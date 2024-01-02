@@ -1,0 +1,113 @@
+\lecture{01}{Mon 01 Jan '24}{}
+
+We assume the following.
+\begin{itemize}
+    \item Basics of set theory
+    \item Existence of $\N = \set{0, 1, 2, \dots}$ with the usual operations
+    $+$ and $\cdot$
+\end{itemize}
+For a recap, refer lectures 1 to 3 of UMA101.
+
+\section{Number Systems} \label{sec:number_systems}
+\[
+    \N \subseteq \Z \subseteq \Q \subseteq \R \subseteq \C
+\]
+\subsection{Recap of the Naturals} \label{sec:naturals}
+$\N$ is the unique minimal inductive set granted by the ZFC axioms.
+Addition and multiplication are defined by the recursion principle and showed
+that they
+\begin{itemize}
+    \item are associative and commutative,
+    \item admit identity elements $0$ and $1$ respectively,
+    \item satisfy the distributive law,
+    \item satisfy cancellation laws,
+    \item \textcolor{Red}{but} do not admit inverses.
+\end{itemize}
+
+\subsection{Relations} \label{sec:relations}
+(Recall) A relation on a set $A$ is a subset $R \subseteq A \times A$.
+We write $a \mathrel{R} b$ to denote $(a, b) \in R$.
+
+\begin{definition}[Partial order] \label{def:relations:partial_order}
+    A relation $R$ on $A$ is called a \emph{partial order} if it is
+    \begin{itemize}
+        \item reflexive, \ie\ $a \mathrel{R} a$ for all $a \in A$;
+        \item antisymmetric, \ie\ if $a \mathrel{R} b$ and $b \mathrel{R} a$
+        then $a = b$ for all $a, b \in A$;
+        \item transitive, \ie\ if $a \mathrel{R} b$ and $b \mathrel{R} c$ then
+        $a \mathrel{R} c$ for all $a, b, c \in A$.
+    \end{itemize}
+    Additionally, if for all $x, y \in A$, $x \mathrel{R} y$ or $y \mathrel{R}$,
+    then $R$ is called a \emph{total order}.
+
+    A set $A$ equipped with a partial order $\le$ is called a \emph{partially
+    ordered set} (or \emph{poset}). \\
+    A set $A$ equipped with a total order $\le$ is called a \emph{totally
+    ordered set} or simply an \emph{ordered set}.
+\end{definition}
+\begin{examples}
+    \item $(\N, \le)$ where we say that $a \le b$ if $\exists c \in \N$ such
+    that $a + c = b$.
+    \item $(\N, \mid)$ where we say that $a \mid b$ if $\exists c \in \N$ such
+    that $a \cdot c = b$.
+\end{examples}
+
+In UMA101, we defined order slightly differently, where we said that either
+$a \le b$ or $b \le a$ but never both.
+This is a ``strict order''.
+We will denote a weak partial order by $\le$ and a strict partial order by $<$.
+(the notation is suggestive of how to every order there is a corresponding
+strict order and vice versa).
+
+\begin{definition}[Equivalence] \label{def:relations:equivalence}
+    An \emph{equivalence relation} on a set $A$ is a relation $R$ satisfying
+    \begin{itemize}
+        \item reflexivity;
+        \item symmetry, \ie\ if $a \mathrel{R} b$ then $b \mathrel{R} a$ for all
+        $a, b \in A$;
+        \item transitivity.
+    \end{itemize}
+\end{definition}
+\begin{notation}
+    We write $[x]_R$ to denote the set $\set{y \in A \mid x \mathrel{R} y}$.
+\end{notation}
+\begin{proposition}
+    The collection $\mathscr{A} = \set{[x]_R \mid x \in A}$ partitions $A$.
+\end{proposition}
+\begin{proof}
+    For every $x \in A$, $x \in [x]_R$ and so $\bigcup \mathscr{A} = A$.
+
+    Let $[x]_R \cap [y]_R \ne \O$, where $x, y \in A$.
+    Then there exists $z \in A$ such that $x \mathrel{R} z$ and
+    $y \mathrel{R} z$, from which it follows that $x \mathrel{R} y$ and
+    $[x]_R = [y]_R$.
+\end{proof}
+
+\subsection{Integers} \label{sec:integers}
+We cannot solve $3 + x = 2$ in $\N$.
+We introduce $\Z$ to solve this problem.
+
+Consider the relation $R$ on $\N \times \N$ given by \[
+    (a, b) \mathrel{R} (c, d) \iff a + d = b + c.
+\] (check that this is an equivalence relation \textcolor{solved}{trivial}).
+\begin{definition} \label{def:integers}
+    We define $\Z$ to be the set of equivalence classes of $R$, notated
+    $\N \times \N / R$.
+\end{definition}
+Further, define
+\begin{itemize}
+    \item $[(a, b)] +_\Z [(c, d)] \coloneq [(a + c, b + d)]$;
+    \item $[(a, b)] \cdot_\Z [(c, d)] \coloneq [(ac + bd, ad + bc)]$.
+    \item $z_1 \le_\Z z_2$ iff there exists $n \in \N$ such that
+    $z_1 +_\Z [(n, 0)] = z_2$ \\
+    (alternatively, $[(a, b)] \le_\Z [(c, d)]$ iff $a + d \le b + c$).
+\end{itemize}
+We need to check that these are well-defined.
+What does this mean?
+Consider \begin{align*}
+    [(1, 2)] +_\Z [(3, 4)] &= [(4, 6)] \\
+    [(3, 4)] +_\Z [(3, 4)] &= [(6, 8)]
+\end{align*}
+Our definition must ensure that $[(4, 6)] = [(6, 8)]$. \\
+In general, the definitions are well-defined if they are independent of the
+choice of representatives.

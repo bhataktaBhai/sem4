@@ -1,0 +1,112 @@
+\lecture{02}{Tue 02 Jan '24}{}
+\begin{proposition}
+    The operations $+_\Z$, $\cdot_\Z$ and the order $\leq_\Z$ are well-defined.
+\end{proposition}
+\begin{proof}
+    Suppose $[(a, b)] = [(a', b')]$ and $[(c, d)] = [(c', d')]$.
+    Then \begin{align*}
+        a + b' &= a' + b \\
+        c + d' &= c' + d \\
+        (a + c) + (b' + d') &= (a' + c') + (b + d) \\
+        [(a + c, b + d)] &= [(a' + c', b' + d')]
+    \end{align*}
+    Since $\le_\Z$ is defined in terms of $+_\Z$, it is also well-defined.
+    % TODO: multiplication
+    % Similarly \begin{align*}
+    %     (a + b')(c + d') &= (a' + b)(c' + d) \\
+    %     ac + ad' + b'c + b'd' &= a'c' + a'd + bc' + bd \\
+    %     (ac + bd) + (a'd' + b'c') &= (a'c' + b'd') + (a'd + b'c) \\
+    %     [(ac + bd, ad + bc)] &= [(a'c' + b'd', a'd' + b'c')]
+    % \end{align*}
+\end{proof}
+
+\begin{definition}[Ring] \label{def:ring}
+    A \emph{ring} is a set $S$ with two binary operations $+$ and $\cdot$ such
+    that for all $a, b, c \in S$,
+    \begin{enumerate}
+        \item addition is associative,
+        \item addition is commutative,
+        \item there exists an additive identity $0$,
+        \item there exists an additive inverse $-a$,
+        \item multiplication is associative,
+        \item there exists a multiplicative identity $1$,
+        \item multiplication is distributive over addition (on both sides).
+    \end{enumerate}
+    A ring in which multiplication is commutative is called a
+    \emph{commutative ring}.
+\end{definition}
+Note that inverses are unique, since if $a + b = 0$ and $a + b' = 0$, then
+$b = (b' + a) + b = b' + (a + b) = b'$.
+
+\begin{definition}[Ordered Ring] \label{def:ordered_ring}
+    An \emph{ordered ring} is a ring $S$ with a total order $\leq$ such that
+    for all $a, b, c \in S$,
+    \begin{enumerate}
+        \item $a \leq b$ implies $a + c \leq b + c$,
+        \item $0 \leq a$ and $0 \leq b$ implies $0 \leq ab$.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem} \leavevmode
+    \begin{itemize}
+        \item $(\Z, +_\Z, \cdot_\Z, \leq_\Z)$ is an ordered (commutative) ring.
+        \item The map $f = n \mapsto [(n, 0)]$ from $\N$ to $\Z$ is an
+        injective map that respects $+$, $\cdot$ and $\leq$.
+        That is, for all $n, m \in \N$,
+        \begin{enumerate}
+            \item $f(n + m) = f(n) +_\Z f(m)$,
+            \item $f(nm) = f(n) \cdot_\Z f(m)$,
+            \item $n \leq m \iff f(n) \leq_\Z f(m)$.
+        \end{enumerate}
+        In other words, $f$ is an isomorphism onto a subset of $\Z$.
+    \end{itemize}
+\end{theorem}
+Thus, we may view $(\N, +, \cdot, \le)$ as a subset of $(\Z, +_\Z, \cdot_\Z,
+\leq_\Z)$, denote $[(n, 0)]$ as $n$ and drop $\Z$ in the subscript.
+We further define $-[(a, b)] \coloneq [(b, a)]$ and $z_1 - z_2 \coloneq z_1 +
+(-z_2)$.
+
+Moreover, we have the following properties.
+\begin{proposition} \leavevmode
+    \begin{itemize}
+        \item There are no zero divisors in $\Z$.
+        That is, for all $a, b \in \Z$, $ab = 0$ implies $a = 0$ or $b = 0$.
+        \item The cancellation laws hold:
+        for all $a, b, c \in \Z$, $a + b = a + c$ implies $b = c$,
+        and $ab = ac$ implies $a = 0$ or $b = c$.
+        \item (trichotomy) For all $z \in \Z$, $z = n$ or $z = -n$ for some
+        $n \in \N$.
+    \end{itemize}
+\end{proposition}
+
+\section{Rationals} \label{sec:rationals}
+We cannot solve $3x = 2$ in $\Z$.
+\begin{proof}
+    Suppose $3x = 2$ for some $x = [(a, b)] \in \Z$.
+    Then \begin{align*}
+        3x &= 2 \\
+        [(3, 0)] \cdot [(a, b)] &= [(2, 0)] \\
+        [(3a, 3b)] &= [(2, 0)] \\
+        3a &= 3b + 2
+    \end{align*}
+    % TODO: what now?
+    What now?
+\end{proof}
+We define $\Z^*$ to be $\Z \setminus \set{0}$ and define the relation $R$ on
+$\Z \times \Z^*$ by $(a, b) R (c, d)$ if $ad = bc$.
+Then $R$ is an equivalence relation on $\Z \times \Z^*$.
+
+\begin{definition}
+    We define $\Q$ to be the set of equivalence classes of $R$, notated
+    $\Z \times \Z^* / R$.
+\end{definition}
+We define operations $+_\Q$ and $\cdot_\Q$ on $\Q$ by
+\begin{align*}
+    [(a, b)] +_\Q [(c, d)] &\coloneq [(ad + bc, bd)] \\
+    [(a, b)] \cdot_\Q [(c, d)] &\coloneq [(ac, bd)]
+\end{align*}
+Since there are no zero divisors in $\Z$, $bd \neq 0$.
+
+We define an order $\leq_\Q$ on $\Q$ by \[
+    [(a, b)] \leq_\Q [(c, d)] \iff (ad - bc) bd \leq 0.
+\]
