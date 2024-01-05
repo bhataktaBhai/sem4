@@ -1,0 +1,227 @@
+\lecture{01}{Thu 04 Jan '24}{}
+
+\setcounter{section}{-1}
+\section{The Course} \label{sec:course}
+\textbf{Texts:} \begin{itemize}
+    \item \textit{Markov Chains}, J. R. Norris
+    \item \textit{Introduction to Stochastic Processes}, Hoel, Port, Stone
+    \item Karlin and Taylor
+\end{itemize}
+
+\textbf{Grading:} \begin{itemize}
+    \item[(20\%)] 2 quizzes
+    \item[(30\%)] 1 midterm
+    \item[(50\%)] Final
+\end{itemize}
+
+\section{Discrete time Markov Chains} \label{sec:dtmc}
+\begin{definition}
+    Let $S$ be a state set (countable).
+    A matrix $P = (p_{xy}; x, y \in S)$ is called a \emph{stochastic matrix} if
+    $p_{xy} \ge 0$ for all $x, y \in S$ and $\sum_{y \in S} p_{xy} = 1$ for all $x \in S$.
+\end{definition}
+
+\begin{definition}
+    Let $S$ be a state set, $P = (p_{xy})$ a stochastic matrix, and $\mu_0$ a
+    probability distribution on $S$, \ie, $\mu_0(x) \ge 0$ for all $x \in S$ and
+    $\sum_{x \in S} \mu_0(x) = 1$.
+
+    Suppose $X_0, X_1, \dots$ are random variables defined on the same
+    probability space taking values in $S$.
+    Then $(X_n; n \ge 0)$ is called a Markov chain with initial distribution
+    $\mu_0$ and transition matrix $P$, notated $MC(\mu_0, P)$, if $X_0$ has
+    distribution $\mu_0$ and for all $n \ge 0$, \[
+        P(X_{n+1} = x_{n+1} \mid X_n = x_n, \dots, X_0 = x_0) = p_{x_n x_{n+1}}
+    \] whenever $P(X_n = x_n, \dots, X_0 = x_0) > 0$.
+\end{definition}
+\begin{notation}
+    Whenever writing $P(X_n \in A \mid (X_0, \dots, X_{n-1}) \in B)$, it is
+    understood that $P((X_0, \dots, X_{n-1}) \in B) > 0$.
+\end{notation}
+
+\begin{theorem}
+    $(X_n; 0 \le n \le N)$ is $MC(\mu_0, P)$ iff \[
+        P(X_0 = x_0, \dots, X_N = x_N) = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-1} x_N}
+    \] for all $x_0, \dots, x_N \in S$.
+\end{theorem}
+\begin{proof}
+    Both directions are proven by induction.
+
+    Suppose $(X_n; 0 \le n \le N)$ is $MC(\mu_0, P)$.
+    $P(X_0 = x_0) = \mu_0(x_0)$.
+    If $P(X_0 = x_0) > 0$, then
+    $P(X_0 = x_0, X_1 = x_1) = \mu_0(x_0) p_{x_0 x_1}$.
+    If $P(X_0 = x_0) = 0$, then $P(X_0 = x_0, X_1 = x_1) \le P(X_0 = x_0) = 0$,
+    and so $P(X_0 = x_0, X_1 = x_1) = 0 = \mu_0(x_0) p_{x_0 x_1}$.
+    % TODO: Complete induction
+
+    Suppose \[
+        P(X_0 = x_0, \dots, X_n = x_n)
+        = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n}
+    \]
+    for all $x_0, \dots, x_n \in S$.
+    Then \begin{align*}
+        P(X_0 = x_0, \dots, X_{n-1} = x_{n-1})
+            &= \sum_{x_n \in S} P(X_0 = x_0, \dots, X_n = x_n) \\
+            &= \sum_{x_n \in S} \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n} \\
+            &= \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n}
+    \end{align*}
+    Use induction to show that for all $1 \le i \le N$, \[
+        P(X_0 = x_0, \dots, X_i = x_i)
+        = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{i-1} x_i}
+    \] and $P(X_0 = x_0)$.
+    This allows us to deduce that \[
+        P(X_{i+1} = x_{i+1} \mid X_0 = x_0, \dots, X_i = x_i)
+        = p_{x_i x_{i+1}}. \qedhere
+    \]
+\end{proof}
+
+\begin{theorem}[Strong Law of Large Numbers] \label{thm:dtmc:slln}
+    Suppose $Z_1, Z_2, \dots$ are iid \R-valued random variables and $E[Z_1]$
+    exists.
+    Then \[
+        \frac{Z_1 + \dots + Z_n}{n} \to E[Z_1]
+    \] as $n \to \infty$, that is, \[
+        P\left\{\omega \in \Omega : \lim_{n \to \infty}
+        \frac{Z_1(\omega) + \dots + Z_n(\omega)}{n} = E[Z_1]\right\} = 1.
+    \]
+\end{theorem}
+\begin{theorem}[Weak Law of Large Numbers] \label{thm:dtmc:wlln}
+    
+\end{theorem}
+\begin{theorem}[Central Limit Theorem] \label{thm:dtmc:clt}
+    Suppose $Z_1, Z_2, \dots$ are iid \R-valued random variables and $E[Z_1^2]$
+    exists.
+    Then \[
+        \frac{\sqrt n}{\sqrt{V(Z_1)}} \left(\frac{Z_1 + \dots + Z_n}{n}
+        - E[Z_1]\right) \to N(0, 1).
+    \]
+\end{theorem}
+\begin{examples}
+    \item A two-state Markov chain.
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state] (1) {$1$};
+            \node[state, right=of 1] (2) {$2$};
+            \path
+                (1) edge[loop left] node {$p$} (1)
+                (2) edge[loop right] node {$q$} (2)
+                (1) edge[bend left, above] node {$1-p$} (2)
+                (2) edge[bend left, below] node {$1-q$} (1);
+        \end{tikzpicture}
+    \end{center}
+    This corresponds to the matrix \[
+        P = \begin{pmatrix}
+            p & 1-p \\
+            1-q & q
+        \end{pmatrix}.
+    \]
+
+    \item A three-state Markov chain.
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state] (1) {$1$};
+            \node[state, above right=of 1] (2) {$2$};
+            \node[state, below right=of 2] (3) {$3$};
+            \path
+                (1) edge node {$\frac12$} (2)
+                (2) edge node {$\frac14$} (3)
+                (3) edge node {$\frac14$} (1)
+                (1) edge[bend right, above] node {$\frac12$} (3)
+                (3) edge[bend right, below] node {$\frac34$} (2)
+                (2) edge[bend right, above] node {$\frac12$} (1);
+            \path
+                (2) edge[loop above] node {$\frac14$} (2);
+        \end{tikzpicture}
+    \end{center}
+
+    \item Simple random walk on $\Z$.
+    Staring from $0$, at each step, move right with probability $p$ and left
+    with probability $q = 1-p$.
+    $P(X_{n+1} = x + 1 \mid X_n = x) = p$ and
+    $P(X_{n+1} = x - 1 \mid X_n = x) = q$.
+    All other probabilities are $0$.
+
+    Such a simple random walk is called symmetric if $p = q = \frac12$.
+    A special case is where $\mu_0 = \delta_x$ for some $x \in \Z$, where
+    $\delta_x$ is the Kr\"onecker delta.
+
+    Aside: Suppose $Z_1, \dots, Z_k$ are random variables taking values in a
+    state set $S$ defined on a probability space $(\Omega, \mathcal F, P)$.
+    and $\tilde{Z}_1, \dots, \tilde{Z}_k$ are rvs taking values in a
+    state set $S$ defined on a probability space
+    $(\tilde{\Omega}, \tilde{\mathcal F}, \tilde{P})$.
+    Then $(Z_1, \dots, Z_k)$ and $(\tilde{Z}_1, \dots, \tilde{Z}_k)$ are said to
+    be identically distributed if \[
+        P(Z_1 = x_1, \dots, Z_k = x_k)
+        = P(\tilde{Z}_1 = x_1, \dots, \tilde{Z}_k = x_k).
+    \] This is notated as \[
+        (Z_1, \dots, Z_k) \stackrel{d}{=} (\tilde{Z}_1, \dots, \tilde{Z}_k).
+    \]
+
+    Suppose that $Y_1, Y_2, \dots$ are iid $\begin{pmatrix}
+        -1 & 1 \\
+        1-p & p
+    \end{pmatrix}$.
+    We have that $(X_n; n \ge 0) \stackrel{d}{=} (\sum_{j=1}^{n} Y_j; n \ge 0)$.
+    Then from the weak law of large numbers, \[
+        \frac{X_n}{n} \to E[Y_1] = 2p - 1.
+    \] From the central limit theorem, \[
+        \frac{X_n - n(p - q)}{\sqrt{n} \sqrt{1 - (p-q)^2}} \to N(0, 1).
+    \]
+
+    On a graph, a simple symmetric random walk is a random walk on a graph
+    where each \[
+        p_{xy} = \begin{cases}
+            \frac1{deg(x)} & \text{if } y \sim x, \\
+            0 & \text{otherwise}.
+        \end{cases}
+    \]
+
+    On $\Z^2$, a simple random walk is given by $p_N$, $p_E$, $p_S$, $p_W$,
+    where $p_N + p_E + p_S + p_W = 1$.
+    At each step, move up with probability $p_N$, right with probability $p_E$,
+    down with probability $p_S$, and left with probability $p_W$.
+
+    \item Consider a shooting game with 4 modes: $N$ (normal), $D$ (distance),
+    $W$ (windy) and $DW$ (distance and windy).
+    The game changes mode randomly to a mode different from the current mode
+    with direcred graph $K_4$ with some edge weights.
+\end{examples}
+
+\begin{theorem}
+    If $(X_n; n \ge 0)$ is a DTMC with transition matrix $P$, then \[
+        P_{\mu_0}(X_n = y) = (\mu_0 P^n)(y).
+    \] In particular, $P_x(X_n = y) = (P^n)_{x,y} = p_{xy}^{(n)}$.
+\end{theorem}
+Here, $\mu_0$ is viewed as a row vector, and $P_{\mu_0}$ is the distribution
+under the assumption that $X_0 \sim \mu_0$.
+\begin{proof}
+    \begin{align*}
+        P_{\mu_0}(X_n = y)
+            &= \sum_{x_0, \dots, x_{n-1} \in S}
+                P(X_0 = x_0, \dots, X_{n-1} = x_{n-1}, X_n = y) \\
+            &= \sum_{x_0, \dots, x_{n-1} \in S}
+                P(X_0 = x_0, \dots, X_{n-1} = x_{n-1}) p_{x_{n-1} y} \\
+            &= (\mu_0 P^{n-1})_y \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{theorem}
+    Let $(X_n; n \ge 0)$ be $MC(\mu_0, P)$.
+    Then for any $n \ge 0$, $l \ge 1$, $x_n, \dots, x_{n+l} \in S$ and
+    $A \subseteq S^n$, \begin{multline*}
+        P_{\mu_0}(X_i = x_i, n < i \le n + l \mid X_n = x_n, (X_0, \dots, X_{n-1}) \in A) \\
+        = P_{x_n}(X_1 = x_{n+1}, \dots, X_l = x_{n+l})
+    \end{multline*}
+\end{theorem}
+In other words, conditioning on $X_n = x_n$ and $(X_0, \dots, X_{n-1}) \in A$,
+the process $(X_n, X_{n+1}, \dots)$ is $MC(\delta_{x_n}, P)$.
+\begin{proof}
+    \begin{align*}
+        P(X_{n+l} = x_{n+l}, &\dots, X_n = x_n, (X_0, \dots, X_{n-1}) \in A) \\
+            &= p_{x_{n} x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}}
+            \sum_{(x_0, \dots, x_{n-1}) \in A} \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n} \\
+            &= P_{\mu_0}(X_n = x_n, (X_0, \dots, X_{n-1}) \in A) p_{x_n x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}} \\
+    \end{align*}
+\end{proof}

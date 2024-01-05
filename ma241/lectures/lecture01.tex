@@ -1,0 +1,88 @@
+\lecture{01}{Wed 03 Jan '24}{}
+
+\setcounter{section}{-1}
+\section{The Course} \label{sec:course}
+\textbf{MS Teams Code:} \texttt{ucwewgr}\\
+\textbf{Textbook:} \textit{Differential Equations and Dynamical Systems}
+by Lawrence Perko.\\
+\textbf{TA:} Babhrubahan Bose (PhD student)\\
+\textbf{Prerequisites:} Real analysis, specifically convergence of sequences and
+series of functions.
+Linear algebra.
+Some topology.
+
+\subsection{Introduction} \label{sec:introduction}
+We wish to solve systems of the form \[
+    \dot{x} = f(x)
+\] where $x \colon (a, b) \subseteq \R \to \R^n$, $x(t) = (x_1(t), \dots, x_n(t))$,
+$f \colon \R^n \to \R^n$, $f = (f_1, \dots, f_n)$ and \[
+    \dot{x}(t) \coloneq (x_1'(t), \dots, x_n'(t)).
+\] So the system is shorthand for \begin{align*}
+    x_1'(t) &= f_1(x_1(t), \dots, x_n(t)) \\
+    &\;\;\vdots \\
+    x_n'(t) &= f_n(x_1(t), \dots, x_n(t)).
+\end{align*}
+We will later show that higher order derivatives and equations like
+$\dot{x} = f(t, x)$ can be reduced to this form.
+
+\section{Linear Systems} \label{sec:linear}
+Where $f$ is linear, \ie, \[
+    f(x) = Ax \text{ where } A \in M(n, \R).
+\] $M(n, \R)$ is the set of all $n \times n$ matrices with real entries.
+
+For $n = 1$ this reduces to $\dot{x} = ax$, $a \in \R$.
+A (The) solution is $x(t) = ce^{at}$, $c \in \R$.
+
+\begin{theorem}[Uniqueness] \label{thm:linear:uniqueness}
+    All solutions to $\dot{x} = ax$ are of the form $x(t) = ce^{at}$ for some
+    $c \in \R$.
+\end{theorem}
+\begin{proof}
+    For any solution $x$, $(x e^{-at})' = \dot{x} e^{-at} - a x e^{-at} = 0$.
+    Thus $x = c e^{at}$ for some $c \in \R$.
+\end{proof}
+
+Consider $n = 2$.
+\begin{definition}[Uncoupled system] \label{def:linear:uncoupled_system}
+    A system $\dot{x} = f(x)$ is \emph{uncoupled} if $f_j$ does not depend on
+    $x_i$ for $i \neq j$.
+\end{definition}
+Consider an uncoupled linear system \[
+    \dot{x} = \begin{pmatrix}
+        -1 & 0 \\
+        0 & 2
+    \end{pmatrix} x.
+\] The unique solution is $x(t) = \begin{pmatrix}
+    c_1 e^{-t} \\
+    c_2 e^{2t}
+\end{pmatrix}$, $c_1, c_2 \in \R$.
+
+\subsection*{Phase Portrait of an ODE System} \label{sec:phase_portrait}
+We can plot the solution curves of this system in $\R^2$ for various values of
+the parameters.
+This plot is called the \emph{phase portrait} of the system.
+The paths of the solutions are called \emph{orbits}.
+
+We can also write the solution as \[
+    x(t) = \begin{pmatrix}
+        e^{-t} & 0 \\
+        0 & e^{2t}
+    \end{pmatrix} \begin{pmatrix}
+        c_1 \\
+        c_2
+    \end{pmatrix}.
+\] Consider the map $\phi \colon \R \times \R^2 \to \R^2$ given by \[
+    \phi(t, c) = \begin{pmatrix}
+        e^{-t} & 0 \\
+        0 & e^{2t}
+    \end{pmatrix} c.
+\] $\phi$ is then called the \emph{flow} or the \emph{dynamical system}
+associated with the ODE system.
+
+An interpretation of the phase portrait requires viewing the tangent vectors at
+any point $x(t)$ in a path, as $\dot{x}(t)$ or $f(x)$.
+The system can be viewed through the lens of its vector field, which is given by
+$f(x)$.
+Any solution to the system is simply a curve which lies tangent to the vector
+field at every point, which is called an \emph{integral curve} of the vector
+field.

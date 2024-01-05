@@ -1,0 +1,206 @@
+\lecture{03}{Wed 03 Jan '24}{}
+\begin{definition}[Exponentiation] \label{def:exponentiation}
+    The recursion principle guarantees the existence of
+    $\mathrm{pow} : \Z \times \N \to \N$ such that for all $n, m \in \N$,
+    \begin{align*}
+        \mathrm{pow}(m, 0) &= 1 \\
+        \mathrm{pow}(m, n + 1) &= m \cdot \mathrm{pow}(m, n)
+    \end{align*}
+    We extend this to $\mathrm{pow} : \Q^* \times \Z \to \Q$ as follows.
+    \begin{align*}
+        \mathrm{pow}\left(\frac{a}{b}, m\right) &\coloneq \begin{cases}
+            a^m / b^m & \text{if } m \in \N \\
+            b^m / a^m & \text{if } -m \in \N \\
+        \end{cases}
+    \end{align*}
+    We write $z^n$ to denote $\mathrm{pow}(z, n)$.
+\end{definition}
+\begin{remark}
+    Note that we have defined $0^0$ to be $1$, but we don't really care.
+\end{remark}
+\begin{proposition}
+    Expoentiation is well-defined.
+\end{proposition}
+\begin{proof}
+    Let $a/b = \tilde{a}/\tilde{b} \in \Q$.
+    That is, $a\tilde{b} = b\tilde{a} \in \Z$.
+    For $m \in \N$, thus $a^m \tilde{b}^m = b^m \tilde{a}^m$ (easily proved by
+    induction).
+
+    Similarly if $-m \in \N$.
+\end{proof}
+
+\begin{theorem} \label{thm:no_rational_square_root_of_2}
+    There exists no $x \in \Q$ such that $x^2 = 2$.
+\end{theorem}
+We first make note of the following lemma.
+\begin{lemma} \label{thm:positive_denominator}
+    Let $x \in \Q$.
+    Then there exists $p \in \Z$, $q \in \N^*$ such that $x = p/q$.
+
+    In particular, if $x > 0$, then $x = p/q$ for some $p \in \N$, $q \in \N^*$.
+\end{lemma}
+\begin{proof}
+    Let $x = a/b$.
+    If $b \in \N$, we are done.
+    Otherwise, $x = -a/{-b}$ and $-b \in \N$. % {-b} makes the minus unary
+\end{proof}
+We will make use of the well-ordered property of $(\N, \le)$ proved below in
+\cref{thm:well-ordering}.
+\begin{proof}[Proof of \cref{thm:no_rational_square_root_of_2}]
+    Suppose there exists such an $x$.
+    By the field properties, $(-x)^2 = x^2$.
+    Thus we may assume $x \ge 0$.
+    Let $x = p/q$ for some $q \in \N^*$.
+    Since $x \ge 0$, we have $p \ge 0 \iff p \in \N$.
+
+    Let $A = \set{q \in \N^* \mid x = p/q \text{ for some } p \in \N}$.
+    $A$ is non-empty.
+
+    By the well-ordering principle, $A$ has a least element $q_0$.
+    Let $p_0 \in \N$ such that $x = p_0/q_0$.
+
+    We know that $1 < x < 2$ [why? because $(\cdot)^2$ is an increasing function
+    on positive reals (why? difference of squares)] and so $0 < p_0-q_0 < q_0$.
+    Now \begin{align*}
+        \frac{2q_0 - p_0}{p_0 - q_0}
+            &= \frac{2 - x}{x - 1} \\
+            &= \frac{(2 - x)(x + 1)}{x^2 - 1} \\
+            &= 2x + 2 - x^2 - x \\
+            &= x,
+    \end{align*}
+    in contradiction to the minimality of $q_0$.
+\end{proof}
+
+\begin{theorem}[Well-ordering principle] \label{thm:well-ordering}
+    Every non-empty subset of $\N$ has a least element.
+\end{theorem}
+\begin{proof}
+    Let $S \subseteq \N$ be non-empty.
+    We define $P(n)$ to be ``if $n \in S$, then $S$ has a least element''.
+    Clearly $P(0)$ holds.
+
+    Suppose $P(k)$ holds for all $k \le n \in \N$. \\
+    If $n+1 \notin S$, $P(n+1)$ holds vacuously. \\
+    If $\exists m \in S (m < n+1)$, then $P(n+1)$ holds by virtue of $P(m)$. \\
+    Otherwise $n+1 \in S$ and $\forall m \in S (n+1 \le m)$, so that $n+1$ is
+    the least element of $S$.
+
+    In any case, $P(n+1)$ holds.
+\end{proof}
+
+\begin{theorem} \label{thm:root2_approximation}
+    Let \begin{align*}
+        A &= \set{x \in \Q \mid x^2 < 2} \\
+        B &= \set{x \in \Q \mid x^2 > 2, x > 0}
+    \end{align*}
+    Then $A$ has no largest element and $B$ has no smallest element.
+\end{theorem}
+\begin{proof}
+    Let $a \in A$.
+    $a > -2$ since otherwise $a^2 \ge 4$.
+    Let $c = a + \frac{2 - a^2}{2 + a}$.
+    Clearly $c > a$.
+    Now \begin{align*}
+        c      &= \frac{2a + 2}{2 + a} \\
+        c^2     &= \frac{4a^2 + 8a + 4}{4 + 4a + a^2} \\
+        c^2 - 2 &= \frac{2a^2 - 4}{(2 + a)^2} < 0
+    \end{align*}
+    Thus $c \in A$.
+
+    For $B$, let $c = b + \frac{2 - b^2}{2 + b} = \frac{2b + 2}{2 + b}$.
+    Clearly $0 < c < b$ and $c^2 - 2 = \frac{2b^2 - 4}{(2 + b)^2} > 0$.
+    Thus $c \in B$.
+\end{proof}
+
+\subsection{Ordered Fields with LUB} \label{sec:ordered_fields_with_lub}
+(Recall from UMA101 Lecture 6)
+Given an ordered set $(X, \le)$, a subset $S \subseteq X$ is said to be
+\emph{bounded above} (resp. below) if there exists $x \in X$ such that for all
+$s \in S$, $s \le x$ (resp. $x \le s$), and any such $x$ is called an
+\emph{upper} (resp. lower) \emph{bound} of $S$.
+
+A (The) \emph{supremum} or least upper bound of $S$ is an element $x \in X$
+such that $x$ is an upper bound of $S$ and for all upper bounds $y$ of $S$,
+$x \le y$.
+Similarly, infimum or greatest lower bound.
+
+$(X, \le)$ is said to have the least upper bound property if every non-empty
+bounded above subset of $X$ admits a supremum.
+
+\begin{proposition}
+    $(\Q, \le)$ does not have the least upper bound property.
+\end{proposition}
+\begin{proof}
+    From \cref{thm:root2_approximation}, we know that $A$ has no largest element
+    and $B$ has no smallest element.
+
+    Let $s$ be a supremum of $A$.
+    Since there is no largest element in $A$, $s \notin A$.
+    From \cref{thm:no_rational_square_root_of_2}, we know that $s^2 \ne 2$.
+    Thus by trichotomy, $s^2 > 2$ and so $s \in B$.
+    But then there is an $s' \in B$ which is less than $s$ but also an upper
+    bound of $A$.
+    This is a contradiction.
+\end{proof}
+
+\begin{theorem}
+    Every ordered field $F$ ``contains'' $\Q$, \ie, there exists an injective
+    map $f : \Q \to F$ that respects $+$, $\cdot$ and $\le$.
+\end{theorem}
+We will notate this statement as $\Q \subseteq F$.
+\begin{proof}
+    Let $f : \Z \to F$ be defined as \[
+        f(n) = \begin{cases}
+            0_F & \text{if } n = 0 \\
+            \underbrace{1_F + \cdots + 1_F}_{n \text{ times}} & \text{if } n > 0 \\
+            \underbrace{(-1_F) + \cdots + (-1_F)}_{m \text{ times}} & \text{if } n = -m, m > 0
+        \end{cases}
+    \]
+    Note that $f(-n) = -f(n)$ for all $n \in \N$.
+    Let us show that $f(n + m) = f(n) + f(m)$ for all $n, m \in \Z$.
+    \begin{casework}
+        \item $n = 0$ or $m = 0$. Immediate.
+        \item $n > 0$ and $m > 0$.
+        Then \begin{align*}
+            f(n + m) &= \underbrace{1_F + \cdots + 1_F}_{n + m \text{ times}} \\
+                     &= \underbrace{1_F + \cdots + 1_F}_{n \text{ times}} +
+                        \underbrace{1_F + \cdots + 1_F}_{m \text{ times}} \\
+                     &= f(n) + f(m)
+        \end{align*}
+        \item $n < 0$ and $m < 0$.
+        Then $f(n + m) = -f((-n) + (-m)) = -(f(-n) + f(-m)) = f(n) + f(m)$.
+        \item $nm < 0$. WLOG, let $m < 0 < n$.
+        Suppose $0 < n + m$.
+        Then $f(n + m) + f(-m) = f(n + m - m) = f(n)$ from case 2.
+        Now suppose $n + m < 0$.
+        Then $f(n) + f(-n-m) = f(n - n - m) = -f(m)$ from case 3.
+        In either case, $f(n + m) = f(n) + f(m)$.
+    \end{casework}
+    Now consider $f(nm)$.
+    If $nm = 0$, then $f(nm) = 0_F = f(n)f(m)$.
+    If $0 < n, m$, then \begin{align*}
+        f(nm) &= \overbrace{1_F + \cdots + 1_F}^{nm \text{ times}} \\
+              &= \underbrace{\overbrace{(1_F + \dots + 1_F)}^{n \text{ times}} +
+                \dots + \overbrace{(1_F + \dots + 1_F)}^{n \text{ times}}}_{m \text{ times}} \\
+              &= \underbrace{(1_F + \cdots + 1_F)}_{n \text{ times}}
+                \cdot \underbrace{(1_F + \cdots + 1_F)}_{m \text{ times}} \\
+              &= f(n) f(m)
+    \end{align*}
+    If either of $n$, $m$ is negative, then we take the negative sign out and
+    use the above case.
+
+    Thus $f$ respects $+$ and $\cdot$.
+
+    Suppose that $m < n$.
+    Then $f(n) - f(m) = f(n) + f(-m) = f(n - m) = (n - m) 1_F$ (where
+    $z 1_F$ is notation for $1_F$ added $z$ times).
+    $n - m$ is positive, but $1_F$ added to itself a positive number of times
+    must be positive.
+    This is because $0_F < 1_F$ (UMA101) and so $k 1_F < (k + 1) 1_F$ for all
+    $k \in \N^+$.
+    Induction gives $0_F < k 1_F$ for all $k \in \N^+$.
+    Thus $f(m) < f(n)$ and so $f$ respects $<$ (and hence $\le$).
+
+    Finally, injectivity of $f$ follows from order preservation.
+\end{proof}

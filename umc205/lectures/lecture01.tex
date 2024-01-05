@@ -1,1 +1,24 @@
 \lecture{01}{Tue 02 Jan '24}{}
+
+A \emph{finite state automata} which accepts the language with an odd
+number of $a$'s
+\begin{center}
+    \begin{tikzpicture}
+        \node[state, initial] (q0) {};
+        \node[state, accepting, right of=q0] (q1) {};
+        \path[->]
+            (q0) edge [bend left] node {$a$} (q1)
+            (q0) edge [loop above] node {$b$} (q0)
+            (q1) edge [loop above] node {$b$} (q1)
+            (q1) edge [bend left] node {$a$} (q0);
+    \end{tikzpicture}
+\end{center}
+
+A language is \emph{regular} if it is accepted by a finite state automata.
+It may be deterministic or non-deterministic, the set of languages accepted
+by both are the same.
+
+A \emph{pushdown automata} is a finite state automata with a stack.
+
+A \emph{context-free grammar} is a language that is accepted by a pushdown
+automata.

@@ -1,5 +1,13 @@
 \lecture{01}{Mon 01 Jan '24}{}
 
+\setcounter{section}{-1}
+\section{The course} \label{sec:course}
+\textbf{Instructor:} Prof.~Purvi~Gupta\\
+\textbf{Office:} L-25\\
+\textbf{Office hours:} Wed 17:00--18:00\\
+\textbf{Lecture hours:} MW 12:00--12:50, Thu 9:00--9:50\\
+\textbf{Tutorial hours:} Fri 12:00--12:50\\
+
 We assume the following.
 \begin{itemize}
     \item Basics of set theory
@@ -12,9 +20,10 @@ For a recap, refer lectures 1 to 3 of UMA101.
 \[
     \N \subseteq \Z \subseteq \Q \subseteq \R \subseteq \C
 \]
-\subsection{Recap of the Naturals} \label{sec:naturals}
-$\N$ is the unique minimal inductive set granted by the ZFC axioms.
-Addition and multiplication are defined by the recursion principle and showed
+\subsection{The Naturals} \label{sec:naturals}
+(Recall from UM101) $\N$ is the unique minimal inductive set granted by the ZFC
+axioms.
+Addition and multiplication are defined by the recursion principle and we showed
 that they
 \begin{itemize}
     \item are associative and commutative,
@@ -31,14 +40,14 @@ We write $a \mathrel{R} b$ to denote $(a, b) \in R$.
 \begin{definition}[Partial order] \label{def:relations:partial_order}
     A relation $R$ on $A$ is called a \emph{partial order} if it is
     \begin{itemize}
-        \item reflexive, \ie\ $a \mathrel{R} a$ for all $a \in A$;
-        \item antisymmetric, \ie\ if $a \mathrel{R} b$ and $b \mathrel{R} a$
+        \item reflexive -- $a \mathrel{R} a$ for all $a \in A$;
+        \item antisymmetric -- if $a \mathrel{R} b$ and $b \mathrel{R} a$
         then $a = b$ for all $a, b \in A$;
-        \item transitive, \ie\ if $a \mathrel{R} b$ and $b \mathrel{R} c$ then
+        \item transitive -- if $a \mathrel{R} b$ and $b \mathrel{R} c$ then
         $a \mathrel{R} c$ for all $a, b, c \in A$.
     \end{itemize}
-    Additionally, if for all $x, y \in A$, $x \mathrel{R} y$ or $y \mathrel{R}$,
-    then $R$ is called a \emph{total order}.
+    Additionally, if for all $x, y \in A$, $x \mathrel{R} y$ or
+    $y \mathrel{R} x$, then $R$ is called a \emph{total order}.
 
     A set $A$ equipped with a partial order $\le$ is called a \emph{partially
     ordered set} (or \emph{poset}). \\
@@ -53,7 +62,7 @@ We write $a \mathrel{R} b$ to denote $(a, b) \in R$.
 \end{examples}
 
 In UMA101, we defined order slightly differently, where we said that either
-$a \le b$ or $b \le a$ but never both.
+$a < b$ or $b < a$ but never both.
 This is a ``strict order''.
 We will denote a weak partial order by $\le$ and a strict partial order by $<$.
 (the notation is suggestive of how to every order there is a corresponding
@@ -63,7 +72,7 @@ strict order and vice versa).
     An \emph{equivalence relation} on a set $A$ is a relation $R$ satisfying
     \begin{itemize}
         \item reflexivity;
-        \item symmetry, \ie\ if $a \mathrel{R} b$ then $b \mathrel{R} a$ for all
+        \item symmetry -- if $a \mathrel{R} b$ then $b \mathrel{R} a$ for all
         $a, b \in A$;
         \item transitivity.
     \end{itemize}
@@ -72,7 +81,8 @@ strict order and vice versa).
     We write $[x]_R$ to denote the set $\set{y \in A \mid x \mathrel{R} y}$.
 \end{notation}
 \begin{proposition}
-    The collection $\mathscr{A} = \set{[x]_R \mid x \in A}$ partitions $A$.
+    The collection $\mathscr{A} = \set{[x]_R \mid x \in A}$ partitions $A$
+    under any equivalence relation $R$ on $A$.
 \end{proposition}
 \begin{proof}
     For every $x \in A$, $x \in [x]_R$ and so $\bigcup \mathscr{A} = A$.
@@ -83,7 +93,7 @@ strict order and vice versa).
     $[x]_R = [y]_R$.
 \end{proof}
 
-\subsection{Integers} \label{sec:integers}
+\subsection{The Integers} \label{sec:integers}
 We cannot solve $3 + x = 2$ in $\N$.
 We introduce $\Z$ to solve this problem.
 

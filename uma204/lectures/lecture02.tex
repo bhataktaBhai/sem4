@@ -1,92 +1,208 @@
 \lecture{02}{Tue 02 Jan '24}{}
+Throughout this section, we will omit the parentheses in $[(a, b)]$ and write
+it as $[a, b]$.
 \begin{proposition}
-    The operations $+_\Z$, $\cdot_\Z$ and the order $\leq_\Z$ are well-defined.
+    The operations $+_\Z$, $\cdot_\Z$ and the relation $\le_\Z$ are
+    well-defined.
 \end{proposition}
 \begin{proof}
-    Suppose $[(a, b)] = [(a', b')]$ and $[(c, d)] = [(c', d')]$.
+    Suppose $x = [a, b] = [a', b']$ and $y = [c, d] = [c', d']$.
     Then \begin{align*}
         a + b' &= a' + b \\
         c + d' &= c' + d \\
         (a + c) + (b' + d') &= (a' + c') + (b + d) \\
-        [(a + c, b + d)] &= [(a' + c', b' + d')]
+        (a + c, b + d) &\mathrel{R} (a' + c', b' + d') \\
+        [a + c, b + d] &= [a' + c', b' + d']
     \end{align*}
     Since $\le_\Z$ is defined in terms of $+_\Z$, it is also well-defined.
-    % TODO: multiplication
-    % Similarly \begin{align*}
-    %     (a + b')(c + d') &= (a' + b)(c' + d) \\
-    %     ac + ad' + b'c + b'd' &= a'c' + a'd + bc' + bd \\
-    %     (ac + bd) + (a'd' + b'c') &= (a'c' + b'd') + (a'd + b'c) \\
-    %     [(ac + bd, ad + bc)] &= [(a'c' + b'd', a'd' + b'c')]
-    % \end{align*}
+    For multiplication, \begin{align*}
+        (a + b')c + (a' + b)d &= (a' + b)c + (a + b')d \\
+        (ac + bd) + (a'd + b'c) &= (a'c + b'd) + (ad + bc) \\
+        [ac + bd, ad + bc] &= [a'c + b'd, a'd + b'c] \\
+        \shortintertext{and symmetrically}
+        [a'c + b'd, a'd + b'c] &= [a'c' + b'd', a'c' + b'd']
+        \shortintertext{so by transitivity}
+        [ac + bd, ad + bc] &= [a'c' + b'd', a'c' + b'd'] \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{proposition}
+    The relation $\le_\Z$ is a total order on $\Z$.
+\end{proposition}
+\begin{proof}
+    Let $x = [a, b], y = [c, d] \in \Z$.
+    Since $x +_\Z [0, 0] = [a + 0, b + 0] = x$, $x \le_\Z x$.
+
+    Suppose $x \le_\Z y$ and $y \le_\Z x$.
+    Then there exist $m, n \in \N$ such that $x + [m, 0] = y$ and
+    $y +_\Z [n, 0] = x$.
+    Thus $x +_\Z [m, 0] +_\Z [n, 0] = [a + m + n, b] = [a, b]$.
+    This gives $a + m + n + b = a + b$ and so $m + n = 0$.
+    This can only be when $m = n = 0$ and so $x = y$.
+
+    Now suppose $x \le_\Z y$ and $y \le_\Z z$.
+    Then there exist $m, n \in \N$ such that $x + [m, 0] = y$ and
+    $y +_\Z [n, 0] = z$.
+    This immediately gives $x + [m + n, 0] = z$ and so $x \le_\Z z$.
+
+    For trichotomy, note that either $a + d \le b + c$ or $b + c \le a + d$ by
+    trichotomy of $(\N, \le)$.
+    In the first case, $a + d + n = b + c$ for some $n \in \N$, so
+    $[a, b] +_\Z [n, 0] = [c, d]$.
+    Thus $x \le_\Z y$.
+    Similarly, in the second case, $y \le x$.
 \end{proof}
 
 \begin{definition}[Ring] \label{def:ring}
     A \emph{ring} is a set $S$ with two binary operations $+$ and $\cdot$ such
     that for all $a, b, c \in S$,
-    \begin{enumerate}
-        \item addition is associative,
-        \item addition is commutative,
-        \item there exists an additive identity $0$,
-        \item there exists an additive inverse $-a$,
-        \item multiplication is associative,
-        \item there exists a multiplicative identity $1$,
+    \begin{enumerate}[label=\small(R\arabic*)]
+        \item addition is associative, \label{def:ring:asso}
+        \item addition is commutative, \label{def:ring:comm}
+        \item there exists an additive identity $0$, \label{def:ring:zero}
+        \item there exists an additive inverse $-a$, \label{def:ring:inverse}
+        \item multiplication is associative, \label{def:ring:mult_asso}
+        \item there exists a multiplicative identity $1$, \label{def:ring:one}
         \item multiplication is distributive over addition (on both sides).
+        \label{def:ring:dist}
     \end{enumerate}
-    A ring in which multiplication is commutative is called a
-    \emph{commutative ring}.
+    For a \emph{commutative ring}, we require additionally that
+    \begin{enumerate}[label=\small(CR\arabic*)]
+        \item multiplication is commutative. \label{def:ring:mult_comm}
+    \end{enumerate}
 \end{definition}
 Note that inverses are unique, since if $a + b = 0$ and $a + b' = 0$, then
 $b = (b' + a) + b = b' + (a + b) = b'$.
 
 \begin{definition}[Ordered Ring] \label{def:ordered_ring}
-    An \emph{ordered ring} is a ring $S$ with a total order $\leq$ such that
+    An \emph{ordered ring} is a ring $S$ with a total order $\le$ such that
     for all $a, b, c \in S$,
-    \begin{enumerate}
-        \item $a \leq b$ implies $a + c \leq b + c$,
-        \item $0 \leq a$ and $0 \leq b$ implies $0 \leq ab$.
+    \begin{enumerate}[label=\small(OR\arabic*)]
+        \item $a \le b$ implies $a + c \le b + c$,
+            \label{def:ordered_ring:sum}
+        \item $0 \le a$ and $0 \le b$ implies $0 \le ab$.
+            \label{def:ordered_ring:prod}
     \end{enumerate}
 \end{definition}
 
 \begin{theorem} \leavevmode
     \begin{itemize}
-        \item $(\Z, +_\Z, \cdot_\Z, \leq_\Z)$ is an ordered (commutative) ring.
-        \item The map $f = n \mapsto [(n, 0)]$ from $\N$ to $\Z$ is an
-        injective map that respects $+$, $\cdot$ and $\leq$.
+        \item $(\Z, +_\Z, \cdot_\Z, \le_\Z)$ is an ordered (commutative) ring.
+        \item The map $f = n \mapsto [n, 0]$ from $\N$ to $\Z$ is an
+        injective map that respects $+$, $\cdot$ and $\le$.
         That is, for all $n, m \in \N$,
         \begin{enumerate}
             \item $f(n + m) = f(n) +_\Z f(m)$,
             \item $f(nm) = f(n) \cdot_\Z f(m)$,
-            \item $n \leq m \iff f(n) \leq_\Z f(m)$.
+            \item $n \le m \iff f(n) \le_\Z f(m)$.
         \end{enumerate}
         In other words, $f$ is an isomorphism onto a subset of $\Z$.
     \end{itemize}
 \end{theorem}
+\begin{proof}
+    For the first part of the theorem, we check all commutative ring axioms.
+    We omit the subscripts on $+$ and $\cdot$ for brevity.
+    \begin{enumerate}[label=\small(R\arabic*)]
+        \item Addition is associative: \begin{align*}
+            \big([a, b] + [c, d]\big) + [e, f]
+                &= [a + c, b + d] + [e, f] \\
+                &= [a + c + e, b + d + f] \\
+                &= [a, b] + [c + e, d + f] \\
+                &= [a, b] + \big([c, d] + [e, f]\big)
+        \end{align*}
+        \item Addition is commutative: immediate from commutativity of $+$ on
+        $\N$.
+        \item Additive identity: $[a, b] + [0, 0] = [a + 0, b + 0] =
+        [a, b]$.
+        \item Additive inverse: $[a, b] + [b, a] = [a + b, b + a] =
+        [0, 0]$ since $a + b + 0 = b + a + 0$.
+        \item Multiplication is associative: \begin{align*}
+            \big([a, b] \cdot [c, d]\big) &\cdot [e, f]
+                = [ac + bd, ad + bc] \cdot [e, f] \\
+                &= [ace + bde + adf + bcf, ade + bce + acf + bdf] \\
+                &= [a(ce + df) + b(cf + de), a(cf + de) + b(ce + df] \\
+                &= [a, b] \cdot [ce + df, cf + de] \\
+                &= [a, b] \cdot \big([c, d] \cdot [e, f]\big)
+        \end{align*}
+        \item Multiplicative identity: $[a, b] \cdot [1, 0] = [a, b]$.
+        \item Multiplication distributes over addition: \begin{align*}
+            [a, b] \cdot \big([c, d] &+ [e, f]\big)
+                = [a, b] \cdot [c + e, d + f] \\
+                &= [ac + ae + bd + bf, ad + af + bc + be] \\
+                &= [ac + bd, ad + bc] + [ae + bf, af + be] \\
+                &= [a, b] \cdot [c, d] + [a, b] \cdot [e, f]
+        \end{align*}
+        Distributivity on the other side follows from commutativity proved
+        below.
+    \end{enumerate}
+    For commutativity of multiplication, \begin{align*}
+        [a, b] \cdot [c, d] &= [ac + bd, ad + bc] \\
+            &= [ca + db, cb + da] \\
+            &= [c, d] \cdot [a, b]
+    \end{align*}
+    \labelcref{def:ordered_ring:sum} follows immediately from the
+    definition.
+    For \labelcref{def:ordered_ring:prod}, suppose $0 \le x, y \in \Z$.
+    Then $x = [n, 0]$ and $y = [m, 0]$ for some $n, m \in \N$.
+    Thus $xy = [nm, 0]$ and so $0 \le xy$.
+
+    The second part is again yawningly brute force.
+    \begin{enumerate}
+        \item $f(n + m) = [n + m, 0] = [n, 0] + [m, 0] = f(n) +_\Z f(m)$.
+        \item $f(nm) = [nm, 0] = [n, 0] \cdot [m, 0] = f(n) \cdot_\Z
+        f(m)$.
+        \item $n \le m \iff \exists k \in \N (n + k = m) \iff \exists k \in \N
+        \big([n, 0] + [k, 0] = [m, 0]\big) \iff f(n) \le_\Z f(m)$. \qedhere
+    \end{enumerate}
+\end{proof}
 Thus, we may view $(\N, +, \cdot, \le)$ as a subset of $(\Z, +_\Z, \cdot_\Z,
-\leq_\Z)$, denote $[(n, 0)]$ as $n$ and drop $\Z$ in the subscript.
-We further define $-[(a, b)] \coloneq [(b, a)]$ and $z_1 - z_2 \coloneq z_1 +
+\le_\Z)$, denote $[n, 0]$ as $n$ and drop $\Z$ in the subscript.
+We further define $-[a, b] \coloneq [b, a]$ and $z_1 - z_2 \coloneq z_1 +
 (-z_2)$.
 
 Moreover, we have the following properties.
 \begin{proposition} \leavevmode
     \begin{itemize}
         \item There are no zero divisors in $\Z$.
-        That is, for all $a, b \in \Z$, $ab = 0$ implies $a = 0$ or $b = 0$.
+        That is, for all $x, y \in \Z$, $xy = 0$ implies $x = 0$ or $y = 0$.
         \item The cancellation laws hold:
-        for all $a, b, c \in \Z$, $a + b = a + c$ implies $b = c$,
-        and $ab = ac$ implies $a = 0$ or $b = c$.
+        for all $x, y, z \in \Z$, $x + y = x + z$ implies $y = z$,
+        and $xy = xz$ implies $x = 0$ or $y = z$.
         \item (trichotomy) For all $z \in \Z$, $z = n$ or $z = -n$ for some
         $n \in \N$.
     \end{itemize}
 \end{proposition}
+\begin{proof}
+    \begin{itemize}
+        \item From trichotomy proven below, we have $x = n$ or $x = -n$ and
+        $y = m$ or $y = -m$ for some $n, m \in \N$.
+        In any case $xy = nm$ or $xy = -nm$.
+        Since there are no zero divisors in $\N$, $xy = 0$ implies $n = 0$ or
+        $m = 0$, which in turn implies $x = 0$ or $y = 0$.
+        \item The first cancellation law follows from the fact that additive
+        inverses exist.
+        For the second, note that $xy = xz \iff x(y - z) = 0$ and invoke the
+        fact that there are no zero divisors.
 
-\section{Rationals} \label{sec:rationals}
+        Here we have also used that $-xz = x(-z)$, since
+        $-\tilde{z} = -1 \cdot \tilde{z}$ for all $\tilde{z} \in \Z$, and
+        multiplication is associative and commutative.
+        \item Let $z = [a, b]$.
+        From trichotomy of $\le$ on $\N$ we know that either $a + n = b$ or
+        $a = b + n$ for some $n \in \N$. (\textcolor{Red}{which \N?})
+        % TODO: clarify ``identifying'' with \N
+        That is, either $z = [0, n] = -n$, or $z = [n, 0] = n$.
+    \end{itemize}
+\end{proof}
+
+\subsection{The Rationals} \label{sec:rationals}
 We cannot solve $3x = 2$ in $\Z$.
 \begin{proof}
-    Suppose $3x = 2$ for some $x = [(a, b)] \in \Z$.
+    Suppose $3x = 2$ for some $x = [a, b] \in \Z$.
     Then \begin{align*}
         3x &= 2 \\
-        [(3, 0)] \cdot [(a, b)] &= [(2, 0)] \\
-        [(3a, 3b)] &= [(2, 0)] \\
+        [3, 0] \cdot [a, b] &= [2, 0] \\
+        [3a, 3b] &= [2, 0] \\
         3a &= 3b + 2
     \end{align*}
     % TODO: what now?
@@ -107,6 +223,112 @@ We define operations $+_\Q$ and $\cdot_\Q$ on $\Q$ by
 \end{align*}
 Since there are no zero divisors in $\Z$, $bd \neq 0$.
 
-We define an order $\leq_\Q$ on $\Q$ by \[
-    [(a, b)] \leq_\Q [(c, d)] \iff (ad - bc) bd \leq 0.
+We define an order $\le_\Q$ on $\Q$ by \[
+    [(a, b)] \le_\Q [(c, d)] \iff (ad - bc) bd \le 0.
 \]
+We will again omit the parentheses in this section.
+\begin{proposition}
+    The operations $+_\Q$, $\cdot_\Q$ and the relation $\le_\Q$ are well-defined.
+\end{proposition}
+\begin{proof}
+    Suppose $[a, b] = [a', b']$ and $[c, d] = [c', d']$.
+    Then \begin{align*}
+        ab' &= a'b \\
+        cd' &= c'd \\
+        (ad + bc)(b'd') &= (a'd' + b'c')(bd) \\
+        [ad + bc, bd] &= [a'd' + b'c', b'd']
+    \end{align*}
+    For multiplication, \begin{align*}
+        (ac)(b'd') &= (a'c')(bd) \\
+        [ac, bd] &= [a'c', b'd']
+    \end{align*}
+    For order, \begin{align*}
+        (ad - bc) bd &\le 0 \\
+        % \implies (ad - bc) bd (a')^2 &\le 0 \\
+        % \implies (aa'd - a'bc) a'bd &\le 0 \\
+        % \implies (aa'd - ab'c) ab'd &\le 0 \\
+        % \implies (a'd - b'c) b'd &\le 0 \\
+        % \implies (a'd - b'c) b'd (c')^2 &\le 0 \\
+        %     &\;\;\vdots \\
+        % \implies (a'd' - b'c') b'd' &\le 0 \\
+        \implies (a'c')(ad - bc) bd (a'c') &\le 0 \\
+        \implies (a'ac'd - a'bc'c) a'bc'd &\le 0 \\
+        \implies (a'acd' - ab'c'c) ab'cd' &\le 0 \\
+        \implies (ac)^2 (a'd' - b'c') b'd' &\le 0 \\
+        \implies (a'd' - b'c') b'd' &\le 0
+    \end{align*}
+    Similarly for the other direction.
+    Thus $+_\Q$, $\cdot_\Q$ and $\le_\Q$ are well-defined.
+\end{proof}
+\begin{proposition}
+    The relation $\le_\Q$ is a total order on $\Q$.
+\end{proposition}
+\begin{proof}
+    \textbf{Transitivity:} Suppose $(ad - bc) bd \le 0$ and $(cf - de) df \le
+    0$.
+    Then $(adf - bcf) bdf \le 0$ and $(bcf - bde) bdf \le 0$.
+    Adding these gives $(adf - bde) bdf \le 0$ and so $(af - be) bf \le 0$.
+
+    \textbf{Antisymmetry:} Suppose $(ad - bc) bd \le 0$ and $(cb - da) db \le 0$.
+    Then $(ad - bc) bd = 0$ which gives $ad = bc$ so $x = y$.
+\end{proof}
+\begin{theorem} \leavevmode
+    \begin{itemize}
+        \item $(\Q, +_\Q, \cdot_\Q, \le_\Q)$ is an ordered field.
+        \item The map $f = z \mapsto [z, 1]$ from $\Z$ to $\Q$ is an
+        injective map that respects $+$, $\cdot$ and $\le$.
+        That is, for all $z_1, z_2 \in \Z$,
+        \begin{enumerate}
+            \item $f(z_1 + z_2) = f(z_1) +_\Q f(z_2)$,
+            \item $f(z_1 z_2) = f(z_1) \cdot_\Q f(z_2)$,
+            \item $z_1 \le z_2 \iff f(z_1) \le_\Q f(z_2)$.
+        \end{enumerate}
+        In other words, $f$ is a commutative ring isomorphism into \Q.
+    \end{itemize}
+\end{theorem}
+\begin{proof}
+    For the first part, we check all ordered field axioms.
+    We again omit the subscripts on $+$ and $\cdot$ for brevity.
+    Numbering is from UMA101.
+    \begin{enumerate}[label=\small(F\arabic*)]
+        \item $+$ and $\cdot$ are commutative: immediate from commutativity of
+        $+$ and $\cdot$ on $\Z$.
+        \item $+$ and $\cdot$ are associative: \begin{align*}
+            \big([a, b] + [c, d]\big) + [e, f]
+                &= [ad + bc, bd] + [e, f] \\
+                &= [(ad + bc)f + bde, bdf] \\
+                &= [adf + b(cf + de), bdf] \\
+                &= [a, b] + [cf + de, df] \\
+                &= [a, b] + \big([c, d] + [e, f]\big)
+        \end{align*}
+        Associativity of $\cdot$ is immediate from associativity on $\Z$.
+        \item Distributivity: \begin{align*}
+            [a, b] \cdot \big([c, d] + [e, f]\big)
+                &= [a, b] \cdot [cf + de, df] \\
+                &= [acf + ade, bdf] \\
+                &= [abcf + abde, b^2 df] \tag{$b$ is nonzero} \\
+                &= [(ac)(bf) + (bd)(ae), (bd)(bf)] \\
+                &= [ac, bd] + [ae, bf]
+        \end{align*}
+        \item Identities: $[0, 1] \ne [1, 1]$, $[a, b] + [0, 1] = [a, b]$ and
+        $[a, b] \cdot [1, 1] = [a, b]$.
+        \item Additive inverse: $[a, b] + [-a, b] = [0, 1]$.
+        \item Multiplicative inverse: $[a, b] \cdot [b, a] = [1, 1]$ for
+        $a \ne 0 \iff [a, b] \ne [0, 1]$.
+    \end{enumerate}
+    For the second part,
+    \begin{enumerate}
+        \item $f(z_1 + z_2) = [z_1 + z_2, 1] = [z_1, 1] + [z_2, 1]$.
+        \item $f(z_1 z_2) = [z_1 z_2, 1] = [z_1, 1] \cdot [z_2, 1]$.
+        \item $f(z_1) \le f(z_2) \iff (z_1 - z_2) \le 0 \iff z_1 \le z_2$.
+        \qedhere
+    \end{enumerate}
+\end{proof}
+We now introduce the division operation $/ : \Q \times \Q^* \to \Q$ by
+$a/b = \frac{a}{b} = ab^{-1}$.
+\begin{notation}
+    Note that every rational number $x = [a, b]$ can be written as $x = a/b$.
+    We thus largely drop the notation $[a, b]$ and write $a/b$ instead.
+\end{notation}
+We will now accept basic algebraic manipulations of rational numbers without
+justification.

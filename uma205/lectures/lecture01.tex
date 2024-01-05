@@ -1,0 +1,65 @@
+\lecture{01}{Wed 03 Jan '24}{}
+
+\setcounter{section}{-1}
+\section{The course} \label{sec:course}
+\textbf{Instructor:} Prof.~Arvind~Ayyer\\
+\textbf{Office:} X-15\\
+\textbf{Office hours:} TBD\\
+\textbf{Lecture hours:} MWF 11:00--11:50\\
+\textbf{Tutorial hours:} Tue 9:00--9:50
+
+80\% attendance is mandatory.
+
+\textbf{Prerequisites:} UMA101 and UMA102
+\textbf{Texts:} Several
+\begin{itemize}
+    \item \textit{Analysis I}, Terence Tao.
+\end{itemize}
+
+\subsection*{Grading} \label{sec:grading}
+\begin{itemize}
+    \item[(20\%)] Quizzes on alternate Tuesdays, worst dropped.
+    No makeup quizzes, but if a quiz is missed for a medical reason
+    (with certificate), that quiz will be dropped.
+    \item[(30\%)] Midterm
+    \item[(50\%)] Final
+\end{itemize}
+Homeworks after every class, ungraded.
+Exams are closed book and closed notes, with no electronic devices allowed.
+
+\subsection*{Aims of the Course} \label{sec:aims}
+\begin{itemize}
+    \item Deal with formal mathematical structures.
+    \item Learning the axiomatic method.
+    \item See how more complicated structures arise from simpler ones.
+\end{itemize}
+
+\section{Peano's Axioms} \label{sec:peano}
+We try to formulate two fundamental quantities: $0$ and the successor function
+$n \mapsto n\pp$.
+\begin{enumerate}[label=(P\arabic*)]
+    \item $0$ is a natural number.
+    \item If $n$ is a natural number, so is $n\pp$.
+    \item $0$ is not the successor of any natural number.
+    \item Different natural numbers have different successors.
+    \item (Principle of mathematical induction) Let $P(n)$ be any ``property''
+    for a natural number $n$.
+    Suppose that $P(0)$ is true, and that $P(n\pp)$ is true whenever $P(n)$ is
+    true.
+    Then $P$ is true for all natural numbers.
+\end{enumerate}
+Denote the set of natural numbers by $\N$.
+Note that $\N$ is itself infinite, but all of its elements are finite.
+\begin{proof}
+    $0$ is finite.
+    If $n$ is finite, then $n\pp$ is finite.
+    Thus, by induction, all natural numbers are finite.
+    (\textcolor{Red}{But wtf is a finite number?})
+\end{proof}
+\begin{remark} \leavevmode
+    \begin{itemize}
+        \item There exist number systems which admit infinite numbers.
+        For example, cardinals, ordinals, etc.
+        \item This way of thinking is \textit{axiomatic}, but not constructive.
+    \end{itemize}
+\end{remark}

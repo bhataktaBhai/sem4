@@ -1,0 +1,230 @@
+\lecture{02}{Thu 04 Jan '24}{Deterministic Finite-State Automata}
+
+\section{Languages} \label{sec:languages}
+\begin{definition}
+    An \emph{alphabet} is a non-empty finite set of symbols or ``letters''.
+
+    A \emph{string} or \emph{word} over an alphabet $A$ is a finite sequence
+    of letters from $A$.
+    Equivalently, a string is a map from a prefix (possibly empty) of $\N$
+    to $A$.
+    The length of a string $s$, notated $\size s$, is the cardinality of its
+    domain.
+    The empty string is denoted $\epsilon$.
+
+    The set of all strings over $A$ is denoted $A^*$.
+\end{definition}
+\begin{example}
+    $A = \set{a, b, c}$ and $\Sigma = \set{0, 1}$ are both alphabets.
+    $aaba$ is a string over $A = \set{a, b, c}$.
+\end{example}
+
+\begin{proposition}
+    Let $A$ be an alphabet.
+    Then $A^*$ is countably infinite.
+\end{proposition}
+\begin{proof}
+    Let $n = \size A$.
+    Let $f \colon A \to \set{1, \dots, n}$ be a numbering of $A$.
+    Replacing each letter in a string with its number gives a representation
+    of the string as a natural number in base $n + 1$.
+    This gives an injection $A^* \to \N$ and so $A^*$ is countable.
+    Infiniteness is obvious.
+
+    Alternatively, consider the strings in their
+    \nameref{def:languages:lexicographic}.
+\end{proof}
+
+\begin{definition}[Language] \label{def:languages:language}
+    A \emph{language} over an alphabet $A$ is a subset of $A^*$.
+\end{definition}
+\begin{example}
+    Let $A = \set{a, b, c}$.
+    Then $\set{abc, aaba}$,
+    $\set{\epsilon, b, aa, bb, aab, aba, bbb, \dots}$, $\set{\epsilon}$,
+    $\set{}$ are all languages over $A$.
+\end{example}
+
+\begin{definition}[Concatenation] \label{def:languages:concatenation}
+    Let $u$, $v$ be strings over an alphabet $A$.
+    Then $u \cdot v$ or simply $uv$ is the string obtained by appending $v$
+    to the end of $u$.
+
+    For two languages $L_1$, $L_2$ over $A$, define their concatenation \[
+        L_1 \cdot L_2 \coloneq \set{uv \mid u \in L_1, v \in L_2}.
+    \]
+\end{definition}
+We will also write $ua$ where $u$ is a string and $a$ is a letter to mean
+$u$ concatenated with the string of length 1 consisting of the letter $a$.
+
+\begin{definition}[Lexicographic order] \label{def:languages:lexicographic}
+    Let $(A, <)$ be a totally ordered alphabet.
+    We say $u < v$ for $u, v \in A^*$ if either $\size u < \size v$ or
+    $\size u = \size v$ and $u = pxu'$, $v = pyv'$ for some $p, u', v' \in A^*$
+    and $x, y \in A$ with $x < y$.
+
+    This is called the \emph{lexicographic order} on $A^*$.
+\end{definition}
+
+\begin{proposition}
+    Let $A$ be an alphabet.
+    Then the set of all languages over $A$ is uncountable.
+\end{proposition}
+\begin{proof}
+    Diagonilization.
+    Suppose there is an enumeration $L$ of all languages over $A$.
+    Let $s$ be an enumeration of $A^*$.
+    Then define $L' = \set{s \in A^* \mid s \notin L_s}$.
+    Then $L'$ is a language over $A$ that is not in $L$.
+\end{proof}
+
+\begin{definition}[Concatenations] \label{def:languages:concatenations}
+    Let $L_1$, $L_2$ be languages over an alphabet $A$.
+    Then $L_1 \cdot L_2$ is the language $\set{uv \mid u \in L_1, v \in L_2}$.
+\end{definition}
+
+\section{Deterministic Finite-State Automata} \label{sec:dfa}
+\begin{center}
+    \begin{tikzpicture}
+        \node[state, initial] (q0) {e};
+        \node[state, accepting, right of=q0] (q1) {o};
+        \path[->]
+            (q0) edge [bend left] node {$a$} (q1)
+            (q0) edge [loop above] node {$b$} (q0)
+            (q1) edge [loop above] node {$b$} (q1)
+            (q1) edge [bend left] node {$a$} (q0);
+    \end{tikzpicture}
+\end{center}
+Each state represents a property of the input string read so far.
+State $e$ is the start state, and state $o$ is the only accepting state.
+
+In this case, State $e$ corresponds to an even number of $a$'s read,
+and State $o$ corresponds to an odd number of $a$'s read.
+This can be proven by induction to conclude that the automaton accepts the
+language $\set{w \in \set{a, b}^* \mid \#_a(w)}$.
+
+\begin{example}
+    Let $A = \set{a, b}$.
+    Consider the DFA
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (q0) {};
+            \node[state, right of=q0] (q1) {};
+            \node[state, right of=q1] (q2) {};
+            \node[state, accepting, right of=q2] (q3) {};
+            \path
+                (q0) edge node {$a$} (q1)
+                (q0) edge [loop above] node {$b$} (q0)
+                (q1) edge node {$b$} (q2)
+                (q1) edge [loop above] node {$b$} (q1)
+                (q2) edge node {$b$} (q3)
+                (q2) edge [bend left] node {$a$} (q1)
+                (q3) edge [loop above] node {$a, b$} (q3);
+        \end{tikzpicture}
+    \end{center}
+    We label the nodes as $\epsilon$, $a$, $ab$ and $abb$
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (q0) {$\epsilon$};
+            \node[state, right of=q0] (q1) {$a$};
+            \node[state, right of=q1] (q2) {$ab$};
+            \node[state, accepting, right of=q2] (q3) {$abb$};
+            \path
+                (q0) edge node {$a$} (q1)
+                (q0) edge [loop above] node {$b$} (q0)
+                (q1) edge node {$b$} (q2)
+                (q1) edge [loop above] node {$b$} (q1)
+                (q2) edge node {$b$} (q3)
+                (q2) edge [bend left] node {$a$} (q1)
+                (q3) edge [loop above] node {$a, b$} (q3);
+        \end{tikzpicture}
+    \end{center}
+    and consider the property corresponding to each state.
+    \begin{itemize}
+        \item State $\epsilon$
+    \end{itemize}
+\end{example}
+
+Another example of a DFA which accepts strings over $\set{0, 1}$ which have
+even parity in each length 4 block.
+\begin{center}
+    \begin{tikzpicture}[scale=0.9, transform shape]
+        \node[state, initial, accepting] (0e) {$0, e$};
+        \node[state, accepting, above right of=0e] (1e) {$1, e$};
+        \node[state, accepting, below right of=0e] (1o) {$1, o$};
+        \node[state, accepting, right of=1e] (2e) {$2, e$};
+        \node[state, accepting, right of=1o] (2o) {$2, o$};
+        \node[state, accepting, right of=2e] (3e) {$3, e$};
+        \node[state, accepting, right of=2o] (3o) {$3, o$};
+        \node[state, below right of=3e] (0o) {$0, o$};
+
+        \path
+            (0e) edge node[near start] {$0$} (1e)
+            (0e) edge node[near start] {$1$} (1o)
+            (1e) edge node[near start] {$0$} (2e)
+            (1e) edge node[near start] {$1$} (2o)
+            (1o) edge node[near start] {$0$} (2o)
+            (1o) edge node[near start] {$1$} (2e)
+            (2e) edge node[near start] {$0$} (3e)
+            (2e) edge node[near start] {$1$} (3o)
+            (2o) edge node[near start] {$0$} (3o)
+            (2o) edge node[near start] {$1$} (3e)
+            (3e) edge node[near start] {$1$} (0o)
+            (3o) edge node[near start] {$0$} (0o)
+            (0o) edge [loop right] node {$0, 1$} (0o)
+            (3e) edge [bend right=2.5cm] node[above, near start] {$0$} (0e)
+            (3o) edge [bend left=2.5cm] node[near start] {$1$} (0e);
+    \end{tikzpicture}
+\end{center}
+
+\begin{problem}
+    Give a DFA that accepts strings over the alphabet $\set{a, b}$ containing an
+    even number of $a$'s and an odd number of $b$'s.
+\end{problem}
+\begin{solution} \leavevmode
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (00) {$e, e$};
+            \node[state, above right of=00] (10) {$o, e$};
+            \node[state, accepting, below right of=00] (01) {$e, o$};
+            \node[state, below right of=10] (11) {$o, o$};
+
+            \path
+                (00) edge node[below] {$a$} (10)
+                (10) edge node[below] {$b$} (11)
+                (11) edge node[above] {$a$} (01)
+                (01) edge node[above] {$b$} (00)
+                (00) edge [bend right] node[below] {$b$} (01)
+                (01) edge [bend right] node[below] {$a$} (11)
+                (11) edge [bend right] node[above] {$b$} (10)
+                (10) edge [bend right] node[above] {$a$} (00);
+        \end{tikzpicture}
+    \end{center}
+\end{solution}
+
+\begin{problem}
+    Give a DFA that accepts strings over $\set{a, b, /, *}$ which don't end
+    inside a C-style comment, \ie, comments of the form \texttt{/* ... */}.
+\end{problem}
+\begin{solution} \leavevmode
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial, accepting] (out) {};
+            \node[state, accepting, right of=out] (slash) {};
+            \node[state, right of=slash] (in) {};
+            \node[state, right of=in] (star) {};
+
+            \path
+                (out) edge [loop below] node {$a, b, *$} (out)
+                (out) edge node {$/$} (slash)
+                (slash) edge node {$*$} (in)
+                (slash) edge [loop below] node {$/$} (slash)
+                (slash) edge [bend left] node {$a, b$} (out)
+                (in) edge [loop below] node {$a, b, /$} (in)
+                (in) edge node {$*$} (star)
+                (star) edge [loop right] node {$*$} (star)
+                (star) edge [bend right] node[above] {$/$} (out)
+                (star) edge [bend left] node {$a, b$} (in);
+        \end{tikzpicture}
+    \end{center}
+\end{solution}
