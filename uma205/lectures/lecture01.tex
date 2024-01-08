@@ -38,17 +38,21 @@ Exams are closed book and closed notes, with no electronic devices allowed.
 We try to formulate two fundamental quantities: $0$ and the successor function
 $n \mapsto n\pp$.
 \begin{enumerate}[label=(P\arabic*)]
-    \item $0$ is a natural number.
-    \item If $n$ is a natural number, so is $n\pp$.
+    \item $0$ is a natural number. \label{peano:0}
+    \item If $n$ is a natural number, so is $n\pp$. \label{peano:closure}
     \item $0$ is not the successor of any natural number.
+    \label{peano:no_predecessor}
     \item Different natural numbers have different successors.
+    \label{peano:injection}
     \item (Principle of mathematical induction) Let $P(n)$ be any ``property''
     for a natural number $n$.
     Suppose that $P(0)$ is true, and that $P(n\pp)$ is true whenever $P(n)$ is
     true.
     Then $P$ is true for all natural numbers.
+    \label{peano:induction}
 \end{enumerate}
-Denote the set of natural numbers by $\N$.
+Denote \emph{the} set of natural numbers by $\N$.
+(Any two sets satisfying the Peano axioms are isomorphic.)
 Note that $\N$ is itself infinite, but all of its elements are finite.
 \begin{proof}
     $0$ is finite.

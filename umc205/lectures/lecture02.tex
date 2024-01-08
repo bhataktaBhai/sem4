@@ -158,22 +158,24 @@ even parity in each length 4 block.
         \node[state, accepting, right of=2o] (3o) {$3, o$};
         \node[state, below right of=3e] (0o) {$0, o$};
 
-        \path
-            (0e) edge node[near start] {$0$} (1e)
-            (0e) edge node[near start] {$1$} (1o)
-            (1e) edge node[near start] {$0$} (2e)
-            (1e) edge node[near start] {$1$} (2o)
-            (1o) edge node[near start] {$0$} (2o)
-            (1o) edge node[near start] {$1$} (2e)
-            (2e) edge node[near start] {$0$} (3e)
-            (2e) edge node[near start] {$1$} (3o)
-            (2o) edge node[near start] {$0$} (3o)
-            (2o) edge node[near start] {$1$} (3e)
-            (3e) edge node[near start] {$1$} (0o)
-            (3o) edge node[near start] {$0$} (0o)
-            (0o) edge [loop right] node {$0, 1$} (0o)
-            (3e) edge [bend right=2.5cm] node[above, near start] {$0$} (0e)
-            (3o) edge [bend left=2.5cm] node[near start] {$1$} (0e);
+        % apply near start to all nodes
+        \begin{scope}[every node/.style={very near start}]
+            \path (0e) edge node {$0$} (1e)
+            (0e) edge node {$1$} (1o)
+            (1e) edge node {$0$} (2e)
+            (1e) edge node {$1$} (2o)
+            (1o) edge node {$0$} (2o)
+            (1o) edge node {$1$} (2e)
+            (2e) edge node {$0$} (3e)
+            (2e) edge node {$1$} (3o)
+            (2o) edge node {$0$} (3o)
+            (2o) edge node {$1$} (3e)
+            (3e) edge node {$1$} (0o)
+            (3o) edge node {$0$} (0o);
+        \end{scope}
+        \path (0o) edge [loop right] node {$0, 1$} (0o)
+            (3e) edge [bend right=2.5cm] node[above, very near start] {$0$} (0e)
+            (3o) edge [bend left=2.5cm] node[very near start] {$1$} (0e);
     \end{tikzpicture}
 \end{center}
 

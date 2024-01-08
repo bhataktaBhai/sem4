@@ -1,0 +1,122 @@
+\lecture{01}{Mon 08 Jan '24}{}
+
+\setcounter{section}{-1}
+\section{The Course} \label{sec:course}
+\textbf{Course website:} \href{https://www.csa.iisc.ac.in/~arindamkhan/courses/ApproxAlgo22/ApproxAlgo.html}{here} \\
+\textbf{MS Teams:} 091kg9h \\
+\textbf{Instructors:} Prof.~Arindam~Khan and Prof.~Anand~Louis \\
+\textbf{TAs:} Aditya~Subramaniam (January) \\
+\textbf{Lecture Hours:} MW 1400--1530 at CSA 112 \\
+\textbf{Office Hours:} Just email.
+
+\subsection{Grading} \label{sec:grading}
+\begin{itemize}
+    \item[(30\%)] Homework
+    \item[(20\%)] Project. Research papers from top conferences
+        (STOC, FOCS, SODA, ICALP, SoCG).
+        Around 10\% on a report.
+        10\% on a presentation (half an hour).
+    \item[(20\%)] Midterm
+    \item[(30\%)] Final
+\end{itemize}
+
+\subsection{Texts} \label{sec:texts}
+Primarily \textit{The Design of Approximation Algorithms} by David Williamson
+and David Shmoys, Cambridge University Press, 2011.
+Available online for free. \\
+Alternatively, \textit{Approximation Algorithms} by Vijay Vazirani, Springer-Verlag, 2001. \\
+For specific topics, Hochbaum, Sariel, etc.
+
+\section{Optimization Problems} \label{sec:optimization_problems}
+Find the \emph{best} solution from a set of \emph{feasible} solutions.
+Richard Karp introduced the concept of \NP-complete problems.
+Unless $\P = \NP$, the optimization version of the problems admit no algorithms
+that simultaneously (1) find optimal solution (2) in polynomial time (3) for
+all instances.
+
+\subsection{Optimization Version of Common \NP-Complete Problems} \label{sec:optimization_np}
+\begin{center}
+    \begin{tabular}{ll}
+        \toprule
+        Problem & Optimization Version \\
+        \midrule
+        3-SAT & Max 3-SAT \\
+        Independent Set & Max Independent Set \\
+        Vertex Cover & Min Vertex Cover \\
+        Set Cover & Min Set Cover \\
+        Hitting Set & Min Hitting Set \\
+        Clique & Max Clique \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\subsection{Approximation Algorithms} \label{sec:approx}
+\textbf{Task:} Solve \NP-hard optimization problems $A$, but no efficient
+algorithm exists (unless $\P = \NP$).
+\begin{definition}
+    Let $\Pi$ be an optimization problem and let $I$ be an instance of $\Pi$.
+    Then $\OPT_\Pi(I)$ is the value of the optimal solution.
+\end{definition}
+There might be several optimal solutions, but they all have the same value.
+\begin{definition}
+    Let $\alpha \ge 1$.
+    $A$ is an $\alpha$-approximation algorithm for a minimization problem $\Pi$
+    if for every instance $I$ of $\Pi$, \[
+        A(I) \le \alpha \OPT_\Pi(I)
+    \] where $A(I)$ is the value of the solution that $A$ returns for $I$.
+\end{definition}
+Typically, $\alpha$ takes values like $1.5$, $2$, $O(1)$, $O(\log n)$, etc. \\
+Usually we omit $\Pi$ and $I$ in $\OPT_\Pi(I)$.
+
+For a maximization problem, $A(I) \ge \frac1\alpha \OPT_\Pi(I)$.
+(Sometimes in literature, $\alpha \le 1$ is used for maximization problems.)
+
+This is also called \emph{absolute approximation}.
+
+\NP-hard problems are very similar to each other in terms of decidability, but
+can be very different in terms of approximability.
+For some problems, it is \NP-hard to obtain any approximation (TSP) but for some
+(Knapsack) we can get $(1+\varepsilon)$-approximation in
+polynomial$(n, \frac1\varepsilon)$ time.
+
+\begin{definition}
+    $A_\varepsilon$ is a polynomial time approximation scheme (PTAS) for a
+    minimization problem $\Pi$ if \[
+        A_\varepsilon(I) \le (1+\varepsilon) \OPT(I)
+    \]
+    and for every fixed $\varepsilon > 0$, the running time of $A_\varepsilon$
+    is polynomial in $n$.
+\end{definition}
+\begin{definition}[EPTAS] \label{def:approx:eptas}
+    Efficient PTAS.
+    $(1+\varepsilon)$-approximation in runtime $f(1 / \varepsilon) n^{O(1)}$,
+    where the exponent of $n$ is independent of $\varepsilon$.
+\end{definition}
+\begin{definition}[FPTAS] \label{def:approx:fptas}
+    Fully polynomial time approximation scheme.
+    $(1+\varepsilon)$-approximation in runtime polynomial in both $n$ and
+    $\frac1\varepsilon$.
+\end{definition}
+\begin{definition}[QPTAS] \label{def:approx:qptas}
+    Quasi-polynomial time approximation scheme.
+    $(1+\varepsilon)$-approximation in quasi-polynomial time in $n$.
+
+    A \emph{quasi-polynomial} is between a polynomial and an exponential.
+\end{definition}
+\begin{definition}[PPTAS] \label{def:approx:pptas}
+    Pseudo-polynomial time approximation scheme.
+    $(1+\varepsilon)$-approximation in pseudo-polynomial time in $n$.
+
+    For example, $(nB)^{O(1)}$, where $B$ is the biggest numeric data.
+\end{definition}
+
+\subsection{Asymptotic Approximation} \label{sec:asymptotic_approximation}
+\begin{definition}
+    The asymptotic approximation ratio $\rho_A^\infty$ of an algorithm $A$ is \[
+        \lim_{n \to \infty} \rho_A^n, \quad \text{where} \quad
+        \rho_A^n = \sup_{I \in \mathcal{I}} \set{\frac{A(I)}{\OPT(I)} \large\mid
+        \OPT(I) = n}
+    \]
+\end{definition}
+
+

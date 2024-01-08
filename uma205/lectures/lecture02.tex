@@ -1,0 +1,332 @@
+\lecture{02}{Mon 08 Jan '24}{}
+
+\begin{definition}[Addition] \label{def:N:addition}
+    Suppose $m, n \in \N$.
+    We define the binary operation $+$ by setting $0 + m = m$.
+    Suppose we have defined $n + m$.
+    Then we inductively define $n\pp + m = (n + m)\pp$.
+\end{definition}
+For example, note that $1 + m = (0 + m)\pp = m\pp$.
+
+\begin{lemma} \label{thm:N:add_zero}
+    For $n \in \N$, we have $n + 0 = n$.
+\end{lemma}
+\begin{proof}
+    $0 + 0 = 0$.
+    If $n + 0 = n$, then $n\pp + 0 = (n + 0)\pp = n\pp$.
+\end{proof}
+
+\begin{lemma} \label{thm:N:add_successor}
+    For $m, n \in \N$, we have $n + m\pp = (n + m)\pp$.
+\end{lemma}
+\begin{proof}
+    Fix $m$ and induct on $n$.
+    For $n = 0$, we have $0 + m\pp = m\pp = (0 + m)\pp$.
+    Suppose $n + m\pp = (n + m)\pp$.
+    Then \begin{align*}
+        n\pp + m\pp &= (n + m\pp)\pp \tag{definition} \\
+                    &= ((n + m)\pp)\pp \tag{hypothesis} \\
+                    &= (n\pp + m)\pp \tag{definition}
+    \end{align*}
+    as desired.
+\end{proof}
+
+\begin{problem} \label{prb:N:add_commute}
+    (Commutativity) For $m, n \in \N$, we have $n + m = m + n$.
+\end{problem}
+\begin{proof}
+    Fix $m$ and induct on $n$.
+    For $n = 0$, we have $0 + m = m = m + 0$.
+    Suppose $n + m = m + n$.
+    Then \begin{align*}
+        n\pp + m &= (n + m)\pp \tag{definition} \\
+                 &= (m + n)\pp \tag{hypothesis} \\
+                 &= m + n\pp
+    \end{align*}
+    by the previous lemma.
+\end{proof}
+
+\begin{problem}
+    (Associativity) For $m, n, p \in \N$, we have $(m + n) + p = m + (n + p)$.
+\end{problem}
+\begin{proof}
+    Induct on $m$.
+    $(0 + n) + p = n + p = 0 + (n + p)$. \\
+    Suppose $(m + n) + p = m + (n + p)$.
+    Then \begin{align*}
+        (m\pp + n) + p &= (m + n)\pp + p \tag{definition} \\
+                       &= ((m + n) + p)\pp \tag{definition} \\
+                       &= (m + (n + p))\pp \tag{hypothesis} \\
+                       &= m\pp + (n + p) \tag{definition}.
+    \end{align*}
+    This closes the induction.
+\end{proof}
+
+\begin{problem}
+    (Cancellation) For $m, n, p \in \N$, if $m + n = m + p$, then $n = p$.
+\end{problem}
+\begin{proof}
+    Induct on $m$.
+    $0 + n = 0 + p$ implies $n = p$.
+
+    Suppose $m + n = m + p$ implies $n = p$.
+    Then $m\pp + n = m\pp + p$ implies $(m + n)\pp = (m + p)\pp$ and so
+    $m + n = m + p$ by \labelcref{peano:injection}.
+    By the inductive hypothesis, $n = p$.
+\end{proof}
+
+\begin{definition}[Positive] \label{def:positive}
+    A natural number is positive if it is not $0$.
+\end{definition}
+
+\begin{proposition}
+    If $a$ is positive and $b \in \N$, then $a + b$ is positive.
+\end{proposition}
+\begin{proof}
+    Induct on $b$.
+    $a + 0 = a$ is positive.
+    $a + b\pp = (a + b)\pp$ is positive since $0$ is not the successor of any
+    natural number.
+\end{proof}
+
+\begin{problem}
+    If $m, n$ in $\N$ with $m + n = 0$, then $m = n = 0$.
+\end{problem}
+\begin{proof}
+    Contrapositive of the previous proposition, with commutativity.
+\end{proof}
+
+\begin{problem}
+    Let $a$ be positive.
+    Then there exists a unique $b \in \N$ such that $a = b\pp$.
+\end{problem}
+\begin{proof}
+    Let $P(n)$ be that $n$ is zero or there exists a unique $b \in \N$ such that
+    $n = b\pp$.
+    $P(0)$ is true.
+
+    Suppose $P(n)$ is true.
+    $n\pp$ is non-zero, successor of $n$ and only $n$, by
+    \labelcref{peano:no_predecessor,peano:injection}.
+    Thus $P(n\pp)$ is true.
+\end{proof}
+
+\begin{definition}[Order] \label{def:order}
+    Let $m, n \in \N$.
+    We say that $n$ is greater than or equal to $m$, written $n \ge m$ or
+    $m \le n$, if $n = m + a$ for some $a \in \N$.
+
+    Similarly, we say that $n$ is (strictly) greater than $m$, written $n > m$
+    or $m < n$, if $n \ge m$ and $n \ne m$.
+\end{definition}
+Note that $n\pp > n$, so there is no largest natural number.
+
+\begin{proposition} \label{thm:N:add_properties}
+    Let $a, b, c \in \N$. Then
+    \begin{enumerate}[label=\arabic*)]
+        \item $a \ge a$ (reflexivity),
+        \item $a \ge b$ and $b \ge a$ implies $a = b$ (antisymmetry),
+        \item $a \ge b$ and $b \ge c$ implies $a \ge c$ (transitivity),
+        \item $a \ge b \iff a + c \ge b + c$,
+        \item $a > b \iff a \ge b\pp$,
+        \item $a > b \iff a = b + c$ for some positive $c$.
+    \end{enumerate}
+\end{proposition}
+\begin{proof} \leavevmode
+    \begin{enumerate}[label=\arabic*)]
+        \item $a = a + 0$.
+        \item $a = b + c$ and $b = a + d$ implies $a = a + (c + d)$.
+            By cancellation, $c + d = 0$ and so $c = d = 0$.
+        \item $a = b + m$ and $b = c + n$ implies $a = c + (m + n)$.
+        \item $a = b + m \iff (a + c) = (b + c) + m$.
+        \item From 6), $a > b \iff a = b + c$ for some positive $c$, iff
+            $a = b + d\pp = b\pp + d$.
+        \item $a > b \iff a = b + c$ but $a \ne b$.
+            Since $a \ne b$, $c$ cannot be zero.
+            Conversely, if $c$ is positive, $a \ne b$. \qedhere
+    \end{enumerate}
+\end{proof}
+
+\begin{proposition}[Trichotomy] \label{thm:trichotomy}
+    Let $a, b \in \N$.
+    Then exactly one of the following holds: $a > b$, $a = b$, or $a < b$.
+\end{proposition}
+\begin{proof}
+    We first prove that no more than one of the three holds.
+    $a = b$ cannot hold simultaneously with $a > b$ or $a < b$ by their
+    definitions.
+    Suppose $a > b$ and $a < b$.
+    Then $a = b + c$ and $b = a + d$ for some positive $c$ and $d$.
+    Thus $a = a + (c + d)$ and so $c + d = 0$, a contradiction.
+
+    We now prove that at least one of the three holds by induction on $a$.
+    Since $b = 0 + b$, either $0 = b$ or $b > 0$.
+    Suppose at least one of $a \ge b$ and $a < b$ holds.
+    If $a = b + c$, then $a\pp = b + (c\pp)$ and so $a\pp > b$.
+    If $a < b$, then by \cref{thm:N:add_properties}(5), $a\pp \le b$.
+    This completes the induction.
+\end{proof}
+
+\begin{proposition}[Strong induction] \label{thm:strong_induction}
+    Let $m_0 \in \N$ and let $P(m)$ be a property for all $m \in \N$.
+    Suppose for all $m \ge m_0$, we have the following:
+    if $P(m')$ holds for all $m_0 \le m' < m$, then $P(m)$ holds.
+    Then $P(m)$ holds for all $m \ge m_0$.
+\end{proposition}
+Note that the inductive step is vacuously true for $m = m_0$.
+\begin{proof}
+    Define $Q(m)$ to be ``$P(m')$ holds for all $m_0 \le m' < m$''.
+    $Q(0)$ holds vacuously, since there are no $m' < 0$.
+
+    Suppose $Q(m)$ holds.
+    If $m < m_0$, then $Q(m\pp)$ holds vacuously, since $m\pp \le m_0$ and so
+    no $m'$ satisfies $m_0 \le m' < m\pp \le m_0$.
+
+    Now if $m \ge m_0$, then $Q(m)$ and the proposition imply $P(m)$.
+    Thus $P(m')$ holds for all $m_0 \le m' \le m \iff m_0 \le m' < m\pp$.
+    Thus $Q(m\pp)$ holds.
+\end{proof}
+
+\begin{problem}[Backwards induction] \label{prb:back_induction}
+    Let $m_0 \in \N$, and let $P(m)$ be a property pertaining to the natural
+    numbers such that whenever $P(m\pp)$ is true, then $P(m)$ is true.
+    Suppose that $P(m_0)$ is also true.
+    Prove that $P(m)$ is true for all natural numbers $m \le m_0$.
+\end{problem}
+\begin{proof}
+    Define $Q(m)$ to be ``if $P(m)$ is true, then $P(m')$ is true for all
+    $m' \le m$''.
+    $Q(0)$ holds vacuously, since $m' \le 0$ implies $m' = 0$.
+
+    Suppose $Q(m)$ holds.
+    Then if $P(m\pp)$ is true, so is $P(m)$, and by the inductive hypothesis,
+    $P(m')$ is true for all $m' \le m$.
+    Thus $Q(m\pp)$ holds.
+    Thus $Q(m)$ holds for all $m \in \N$.
+
+    In particular, $Q(m_0)$ holds, and so $P(m')$ is true for all $m' \le m_0$.
+\end{proof}
+
+From now on, we will assume the usual laws of addition.
+\begin{definition}[Multiplication] \label{def:N:multiplication}
+    Let $m \in \N$.
+    The binary operation multiplication, denoted by $*$, is defined as follows.
+    Set $0 * m = 0$.
+    Then define it inductively as follows.
+    If we know $n * m$, set $n\pp * m = (n * m) + m$.
+\end{definition}
+
+\begin{lemma}
+    Let $m, n \in \N$,
+    Then $m * n = n * m$.
+\end{lemma}
+\begin{proof}
+    First note that $m * 0 = 0$, since $0 * 0 = 0$ and
+    $m\pp * 0 = m * 0 + 0 = m * 0$.
+
+    Next note that $n * m\pp = (n * m) + n$, since $0 * m\pp = 0 = (0 * m) + 0$,
+    and $n\pp * m\pp = (n * m\pp) + m\pp$ which is equal to
+    $(n * m) + n + m\pp = (n * m) + m + n\pp = (n\pp * m) + n\pp$ by the
+    inductive hypothesis.
+
+    Finally, $0 * n = n * 0$, and $m\pp * n = n * m\pp$ gives
+    $m * n = n * m$ by induction on $m$.
+\end{proof}
+
+We use the notation $m n$ for $m * n$ and also employ the usual convention for
+precedence, so that $m n + p$ means $(m * n) + p$ and not $m * (n + p)$.
+\begin{lemma}
+    Let $m, n \in \N$.
+    Then $m n = 0$ iff at least one of $m$ and $n$ is $0$.
+\end{lemma}
+\begin{proof}
+    The `if' direction is clear.
+    Suppose $m$, $n$ are positive.
+    Then $m = \tilde{m}\pp$ for some $\tilde{m} \in \N$.
+    \begin{align*}
+        m n &= (\tilde{m}\pp) n \\
+            &= (\tilde{m} n) + n
+    \end{align*}
+    which is positive since $n$ is positive.
+\end{proof}
+
+\begin{proposition}[Distributivity] \label{thm:distributivity}
+    For $a, b, c \in \N$, we have $a(b + c) = ab + ac$ and $(b + c)a = ba + ca$.
+\end{proposition}
+\begin{proof}
+    Prove the first by induction on $a$.
+    $0(b + c) = 0 = 0 + 0 = 0b + 0c$.
+
+    Suppose $a(b + c) = ab + ac$.
+    Then \begin{align*}
+        a\pp(b + c) &= a(b + c) + (b + c) \tag{definition} \\
+                    &= (ab + ac) + (b + c) \tag{hypothesis} \\
+                    &= (ab + b) + (ac + c) \\
+                    &= a\pp b + a\pp c \tag{definition}.
+    \end{align*}
+    The second equality follows from the first by commutativity.
+\end{proof}
+
+\begin{problem}
+    (Associativity) For $a, b, c \in \N$, we have $(ab)c = a(bc)$.
+\end{problem}
+\begin{proof}
+    Induct on $a$.
+    $(0b)c = 0c = 0 = 0(bc)$.
+
+    Suppose $(ab)c = a(bc)$.
+    Then \begin{align*}
+        (a\pp b)c &= (ab + b)c \tag{definition} \\
+                  &= (ab)c + bc \tag{distributivity} \\
+                  &= a(bc) + bc \tag{hypothesis} \\
+                  &= a\pp(bc)
+    \end{align*} by definition.
+\end{proof}
+\begin{problem}
+    (Order preservation) For $a, b, c \in \N$ with $a < b$ and $c \ne 0$,
+    we have $ac < bc$.
+\end{problem}
+\begin{proof}
+    Induct on $c$ with base case $c = 1$.
+    If $ac < bc$, then $ac + a < bc + a$ but $bc + a < bc + b$, both by order
+    preservation under addition.
+    By transitivity, $ac + a < bc + b$ and so $ac\pp < bc\pp$.
+\end{proof}
+\begin{problem}
+    (Cancellation) For $a, b, c \in \N$ with $ac = bc$ and $c \ne 0$, we have
+    $a = b$.
+\end{problem}
+\begin{proof}
+    From trichotomy and order preservation.
+\end{proof}
+
+\begin{proposition}[Euclidean algorithm] \label{thm:euclidean_algorithm}
+    Let $n \in \N$ and $m$ be positive.
+    Then there exist unique $q, r \in \N$ such that $n = qm + r$ and $r < m$.
+    We call $q$ the quotient and $r$ the remainder.
+\end{proposition}
+\begin{proof}
+    We first prove uniqueness.
+    Suppose $n = qm + r = q'm + r'$.
+    If $q < q' \iff q\pp \le q'$, then $qm + r < qm + m = q\pp m \le q'm
+    \le q'm + r'$, a contradiction.
+    Similarly, $q' < q$ is impossible.
+    This leaves $q = q'$.
+    Then $qm + r = q'm + r'$ gives $r = r'$ by cancellation.
+
+    For existence, we induct on $n$.
+    $0 = 0m + 0$.
+    Suppose $n = qm + r$.
+    Then $n\pp = qm + r\pp$.
+    If $r\pp < m$, we are done.
+    Otherwise, $r\pp = m$ (since $r < m \iff r\pp \le m$) and so
+    $n\pp = (q\pp)m + 0$.
+\end{proof}
+This proposition allows us to divide.
+
+\begin{definition}[Exponentiation] \label{def:exponentiation}
+    Let $m$ be positive.
+    The binary operation exponentiation can be defined inductively as
+    $m ^ 0 = 1$ and $m ^ {n\pp} = m ^ n m$.
+    We further define $0 ^ k = 0$ for all positive $k$.
+\end{definition}

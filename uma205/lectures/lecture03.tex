@@ -1,0 +1,125 @@
+\lecture{03}{Mon 08 Jan '24}{}
+
+\section{Axioms of Set Theory (ZFC)} \label{sec:zfc}
+\begin{definition}[Set] \label{def:zfc:set}
+    A set is a well-defined collection of objects, which we call elements.
+    We will write $x \in A$ to say that $x$ is an element of $A$.
+\end{definition}
+Well-defined means that given any object, we can state without ambiguity whether
+it is an element of the set or not.
+
+\begin{axiom} \label{def:zfc:sets_are_objects}
+    Sets are themselves objects.
+    If $A$ and $B$ are sets, it is meaningful to ask whether $A$ is an element
+    of $B$.
+\end{axiom}
+
+\begin{axiom}[Extensionality] \label{def:zfc:extensionality}
+    Two sets $A$ and $B$ are equal, written $A = B$, if every element of $A$ is
+    a member of $B$ and vice versa.
+\end{axiom}
+
+\begin{axiom}[Existence] \label{def:zfc:existence}
+    There exists a set, denoted by $\O$ or $\{\}$, known as the empty set, which
+    does not contain any elements, \ie, $x \notin \O$ for all objects $x$.
+\end{axiom}
+
+\begin{problem}
+    $\O$ is unique.
+\end{problem}
+\begin{proof}
+    Suppose $\O$ and $\O'$ are both empty sets.
+    Then $x \in \O \iff x \in \O'$ since both are always false.
+\end{proof}
+
+\begin{lemma}[Single choice] \label{thm:zfc:single_choice}
+    Let $A$ be a non-empty set.
+    Then there exists an object $x$ such that $x \in A$.
+\end{lemma}
+\begin{proof}
+    If not, then $x \notin A$ for all objects $x$ and so $A = \O$.
+\end{proof}
+Thus, we can choose an element of $A$ to certify its non-emptiness.
+
+\begin{axiom}[Pairing] \label{def:zfc:pairing}
+    If $a$ is an object, there exists a set, denoted $\set{a}$, whose only
+    element is $a$.
+    Similarly, if $a$ and $b$ are objects, there exists a set, denoted
+    $\set{a, b}$, whose only elements are $a$ and $b$.
+\end{axiom}
+For example, we can now construct $\O$, $\set{\O}$, $\set{\set{\O}}$,
+$\set{\O, \set{\O}}$, etc, all of which are distinct.
+
+\begin{axiom}[Unions] \label{def:zfc:unions}
+    Given sets $A$ and $B$, there exists a set, denoted $A \cup B$, called the
+    union of $A$ and $B$, which consists of exactly the elements in $A$, $B$, or
+    both.
+\end{axiom}
+
+\begin{problem}
+    $A \cup B = B \cup A$.
+\end{problem}
+\begin{proof}
+    By commutativity of $\lor$.
+\end{proof}
+\begin{problem}
+    $(A \cup B) \cup C = A \cup (B \cup C)$.
+\end{problem}
+\begin{proof}
+    By associativity of $\lor$.
+\end{proof}
+
+\begin{definition}[Subset] \label{def:zfc:subset}
+    $A$ is a subset of $B$ if every element of $A$ is alaso an element of $B$,
+    denoted $A \subseteq B$.
+\end{definition}
+
+\begin{axiom}[Specification] \label{def:zfc:specification}
+    (also called Separation).
+    Let $A$ be a set and let $P(x)$ be a property for every $x \in A$.
+    Then there exists a set $S = \set{x \in A \mid P(x)}$ where $x \in S$ iff
+    $x \in A$ and $P(x)$ is true.
+\end{axiom}
+We can now define the intersection, $A \cap B$, and difference, $A \setminus B$,
+of sets $A$ and $B$.
+\begin{definition}
+    Let $A$ and $B$ be sets.
+    we define the intersection $A \cap B = \set{x \in A \mid x \in B}$ and the
+    difference $A \setminus B = \set{x \in A \mid x \notin B}$.
+
+    $A$ and $B$ are said to be disjoint if $A \cap B = \O$.
+\end{definition}
+
+Recall that sets form a Boolean algebra under the operations $\cup$, $\cap$, and
+$\setminus$.
+For example, $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$, de Morgan's laws,
+etc.
+
+\begin{axiom}[Replacement] \label{def:zfc:replacement}
+    Let $A$ be a set and let $P(x, y)$ be a property for every $x \in A$ and
+    every object $y$, such that for every $x \in A$ there is at most one $y$ for
+    which $P(x, y)$ is true.
+    Then there exists a set $S = \set{y \mid P(x, y) \text{ is true for some }
+    x \in A}$.
+    That is, $y \in S$ iff $P(x, y)$ is true for some $x \in A$.
+\end{axiom}
+\begin{examples}
+    \item Let $A = \set{7, 9, 22}$ and $P(x, y) \equiv y = x\pp$.
+    Then $S = \set{8, 10, 23}$.
+    \item Let $A = \set{7, 9, 22}$ and $P(x, y) \equiv y = 1$.
+    Then $S = \set{1}$.
+\end{examples}
+
+\begin{axiom}[Infinity] \label{def:zfc:infinity}
+    There exists a set, denoted $\N$, whose objects are called natural numbers,
+    \ie, an object $0 \in \N$, and $n\pp$ for every $n \in \N$, such that the
+    Peano axioms hold.
+\end{axiom}
+
+\begin{axiom}[Foundation] \label{def:zfc:foundation}
+    (also called Regularity).
+    If $A$ is a non-empty set, then there exists at least one $x \in A$ which
+    is either not a set or is disjoint from $A$.
+\end{axiom}
+For example, if $A = \set{\set{1, 2}, \set{1, 2, \set{1, 2}}}$, then
+$\set{1, 2}$ is an element of $A$ which is disjoint from $A$.

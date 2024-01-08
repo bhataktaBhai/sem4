@@ -1,0 +1,154 @@
+\documentclass[12pt]{article}
+\input{../preamble}
+
+\title{Assignment 1}
+\author{Naman Mishra}
+\date{07 January, 2024}
+
+\begin{document}
+\maketitle
+\setcounter{assignment}{1}
+
+\begin{problem}
+    Let $(\Z, +_\Z, \cdot_\Z, \le_\Z)$ be defined as in class.
+    Recall that we identify $n \in \N$ with $[(n, 0)] \in \Z$.
+    Show that any element of $\Z$ is either $m$ or $-m$ for some $m \in \N$.
+\end{problem}
+\begin{proof}
+    Proved in \refifdef{thm:Z:prop}{\cref}{the last proposition on integers}.
+\end{proof}
+
+\begin{problem}
+    Recall the construction of $\Q$ as the set of equivalence classes of the
+    relation $R$ on $\Z \times \Z \setminus \set{0}$ given by
+    $(a, b) R (c, d) \iff ad = bc$.
+    We say that $[(a, b)] \le [(c, d)]$ if $(bc - ad)(bd) \ge 0$.
+    Using only the arithmetic and order properties of integers, show that the
+    relation $\le$ is well-defined.
+    Remember you are no allowed to divide yet!
+\end{problem}
+\begin{proof}
+    \refifdef{thm:Q:well-defined}{\Cref}{Proved immediately after the definition}.
+\end{proof}
+
+\begin{problem} \label{prob:ZQ:lub}
+    Without assuming the existence of irrational numbers, show that
+    \begin{enumerate}[label=(\alph*)]
+        \item $(\Z, \le)$ has the least upper bound property.
+        \item $(\Q, \le)$ does not have the least upper bound property.
+    \end{enumerate}
+    \textit{You may directly cite any theorem(s) proved in class.}
+\end{problem}
+\begin{proof} \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item Let $S$ be a non-empty bounded above subset of $\Z$.
+        Let $b$ be an upper bounded of $S$ and let $f \colon \Z \to \N$ be as
+        $f(x) = b - x$.
+        By the well-ordering principle, $f(S)$ has a least element $m$.
+        Then $b - m$ is the maximum of $S$.
+        \item \refifdef{thm:Q:no_lub}{\Cref}{Corollary 1.21}. \qedhere
+    \end{enumerate}
+\end{proof}
+
+\begin{problem}
+    Let $F$ be an ordered field.
+    Recall that $\Q \subseteq F$.
+    Show that the following two statements are equivalent.
+    \begin{enumerate}
+        \item For every $a, b > 0$ in $F$, there is an $n \in \N$ such that
+            $na > b$.
+        \item For every $a < b$ in $F$, there is an $r \in \Q$ such that
+            $a < r < b$.
+    \end{enumerate}
+\end{problem}
+\begin{proof}
+    Suppose (i) holds.
+    Let $a < b$ in $F$.
+    Then $1 / (b - a) > 0$.
+    Let $n \in \N$ be such that $n > 1 / (b - a)$, that is, $1/n < b - a$.
+    % Let $S = \set{m \in \Z \mid m \cdot \frac1n \le a}$.
+    We first show that there is a rational at most $a$.
+    If $a \ge 0$, this is trivial.
+    Otherwise, $-a > 0$ and so by (i) there is an $m \in \N$ such that
+    $m > 1 / (-a) \iff -1 / m < a$.
+    Thus the set $S = \set{k \in \Z \mid k \cdot \frac1n \le a}$ is non-empty.
+    By (i), it is bounded above.
+    By \cref{prob:ZQ:lub}(a), it has a maximum $M$.
+    Then $\frac{M}{n} \le a < \frac{M + 1}{n} \le a + \frac1n < b$.
+    Thus $\frac{M + 1}{n}$ is the required rational.
+
+    Suppose (ii) holds.
+    Let $0 < a, b$.
+    Then there exist $p \in \N$ and $q \in \N^*$ such that
+    $0 < b/a < p/q < b/a + 1$.
+    Since $1 \le q$, $p/q \le p$.
+    Then $b < pa$ as required.
+\end{proof}
+
+\begin{problem}
+    Let $F$ be a field.
+    An absolute value of $F$ is a function $A \colon F \to \R$ satisfying
+    \begin{enumerate}[label=(\arabic*)]
+        \item $A(x) \ge 0$ for all $x \in F$,
+        \item $A(x) = 0$ if and only if $x = 0$,
+        \item $A(xy) = A(x)A(y)$ for all $x, y \in F$,
+        \item $A(x + y) \le A(x) + A(y)$ for all $x, y \in F$.
+    \end{enumerate}
+    A subset $S \subseteq F$ is said to be $A$-bounded if there exists an
+    $M > 0$ such that $A(s) \le M$ for all $s \in S$.
+    This is a way to define boundedness of sets in the absence of an order
+    relation.
+
+    Let $p \in \N$ be a prime number.
+    Define $\nu_p \colon \Z \to \Z \cup \set{\infty}$ by \[
+        \nu_p(n) = \begin{cases}
+            \max\set{k \in \N : p^k \mid n}, & \text{if } n \ne 0, \\
+            \infty, & \text{if } n = 0.
+        \end{cases}
+    \] Extend $\nu_p$ to $\Q$ by \[
+        \nu_p(a/b) = \nu_p(a) - \nu_p(b), \quad a, b \in \Z, b \ne 0.
+    \] Now, define $A_p \colon \Q \to \R$ by $A_p(x) = e^{-\nu_p(x)}$ if
+    $x \ne 0$, and $A_p(0) = 0$.
+    \begin{enumerate}[label=(\alph*)]
+        \item Show that $A_p$ is an absolute value on $\Q$.
+        \item Show that \[
+            A_p(x + y) \le \max\set{A_p(x), A_p(y)}, \quad x, y \in \Q.
+        \]
+        \item Show that $\Z$ is $A_p$-bounded.
+    \end{enumerate}
+    \textit{You may use basic facts about factorization without proof,
+    but clearly state what you are using.}
+\end{problem}
+\begin{proof}
+    $A_p$ satisfies (1) and (2) by definition.
+
+    Let $x = a/b$, $y = c/d$ in $\Q$.
+    If either is zero, (3) holds trivially. \\
+    Otherwise $xy = ac/bd$ with $a, b, c, d \in \Z^*$.
+    Let $a = p^{\nu_p(a)} a'$, $c = p^{\nu_p(c)} c'$, where $a', c'$ are
+    coprime to $p$.
+    Then $ac = p^{\nu_p(a) + \nu_p(c)} (a'c')$.
+    Thus $\nu_p(ac) = \nu_p(a) + \nu_p(c)$.
+    Similarly, $\nu_p(bd) = \nu_p(b) + \nu_p(d)$.
+    Thus $\nu_p(xy) = \nu_p(x) + \nu_p(y)$ and so $A_p(xy) = A_p(x) A_p(y)$.
+
+    (4) follows from (b), which we prove now.
+    If either $x$ or $y$ is zero, (b) holds trivially.
+    Let \[
+        x = \frac{p^\alpha a}{p^\beta b}, \quad
+        y = \frac{p^\gamma c}{p^\delta d}, \quad
+    \] where $a, b, c, d \in \Z^*$ are coprime to $p$.
+    Thus $\nu_p(x) = \alpha - \beta$ and $\nu_p(y) = \gamma - \delta$.
+    WLOG suppose that $A_p(x) \ge A_p(y) \iff \nu_p(x) \le \nu_p(y)$ which gives
+    $\alpha - \beta \le \gamma - \delta$.
+    \begin{align*}
+        x + y &= \frac{p^{\alpha + \delta} ad + p^{\beta + \gamma} bc}{p^{\beta + \delta} bd} \\
+        &= \frac{p^{\alpha + \delta} (ad + p^{\beta + \gamma - \alpha - \delta} bc)}{p^{\beta + \delta} bd}
+    \end{align*}
+    Thus $\nu_p(x + y) \ge \alpha + \delta - \beta - \delta = \alpha - \beta$
+    and so $A_p(x + y) \le A_p(x) = \max\set{A_p(x), A_p(y)}$.
+
+    (c) follows from $\nu_p(x) \ge 0$, so $A_p(x) \le 1$ for all $x \in \Z$.
+\end{proof}
+
+\end{document}

@@ -30,7 +30,7 @@
     Similarly if $-m \in \N$.
 \end{proof}
 
-\begin{theorem} \label{thm:no_rational_square_root_of_2}
+\begin{theorem} \label{thm:Q:no_rational_square_root_of_2}
     There exists no $x \in \Q$ such that $x^2 = 2$.
 \end{theorem}
 We first make note of the following lemma.
@@ -47,7 +47,7 @@ We first make note of the following lemma.
 \end{proof}
 We will make use of the well-ordered property of $(\N, \le)$ proved below in
 \cref{thm:well-ordering}.
-\begin{proof}[Proof of \cref{thm:no_rational_square_root_of_2}]
+\begin{proof}[Proof of \cref{thm:Q:no_rational_square_root_of_2}]
     Suppose there exists such an $x$.
     By the field properties, $(-x)^2 = x^2$.
     Thus we may assume $x \ge 0$.
@@ -89,7 +89,7 @@ We will make use of the well-ordered property of $(\N, \le)$ proved below in
     In any case, $P(n+1)$ holds.
 \end{proof}
 
-\begin{theorem} \label{thm:root2_approximation}
+\begin{theorem} \label{thm:Q:root2_approximation}
     Let \begin{align*}
         A &= \set{x \in \Q \mid x^2 < 2} \\
         B &= \set{x \in \Q \mid x^2 > 2, x > 0}
@@ -113,6 +113,25 @@ We will make use of the well-ordered property of $(\N, \le)$ proved below in
     Thus $c \in B$.
 \end{proof}
 
+\begin{corollary} \label{thm:Q:no_lub}
+    $(\Q, \le)$ does not have the least upper bound property.
+\end{corollary}
+\begin{proof}
+    Let $b$ be an upper bound of $A$.
+    Clearly $b > 0$.
+    $b$ cannot be in $A$ since $A$ has no largest element.
+    $b$ cannot have square $2$ by \cref{thm:Q:no_rational_square_root_of_2}.
+    Thus $b \in B$.
+    But since $B$ has no smallest element, there is a $b' \in B$ which is less
+    than $b$.
+
+    For any $a \in A$, if $a < 0$ then $a < b'$.
+    Otherwise, $0 < (b')^2 - a^2 = (b' - a)(b' + a)$ and so $a < b'$.
+    Thus $b'$ is an upper bound of $A$ which is less than $b$.
+
+    Since $b$ was arbitrary, $A$ cannot have a least upper bound.
+\end{proof}
+
 \subsection{Ordered Fields with LUB} \label{sec:ordered_fields_with_lub}
 (Recall from UMA101 Lecture 6)
 Given an ordered set $(X, \le)$, a subset $S \subseteq X$ is said to be
@@ -132,12 +151,12 @@ bounded above subset of $X$ admits a supremum.
     $(\Q, \le)$ does not have the least upper bound property.
 \end{proposition}
 \begin{proof}
-    From \cref{thm:root2_approximation}, we know that $A$ has no largest element
+    From \cref{thm:Q:root2_approximation}, we know that $A$ has no largest element
     and $B$ has no smallest element.
 
     Let $s$ be a supremum of $A$.
     Since there is no largest element in $A$, $s \notin A$.
-    From \cref{thm:no_rational_square_root_of_2}, we know that $s^2 \ne 2$.
+    From \cref{thm:Q:no_rational_square_root_of_2}, we know that $s^2 \ne 2$.
     Thus by trichotomy, $s^2 > 2$ and so $s \in B$.
     But then there is an $s' \in B$ which is less than $s$ but also an upper
     bound of $A$.
