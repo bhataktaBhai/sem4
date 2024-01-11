@@ -1,0 +1,144 @@
+\lecture{01}{Tue 09 Jan '24}{}
+
+\setcounter{section}{-1}
+\section{The Course} \label{sec:course}
+\textbf{Instructor:} Prof.~Chiranjib~Bhattacharyya \\
+\textbf{Office:} CSA, 254 \\
+\textbf{Office hours:} TBD\\
+\textbf{Lecture hours:} TuTh 10:00--11:20
+
+\subsection{References} \label{sec:references}
+\begin{enumerate}
+    \item \textit{Pattern Classification} by Duda, Hart, and Stork
+    \item \textit{Probabilistic Theory of Pattern Recognition} by Devroye,
+        Györfi, and Lugosi
+    \item \textit{Pattern Recognition and Machine Learning} by Bishop
+\end{enumerate}
+
+\section{}
+Consider a machine which can measure the diameter of any fruit placed on it.
+Can the machine distinguish between an apple and an orange?
+Now suppose the machine also has the \emph{capacity} to measure the weight
+of the fruit.
+Can it distinguish between an apple and an orange now?
+\[
+    \text{Fruit} \mapsto (x_1, x_2) \mapsto \set{\text{Apple}, \text{Orange}}
+\] where $x_1$ is the diameter and $x_2$ is the weight.
+These are called \emph{features}.
+
+% scatter plot of x2 vs x1
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            xlabel=$x_1$,
+            ylabel=$x_2$,
+            xmin=-1, xmax=10,
+            ymin=-1, ymax=10,
+            axis lines=middle,
+            % legend pos=north west,
+            ]
+            \addplot[only marks, mark=*, Red] table {
+                1 4
+                2 5
+                2.5 5.5
+                3 4.2
+                2.6 4.8
+                3.2 5.2
+                1.6 3.6
+            };
+            \addplot[only marks, mark=*, orange] table {
+                5 2.5
+                5.5 3
+                6 3.2
+                5.3 3.4
+                5.8 2.3
+                6.2 3.5
+            };
+            \addplot[domain=-1:10, samples=2, blue] {0.7*x+1};
+        \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+How do we measure how good a classifier is?
+This example has very few data points, so error is zero.
+Data is expensive, so accurate testing is expensive.
+
+Let $h$ be a classifier.
+We want to measure how good $h$ is.
+We consider a random variable (of as yet unknown distribution) and compute
+the probability of error.
+
+We consider this slightly more formally.
+Let the training data be \[
+    \mathcal{D} = \set{(x^i, y^i)}
+\] where $x \in \R^2$ and $y \in \set{1, -1}$, where $-1$ and $1$ represent
+apples and oranges respectively.
+Then $h$ is a function from $\R^2$ to $\set{-1, 1}$.
+We wish to measure the probability $\Pr(h(X) \ne Y)$.
+
+\subsection{Probability Review} \label{sec:probability_review}
+Suppose a coin is given with unknown probability of heads $p$.
+How do we estimate $p$?
+We flip the coin $n$ times and count the number of heads $n_H$.
+Then we estimate $p$ as $\hat{p} = \frac{n_H}{n}$.
+
+The rationale behind this is the weak/strong law of large numbers.
+\begin{theorem}[Weak Law of Large Numbers] \label{thm:probability_review:wlln}
+    Let $X_1, X_2, \ldots$ be i.i.d.~random variables with mean $\mu$.
+    Then for any $\varepsilon > 0$, \[
+        \Pr\left(\abs{\frac{1}{n} \sum_{i=1}^n X_i - \mu} > \varepsilon\right)
+        \to 0
+    \] as $n \to \infty$.
+\end{theorem}
+
+\begin{theorem}[Strong Law of Large Numbers] \label{thm:probability_review:slln}
+    Let $X_1, X_2, \ldots$ be i.i.d.~random variables with mean $\mu$.
+    Then \[
+        \Pr\left(\lim_{n \to \infty} \frac{1}{n} \sum_{i=1}^n X_i = \mu\right)
+        = 1
+    \]
+\end{theorem}
+We have made several assumptions here.
+We know the structure of the problem at hand.
+For instance, we know that there is exactly one coin tossed each time.
+We have assumed that the coin tosses are independent.
+We have assumed that the probability of heads is the same for each toss.
+
+Suppose we know the following in our earlier experiment:
+\begin{itemize}
+    \item $\Pr(Y = 1)$
+    \item $\Pr(Y = -1)$
+    \item $\Pr(X = x \mid Y = 1)$
+    \item $\Pr(X = x \mid Y = -1)$
+\end{itemize}
+Let $\eta(x) = \Pr(Y = 1 \mid X = x)$ given by Bayes' rule.
+Our rule for classification is \[
+    h(x) = \begin{cases}
+        \hphantom{-}1 & \text{if } \eta(x) > \frac{1}{2} \\
+        -1 & \text{otherwise}
+    \end{cases}
+\] This is called the \emph{Bayes classifier}.
+
+\subsection{Multivariate Gaussians} \label{sec:multivariate_gaussians}
+\[
+    f(x) = \frac{1}{\sqrt{(2\pi)^d \det(\Sigma)}}
+    \exp\left(-\frac{1}{2} (x - \mu)^\top \Sigma^{-1} (x - \mu)\right)
+\] where $x$ is a $d$-dimensional column vector (so that the exponent is a
+scalar), $\mu$ is the mean, and $\Sigma$ is the covariance matrix.
+\begin{align*}
+    E[X] &= \int_{x \in \R^d} x f(x) \dd x \\
+    \Sigma_{ij} &= E[(X_i - \mu_i)(X_j - \mu_j)]
+\end{align*}
+\textbf{Reading assignment:} Let $A$ be a square symmetric real-valued matrix.
+What is known about the eigenvalues and positive definiteness of $A$?
+
+\begin{definition}[Positive definite] \label{def:multivariate_gaussians:positive_definite}
+    A matrix $A_{n \times n}$ is \emph{positive definite} if $u^\top A u > 0$
+    for all $u \in \R^n \setminus \set{0}$.
+\end{definition}
+
+\begin{exercise}
+    Compute the Bayes classifier under the assumption that $X$ under class 1
+    and class 2 has multivariate Gaussian distribution with means $\mu_1$
+    and $\mu_2$ with same covariance matrix $\Sigma$.
+\end{exercise}

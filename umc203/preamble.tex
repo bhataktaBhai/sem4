@@ -1,0 +1,14 @@
+\let\emph\textsl
+\input{~/IISc/preamble}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\newcounter{assignment}
+\theoremstyle{definition}
+\newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem}{Problem}[assignment]
+\newmdtheoremenv[nobreak=true]{exercise}[theorem]{Exercise}
+
+\DeclareMathOperator{\sgn}{sgn}
+\usepackage{bbm}
+\newcommand{\ind}[1]{\mathbbm{1}_{#1}}
+\newcommand{\given}{\mid}
