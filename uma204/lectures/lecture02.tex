@@ -1,7 +1,7 @@
 \lecture{02}{Tue 02 Jan '24}{}
 Throughout this section, we will omit the parentheses in $[(a, b)]$ and write
 it as $[a, b]$.
-\begin{proposition} \label{thm:Q:well-defined}
+\begin{proposition} \label{thm:Z:well-defined}
     The operations $+_\Z$, $\cdot_\Z$ and the relation $\le_\Z$ are
     well-defined.
 \end{proposition}
@@ -227,7 +227,7 @@ We define an order $\le_\Q$ on $\Q$ by \[
     [(a, b)] \le_\Q [(c, d)] \iff (ad - bc) bd \le 0.
 \]
 We will again omit the parentheses in this section.
-\begin{proposition}
+\begin{proposition} \label{thm:Q:well-defined}
     The operations $+_\Q$, $\cdot_\Q$ and the relation $\le_\Q$ are well-defined.
 \end{proposition}
 \begin{proof}
@@ -251,13 +251,12 @@ We will again omit the parentheses in this section.
         % \implies (a'd - b'c) b'd (c')^2 &\le 0 \\
         %     &\;\;\vdots \\
         % \implies (a'd' - b'c') b'd' &\le 0 \\
-        \implies (a'c')(ad - bc) bd (a'c') &\le 0 \\
-        \implies (a'ac'd - a'bc'c) a'bc'd &\le 0 \\
-        \implies (a'acd' - ab'c'c) ab'cd' &\le 0 \\
-        \implies (ac)^2 (a'd' - b'c') b'd' &\le 0 \\
-        \implies (a'd' - b'c') b'd' &\le 0
-    \end{align*}
-    Similarly for the other direction.
+        \iff (b'd')(ad - bc) bd (b'd') &\le 0 \\
+        \iff (ab'dd' - bb'cd') bdb'd' &\le 0 \\
+        \iff (a'bdd' - bb'c'd) bdb'd' &\le 0 \\
+        \iff (bd)^2 (a'd' - b'c') b'd' &\le 0 \\
+        \iff (a'd' - b'c') b'd' &\le 0
+    \end{align*} since $bd \ne 0 \ne b'd'$.
     Thus $+_\Q$, $\cdot_\Q$ and $\le_\Q$ are well-defined.
 \end{proof}
 \begin{proposition}

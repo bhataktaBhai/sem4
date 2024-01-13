@@ -7,5 +7,5 @@
 **/*.aux
 **/*.dvi
 # **/*.pdf
-**/*.synctex.gz*
+**/*.synctex*
 .DS_Store

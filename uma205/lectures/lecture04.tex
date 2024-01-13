@@ -1,0 +1,116 @@
+\lecture{04}{Wed 10 Jan '24}{}
+
+\begin{definition}[Cartesian product] \label{def:cartesian_product}
+    Let $A$ and $B$ be sets.
+    Then $A \times B = \set{(a, b) \mid a \in A, b \in B}$ is called the
+    \emph{Cartesian product} of $A$ and $B$. 
+\end{definition}
+This exists by virtue of the axiom of powers (\ref{def:zfc:powers}).
+\begin{definition}[Relation] \label{def:relation}
+    Let $A$ and $B$ be sets.
+    Then a subset $R$ of $A \times B$ is called a (binary) \emph{relation}
+    from $A$ to $B$.
+    If $B = A$, we say that $R$ is a relation on $A$.
+\end{definition}
+
+We define some properties of relations.
+\begin{definition}
+    Let $R$ be a relation on a set $A$.
+    We say that $R$ is
+    \begin{enumerate}
+        \item \textbf{reflexive} if $(a, a) \in R$ for all $a \in A$,
+        \item \textbf{symmetric} if $(a, b) \in R \implies (b, a) \in R$,
+        \item \textbf{antisymmetric} if $(a, b) \in R \land (b, a) \in R
+        \implies a = b$,
+        \item \textbf{transitive} if $(a, b) \in R \land (b, c) \in R
+        \implies (a, c) \in R$.
+    \end{enumerate}
+    If $R$ satisfies (i), (ii) and (iv), it is said to be an
+    \emph{equivalence relation}.
+    We write $a \sim_R b$ for $(a, b) \in R$.
+
+    If $R$ satisfies (i), (iii) and (iv), it is a partial order.
+    We write $a \le_R b$ or $a \ge_R b$ for $(a, b) \in R$.
+\end{definition}
+
+\begin{definition}[Equivalence class] \label{def:equivalence_class}
+    Let $X$ be a set and $\sim_R$ an equivalence relation on $X$.
+    The equivalence class associated with $x \in X$ is \[
+        [x] = \set{y \in X \mid y \sim_R x}.
+    \]
+\end{definition}
+
+\begin{definition}[Partition] \label{def:partition}
+    A (set) \emph{partition} of a set $X$ is a family $\set{X_\alpha \mid
+    \alpha \in I}$, where $I$ is some indexing set, such that,
+    \begin{enumerate}
+        \item $X_\alpha \cap X_\beta = \O$ for all $\alpha \ne \beta \in I$,
+        \item $\bigcup_{\alpha \in I} X_\alpha = X$.
+    \end{enumerate}
+    This is also written as simply \[
+        \bigsqcup_{\alpha \in I} X_\alpha = X.
+    \]
+\end{definition}
+
+\begin{proposition}[Fundamental theorem of equivalence relations] \label{thm:fter}
+    Let $X$ be a set and $\sim_R$ an equivalence relation on $X$.
+    Then the family of equivalence classes $\set{[x] \mid x \in X}$ forms
+    a partition of $X$.
+    Conversely, every partition arises from an equivalence relation.
+\end{proposition}
+\begin{proof}
+    Exercise.
+    % TODO
+\end{proof}
+
+\begin{definition}
+    Let $X$ be a set and $\sim_R$ an equivalence relation on $X$.
+    Then the set $X / \sim_R = \set{[x] \mid x \in X}$ is called the
+    \emph{quotient set} of $X$ by $R$.
+\end{definition}
+\begin{examples}
+    \item Consider $\N$ with the relation $a \sim_R b \iff a \equiv b \pmod{3}$.
+    The quotient set $\N / R$ is $\set{[0], [1], [2]}$, which is morally the
+    same as $\set{0, 1, 2}$.
+    \item For any set $A$ with the equality relation $=$, the quotient set
+    $A /{=}$ is the (morally) the same as $A$.
+    \item Consider $\R^2$ with $(x, y) \sim (z, w)$ if $x^2 + y^2 = z^2 + w^2$.
+    Then $\R^2 /{\sim} = \set{[(r, 0)] \mid r \in \R}$ which is morally just
+    the set of non-negative reals.
+\end{examples}
+
+\begin{definition}[Function] \label{def:fn}
+    Let $A$ and $B$ be sets.
+    A relation $f$ from $A$ to $B$ is said to be a \emph{function} if for
+    all $a \in A$, there exists a unique $b \in B$ such that $(a, b) \in f$.
+
+    $A$ is said to be the \emph{domain}, $B$ is said to be the \emph{range}
+    or \emph{codomain} of $f$.
+    For a subset $C \subseteq A$, the image of $C$ under $f$ is
+    $f(C) = \set{f(a) \mid a \in C}$.
+
+    For a subset $D \subseteq B$, the \emph{preimage} or \emph{inverse image} of
+    $D$ under $f$ is $f^{-1}(D) = \set{a \in A \mid f(a) \in D}$.
+\end{definition}
+Note that $f(C)$ exists by the axiom of replacement.
+\begin{examples}
+    \item $A = B = \N$, $f(a) = a\pp$.
+    Then $f(\N) = \N \setminus \set{0}$. \[
+        f^{-1}(\set{a}) = \begin{cases}
+            \set{a - 1} & \text{if } a > 0 \\
+            \O & \text{if } a = 0
+        \end{cases}
+    \]
+\end{examples}
+
+\begin{definition} \label{def:fn:equality}
+    Two functions $f$ and $g$ with the same domain $X$ and range $Y$ are
+    equal if $f(x) = g(x)$ for all $x \in X$.
+\end{definition}
+
+\begin{definition}[Composition] \label{def:fn:composition}
+    If $f : X \to Y$ and $g : Y \to Z$, then the \emph{composition} $g \circ f$
+    is a function $g \circ f \colon X \to Z$ given by \[
+        (g \circ f)(x) = g(f(x)).
+    \]
+\end{definition}

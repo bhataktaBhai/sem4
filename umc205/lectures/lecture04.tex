@@ -1,0 +1,61 @@
+\lecture{04}{Thu 11 Jan '24}{}
+
+\subsubsection{Two Necessary Conditions for Regular Languages} \label{sec:pumping_periodic}
+In a given DFA $\mathcal{A}$ with $n$ states, any path of length greater
+than $n$ must have a loop.
+Let $u$ be the string of symbols on the path from the start state to the
+beginning of the loop, let $v$ be the (non-empty) string of symbols on the
+loop, and let $w$ be the string of symbols on the path from the end of the
+loop to the final state.
+
+Then if $uvw$ is accepted by $\mathcal{A}$, then so is $uv^kw$ for any
+$k \geq 0$.
+
+\begin{theorem}[Pumping Lemma]
+    For any regular language $L$, there exists a constant $k$, such that
+    for any word $t \in L$ of the form $xyz$ with $\abs{y} \ge k$, there
+    exist strings $u$, $v$ and $w$ such that
+    \begin{enumerate}
+        \item $y = uvw$, $v \ne \epsilon$, and
+        \item $xu v^i wz \in L$ for each $i \ge 0$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proposition}
+    The language $\set{a^n b^n \mid n \ge 0}$ is not regular.
+\end{proposition}
+\begin{proof}
+    Let $k \in \N$.
+    Choose $t = a^k b^k = xyz$ where $x = \epsilon$, $y = a^k$, and $z = b^k$.
+    Let $y = uvw$ for some non-empty $v$.
+    Then $v = a^j$ for some $j \ge 1$.
+    Then $x u v^2 w z = a^{k + j} b^k$, which is not in the language.
+    Therefore, the language is not regular.
+\end{proof}
+
+\begin{problem}
+    Show that $\set{a^{2^n} \mid n \ge 0}$ is not a regular language.
+\end{problem}
+\begin{solution}
+    Let $k \in \N$.
+    Choose $t = a^{2^k} = xyz$ where $x = \epsilon$, $y = a^{2^k - 1}$, and
+    $z = a$.
+    Let $y = uvw$ for some non-empty $v$.
+    Then $v = a^j$ for some $1 \le j < 2^k$.
+    Then $x u v^2 w z = a^{2^k + j}$, which is not in the language
+    since $2^k < 2^k + j < 2^{k + 1}$.
+\end{solution}
+
+\begin{problem}
+    Is the language $\set{w \cdot w \mid w \in \set{0, 1}^*}$ regular?
+\end{problem}
+\begin{proof}
+    Let $k \in \N$.
+    Choose $t = 0^k 1^k 0^k 1^k = xyz$ where $x = 0^k$, $y = 1^k$, and
+    $z = 0^k 1^k$.
+    Let $y = uvw$ for some non-empty $v$.
+    Then $v = 1^j$ for some $1 \le j \le k$.
+    If $j$ is odd, we are done.
+    Otherwise, $x u v^2 w z = 0^k 1^{k + m} 1^m 0^k 1^k$, where $j = 2m$.
+    This is not in the language since the second half starts with a $1$.
+\end{proof}

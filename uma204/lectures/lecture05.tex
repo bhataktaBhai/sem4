@@ -1,0 +1,94 @@
+\lecture{05}{Thu 11 Jan '24}{}
+\begin{theorem}
+    $\R$ has the least upper bound property.
+\end{theorem}
+\begin{proof}
+    Let $\alpha$ be a non-empty subset of $\R$ that is bounded above.
+    We claim that $S = \bigcup_{A \in \alpha} A$ is the supremum of $\alpha$.
+    \begin{description}
+        \item[$s$ is a cut:] Since $S$ is a union of a non-empty set of
+        non-empty sets, it is non-empty.
+        Since $S$ is bounded above, say by some cut $C$, we have
+        $S \subseteq C \subsetneq \Q$ and so $S \ne \Q$.
+        If $a \in S$, then $a \in A$ for some
+        $A \in \alpha$. Since $A$ is a cut, every rational smaller than $a$
+        is contained in $A$ and thereby in $S$.
+        Moreover, there exists an $a' \in A$ which is larger than $a$.
+        Thus $a' \in S$ is larger than $a$.
+        \item[upper bound:] $A \subseteq S$ for all $A \in \alpha$.
+        \item[least upper bound:] For any $D \subsetneq S$,
+        let $b \in S \setminus D$.
+        But since $b \in A$ for some $A \in \alpha$, $D$ is not an upper
+        bound of $\alpha$. \qedhere
+    \end{description}
+\end{proof}
+Dedekind's construction is an ``order completion''.
+Thus all the order properties (LUB, density) are nice, but arithmetic is
+ugly.
+
+\subsubsection{Cauchy's Construction} \label{sec:cauchy}
+There seem to be sequences in $\Q$ that ``should'' have a limit (\eg, a
+monotone and bounded sequence) but do not (within $\Q$).
+We construct equivalence classes of sequences which ``converge'' to the same
+number, and define reals by those classes.
+\begin{definition}[Sequence]
+    A sequence of rational numbers is a $f \colon \N \to \Q$.
+    We usually denote $f(k)$ by $a_k$ and call it the $k$-th term of the
+    sequence.
+    The function $f$ is usually written as $(a_k)_{k \in \N}$.
+\end{definition}
+
+\begin{definition}
+    A sequence $(a_k)_{k \in \N} \subseteq \Q$ is said to be
+    \begin{enumerate}
+        \item \Q-bounded if there exists an $M \in \Q$ such that
+        $|a_k| \le M$ for all $k \in \N$.
+        \item \Q-Cauchy if for every rational $\epsilon > 0$, there exists
+        an $N \in \N$ such that $|a_m - a_n| < \epsilon$ for all
+        $m, n \ge N$.
+        \item convergent in \Q\ if there exists an $L \in \Q$ such that
+        for all (rational) $\varepsilon > 0$, there exists an $N \in \N$
+        such that $|a_n - L| < \varepsilon$ for all $n \ge N$.
+    \end{enumerate}
+\end{definition}
+
+\begin{exercise}
+    Show that if a sequence is convergent in \Q, then it is \Q-Cauchy,
+    and if it is \Q-Cauchy, then it is \Q-bounded.
+\end{exercise}
+\begin{remark}
+    From UMA101, we know that if a sequence is convergent in \Q, the limit
+    is unique.
+    We also know arithmetic laws of limits (which we proved over \R, but
+    they hold over \Q as well).
+\end{remark}
+
+\begin{definition}
+    Two sequences $a = (a_n)_{n \in \N}$ and $b = (b_n)_{n \in \N}$ are said
+    to be \emph{equivalent} if their difference converges to $0$.
+\end{definition}
+
+\begin{proposition}
+    Let $\mathcal{C}$ denote the space of \Q-cauchy sequences.
+    Then $\sim$ given by $a \sim b$ if $a$ and $b$ are equivalent (as per
+    the previous definition) is an equivalence relation.
+\end{proposition}
+\begin{proof}
+    Reflixivity and symmetry are immediate.
+    Transitivity follows from the triangle inequality.
+\end{proof}
+
+\begin{definition}[\R] \label{def:R:cauchy}
+    We define \[
+        \R \coloneq \mathcal{C} /{\sim}.
+    \] Further,
+    \begin{enumerate}
+        \item $[a] +_\R [b] \coloneq [a + b]$.
+        \item The additive identity $0 = [(0)_{n \in \N}]$.
+        \item $[a] \cdot_\R [b] \coloneq [a \cdot b]$.
+        \item $[a] >_\R 0$ if there exists a rational $c > 0$ and an
+        $N \in \N$ such that $a_n > c$ for all $n \ge N$.
+        From positivity, we can define order as $[a] >_\R [b]$ iff there
+        is some $[d] > 0$ such that $[a] + [d] = [b]$.
+    \end{enumerate}
+\end{definition}

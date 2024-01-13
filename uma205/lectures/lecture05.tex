@@ -1,0 +1,104 @@
+\lecture{05}{Fri 12 Jan '24}{}
+
+\begin{definition}
+    A function $f\colon A \to B$ is said to be
+    \begin{itemize}
+        \item \emph{injective}, if $f(x) = f(y)$ implies $x = y$,
+        \item \emph{surjective}, if $f(A) = B$,
+        \item \emph{bijective}, if it is both injective and surjective.
+        \item an \emph{involution}, if $f(f(x)) = x$ for all $x \in A$.
+    \end{itemize}
+\end{definition}
+\begin{exercise}
+    Let $f\colon A \to B$ be an involution.
+    Show that $f$ is bijective.
+\end{exercise}
+\begin{solution}
+    $f$ is surjective since everything is in the range.
+    Injective since $f(x) = f(y) \implies f(f(x)) = f(f(y)) \implies x = y$.
+\end{solution}
+
+A function is bijective iff for any $b \in B$ there is a unique $a \in A$
+such that $f(a) = b$.
+\begin{definition}
+    Let $f\colon A \to B$ be bijective.
+    The \emph{inverse} of $f$ is the function $f^{-1}\colon B \to A$
+    where $f^{-1}(b)$ is the unique $a \in A$ such that $f(a) = b$.
+\end{definition}
+
+\begin{axiom}[Powers] \label{def:zfc:powers}
+    Let $X$ and $Y$ be sets.
+    Then there exists a set, denoted $Y^X$, consisting of all functions
+    from $X \to Y$.
+\end{axiom}
+\begin{exercise}
+    Let $X$ be a set.
+    Then $\set{Y \mid Y \subseteq X}$ is also a set.
+\end{exercise}
+\begin{solution}
+    The property $P(F, X_F)$ given by \[
+        P(F, X_F) \iff F \in 2^X \land X_F = \set{x \in X \mid F(x) = 1}
+    \] is satisfied by at most one $X_F$ for any $F$.
+    Thus applying the axiom of replacement on $2^S$ gives the desired set.
+\end{solution}
+
+\begin{axiom}[Unions] \label{def:zfc:unions}
+    Let $A$ be a set whose elements are also sets.
+    Then there exists a set, denoted $\bigcup A$, whose elements are the
+    elements of the elements of $A$.
+    Thus $x \in \bigcup A \iff x \in S$ for some $S \in A$.
+\end{axiom}
+\begin{remark}
+    This axiom implies \cref{def:zfc:pairwise_union}.
+
+    Let $I$ be a set such that $A_\alpha$ is a set for all $\alpha \in I$.
+    Then $\set{A_\alpha \mid \alpha \in I}$ is a set by the axiom of
+    replacement.
+    Thus $\bigcup_{\alpha \in I} A_\alpha$ is a set.
+\end{remark}
+
+\begin{definition}
+    Two sets $X$ and $Y$ are said to have the same \emph{cardinality} if
+    there exists a bijection $f\colon X \to Y$.
+
+    Let $n \in \N$.
+    If a set $X$ has the same cardinality as $\set{0, 1, \ldots, n - 1}$,
+    then $X$ is said to be \emph{finite} and have cardinality $n$.
+\end{definition}
+
+\begin{definition}
+    A set $X$ is \emph{countably infinite} or \emph{countable} if it has the
+    same cardinality as $\N$, is \emph{at most countable} if it is finite or
+    countable, and is \emph{uncountable} otherwise.
+\end{definition}
+\begin{exercise}
+    Let $m < n$ be naturals.
+    Show that there is
+    \begin{enumerate}
+        \item no surjection from $[m]$ to $[n]$\footnotemark.
+        \item no injection from $[n]$ to $[m]$.
+        \item a bijection from $[a]$ to $[b]$ iff $a = b$.
+    \end{enumerate}
+\end{exercise}
+\footnotetext{$[n] = \set{1, \dots, n}$}
+
+\begin{exercise}[Properties of countable sets] \leavevmode
+    \begin{enumerate}
+        \item If $X$ and $Y$ are countable, then so is $X \cup Y$.
+        \item The set $\set{(n, m) \in \N \times \N \mid 0 \le m \le n}$ is
+            countable.
+        \item $\N \times \N$ is countable.
+    \end{enumerate}
+\end{exercise}
+\begin{theorem}
+    Let $X$ be an arbitrary set.
+    Then $X$ and $2^X$ cannot have the same cardinality.
+\end{theorem}
+\begin{proof}
+    Let $f\colon X \to 2^X$.
+    Consider $A = \set{x \in X \mid x \notin f(x)} \subseteq X$.
+    So $A \in 2^X$.
+    Since for any $x \in X$, $x \in A \iff x \notin f(x)$, we have
+    $f(x) \ne A$ for all $x \in X$.
+    Thus $f$ is not surjective.
+\end{proof}

@@ -1,0 +1,145 @@
+\lecture{03}{Tue 09 Jan '24}{}
+\subsection{A good way to construct DFAs} \label{sec:dfa:ideas}
+Suppose we have to construct a DFA for a language $L$ over an alphabet $A$.
+\begin{itemize}
+    \item Think of a finite number of properties of strings that you might
+    want to keep track of.
+    For example, ``number of $a$'s seen so far is even''.
+    \item Identify an initial property that is true of the empty string,
+    say $p_0$.
+    \item Make sure there is a rule to update the properties which are being
+    tracked for a string $wa$, based purely on the properties for $w$ and
+    the last input $a$.
+    \item The properties should imply membership in $L$ or non-membership
+    in $L$.
+\end{itemize}
+
+\subsection{DFAs Formally} \label{sec:dfa:formal}
+\begin{definition}[DFA] \label{def:dfa}
+    A \emph{deterministic finite-state automaton} $\mathcal{A}$ over an
+    alphabet $A$ is a tuple $(Q, s, \delta, F)$ where
+    \begin{itemize}
+        \item $Q$ is a finite set of \emph{states},
+        \item $s \in Q$ is the \emph{start state},
+        \item $\delta: Q \times A \to Q$ is the \emph{transition function},
+        \item $F \subseteq Q$ is the set of \emph{final states}.
+    \end{itemize}
+\end{definition}
+For example, the first example in \cref{sec:dfa} can be written as
+\begin{align*}
+    A &= \set{a, b} \\
+    Q &= \set{e, o} \\
+    s &= e \\
+    F &= \set{o} \\
+    \delta(e, a) &= o \\
+    \delta(e, b) &= e \\
+    \delta(o, a) &= e \\
+    \delta(o, b) &= o
+\end{align*}
+We further define $\hat{\delta} : Q \times A^* \to Q$ as the extension of
+$\delta$ to strings.
+\begin{align*}
+    \hat{\delta}(q, \epsilon) &= q \\
+    \hat{\delta}(q, wa) &= \delta(\hat{\delta}(q, w), a)
+\end{align*}
+\begin{definition}[Language of a DFA] \label{def:dfa:lang}
+    The \emph{language of a DFA} $\mathcal{A}$ is
+    \begin{equation*}
+        L(\mathcal{A}) = \set{w \in A^* \mid \hat{\delta}(s, w) \in F}
+    \end{equation*}
+\end{definition}
+
+\subsection{Regular Languages} \label{sec:dfa:regular}
+\begin{definition}[Regular Language] \label{def:regular}
+    A language $L$ is \emph{regular} if there exists a DFA $\mathcal{A}$
+    over $A$ such that $L(\mathcal{A}) = L$.
+\end{definition}
+For example, the exercises we have done so far.
+Another example is \emph{any} finite language.
+
+\begin{theorem}
+    The class of regular languages over an alphabet is countable.
+\end{theorem}
+\begin{proof}
+    We partition the set of all DFAs over $A$ by their number of states.
+    For each $n \in \mathbb{N}$, there are finitely many DFAs with $n$
+    states.
+    A countable union of finite sets is countable.
+    Thus the set of all DFAs over $A$ is countable.
+    Since each regular language corresponds to at least one DFA, the set
+    of all regular languages over $A$ is countable.
+\end{proof}
+However, we have seen that there are uncountably many languages over any
+alphabet.
+This immediately yields the following.
+\begin{corollary}
+    There are uncountably many languages that are not regular.
+\end{corollary}
+
+\begin{theorem}[Closure under set operations] \label{thm:dfa:regular:closure1}
+    The class of regular languages is closed under union, intersection and
+    complementation.
+\end{theorem}
+\begin{proof}
+    For complementation, simply invert the set of final states.
+    That is, given $\mathcal{A} = (Q, s, \delta, F)$, let
+    $\mathcal{A}' = (Q, s, \delta, Q \setminus F)$.
+    Then $L(\mathcal{A}') = A^* \setminus L(\mathcal{A})$, since
+    \begin{align*}
+        w \in L(\mathcal{A}') &\iff \hat{\delta}(s, w) \in Q \setminus F \\
+        &\iff \hat{\delta}(s, w) \notin F \\
+        &\iff w \notin L(\mathcal{A}) \\
+        &\iff w \in A^* \setminus L(\mathcal{A})
+    \end{align*}
+
+    For intersection and union, define the \emph{product} of two DFAs.
+    \begin{definition}[Product] \label{def:dfa:product}
+        Given two DFAs $\mathcal{A} = (Q, s, \delta, F)$ and
+        $\mathcal{B} = (Q', s', \delta', F')$ over the same alphabet $A$, the
+        \emph{product} of $\mathcal{A}$ and $\mathcal{B}$ is \[
+            \mathcal{A} \times \mathcal{B} = (Q \times Q', (s, s'), \Delta,
+            F \times F')
+        \] where $\Delta((q, q'), a) = (\delta(q, a), \delta'(q', a))$.
+    \end{definition}
+    Note that in the above definition, the extension of $\Delta$ to strings
+    $\hat{\Delta}$ is given by \[
+        \hat{\Delta}((q, q'), w) = (\hat{\delta}(q, w), \hat{\delta'}(q', w))
+    \]
+    This is easily proved by induction on the length of $w$ (or structural
+    induction on $w$).
+    \begin{align*}
+        \hat{\Delta}((q, q'), \epsilon) &= (q, q') \\
+        &= (\hat{\delta}(q, \epsilon), \hat{\delta'}(q', \epsilon)) \\
+        \shortintertext{and if}
+        \hat{\Delta}((q, q'), w) &= (\hat{\delta}(q, w), \hat{\delta'}(q', w)) \\
+        \shortintertext{then}
+        \hat{\Delta}((q, q'), wa) &= \Delta(\hat{\Delta}((q, q'), w), a) \\
+        &= \Delta((\hat{\delta}(q, w), \hat{\delta'}(q', w)), a) \\
+        &= (\delta(\hat{\delta}(q, w), a), \delta'(\hat{\delta'}(q', w), a)) \\
+        &= (\hat{\delta}(q, wa), \hat{\delta'}(q', wa)).
+    \end{align*}
+
+    Now let $\mathcal{A}$, $\mathcal{B}$ be DFAs over $A$.
+    Then $L(\mathcal{A} \times \mathcal{B})
+    = L(\mathcal{A}) \cap L(\mathcal{B})$, since
+    \begin{align*}
+        w \in L(\mathcal{A} \times \mathcal{B})
+            &\iff \hat{\Delta}((s, s'), w) \in F \times F' \\
+            &\iff (\hat{\delta}(s, w), \hat{\delta'}(s', w)) \in F \times F' \\
+            &\iff \hat{\delta}(s, w) \in F \land \hat{\delta'}(s', w) \in F' \\
+            &\iff w \in L(\mathcal{A}) \land w \in L(\mathcal{B})
+    \end{align*}
+    Since $X \cup Y = \comp{\comp{X} \cap \comp{Y}}$, closure under union
+    follows from closure under complementation and intersection.
+
+    More directly, the DFA
+    $(Q \times Q', (s, s'), \Delta, F \times Q' \cup F' \times Q)$
+    accepts the language $L(\mathcal{A}) \cup L(\mathcal{B})$.
+\end{proof}
+
+\begin{theorem}[Closure under concatenation] \label{thm:dfa:regular:closure2}
+    The class of regular languages is closed under concatenation.
+\end{theorem}
+\begin{proof}
+    
+\end{proof}

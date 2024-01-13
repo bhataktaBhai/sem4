@@ -1,0 +1,202 @@
+\lecture{03}{Thu 11 Jan '24}{}
+    First consider the case where $\abs{S} = 2$.
+    Let $S = \set{s_1, s_2}$.
+    We know that $g_S = a s_1 + b s_2$ where $a, b \in \Z$.
+    Now \[
+        m g_S = (ma - ks_2) s_1 + (mb + ks_1) s_2
+    \] Choose $k \in \N$ such that $0 \le ma - ks_2 < s_2$.
+    We can write $mg_S = \tilde{a} s_1 + \tilde{b} s_2$ where
+    $0 \le \tilde{a} < s_2$.
+
+    If $m_S = \frac{s_1 s_2}{g_S} + 1$, then for all $m \ge m_S$,
+    $s_1s_2 < mg_S = \tilde{a}s_1 + \tilde{b}s_2 < s_1s_2 + \tilde{b}s_2$
+    and so $\tilde{b} > 0$.
+
+    Now let $S = \set{s_1, s_2, \dots, s_{l+1}}$ and
+    $F = \set{s_1, s_2, \dots, s_l}$.
+
+    \textbf{Claim:} $\tilde{g}_S = \gcd(g_F, s_{l+1})$ is equal to $g_S$. \\
+    \textbf{Proof of claim:} Huh?
+
+    If $m \ge m_{g_F, s_{l+1}} + \frac{m_F g_F}{g_S}$, then \begin{align*}
+        m g_S - m_F g_F
+            &= \left(m - \frac{m_F g_F}{g_S}\right) g_S \\
+            &= a g_F + b s_{l+1} \text{ for some } a, b \in \Z_{\ge 0} \\
+        m g_S
+            &= (a + m_F) g_F + b s_{l+1} \\
+            &= \sum_{i=1}^{l} a_i s_i + b s_{l+1}
+    \end{align*} where all coefficients are non-negative integers.
+    This closes the induction.
+\end{proof}
+
+\begin{definition}[Extended reals] \label{def:extended_reals}
+    We define \[
+        \overline{\R} = \R \cup \set{-\infty, +\infty}
+    \] to be the \emph{extended reals}.
+\end{definition}
+
+\begin{definition}[Filtration] \label{def:filtration}
+    Let $(\Omega, \F, P)$ be a probability space.
+    A collection $(\F_n)_{n \in \N}$ of $\sigma$-algebras is called a
+    \emph{filitration} if $\F_n \subseteq \F_{n+1} \subseteq \F$ for all
+    $n \in \N$.
+\end{definition}
+% Consider $X : (\Omega, \F, P) \to \overline{\R}$.
+\begin{definition}[Natural filtration] \label{def:natural_filtration}
+    Let $(X_n)_{n \ge 0}$ be a sequence of $S$-values random variables
+    defined on $(\Omega, \F, P)$.
+    For $n \ge 0$, define \begin{align*}
+        \F_n &= \set{(X_0, X_1, \dots, X_n)^{-1}(A) \mid A \in S^{n+1}} \\
+            &= \sigma(X_0, X_1, \dots, X_n)
+    \end{align*}
+    Here, $(X_0, \dots, X_n)^{-1}(A) = \set{\omega \in \Omega \mid
+    (X_0(\omega), \dots, X_n(\omega)) \in A}$.
+    This sequence of $\sigma$-algebras is called the \emph{natural
+    filtration} of $(X_n)_{n \ge 0}$.
+\end{definition}
+Why is this a $\sigma$-algebra?
+The empty set is in $\F_n$ because $\emptyset \in S^{n+1}$.
+The complement of any set in $\F_n$ is in $\F_n$ because
+$(X_0, \dots, X_n)^{-1}(A^c) = (X_0, \dots, X_n)^{-1}(A)^c$.
+
+Why is $\F_n \subseteq \F_{n+1}$?
+For any $A \in S^{n+1}$, we have \[
+    (X_0, \dots, X_n)^{-1}(A) = (X_0, \dots, X_n, X_{n+1})^{-1}(A \times S).
+\]
+
+\begin{definition}[Stopping time] \label{def:stopping_time}
+    Suppose $(X_n)_{n \ge 0}$ is a sequence of $S$-valued random variables
+    on $(\Omega, \F, P)$ with natural filtration $(\F_n)_{n \ge 0}$.
+
+    Then $\tau \colon \Omega \to \N \cup \set{\infty}$ is called a
+    \emph{stopping time} with respect to $(\F_n)_{n \ge 0}$ if for all
+    $n \in \N$, \[
+        \set{\tau \le n} \in \F_n.
+    \]
+\end{definition}
+This is equivalent to saying that for all $n \in \N$, \[
+    \ind{\set{\tau \le n}} = \ind{\set{(X_0, \dots, X_n) \in A}}
+    \quad \text{for some } A \in S^{n+1}.
+\]
+
+Consider the simple randow walk $(X_n)_{n \ge 0}$ on $\Z$.
+Then the event that the hitting time of $10$ is at most $n$ is \[
+    \set{T_{10} \le n} = \bigcup_{i=1}^{n} \set{X_i = 10}.
+\]
+\begin{examples}
+    \item Let $(X_n)_{n \ge 0}$ be an $S$-valued stochastic process and let
+    $A \subseteq S$.
+    Let $T_A \coloneq \inf\set{n \ge 1 \mid X_n \in A}$, where we take
+    $\inf \O$ to be $+\infty$ by convention.
+    Then $T_A$ is a stopping time with respect to the natural filtration
+    associated with $(X_n)_{n \ge 0}$.
+    That is, for all $n \in \N$, \[
+        \set{T_A \le n} = \bigcup_{i=1}^{n} \set{X_i \in A} \in \F_n.
+    \]
+    \item SRW($p$) started at the origin.
+    Then $L = \sup \set{n \ge 1 \mid X_n < 7}$ is NOT a stopping time.
+\end{examples}
+Now if $\tau$ is a stepping time, then $\set{\tau = n} \in \F_n$ for all
+$n \in \N$.
+This is because \[
+    \set{\tau = n} = \set{\tau \le n} \cap \set{\tau \le n-1}^c
+\] where both sets are in $\F_n$.
+
+\begin{proposition}
+    If $\tau_1$ and $\tau_2$ are stopping times, then so are
+    $\tau_1 \wedge \tau_2$, $\tau_1 \vee \tau_2$ and $\tau_1 + \tau_2$.
+\end{proposition}
+\begin{proof}
+    We have \begin{align*}
+        \set{\tau_1 \wedge \tau_2 \le n}
+            &= \set{\tau_1 \le n} \cup \set{\tau_2 \le n} \\
+        \set{\tau_1 \vee \tau_2 \le n}
+            &= \set{\tau_1 \le n} \cap \set{\tau_2 \le n} \\
+        \set{\tau_1 + \tau_2 \le n}
+            &= \bigcup_{i=0}^{n} \set{\tau_1 \le i} \cap \set{\tau_2 \le n-i}
+    \end{align*}
+\end{proof}
+
+\begin{problem}
+    Give an example of two stopping times $\tau_1$ and $\tau_2$ such that
+    $\Pr(\tau_1 \le \tau_2) = 1$ but $\tau_2 - \tau_1$ is not a stopping
+    time.
+\end{problem}
+\begin{solution}
+    Consider the SSRW($p$) started at the origin, with \begin{align*}
+        \tau_1 &= \inf\set{n \ge 1 \mid X_n = 10} \\
+        \tau_2 &= \inf\set{n \ge \tau_1 \mid X_n = 0}.
+    \end{align*}
+\end{solution}
+
+\begin{theorem}[Strong Markov property] \label{thm:strong_markov}
+    Let $(X_n)_{n \ge 0}$ be in $MC(\mu_0, p)$, and let $\tau$ be a stopping
+    time.
+    Let $A = [0, \infty)$.
+    Then \begin{multline*}
+        \Pr\nolimits_{\mu_0}(X_{\tau+1} = x_1, \dots, X_{\tau+n} = x_n
+            \given \tau \in A, X_\tau = x) \\
+        = \Pr\nolimits_x(X_1 = x_1, \dots, X_n = x_n)
+    \end{multline*}
+\end{theorem}
+\begin{proof}
+    The SMP is equivalent to \begin{equation*}
+        E_{\mu_0}[f((X_{\tau+j})_{j \ge 0}) \mid \tau \in A, X_\tau = x]
+            = E_x\left[f\left((X_j)_{j \ge 0}\right)\right]
+    \end{equation*} for any bounded function $f \colon S^\infty \to \R$.
+    Now \begin{align*}
+        P_{\mu_0}(&X_{\tau+1} = x_1, \dots, X_{\tau+n} = x_n, \tau \in A,
+        X_\tau = x) \\
+            &= \sum_{m \in A} P_{\mu_0}(X_{m+1} = x_1, \dots, X_{m+n} = x_n,
+                \tau = m, X_m = x) \\
+            &= \sum_{m \in A} P_{\mu_0}(\tau = m, X_m = x)
+                P_x(X_1 = x_1, \dots, X_n = x_n) \\
+            &= P_x(X_1 = x_1, \dots, X_n = x_n)
+                P_{\mu_0}(\tau \in A, X_\tau = x)
+    \end{align*}
+\end{proof}
+
+\begin{definition}
+    Suppose $X$ takes values in $\N \cup \set{\infty}$, and let
+    $p_k \coloneq \Pr(X = k)$, $k \in \N \cup \set{\infty}$.
+    Then the \emph{probability generating function} of $X$ is defined as \begin{align*}
+        G_X(s) &= p_0 + p_1 s + p_2 s^2 + \dots, \quad s \in (-1, 1) \\
+            &= E[s^X]
+    \end{align*} where we take $s^\infty = 0$ for $\abs{s} < 1$.
+\end{definition}
+\begin{remark}
+    The left limit $G_X(1^-) = \lim_{s \uparrow 1} G_X(s) = 1 - p_\infty$.
+\end{remark}
+If $p_\infty > 0$, then $EX = \infty$.
+Otherwise, $EX = \sum_{k=0}^{\infty} k p_k = G_X'(1^-)$.
+
+Let $X$, $Y$ be two random variables taking values in $\N \cup \infty$ and
+$G_X(s) = G_Y(s) \forall s \in (-1, 1)$, then $X \eqd Y$.
+
+\begin{problem}
+    Suppose $(X_n)_{n \ge 0}$ is an SRW($p$) on \Z\ started at the origin.
+    Find $\mathcal{G} = G_{T_{-1}}$.
+\end{problem}
+\begin{solution}
+    \begin{align*}
+        G(s) &= E_0[s^{T_{-1}}] \\
+            &= p E_0[s^{T_{-1}} \given X_1 = 1]
+                + q E_0[s^{T_{-1}} \given X_1 = -1] \\
+            &= p E_1[s^{T_{-1}}] + q s \\
+            &= p E_1[s^{1 + T_{-1}}] + q s \\
+            &= p s E_0[s^{T_{-2}}] + q s
+    \end{align*}
+    Since $s^\infty = 0$ by our convention, we have \begin{align*}
+        E_0[s^{T_{-2}}] &= E_0[s^{T_{-2}} \ind{T_{-1} < \infty}]
+            &= \sum_{m} E_0[s^{T_{-2}} \ind{T_{-1} = m}] \\
+            &= \sum_{m} \Pr_0(T_{-1} = m) E_{-1}[s^{m + T_{-2}}] \\
+            &= \sum_{m} \Pr_0(T_{-1} = m) s^m E_0[s^{T_{-1}}] \\
+            &= G(s)^2
+    \end{align*}
+    Thus \begin{align*}
+        G(s) &= p s G(s)^2 + q s \\
+        G(s) &= \frac{1 \pm \sqrt{1 - 4pq s}}{2ps}
+    \end{align*}
+    \textbf{Claim:} $G(s) = \frac{1 - \sqrt{1 - 4pqs^2}}{2ps}$ for all
+    $s \in (-1, 1) \setminus \set{0}$.
+\end{solution}

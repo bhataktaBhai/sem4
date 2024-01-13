@@ -4,11 +4,12 @@
 \newcounter{assignment}
 \theoremstyle{definition}
 \newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem}{Problem}[assignment]
+\newmdtheoremenv[nobreak=true]{exercise}[theorem]{Exercise}
 
 \newcommand*{\assignment}[2]{%
     \stepcounter{assignment}%
     \subsection{Assignment #1}
-    \marginpar{\raggedright\small{due #2}}
+    \marginpar{\raggedright\small{#2}}
     \vskip 6pt
 }
 \makeatletter

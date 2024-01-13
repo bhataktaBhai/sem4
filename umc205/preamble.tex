@@ -1,6 +1,7 @@
 \let\emph\textsl
 \input{~/IISc/preamble}
 \newcommand{\size}[1]{\# #1}
+\newcommand{\comp}[1]{\overline{#1}}
 
 \usepackage{tikz}
 \usetikzlibrary{automata,positioning,arrows}
@@ -13,3 +14,5 @@
     auto,
     shorten >=1pt
 }
+\theoremstyle{definition}
+\newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem}{Problem}[section]

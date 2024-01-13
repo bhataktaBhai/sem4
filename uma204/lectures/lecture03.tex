@@ -61,7 +61,7 @@ We will make use of the well-ordered property of $(\N, \le)$ proved below in
     Let $p_0 \in \N$ such that $x = p_0/q_0$.
 
     We know that $1 < x < 2$ [why? because $(\cdot)^2$ is an increasing function
-    on positive reals (why? difference of squares)] and so $0 < p_0-q_0 < q_0$.
+    on positive rationals (why? difference of squares)] and so $0 < p_0-q_0 < q_0$.
     Now \begin{align*}
         \frac{2q_0 - p_0}{p_0 - q_0}
             &= \frac{2 - x}{x - 1} \\
@@ -222,4 +222,8 @@ We will notate this statement as $\Q \subseteq F$.
     Thus $f(m) < f(n)$ and so $f$ respects $<$ (and hence $\le$).
 
     Finally, injectivity of $f$ follows from order preservation.
+
+    We extend $f$ to $\Q$ by defining $f(a/b) = f(a) f(b)^{-1}$.
+    This continues to be an isomorphism.
+    % TODO
 \end{proof}

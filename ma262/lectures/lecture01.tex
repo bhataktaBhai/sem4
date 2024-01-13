@@ -53,27 +53,44 @@
     $P(X_0 = x_0, X_1 = x_1) = \mu_0(x_0) p_{x_0 x_1}$.
     If $P(X_0 = x_0) = 0$, then $P(X_0 = x_0, X_1 = x_1) \le P(X_0 = x_0) = 0$,
     and so $P(X_0 = x_0, X_1 = x_1) = 0 = \mu_0(x_0) p_{x_0 x_1}$.
-    % TODO: Complete induction
 
-    Suppose \[
-        P(X_0 = x_0, \dots, X_n = x_n)
-        = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n}
+    \textbf{Induction:} Suppose \[
+        P_j \coloneq P(X_0 = x_0, \dots, X_j = x_j)
+        = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{j-1} x_j}.
+    \] If this is zero, so is $P_{j+1}$, and so it is equal to
+    $\mu_0(x_0) p_{x_0 x_1} \dots p_{x_{j-1} x_j} p_{x_j x_{j+1}}$. \\
+    If not, then \begin{align*}
+        P_{j+1}
+            &= P_j P(X_{j+1} = x_{j+1} \mid X_0 = x_0, \dots, X_j = x_j) \\
+            &= P_j p_{x_j x_{j+1}} \\
+            &= \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{j-1} x_j} p_{x_j x_{j+1}},
+    \end{align*} closing the induction.
+    In particular, \[
+        P(X_0 = x_0, \dots, X_N = x_N) = \mu_0(x_0) p_{x_0 x_1} \dots
+        p_{x_{N-1} x_N}.
     \]
-    for all $x_0, \dots, x_n \in S$.
-    Then \begin{align*}
-        P(X_0 = x_0, \dots, X_{n-1} = x_{n-1})
-            &= \sum_{x_n \in S} P(X_0 = x_0, \dots, X_n = x_n) \\
-            &= \sum_{x_n \in S} \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n} \\
-            &= \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n}
+
+    Now suppose \[
+        P(X_0 = x_0, \dots, X_N = x_N)
+        = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-1} x_N}
+    \]
+    for all $x_0, \dots, x_N \in S$.
+    Then for any $x_0, \dots, x_{N-1} \in S$,
+    \begin{align*}
+        P(X_0 = x_0, \dots, X_{N-1} = x_{N-1})
+            &= \sum_{x_N \in S} P(X_0 = x_0, \dots, X_N = x_N) \\
+            &= \sum_{x_N \in S} \mu_0(x_0) p_{x_0 x_1} \dots 
+                p_{x_{N-2} x_{N-1}} p_{x_{N-1} x_N} \\
+            &= \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-2} x_{N-1}}.
     \end{align*}
-    Use induction to show that for all $1 \le i \le N$, \[
+    We have by backwards induction that for all $1 \le i \le N$, \[
         P(X_0 = x_0, \dots, X_i = x_i)
         = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{i-1} x_i}
-    \] and $P(X_0 = x_0)$.
+    \] and $P(X_0 = x_0) = \mu_0(x_0)$.
     This allows us to deduce that \[
         P(X_{i+1} = x_{i+1} \mid X_0 = x_0, \dots, X_i = x_i)
-        = p_{x_i x_{i+1}}. \qedhere
-    \]
+        = p_{x_i x_{i+1}}
+    \] by definition of conditional probability.
 \end{proof}
 
 \begin{theorem}[Strong Law of Large Numbers] \label{thm:dtmc:slln}
@@ -94,7 +111,7 @@
     exists.
     Then \[
         \frac{\sqrt n}{\sqrt{V(Z_1)}} \left(\frac{Z_1 + \dots + Z_n}{n}
-        - E[Z_1]\right) \to N(0, 1).
+        - E[Z_1]\right) \stackrel{d}{\to} N(0, 1).
     \]
 \end{theorem}
 \begin{examples}
@@ -116,7 +133,6 @@
             1-q & q
         \end{pmatrix}.
     \]
-
     \item A three-state Markov chain.
     \begin{center}
         \begin{tikzpicture}
@@ -124,17 +140,23 @@
             \node[state, above right=of 1] (2) {$2$};
             \node[state, below right=of 2] (3) {$3$};
             \path
-                (1) edge node {$\frac12$} (2)
-                (2) edge node {$\frac14$} (3)
-                (3) edge node {$\frac14$} (1)
-                (1) edge[bend right, above] node {$\frac12$} (3)
-                (3) edge[bend right, below] node {$\frac34$} (2)
-                (2) edge[bend right, above] node {$\frac12$} (1);
+                (1) edge node[below] {$\frac12$} (2)
+                (2) edge node[below] {$\frac14$} (3)
+                (3) edge node[above] {$\frac14$} (1)
+                (1) edge[bend right] node[below] {$\frac12$} (3)
+                (3) edge[bend right] node[above] {$\frac34$} (2)
+                (2) edge[bend right] node[above] {$\frac12$} (1);
             \path
                 (2) edge[loop above] node {$\frac14$} (2);
         \end{tikzpicture}
     \end{center}
-
+    This has transition matrix \[
+        P = \begin{pmatrix}
+            1/2 & 1/2 & 0 \\
+            1/2 & 1/4 & 1/4 \\
+            1/4 & 3/4 & 0
+        \end{pmatrix}.
+    \]
     \item Simple random walk on $\Z$.
     Staring from $0$, at each step, move right with probability $p$ and left
     with probability $q = 1-p$.
@@ -159,21 +181,23 @@
         (Z_1, \dots, Z_k) \stackrel{d}{=} (\tilde{Z}_1, \dots, \tilde{Z}_k).
     \]
 
-    Suppose that $Y_1, Y_2, \dots$ are iid $\begin{pmatrix}
-        -1 & 1 \\
-        1-p & p
+    Suppose that $Y_1, Y_2, \dots$ are iid with distribution
+    $\begin{pmatrix}
+        1 & -1 \\
+        p & 1-p
     \end{pmatrix}$.
     We have that $(X_n; n \ge 0) \stackrel{d}{=} (\sum_{j=1}^{n} Y_j; n \ge 0)$.
     Then from the weak law of large numbers, \[
         \frac{X_n}{n} \to E[Y_1] = 2p - 1.
     \] From the central limit theorem, \[
-        \frac{X_n - n(p - q)}{\sqrt{n} \sqrt{1 - (p-q)^2}} \to N(0, 1).
+        \frac{X_n - n(p - q)}{\sqrt{n} \sqrt{1 - (p-q)^2}} \stackrel{d}{\to}
+        N(0, 1).
     \]
 
     On a graph, a simple symmetric random walk is a random walk on a graph
     where each \[
         p_{xy} = \begin{cases}
-            \frac1{deg(x)} & \text{if } y \sim x, \\
+            \frac1{\mathrm{deg}(x)} & \text{if } y \sim x, \\
             0 & \text{otherwise}.
         \end{cases}
     \]
@@ -191,19 +215,20 @@
 
 \begin{theorem}
     If $(X_n; n \ge 0)$ is a DTMC with transition matrix $P$, then \[
-        P_{\mu_0}(X_n = y) = (\mu_0 P^n)(y).
+        P_{\mu_0}(X_n = y) = (\mu_0 P^n)_y.
     \] In particular, $P_x(X_n = y) = (P^n)_{x,y} = p_{xy}^{(n)}$.
 \end{theorem}
 Here, $\mu_0$ is viewed as a row vector, and $P_{\mu_0}$ is the distribution
 under the assumption that $X_0 \sim \mu_0$.
+Also, $P_x$ is under the assumption that $\mu_0 = \delta_x$.
 \begin{proof}
     \begin{align*}
         P_{\mu_0}(X_n = y)
-            &= \sum_{x_0, \dots, x_{n-1} \in S}
+            &= \sum_{\substack{x_j \in S \\ 0 \le j < n}}
                 P(X_0 = x_0, \dots, X_{n-1} = x_{n-1}, X_n = y) \\
-            &= \sum_{x_0, \dots, x_{n-1} \in S}
-                P(X_0 = x_0, \dots, X_{n-1} = x_{n-1}) p_{x_{n-1} y} \\
-            &= (\mu_0 P^{n-1})_y \qedhere
+            &= \sum_{\substack{x_j \in S \\ 0 \le j < n}}
+                (\mu_0)_{x_0} p_{x_0 x_1} \dots p_{x_{n-1} y} \\
+            &= (\mu_0 P^n)_y \qedhere
     \end{align*}
 \end{proof}
 

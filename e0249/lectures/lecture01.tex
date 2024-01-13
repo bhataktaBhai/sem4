@@ -36,16 +36,37 @@ all instances.
 
 \subsection{Optimization Version of Common \NP-Complete Problems} \label{sec:optimization_np}
 \begin{center}
-    \begin{tabular}{ll}
+    \begin{tabular}{p{0.4\textwidth}p{0.55\textwidth}}
         \toprule
-        Problem & Optimization Version \\
+        Exact Decision Problem & Optimization Version \\
         \midrule
-        3-SAT & Max 3-SAT \\
-        Independent Set & Max Independent Set \\
-        Vertex Cover & Min Vertex Cover \\
-        Set Cover & Min Set Cover \\
-        Hitting Set & Min Hitting Set \\
-        Clique & Max Clique \\
+        \textbf{3-SAT} \newline 
+        Is a 3-CNF formula satifiable?
+            & \textbf{Max 3-SAT} \newline
+            Find an assignment that satisfies as many clauses as possible. \\
+        \midrule
+        \textbf{3Col} \newline
+        Is there a legal 3-coloring (all edges bichromatic) of a graph?
+            & There are 2 natural corresponding optimization problems.
+            \begin{itemize}
+                \item \textbf{Min-Coloring} \newline
+                    Color legally with as few colors as possible.
+                \item \textbf{Max-3Cut} \newline
+                    Color with 3 colors, make the coloring as legal as possible.
+                    Can be thought of as partitioning vertices into three sets,
+                    and maximizing the number of edges between the sets.
+                    \newline
+                    (note: the usual \textbf{Max-Cut} is \textbf{Max-2Cut}) 
+            \end{itemize} \\
+        \midrule
+        \textbf{Vertex Cover} \newline
+        Input is a graph and an integer $k$.
+        Is there a vertex cover (a subset of vertices such that every edge
+        includes one of the vertices) of size less than $k$?
+            & \textbf{Min-Vertex-Cover} \newline
+            Input is a graph.
+            Output is a vertex cover.
+            Value is the fraction of vertices in the cover. \\
         \bottomrule
     \end{tabular}
 \end{center}

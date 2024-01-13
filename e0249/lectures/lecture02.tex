@@ -1,0 +1,184 @@
+\lecture{02}{Wed 10 Jan '24}{}
+
+\section{Greedy Algorithms} \label{sec:greedy}
+Construct a solution iteratively by taking `myopic' choices, \ie, choose the
+best augmentation that optimizes the objective.
+Greedy algorithms that work are simple and fast.
+Greedy algorithms that don't work, don't work.
+
+\subsection{Set Cover} \label{sec:set_cover}
+\vspace{1em}
+\begin{problem}
+    \textbf{Given:}
+    \begin{itemize}
+        \item A ground set of $n$ elements $E = \set{e_1, \dots, e_n}$.
+        \item A collection of $m$ subsets of $E$,
+        $\mathcal{S} = \set{S_1, \dots, S_m}$.
+        \item A cost function $\mathrm{cost} \colon \mathcal{S} \to \Q_+$.
+    \end{itemize}
+    \textbf{Goal:} Find a minimum weight collection of subsets from
+    $\mathcal{S}$ that covers $E$.
+\end{problem}
+For instance, \begin{align*}
+    E &= \set{A, B, C, D, E, F} & n &= 6 \\
+    S_1 &= \set{A, B, C} & c(S_1) &= 10 \\
+    S_2 &= \set{C, F} & c(S_2) &= 10 \\
+    S_3 &= \set{E, F} & c(S_3) &= 8 \\
+    S_4 &= \set{D, E} & c(S_4) &= 10 \\
+    S_5 &= \set{B, D, E} & c(S_5) &= 11
+\end{align*}
+Brute force is exponential in $m$ ($O(n 2^m)$).
+
+We have several greedy options:
+\begin{itemize}
+    \item Select minimum cost set.
+    Obviously fails.
+    Consider singleton sets of cost $1$, and universal set of cost
+    $1 + \varepsilon$.
+    Greedy gives cost $n$, optimal is $1 + \varepsilon$.
+    This is an $n$-approximation.
+    \item Select set that covers the most uncovered elements.
+    Obviously fails.
+    Consider the same sets as before, but cost of universal set being
+    arbitrarily large.
+    \item Choose set that covers the most uncovered elements per unit cost.
+    This is a $O(\log n)$-approximation.
+\end{itemize}
+
+\begin{algo}
+    \Fn{GreedySetCover}{$E, \mathcal{S}, \mathrm{cost}$}
+        \State $C \gets \O$
+        \While{$C \neq E$}
+            \State $\alpha_S \gets \frac{\mathrm{cost}(S)}{\abs{S \setminus C}}$
+                for each $S \in \mathcal{S}$
+            \State Select $S$ with minimum $\alpha_S$
+            \For{$e \in S \setminus C$}
+                \State $\mathrm{price}(e) \gets \alpha_S$
+            \EndFor
+            \State $C \gets C \cup S$
+        \EndWhile
+        \State \Return C
+    \EndFn
+\end{algo}
+\begin{proposition}
+    \textsc{GreedySetCover} is an $O(\log n)$-approximation.
+\end{proposition}
+\begin{proof}
+    We make two observations.
+    \begin{itemize}
+        \item Left over sets from OPT can cover the remaining items from
+        $E \setminus C$ at cost at most OPT.
+        \item Among these left over sets, at least one must have cost
+        effectiveness at most $\frac{\OPT}{\abs{E \setminus C}}$.
+    \end{itemize}
+    WLOG, suppose that the elements are numbered in the order in which they 
+    are selected by the greedy algorithm.
+
+    Assume element $e_k$ was covered by the most cost-effective set at
+    iteration $i \le k$.
+    The numbering implies that at most $k - 1$ elements were selected before
+    iteration $i$.
+
+    At the beginning of iteration $i$, $\abs{E \setminus C} \ge n - k + 1$.
+    From our observation, we have that \[
+        \mathrm{price}(e_k) \le \frac{\OPT}{\abs{E \setminus C}}
+            \le \frac{\OPT}{n - k + 1}
+    \] The way price is defined, the cost of the set cover is the same as
+    the sum of the prices of the elements.
+    Thus we have \begin{align*}
+        \mathrm{cost}(C) &= \sum_{j = 1}^{n} \mathrm{price}(e_j) \\
+            &\le \sum_{j = 1}^{k} \frac{\OPT}{n - j + 1} \\
+            &\le \sum_{j = 1}^{n} \frac{\OPT}{j} \\
+            &\le H_n \OPT.
+    \end{align*}
+    From $H_n \le 1 + \ln n$, we have that the cost of the greedy algorithm
+    is at most $(1 + \ln n) \OPT$.
+
+    Is this bound tight?
+    Yes!
+    Consider the following instance: \begin{align*}
+        E &= \set{1, \dots, n} \\
+        S_i &= \set{i} \\
+        \mathrm{cost}(S_i) &= 1 \text{ for } i = 1, \dots, n \\
+        S_{n + 1} &= E \\
+        \mathrm{cost}(S_{n + 1}) &= 1 + \varepsilon
+    \end{align*}
+    The optimal solution is the set cover $\set{S_{n+1}}$ with cost
+    $1 + \varepsilon$.
+    The greedy selects the sets $S_1, \dots, S_n$ with total cost $H_n$.
+    Thus, the approximation ratio $r$ lies in \[
+        \left[\frac{H_n}{1 + \varepsilon}, H_n\right]
+    \] for every $\varepsilon > 0$?
+    % TODO: wtf
+
+    Current literature has an upper bound of $\ln(n / \ln n) + 0.78$ and
+    a lower bound of $\ln(n / \ln n) - 0.31$.
+\end{proof}
+
+\begin{theorem}[Dinur-Steurer] \label{thm:set_cover:np-hard}
+    It is \NP-hard to approximate set cover within $(1 - \varepsilon) \ln n$
+    for all $\varepsilon > 0$.
+\end{theorem}
+
+\subsubsection{Vertex Cover} \label{sec:set_cover:vertex_cover}
+\vspace{1em}
+\begin{problem}[Vertex Cover]
+    \textbf{Given:}
+    \begin{itemize}
+        \item a graph $G = (V, E)$.
+        \item node weights $C : V \to \Q^+$.
+    \end{itemize}
+    \textbf{Goal:} A subset $U \subseteq V$ such that each edge is incident
+    to at least one node in $U$ and $\sum_{u \in U} C(u)$ is minimized.
+\end{problem}
+This is a special case of \textsc{SetCover} where $E$ is the ground set,
+and $S_i$ is the set of edges incident to node $i$.
+
+% TODO: HW
+\textbf{Homework:} Prove that a maximal matching is a $2$-approximation for
+\textsc{VertexCover} in the unweighted case.
+
+\subsection{Max-Cut} \label{sec:max-cut}
+\vspace{1em}
+\begin{definition}[Cut] \label{def:max-cut:cut}
+    Given an undirected graph $G = (V, E)$, a \emph{cut} is a partition of
+    $V$ into $S$ and $V \setminus S$.
+\end{definition}
+
+\begin{problem}[Max-Cut]
+    \textbf{Given:} \begin{itemize}
+        \item An undirected complete graph $G = (V, E)$.
+        \item A weight function $w : E \to \Q$.
+    \end{itemize}
+    \textbf{Goal:} Find a cut $[S, V \setminus S]$ that maximizes the sum of
+    the weights of the edges crossing the cut.
+    That is, \[
+        \OPT = \max_{S \subseteq V} \sum_{(u, v) \in E} w(u, v)
+            [u \in S \lxor v \in S]
+    \]
+\end{problem}
+
+Randomized algorithm:
+\begin{algo}
+    \Fn{TBD}{$G = (V, E), w$}
+        \State $S \gets \O$
+        \For{$v \in V$}
+            \State add $v$ to $S$ with probability $\frac{1}{2}$
+        \EndFor
+        \State \Return $(S, V \setminus S)$
+    \EndFn
+\end{algo}
+\begin{proposition}
+    The expected value of the cut returned by the above algorithm is
+    $\frac{1}{2} \OPT$.
+\end{proposition}
+\begin{proof}
+    Define \[
+        X_i \coloneq \begin{cases}
+            1 & \text{if edge $i$ is a crossing edge} \\
+            0 & \text{otherwise}
+        \end{cases}
+    \] Then $E[X_i] = \frac12$.
+    Expected size of the cut is $\frac{\abs{E}}{2} \ge \frac{\OPT}{2}$ since
+    $\abs{\OPT} \le \abs{E}$.
+\end{proof}
