@@ -1,0 +1,123 @@
+\lecture{06}{Mon 15 Jan '24}{}
+
+\textbf{News:} Quiz 1 tomorrow.
+Material upto and including lecture 6.
+
+\begin{definition}
+    Let $I$ be a possibly infinite indexing set and for all $\alpha \in I$
+    let $X_\alpha$ be a set.
+    Then its (possibly infinite) Cartesian product is defined as
+    \[
+        \prod_{\alpha \in I} X_\alpha = \bigg\{
+            (x_\alpha)_{\alpha \in I} \in \Big(\bigcup_{\beta \in I}
+            X_\beta\Big)^I \;\bigg\vert\; x_\alpha \in X_\alpha
+            \text{ for all } \alpha \in I
+        \bigg\}
+    \]
+\end{definition}
+
+\begin{exercise}
+    For any sets $I$ and $X$, $\prod_{\alpha \in I} X = X^I$.
+\end{exercise}
+\begin{axiom}[Choice] \label{def:zfc:choice}
+    Let $I$ be a set and for all $\alpha \in I$ let $X_\alpha \ne \O$.
+    Then $\prod_{\alpha \in I} X_\alpha$ is non-empty.
+\end{axiom}
+
+\begin{definition}
+    A \emph{choice function} on $X$ is a function $f\colon 2^X \setminus \O
+    \to X$ such that for all non-empty $S \subseteq X$, $f(S) \in S$.
+\end{definition}
+\begin{fact}
+    The existence of a choice function for every $X$ is equivalent to the
+    axiom of choice.
+\end{fact}
+\begin{remark}
+    A variant of AoC is the \emph{axiom of countable choice}, which requires
+    $I$ to be at most countable.
+\end{remark}
+
+\begin{lemma}
+    Let $E$ be a bounded above non-empty subset of \R.
+    Then there exists a sequence $(a_n)_{n \in \N}$ such that $a_n \in E$ for
+    all $n$ and $\lim_{n \to \infty} a_n = \sup E$.
+\end{lemma}
+\begin{proof}
+    Let $X_n = \set{x \in E \mid \sup E - \frac1n \le x \le \sup E}$.
+    Each $X_n$ is non-empty.
+    By AoC, there exists a sequence $(a_n)_{n \in \N}$ such that for all
+    $n$, $a_n \in X_n$.
+    Thus $a_n \in E$ for all $n$ and $\lim_{n \to \infty} a_n = \sup E$.
+\end{proof}
+
+\begin{definition}
+    Let $(P, \le)$ be a poset.
+    A subset $Y \subseteq P$ is called a \emph{chain} or \emph{totally
+    ordered} if for any $y, y' \in Y$, either $y \le y'$ or $y' \le y$.
+\end{definition}
+\begin{definition}
+    Let $(P, \le)$ be a poset and $Y \subseteq P$.
+    We say that $y$ is a \emph{minimal} (resp. \emph{maximal}) element of
+    $Y$ if there is no $y' \in Y$ such that $y' < y$ (resp. $y' > y$).
+\end{definition}
+
+\begin{definition}
+    Let $(P, \le)$ be a poset and $Y \subseteq P$ be a chain.
+    We say that $Y$ is \emph{well-ordered} if every non-empty subset of $Y$
+    has a minimal element.
+\end{definition}
+
+\setcounter{axiom}{\value{axiom}-1}
+\begin{axiom}[Well-ordering principle] \label{def:zfc:well-ordering}
+    Given any set $X$, there exists a well-ordering on $X$.
+\end{axiom}
+\setcounter{axiom}{\value{axiom}-1}
+\begin{axiom}[Zorn's lemma] \label{def:zfc:zorn}
+    Let $(X, \le)$ be a non-empty poset such that every chain $Y$ of $X$ has
+    an upper bound (there exists an $x \in X$ such that $y \le x$ for all
+    $y \in Y$).
+    Then $X$ has a maximal element.
+\end{axiom}
+
+\begin{fact}
+    The axiom of choice, well-ordering principle, and Zorn's lemma are
+    equivalent.
+\end{fact}
+\begin{proof}
+    \begin{description}
+        \item[Zorn $\implies$ AoC.]
+            Let $X \ne \O$ and let $P$ be the set of ordered pairs $(Y, f)$
+            where $Y \subseteq X$ and $f$ is a choice function on $Y$.
+            Define $(Y, f) \le (Y', f')$ if $Y \subseteq Y'$ and
+            $f' \vert_Y = f$.
+            $P$ is non-empty because $\set{x} \subseteq X$ has a choice
+            function for all $x \in X$.
+
+            Let $C$ be a chain in $P$.
+            Then let $\overline{Y} = \bigcup_{(Y, f) \in C} Y$ and define
+            $\overline{f}$ by setting $\overline{f}(S) = f(S)$ for any $f$
+            for which $f(S)$ is defined.
+            Then $(\overline{Y}, \overline{f})$ is an upper bound for $C$.
+
+            By Zorn's lemma, there exists a maximal element of $P$, say
+            $(Y, f)$.
+            If $x \in X \setminus Y$, we can extend $f$ to $Y \cup \set{x}$
+            by defining $f(S) = x$ for any $S$ containing $x$.
+            This contradicts the maximality of $(Y, f)$.
+            Thus $X \setminus Y$ must be empty, and so $f$ is a choice
+            function on $X$.
+        \item[AoC $\implies$ Zorn.]
+            Let $P$ be a poset whose every chain has an upper bound.
+            Suppose $P$ has no maximal element.
+            Pick $x_0 \in P$ using a choice function.
+            Since $x_0$ is not maximal, there exists an $x_1$ larger than
+            $x_0$, and $x_2$ larger than $x_1$, and so on.
+            This gives a chain $x_0 < x_1 < x_2 < \dots$.
+            But then $x_\omega$ is an upper bound for this chain.
+            This gives another chain $x_\omega < x_{\omega + 1} < \dots$.
+            But then $x_{2\omega}$ is an upper bound for this chain.
+
+            Continuing in this way, we get a chain which is ``larger'' than
+            $P$ itself, a contradiction.
+    \end{description}
+\end{proof}

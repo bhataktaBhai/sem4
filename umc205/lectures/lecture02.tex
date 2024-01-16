@@ -72,10 +72,9 @@ $u$ concatenated with the string of length 1 consisting of the letter $a$.
 \end{proposition}
 \begin{proof}
     Diagonilization.
-    Suppose there is an enumeration $L$ of all languages over $A$.
-    Let $s$ be an enumeration of $A^*$.
-    Then define $L' = \set{s \in A^* \mid s \notin L_s}$.
-    Then $L'$ is a language over $A$ that is not in $L$.
+    Let $\Phi\colon A^* \to 2^{A^*}$ be a map.
+    Then define $L_\Phi = \set{s \in A^* \mid s \notin \Phi(s)}$.
+    Then $L_\Phi$ is a language over $A$ that is not in the image of $\Phi$.
 \end{proof}
 
 \begin{definition}[Concatenations] \label{def:languages:concatenations}

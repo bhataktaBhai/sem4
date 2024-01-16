@@ -1,0 +1,42 @@
+\lecture{05}{Tue 16 Jan '24}{}
+
+\begin{definition}
+    Let $L \subseteq A^*$ be a language.
+    The \emph{Kleene closure} of $L$, denoted $L^*$, is defined as \[
+        L^* = \bigcup_{n \in \N} L^n
+    \] where $L^0 = \set{\epsilon}$ and $L^{n+1} = L^n \cdot L$.
+\end{definition}
+In other words, \[
+    L^* = \set{s \in A^* \mid \exists w \in L^\N \text{ and }
+        n \in \N \text{ such that } s = w_0 \cdots w_n}
+\]
+\begin{problem}
+    If $L \subseteq \set{a}^*$, show that $L^*$ is regular.
+\end{problem}
+\begin{problem}
+    Show that there exists a language $L \subseteq A^*$ such that neither
+    $L$ nor its complement $A^* \setminus L$ contains an infinite regular
+    subset.
+\end{problem}
+
+\begin{definition}[Ultimate periodicity] \label{def:ultimate_periodicity}
+    A subset $X$ of \N\ is said to be \emph{ultimately periodic} if there
+    exist $n_0 \in \N$, $p \in \N^*$ such that for all $m \ge n_0$,
+    $m \in X$ iff $m + p \in X$.
+\end{definition}
+\begin{proposition}
+    A subset $X$ being ultimately periodic is equivalent to either
+    \begin{itemize}
+        \item there exist $n_0 \in \N$, $p \in \N^*$ such that for all
+            $m \ge n_0$, $m \in X \implies m + p \in X$, or
+        \item 
+    \end{itemize}
+\end{proposition}
+
+\begin{definition}
+    For a language $L \subseteq A^*$, define $\lengths(L)$ to be
+    $\set{\size w \mid w \in L}$.
+\end{definition}
+\begin{theorem}
+    If $L$ is a regular language, then $\lengths(L)$ is ultimately periodic.
+\end{theorem}

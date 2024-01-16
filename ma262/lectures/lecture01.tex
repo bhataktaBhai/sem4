@@ -16,27 +16,29 @@
 
 \section{Discrete time Markov Chains} \label{sec:dtmc}
 \begin{definition}
-    Let $S$ be a state set (countable).
-    A matrix $P = (p_{xy}; x, y \in S)$ is called a \emph{stochastic matrix} if
-    $p_{xy} \ge 0$ for all $x, y \in S$ and $\sum_{y \in S} p_{xy} = 1$ for all $x \in S$.
+    Let $S$ be a state set (at most countable).
+    A matrix $P = (p_{xy}; x, y \in S)$ is called a \emph{stochastic matrix}
+    if $p_{xy} \ge 0$ for all $x, y \in S$ and $\sum_{y \in S} p_{xy} = 1$
+    for all $x \in S$.
 \end{definition}
 
 \begin{definition}
-    Let $S$ be a state set, $P = (p_{xy})$ a stochastic matrix, and $\mu_0$ a
-    probability distribution on $S$, \ie, $\mu_0(x) \ge 0$ for all $x \in S$ and
-    $\sum_{x \in S} \mu_0(x) = 1$.
+    Let $S$ be a state set, $P = (p_{xy})$ a stochastic matrix, and $\mu_0$
+    a probability distribution on $S$, \ie, $\mu_0(x) \ge 0$ for all
+    $x \in S$ and $\sum_{x \in S} \mu_0(x) = 1$.
 
     Suppose $X_0, X_1, \dots$ are random variables defined on the same
     probability space taking values in $S$.
     Then $(X_n; n \ge 0)$ is called a Markov chain with initial distribution
-    $\mu_0$ and transition matrix $P$, notated $MC(\mu_0, P)$, if $X_0$ has
+    $\mu_0$ and transition matrix $P$, denoted $MC(\mu_0, P)$, if $X_0$ has
     distribution $\mu_0$ and for all $n \ge 0$, \[
-        P(X_{n+1} = x_{n+1} \mid X_n = x_n, \dots, X_0 = x_0) = p_{x_n x_{n+1}}
+        P(X_{n+1} = x_{n+1} \mid X_n = x_n, \dots, X_0 = x_0)
+            = p_{x_n x_{n+1}}
     \] whenever $P(X_n = x_n, \dots, X_0 = x_0) > 0$.
 \end{definition}
 \begin{notation}
     Whenever writing $P(X_n \in A \mid (X_0, \dots, X_{n-1}) \in B)$, it is
-    understood that $P((X_0, \dots, X_{n-1}) \in B) > 0$.
+    understood that only $P((X_0, \dots, X_{n-1}) \in B) > 0$ is considered.
 \end{notation}
 
 \begin{theorem}

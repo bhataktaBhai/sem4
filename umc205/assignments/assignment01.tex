@@ -1,0 +1,64 @@
+\documentclass[12pt]{article}
+\input{../preamble}
+
+\title{Assignment 1}
+\author{Naman Mishra}
+\date{16 January, 2024}
+
+\begin{document}
+\maketitle
+
+\begin{problem}
+    Give a DFA for the language of all strings over the alphabet
+    $\set{0, 1}$ which contain an occurrence of $010$ or $100C$ as a
+    contiguous substring. 
+\end{problem}
+\begin{solution} \leavevmode
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (e) {};
+            \node[state, above right of=e] (1) {};
+            \node[state, right of=1] (10) {};
+            \node[state, accepting, below right of=10] (F) {};
+            \node[state, below right of=e] (0) {};
+            \node[state, right of=0] (01) {};
+            \path[->]
+                (e) edge node {$1$} (1)
+                    (e) edge node {$0$} (0)
+                (1) edge node {$0$} (10)
+                    (1) edge[loop above] node {$1$} (1)
+                (10) edge node {$0$} (F)
+                    (10) edge node {$1$} (01)
+                (F) edge[loop right] node {$0, 1$} (F)
+                (0) edge node {$1$} (01)
+                    (0) edge[loop below] node {$0$} (0)
+                (01) edge node {$0$} (F)
+                    (01) edge node {$1$} (1);
+        \end{tikzpicture}
+    \end{center}
+\end{solution}
+
+\begin{problem}
+\end{problem}
+\begin{solution} \leavevmode
+    \begin{center}
+        \begin{tikzpicture}[every node/.style={font=\scriptsize}]
+            \node[state, initial] (000) {000};
+            \node[state, below left of=000] (100C) {100C};
+            \node[state, below right of=000] (011C) {011C};
+            \node[state, below of=100C] (001) {001};
+            \node[state, below of=011C] (101) {101};
+
+            \path[->]
+                (000) edge node[above] {$A$} (100C)
+                    (000) edge node[above] {$B$} (011C)
+                (100C) edge node[left] {$A$} (001)
+                    (100C) edge node[above, near start] {$B$} (101)
+                (011C) edge node[right] {$A$} (101)
+                    (011C) edge node[above, near start] {$B$} (001)
+                (001) edge node[below] {$A$} (101);
+        \end{tikzpicture}
+    \end{center}
+\end{solution}
+
+\end{document}

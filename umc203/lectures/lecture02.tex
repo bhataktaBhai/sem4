@@ -2,13 +2,13 @@
 
 We come back to apples and oranges.
 \begin{align*}
-    \mathcal{X} \subseteq \R^d \\
-    \mathcal{Y} &= \set{-1, 1} \\
+    \mathcal{X} &\subseteq \R^d \quad \text{instance space} \\
+    \mathcal{Y} &= \set{-1, 1} \quad \text{label space} \\
     \mathcal{D} &= \set{(x_i, y_i) \mid x_i \in \mathcal{X},
         y_i \in \mathcal{Y}}
 \end{align*}
 We also know \emph{priors} \begin{align*}
-    \Pr(Y = 1) &= p_1 & \Pr(Y = -1) = p_2 &= 1 - p_1 \\
+    \Pr(Y = 1) &= p_1 & \Pr(Y = -1) = 1 - p_1 &\eqcolon p_2
     \intertext{and \emph{class condition distributions}}
     \Pr(X = x \mid Y = 1) &= f_1(x) & \Pr(X = x \mid Y = -1) &= f_2(x)
 \end{align*}
@@ -16,7 +16,8 @@ We also know \emph{priors} \begin{align*}
     We will always write probabilities like this, but understand them to be
     densities whenever appropriate.
 \end{remark}
-From Bayes' rule, we have
+From Bayes' rule, we have the \emph{posterior}
+$\eta\colon \mathcal{X} \to [0, 1]$ defined by
 \begin{align*}
     \eta(x) \coloneq \Pr(Y = 1 \mid X = x)
         &= \frac{\Pr(X = x \mid Y = 1) \Pr(Y = 1)}{\Pr(X = x)} \\
@@ -52,7 +53,8 @@ we write \[
         &= \log \frac{p_1}{p_2} + (\mu_1 - \mu_2)^\top C^{-1} x
             - \frac12 (\mu_1^\top C^{-1} \mu_1 - \mu_2^\top C^{-1} \mu_2) \\
         &= w^\top x - b
-\end{align*} where $w = C^{-1}(\mu_1 - \mu_2)$ and $b$ is something.
+\end{align*} where $w = C^{-1}(\mu_1 - \mu_2)$ (since $C$ is symmetric) and
+$b$ is something.
 Thus $h^*(x) = \sgn(w^\top x - b)$.
 \begin{remark}
     $w^\top x = b$ is a hyperplane in $\R^d$, dividing the space into two
@@ -67,23 +69,35 @@ Thus $h^*(x) = \sgn(w^\top x - b)$.
 \begin{solution}
     We have \begin{equation*}
         \log \frac{f_1(x)}{f_2(x)}
-            = \log \frac{\sigma_2^d}{\sigma_1^d}
+            = d \log \frac{\sigma_2}{\sigma_1}
                 - \frac{1}{2\sigma_1^2} \norm{x - \mu_1}^2
                 + \frac{1}{2\sigma_2^2} \norm{x - \mu_2}^2
     \end{equation*}
+    Thus we choose class $1$ when \[
+        d \log \sigma_1 + \frac{1}{2\sigma_1^2}
+            < d \log \sigma_2 + \frac{1}{2\sigma_2^2}
+    \] and class $2$ otherwise.
 \end{solution}
 
-\subsection{How Good is the Bayes Classifier?} \label{sec:goodness}
+\subsection{How Good is the Bayes Classifier?} \label{sec:bayest}
 We wish to compute the error $\Pr(h(X) \ne Y)$ for some rule $h$.
 \begin{align*}
     \Pr(h(X) \ne Y)
         &= E_{XY} \ind{h^*(X) \ne Y} \\
         &= E_X E_{Y \mid X} \ind{h^*(X) \ne Y} \\
     \intertext{but}
-    E_{Y \mid X} \ind{h^*(X) \ne Y}
-        &= \eta(x) \ind{h^*(x) \ne 1} + (1 - \eta(x)) \ind{h^*(x) \ne -1}
+    E_{Y \mid X = x} \ind{h^*(X) \ne Y}
+        &= \begin{cases}
+            1 - \eta(x) & \text{if } h(x) = 1 \\
+            \eta(x) & \text{if } h(x) = -1
+        \end{cases} \tag{$*$} \\
+        &= \eta(x) \ind{h^*(x) = -1} + (1 - \eta(x)) \ind{h^*(x) = 1}
 \end{align*}
-Comparing it with $h^*$,
+It is clear from $(*)$ that whenever $\eta(x) > 1 - \eta(x)$, setting
+$h(x) = 1$ minimizes the error, and whenever $\eta(x) < 1 - \eta(x)$,
+setting $h(x) = -1$ minimizes the error.
+
+More rigorously, upon comparing with $h^*$,
 \begin{align*}
     E_{Y \mid X} (\ind{h(X) \ne Y} - \ind{h^*(X) \ne Y})
         &= E_{Y \given X} (\ind{h^*(X) = Y} - \ind{h^*(X) \ne Y}) \\

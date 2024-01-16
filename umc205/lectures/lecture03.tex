@@ -30,11 +30,10 @@ For example, the first example in \cref{sec:dfa} can be written as
     A &= \set{a, b} \\
     Q &= \set{e, o} \\
     s &= e \\
-    F &= \set{o} \\
-    \delta(e, a) &= o \\
-    \delta(e, b) &= e \\
-    \delta(o, a) &= e \\
-    \delta(o, b) &= o
+    F &= \set{o}
+\end{align*} and \begin{align*}
+    \delta(e, a) &= o &\delta(o, a) &= e \\
+    \delta(e, b) &= e &\delta(o, b) &= o
 \end{align*}
 We further define $\hat{\delta} : Q \times A^* \to Q$ as the extension of
 $\delta$ to strings.
@@ -50,6 +49,7 @@ $\delta$ to strings.
 \end{definition}
 
 \subsection{Regular Languages} \label{sec:dfa:regular}
+\vspace{1em}
 \begin{definition}[Regular Language] \label{def:regular}
     A language $L$ is \emph{regular} if there exists a DFA $\mathcal{A}$
     over $A$ such that $L(\mathcal{A}) = L$.

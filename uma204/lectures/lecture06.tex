@@ -1,0 +1,55 @@
+\lecture{06}{Mon 15 Jan '24}{}
+
+We define an isomorphism from \Q\ into \R\ as \[
+    r \in \Q \mapsto [(r, r, \dots)] \in \R.
+\]
+\begin{theorem}
+    $(\R, +, \cdot, \le)$ satisfies the Archimedean property.
+\end{theorem}
+\begin{proof}
+    Let $[a], [b] > 0$ be in \R.
+    Since $[b]$ is \Q-Cauchy, there exists a positive $M \in \Q$ such that
+    $b_n < M$ for all $n \in \N$. % TODO: why?
+
+    Since $[a] > 0$, let $c \in \Q^+$ and $N \in \N$ be such that $a_n > c$
+    for all $n \ge N$.
+    By the Archimedean property of \Q, there exists an $m \in \N$ such that
+    $m c > M$.
+    Thus $b_n < M < m c < m a_n$ for all $n \ge N$.
+    Thus $(m + 1) a_n - b_n > m a_n - b_n + c > c$ for all $n \ge N$ and so
+    $[m + 1] [a] > [b]$.
+\end{proof}
+
+\begin{theorem}
+    $(\R, +, \cdot, \le)$ satisfies the LUB property.
+\end{theorem}
+\begin{proof}
+    Let $A \subseteq \R$ be a non-empty bounded above set.
+
+    For $n \in \N^*$, let
+    $U_n = \set{m \in \Z : \frac mn \text{ is an upper bound of } A}$.
+    From the Archimedean property of \R, $U_n$ is non-empty and bounded below.
+    By well-ordering, $U_n$ has a minimum $m(n)$.
+    Let $a_n = \frac{m(n)}{n}$ for each $n \in \N^*$.
+
+    \textbf{Claim:} $(a_n)_{n \in \N^*}$ is \Q-Cauchy. \\
+    Let $\varepsilon$ be a positive rational number.
+    By Archimedean, there $\frac1n < \varepsilon$ for all $n$ above some
+    $N$ in \N.
+    Note that for any $n \in \N^*$, $a_n$ is an upper bound of $A$, and
+    $a_n - \frac1n$ is not an upper bound of $A$.
+
+    Thus for any $n, n' \ge N^*$, we have \begin{align*}
+        \frac{m(n)}{n} &> \frac{m(n')}{n'} - \frac1{n'}
+            & \frac{m(n')}{n'} &> \frac{m(n)}{n} - \frac1n \\
+        a_n - a_{n'} &> -\frac1{n'} & a_n - a_{n'} &< \frac1n \\
+    \end{align*}
+    and so $|a_n - a_{n'}| < \max\set{\frac1n, \frac1{n'}} < \varepsilon$.
+
+    \textbf{Claim:} $[(a_n)]$ is an upper bound of $A$. \\
+    Suppose there exists some $[x] > [a]$.
+    That is, there is some positive rational $c$ such that $c < x_n - a_n$
+    for all $n$ larger than some $N_1 \in \N^*$.
+    Since $(x_n)$ is \Q-Cauchy, $-c/2 < x_n - x_m < c/2$ for all $n$, $m$
+    larger than some $N_2 \in \N^*$.
+\end{proof}
