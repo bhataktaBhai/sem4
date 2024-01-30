@@ -1,8 +1,16 @@
 % \let\emph\textsl
-\input{~/IISc/preamble}
+\input{../preamble}
+\newcommand\size[1]{\##1}
 \newcommand{\pp}{_{+\!+}}
+% long minus
+\newcommand{\lm}{\setminus}
+\newcommand{\doubleslash}{/\!/}
+\newcommand\stirling[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
+\newcommand\ftirling[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand\id{\mathrm{id}}
+\DeclareMathOperator\type{type}
 
-\newcounter{assignment}
-\theoremstyle{definition}
-\newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem}{Problem}[assignment]
-\newmdtheoremenv[nobreak=true]{exercise}[theorem]{Exercise}
+\usepackage{booktabs}
+\usepackage{diagbox}
+% \newcommand\young[1]{\begin{tikz}
+%     \for 

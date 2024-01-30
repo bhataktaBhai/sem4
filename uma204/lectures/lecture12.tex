@@ -1,0 +1,74 @@
+\lecture{12}{Mon 29 Jan '24}{}
+\section{Connected Sets} \label{sec:connected}
+\begin{definition} \label{def:connected} \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item Let $(X, d)$ be a metric space.
+        A pair of sets $A, B \subseteq X$ are said to be \emph{separated} in
+        $X$ if $\wbar{A} \cap B = A \cap \wbar{B} = \O.$
+        \item A set $E \subseteq X$ is said to be \emph{disconnected} if it
+        is the union of two separated sets in $X$.
+        \item $E$ is \emph{connected} if it is not disconnected.
+    \end{enumerate}
+\end{definition}
+\begin{examples}
+    \item Sets $A = (-1, 0)$ and $B = (0, 1)$ are separated in $\R$.
+    Note that $\sgn$ is continuous on $A \cup B$ but does not satisfy the
+    intermediate value property.
+
+    However, if $A = (-1, 0]$ instead, then all continuous functions on
+    $A \cup B$ satisfy the intermediate value property.
+    \item The empty set is connected.
+    \item \Q\ is disconnected in \R.
+    The partition
+    $\{\Q \cap (-\infty, \sqrt 2), \Q \cap (\sqrt 2, \infty)\}$
+    separates \Q.
+    \item \Q\ is disconnected even in \Q.
+\end{examples}
+\begin{exercise}
+    Let $E \subseteq Y \subseteq (X, d)$.
+    Then $E$ is connected relative to $Y$ iff $E$ is cpnnected in $X$.
+\end{exercise}
+
+\begin{theorem}
+    Let $E \subseteq \R$.
+    Then $E$ is connected iff $E$ is convex, \ie, for all $x < y \in E$,
+    $[x, y] \subseteq E$.
+\end{theorem}
+\begin{proof}
+    Suppose $E$ is connected, but not convex, \ie, there exist $x < y \in E$
+    and some $r \in (x, y)$ that is not in $E$.
+    Then $A = (-\infty, r] \cap E$ and $B = [r, \infty) \cap E$ separate
+    $E$.
+
+    Conversely, suppose $E$ is convex but not connected.
+    Then there exist $A, B \subseteq E$ that separate $E$.
+    Let $x \in A$ and $y \in B$ and suppose WLOG that $x < y$.
+    Note that $A \cap [x, y]$ is non-empty and bounded.
+    Let $r = \sup(A \cap [x, y])$.
+
+    By the lemma below, $r \in \wbar{A \cap [x, y]} \subseteq \wbar{A}
+    \cap [x, y]$ so $r \in \wbar{A}$.
+    Disconnectedness forces that $r \notin B \iff r \in A$ so $x \le r < y$.
+
+    But since $r$ is the supremum of $A \cap [x, y]$, $(r, y) \subseteq B$.
+    This gives $r \in \wbar{B}$, violating the separation of $A$ and $B$.
+\end{proof}
+
+\section{The Cantor Set} \label{sec:cantor_set}
+\begin{definition}[Perfect set] \label{def:perfect_set}
+    A set $E \subseteq (X, d)$ is said to be \emph{perfect} if every point
+    of $E$ is a limit point of $E$.
+\end{definition}
+Note that $E = [0, 1]$ is perfect in $\R$.
+Can we produce a ``sparse'' perfect set?
+Throwing away isolated points makes the set open.
+Throwing away a finite number of open sets preserves perfectness, but there
+are still \emph{intervals of positive length}.
+
+\textbf{Can we produce a perfect set such that}
+\begin{enumerate}
+    \item it contains no intervals of positive length?
+    \item $E$ is \emph{nowhere dense}, \ie, the interior of the closure of
+    $E$ is empty?
+\end{enumerate}
+Note that the second condition implies the first.

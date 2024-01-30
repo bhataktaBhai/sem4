@@ -46,27 +46,68 @@
     \refifdef{prb:archimedean=dense}{\cref}{problem 4 on assignment 1}.
 \end{proof}
 
-\subsection{The Reals} \label{sec:R}
+\section{The Reals} \label{sec:R}
 \vspace{0.5em}
 \begin{theorem}[Dedekind/Cauchy] \label{thm:R:unique}
     There exists a unique (up to isomorphism) ordered field with the LUB
     property.
 \end{theorem}
+We first recover some properties of supremums.
+\begin{lemma} \label{thm:R:sup}
+    Let $F$ be an ordered field with the LUB property.
+    Let $A$ and $B$ be non-empty bounded above subsets of $F$.
+    Then $\sup A + \sup B = \sup (A + B)$.
+    Further, if all elements of $A$ and $B$ are non-negative, then
+    $\sup A \sup B = \sup (A B)$.
+
+    Here $A + B \coloneq \set{a + b \mid a \in A, b \in B}$ and
+    $A B \coloneq \set{ab \mid a \in A, b \in B}$.
+\end{lemma}
+\begin{proof}
+    Let $\alpha = \sup A$ and $\beta = \sup B$.
+    For all $a \in A$ and $b \in B$, $a + b \le \alpha + \beta$.
+    Thus $\alpha + \beta$ is an upper bound of $A + B$.
+
+    Let $c < \alpha + \beta$.
+    Since $c - \beta < \alpha$, there exists an $a \in A$ larger than
+    $c - \beta$.
+    Then $c - a < \beta$ and so there exists a $b \in B$ larger than
+    $c - a$.
+    Thus $c < a + b \in A + B$ and so $\alpha + \beta = \sup (A + B)$.
+
+    Now suppose all elements of $A$ and $B$ are non-negative.
+    If $\alpha = 0$ or $\beta = 0$, then $\alpha \beta = 0$ and so
+    $\alpha \beta = \sup (A B)$.
+
+    For all $a \in A$ and $b \in B$, $ab \le \alpha \beta$.
+    Let $c < \alpha \beta$.
+    Since $c/\beta < \alpha$, there exists an $a \in A$ larger than
+    $c/\beta$.
+    Then $c/a < \beta$ and so there exists a $b \in B$ larger than
+    $c/a$.
+    Thus $c < ab \in A B$ and so $\alpha \beta = \sup (A B)$.
+\end{proof}
+
 \begin{proof}[Proof of uniqueness.]
     Let $F$ and $G$ be OFWLUB.
     Let $h$ be identity on $\Q \subseteq F, G$.
-    Let $z \in F$ and \[
+    For $z \in F$ let \[
         % A_z = \set{w \in \Q \mid w \le_F z}.
         A_z = \set{w \in \Q \mid w <_F z}.
     \]
     \textbf{Claim:} $A_z$ is non-empty and bounded above when viewed as a
-    subset of $G$, and therefore has a supremum in $G$. \\
-    First, $A_z$ is non-empty by density applied to $(z-1_F, z)$ o
-    Archimedean applied to $-z$.
-    Secondly, by Archimedean (or density) there exists a \emph{rational}
-    upper bound $q$ of $A_z$ in $F$.
-    This $q$ is also an upper bound of $A_z$ in $G$. \\
-    By LUB, $A_z$ has a supremum in $G$.
+    subset of $G$, and therefore has a supremum in $G$.
+
+    \makebox[\textwidth][r]{%
+        \begin{minipage}{0.95\textwidth}
+            First, $A_z$ is non-empty by density applied to $(z-1_F, z)$ or
+            Archimedean applied to $-z$.
+            Secondly, by Archimedean (or density) there exists a \emph{rational}
+            upper bound $q$ of $A_z$ in $F$.
+            This $q$ is also an upper bound of $A_z$ in $G$. \\
+            By LUB, $A_z$ has a supremum in $G$.
+        \end{minipage}
+    }
 
     We define $h(z) \coloneq \sup_G A_z$.
     For this we need to show that $h(r) = r$ for all $r \in \Q$, so that the
@@ -78,15 +119,22 @@
     Thus $g$ cannot be an upper bound of $A_r \subseteq G$.
     Thus $r = \sup_G A_r = h(r)$.
 
-    \textbf{Claim:} $h$ preserves order. \\
-    Let $z < w \in F$.
-    By density of $\Q$ in $F$, there exist rationals $r$, $s$, $t$ such that
-    $z < r < s < t < w$.
-    Then $A_z \subsetneq A_w$ as subsets of $F$ and hence of $G$.
-    Thus \[
-        h(z) = \sup_G A_z \le_G r < s < t \le_G \sup_G A_w = h(w).
-    \]
-    \textbf{Claim:} $h$ preserves addition. \\
+    \textbf{Claim:} $h$ preserves order.
+
+    \makebox[\textwidth][r]{%
+        \begin{minipage}{0.95\textwidth}
+            Let $z < w \in F$.
+            By density of $\Q$ in $F$, there exist rationals $r$, $s$, $t$ such that
+            $z < r < s < t < w$.
+            Then $A_z \subsetneq A_w$ as subsets of $F$ and hence of $G$.
+            Thus \[
+                h(z) = \sup_G A_z \le_G r < s < t \le_G \sup_G A_w = h(w).
+            \]
+        \end{minipage}
+    }
+
+    \textbf{Claim:} $h$ preserves addition.
+
     % Let $B_z$ be the set $\set{w \in \Q \mid w <_F z}$.
     % Since $h$ preserves order, $\sup_G B_z = \sup_G \set{h(w) \mid w
     % \in B_z} = h(\sup_F B_z) = h(z) = \sup_G A_z$.
@@ -100,25 +148,68 @@
     % Then $h^{-1}(g) < s_F$ and so there is some $s \in S$ such that
     % $h^{-1}(g) < s < s_F$, but then $g < h(s)$ so that $g$ is not an upper
     % bound of $h(S)$.
-    It is sufficient to show that $A_{x+y} = A_x + A_y$, where set addition
-    is defined pairwise.
-    If a rational $q \in A_x + A_y$, then clearly $q <_F x + y$ and so
-    $q \in A_{x+y}$.
-    Let $q \in A_{x+y} \iff q <_F x + y$.
-    Then $q - x \in A_y$.
-    Since $A_y$ has no largest element (by density), there exists an
-    $r \in A_y$ with $q - x < r < y$.
-    Then $q - r < x$ and so $q - r \in A_x$.
-    Thus $q = (q - r) + r \in A_x + A_y$ which gives equality of the sets.
+    \makebox[\textwidth][r]{%
+        \begin{minipage}{0.95\textwidth}
+            It is sufficient to show that $A_{x+y} = A_x + A_y$, where set
+            addition is defined pairwise.
+            If a rational $q \in A_x + A_y$, then clearly $q <_F x + y$ and
+            so $q \in A_{x+y}$.
+            Let $q \in A_{x+y} \iff q <_F x + y$.
+            Then $q - x \in A_y$.
+            Since $A_y$ has no largest element (by density), there exists an
+            $r \in A_y$ with $q - x < r < y$.
+            Then $q - r < x$ and so $q - r \in A_x$.
+            Thus $q = (q - r) + r \in A_x + A_y$ which gives equality of
+            the sets.
 
-    Since $\sup A_x + \sup A_y = \sup (A_x + A_y) = \sup A_{x+y}$, $h$
-    preserves addition.
+            From the previous lemma, $\sup A_x + \sup A_y =
+            \sup (A_x + A_y) = \sup A_{x+y}$ and so $h$ preserves addition.
+        \end{minipage}
+    }
 
-    \textbf{Claim:} $h$ preserves multiplication. \\
+    \textbf{Claim:} $h$ preserves multiplication.
 
+    \makebox[\textwidth][r]{%
+        \begin{minipage}{0.95\textwidth}
+            Let $0 < x, y \in F$.
+            Let $A^+_z = \set{w \in \Q \mid 0 < w <_F z}$.
+            We will show that $A^+_{xy} = A^+_x A^+_y$, where set product is
+            defined pairwise.
+            % \begin{description}
+            %     \item[$\bm{A^+_x A^+_y \subseteq A^+_{xy}}$:]
+            %     Suppose $w \in A^+_x A^+_y$.
+            %     Then $w = qr$ for some $0 < q <_F x$ and $0 < r <_F y$.
+            %     This immediately gives $0 < w <_F xy$, so that $w \in A^+_{xy}$.
+            %     \item[$\bm{A^+_{xy} \subseteq A^+_x \cdot A^+_y}$:]
+            %     Suppose $w \in A^+_{xy}$.
+            %     Then $0 < w/x <_F y$.
+            %     Thus $w/x \in A^+_y$.
+            %     Since $A^+_y$ has no largest element, there exists an $r \in A^+_y$
+            %     such that $w/x <_F r <_F y$.
+            %     Then $w/r <_F x$ and so $w/r \in A^+_x$.
+            %     Thus $w = (w/r) \cdot r \in A^+_x \cdot A^+_y$.
+            % \end{description}
+            If a rational $q \in A^+_x A^+_y$, then clearly $0 < q <_F xy$
+            and so $q \in A^+_{xy}$.
+            Let $q \in A^+_{xy} \iff 0 < q <_F xy$.
+            Then $q/x \in A^+_y$.
+            Since $A^+_y$ has no largest element, there exists an
+            $r \in A^+_y$ with $q/x < r < y$.
+            Then $q/r < x$ and so $q/r \in A^+_x$.
+            Thus $q = (q/r) \cdot r \in A^+_x A^+_y$ which gives equality of
+            the sets.
+
+            From the previous lemma, $\sup A^+_x \sup A^+_y =
+            \sup (A^+_x A^+_y) = \sup A^+_{xy}$ and so $h$ preserves
+            multiplication of positive elements.
+
+            Since $h$ preserves addition, $h$ preserves additive inverses.
+            So $h$ preserves multiplication of all elements. \qedhere
+        \end{minipage}
+    }
 \end{proof}
 
-\subsubsection{Dedekind's Construction} \label{sec:R:dedekind}
+\subsection{Dedekind's Construction} \label{sec:R:dedekind}
 \begin{definition}[Dedekind cut] \label{def:R:dedekind:cut}
     A \emph{Dedekind cut} is a non-empty proper subset $A \subsetneq \Q$
     such that
@@ -135,7 +226,6 @@
     \begin{enumerate}
         \item $A \le B \iff A \subseteq B$;
         \item $A + B = \set{a + b \mid a \in A, b \in B}$.
-        The additive identity $0 = \set{x \in \Q \mid x < 0}$;
         \item for $A, B > 0$, \[
             A \cdot B = \set{q \in \Q \mid q \le rs \text{ for some }
                 r \in A, s \in B}.
@@ -144,3 +234,38 @@
         If $A < 0$ and $B < 0$, then $A \cdot B = (-A) \cdot (-B)$.
     \end{enumerate}
 \end{definition}
+
+\begin{proposition} \label{thm:R:dedekind:negative}
+    $O = \set{z \in \Q \mid z < 0}$ is the additive identity of \R.
+    For any $A \in \R$, \[
+        B = \set{x \in \Q \mid \exists r \in O (r - x \notin A)}
+    \] is an additive inverse of $A$.
+\end{proposition}
+\begin{proof}
+    Let $A \in \R$.
+    For all $a \in A$, there exists $a' \in A$ larger than $a$.
+    So $a - a' \in O$ and thus $a' + (a - a') = a \in A + O$.
+
+    For all $a \in A + O$, there exists $a' \in A$ and $o \in O$ such that
+    $a = a' + o$.
+    But then $a' > a$, so $a \in A$.
+    Thus $A + O = A$.
+
+    Let $B$ be as defined.
+    Let $a + b \in A + B$ where $a \in A$ and $b \in B$.
+    Then there exists $r \in O$ such that $r - b \notin A$.
+    So $r - b > a$ and thus $a + b < r < 0$.
+
+    Now let $o \in O$.
+    Since $O$ has no largest element, there exists an $o' \in O$ such that
+    $o' > o$.
+    Let $a \in A$.
+    Consider the set $\alpha = \set{n \in \Z \mid a + n(o' - o) \in A}$.
+    By archimedean property of $\Q$, $\alpha$ is bounded.
+    It is obviously non-empty fucker.
+    Thus it has a supremum $n$.
+    Let $a' = a + n(o' - o)$.
+    $a' + (o' - o) = o' - (o - a') \notin A$ because $n$ was supremum.
+    This gives $o - a' \in B$.
+    Thus $o \in A + B$.
+\end{proof}

@@ -20,7 +20,67 @@
     \end{enumerate}
 \end{problem}
 \begin{proof}
-    % \refifdef{}{\Cref}
+    \refifdef{thm:R:unique}{\Cref}{Lecture 4}.
 \end{proof}
+
+\begin{problem}
+    In this problem, you may assume the well-definedness, commutativity and
+    associativty of addition of Dedekind cuts (as defined in Lecture 04).
+    Let $O = \set{z \in \Q : z < 0}$.
+    Verify that $O$ is a Dedekind cut, and $A + O = A$ for all Dedekind cuts
+    $A$.
+    Let $A$ be a Dedekind cut.
+    Define a Dedekind cut $B$ such that $A + B = O$.
+    You must justify your answer.
+\end{problem}
+\begin{proof}
+    \refifdef{thm:R:dedekind:negative}{\Cref}{Lecture 4}.
+\end{proof}
+
+\begin{problem}
+    Let $a = (a_n)_{n \in \N}$ and $b = (b_n)_{n \in \N}$ be sequences of
+    rational numbers such that $b_n \ne 0$ for all $n \in \N$.
+    Suppose \[
+        \lim_{n \to \infty} \frac{a_n}{b_n} = 1.
+    \]
+    \begin{enumerate}
+        \item Are $a$ and $b$ equivalent?
+        \item Are $a$ and $b$ equivalent if $a$ is a \Q-bounded sequence?
+    \end{enumerate}
+\end{problem}
+\begin{solution} \leavevmode
+    \begin{enumerate}
+        \item No. $a_n = n + 1$ and $b_n = n$ gives a counterexample.
+        \item Yes.
+    \end{enumerate}
+    Let $a$ be bounded by $M$.
+    Let $n_0$ be such that for all $n \ge n_0$, $\frac12 < \frac{a_n}{b_n}$.
+    Then, for all $n \ge n_0$, $\abs{b_n} < 2 \abs{a_n} \le 2M$.
+    Thus $b$ is bounded.
+
+    Let $\varepsilon > 0$.
+    Let $N$ be such that for all $n \ge N$, \[
+        \abs{\frac{a_n}{b_n} - 1} < \frac{\varepsilon}{2M}.
+    \] Then for all $n \ge N$, \begin{align*}
+        \abs{a_n - b_n} &= \abs{b_n} \abs{\frac{a_n}{b_n} - 1} \\
+                  &< 2M \frac{\varepsilon}{2M} \\
+                  &= \varepsilon.
+    \end{align*}
+\end{solution}
+
+\begin{problem}
+    You cannot use the existence (or the LUB property) of the ordered field
+    of real numbers in this problem, so you must work ``within'' \Q.
+    \begin{enumerate}
+        \item Show that every monotone \Q-bounded sequence of rational
+        numbers is \Q-Cauchy.
+        \item Consider the following sequence: \[
+            x_n = \begin{cases}
+                2, & \text{if } n = 0, \\
+                x_{n-1} - \frac{x_{n-1}^2 - 2}{2 x_{n-1}} & \text{if } n \ge 1
+            \end{cases}
+        \]
+    \end{enumerate}
+\end{problem}
 
 \end{document}

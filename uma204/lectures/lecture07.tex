@@ -1,0 +1,114 @@
+\lecture{07}{Wed 17 Jan '24}{}
+
+\section{The Complex Numbers} \label{sec:C}
+\begin{definition}
+    A \emph{complex number} is an ordered pair of real numbers.
+    We define operations on the set $\C$ of complex numbers as follows.
+    \begin{align*}
+        (a, b) + (c, d) &= (a + c, b + d) \\
+        (a, b) \cdot (c, d) &= (ac - bd, ad + bc) \\
+        \abs{(a, b)} &= \sqrt{a^2 + b^2}
+    \end{align*}
+    We further define $i$ to be $(0, 1)$.
+\end{definition}
+\begin{remark}
+    These operations make $\C$ a \emph{normed field}.
+\end{remark}
+
+\begin{theorem}
+    The map $f\colon \R \to \C$ given by $f(x) = (x, 0)$ is an isomorphism
+    into \C.
+\end{theorem}
+This allows us to identify $x \in \R$ with $(x, 0) \in \C$.
+
+\begin{remark}
+    $(a, b) = a + ib$ for any $a, b \in \R$.
+    $i^2 = -1$.
+
+    $0$ is the additive identity and $(-a) + i(-b)$ is the additive inverse
+    of $a + ib$.
+
+    $1$ is the multiplicative identity and for $a + ib \ne 0$,
+    $\frac{a}{a^2 + b^2} + i \frac{-b}{a^2 + b^2}$ is the multiplicative
+    inverse of $(a, b)$.
+\end{remark}
+
+\begin{theorem}[Cauchy-Schwarz inequality] \label{thm:C:cs}
+    Let $a_1, a_2, \dots, a_n$ and $b_1, b_2, \dots, b_n$ be real numbers.
+    Then \[
+        \Big\lvert\sum_{j=1}^n a_j \conj{b_j}\Big\rvert^2
+            \le \Big(\sum_{j=1}^n \abs{a_j}^2\Big)
+                \Big(\sum_{j=1}^n \abs{b_j}^2\Big).
+    \]
+\end{theorem}
+\begin{proof}
+    Let $\lambda = u + iv \in \C$.
+    \begin{align*}
+        0 &\le \sum_{j=1}^n (a_j + \lambda b_j)\conj{(a_j + \lambda b_j)} \\
+          &= \sum_{j=1}^n (a_j \conj{a_j} + \conj{\lambda} a_j \conj{b_j}
+            + \lambda b_j \conj{a_j} + \abs{\lambda}^2 b_j \conj{b_j}) \\
+          &= \sum_{j=1}^n \abs{a_j}^2 + 2[u \Re(A) + v \Im(A)]
+            + (u^2 + v^2) B
+    \end{align*}
+    where $A = \sum_{j=1}^n a_j \conj{b_j}$ and
+    $B = \sum_{j=1}^n \abs{b_j}^2$.
+
+    Let the right hand expression be $F(u, v)$.
+    Then $F_u(u, v) = 2\Re(A) + 2uB$ and $F_v(u, v) = 2\Im(A) + 2vB$.
+    Setting both to be $0$ gives $u = -\frac{\Re(A)}{B}$ and
+    $v = -\frac{\Im(A)}{B}$.
+    These values of $u$ and $v$ give $\lambda = -A/B$.
+    Thus \begin{align*}
+        F(u, v) &= \sum_{j=1}^n \abs{a_j}^2 - \frac{2 \abs{A}^2}{B}
+                    + \frac{\abs{A}^2}{B} \\
+        \shortintertext{and so}
+        \abs{A}^2 &\le \sum_{j=1}^n \abs{a_j}^2 \sum_{j=1}^n \abs{b_j}^2.
+            \qedhere
+    \end{align*}
+\end{proof}
+
+\chapter{Metric Spaces} \label{chp:metric}
+
+\section{Definitions \& examples} \label{sec:defn}
+
+\begin{definition} \label{def:metric}
+    A \emph{metric space} is a pair $(X, d)$ consisting of a set $X$ and a
+    ``distance function'' $d\colon X \times X \to [0, \infty)$ such that
+    \begin{enumerate}[label=\small(M\arabic*)]
+        \item $d(x, y) = 0$ iff $x = y$, \label{def:metric:positivity}
+        \item $d(x, y) = d(y, x)$, \label{def:metric:symmetry}
+        \item $d(x, z) \le d(x, y) + d(y, z)$ (triangle inequality).
+            \label{def:metric:triangle}
+    \end{enumerate}
+\end{definition}
+\begin{examples}
+    \item $X = \R$, $d(x, y) = \abs{x - y}$.
+    \item (Real Euclidean space) $X = \R^n$.
+    The inner product $\innerp{x}{y} = \sum_{j=1}^n x_j y_j$ gives the
+    \emph{Euclidean} distance $d(x, y) = \sqrt{\innerp{x - y}{x - y}}$.
+    \item (Discrete metric) Let $X$ be any set.
+    Then $[x \ne y]$ is a distance function on $X$.
+    \item $X = \R^n$, $p \in [1, \infty]$.
+    For $p \ne \infty$, \[
+        d_p(x, y) = \bigg(\sum_{j=1}^n \abs{x_j - y_j}^p\bigg)^{1/p}
+    \] and \[
+        d_\infty(x, y) = \max_{1 \le j \le n} \abs{x_j - y_j}.
+    \] If $p \ne 2$, then $d_p$ is not induced by an inner product.
+    \item For any metric space $(X, d)$ and a subset $Y \subseteq X$, the
+    restriction of $d$ to $Y \times Y$ is a distance on $Y$.
+\end{examples}
+
+\begin{proposition}
+    Given $a, b \in \R^n$, \[
+        \big\lvert\norm{a} - \norm{b}\big\rvert
+            \le \norm{a + b} \le \norm{a} + \norm{b}.
+    \]
+\end{proposition}
+\begin{proof}
+    From Cauchy-Schwarz, \begin{align*}
+        \norm{a + b}^2 &= \innerp{a + b}{a + b} \\
+            &= \norm{a}^2 + 2\innerp{a}{b} + \norm{b}^2 \\
+            &\le \norm{a}^2 + 2\norm{a}\norm{b} + \norm{b}^2 \\
+            &= (\norm{a} + \norm{b})^2. \qedhere
+    \end{align*}
+\end{proof}

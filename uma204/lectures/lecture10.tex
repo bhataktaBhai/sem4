@@ -1,0 +1,80 @@
+\lecture{10}{Wed 24 Jan '24}{}
+\section{Compactness} \label{sec:compactness}
+\begin{definition} \label{def:bounded}
+    A subset $E \subseteq (X, d)$ is said to be bounded if there exists a
+    $p \in X$ and $M > 0$ such that $E \subseteq B(p; M)$.
+\end{definition}
+
+Consider $E = \set{p \in \Q : 2 < p^2 < 3}$.
+Then $E$ is both closed and bounded in $(\Q, \abs{\cdot})$.
+However, continuous functions on $E$ are neither uniformly continuous nor
+bounded.
+
+\begin{definition} \label{def:open_cover}
+    Let $E \subseteq (X, d)$.
+    An open cover $\set{\mcU_\alpha}_{\alpha \in \Lambda}$ of $E$ in $X$ is
+    a collection of open sets $\mcU_\alpha$ such that
+    $E \subseteq \bigcup_{\alpha \in \Lambda} \mcU_\alpha$.
+\end{definition}
+
+\begin{definition} \label{def:compact}
+    A subset $E \subseteq (X, d)$ is said to be compact if any open cover
+    $\mcU = \set{\mcU_\alpha}_{\alpha \in \Lambda}$ of $E$ in $X$ admits a
+    finite subcover of $E$, \ie, there exist
+    $\alpha_1, \dots, \alpha_k \in \Lambda$ such that $E \subseteq
+    \bigcup_{i = 1}^k \mcU_{\alpha_i}$.
+\end{definition}
+
+\begin{examples}
+    \item $E \subseteq (X, d)$ is finite.
+    Let $\mcU$ be an open cover of $E = \set{p_1, \dots, p_n}$.
+    Then for each $p_j \in E$, there exists $\alpha_j \in \Lambda$ such that
+    $p_j \in \mcU_{\alpha_j}$.
+    Then $E \subseteq \bigcup_{j = 1}^n \mcU_{\alpha_j}$.
+    \item $E = (0, 1)$ is not compact in $(\R, \abs{\cdot})$.
+    \begin{proof}
+        Let $\mcU_n = (\frac1{n+2}, \frac1n)$ for $n \in \N^*$.
+        Then $\mcU = \set{\mcU_n}_{n \in \N^*}$ is an open cover of $E$.
+        However, $\mcU$ does not admit a finite subcover of $E$.
+        For any finite $\set{\mcU_{n_1}, \dots, \mcU_{n_k}}$, let
+        $n_0 = \max\set{n_j : 1 \le j \le k}$.
+        Then $\bigcup \mcU_{n_j} \subseteq (\frac1{n_0 + 2}, 1)$ and thus is
+        not a cover of $E$.
+    \end{proof}
+    \item $E = [0, 1]$ is compact in $(\R, \abs{\cdot})$.
+    In fact, all rectangles (sets of the form
+    $[a_1, b_1] \times \dots \times [a_n, b_n]$) are compact in
+    $(\R^n, \norm{\cdot})$.
+\end{examples}
+
+\begin{theorem}
+    Let $E \subseteq (\R^n, \norm{\cdot})$.
+    Then the following are equivalent:
+    \begin{enumerate}[label=(\arabic*)]
+        \item $E$ is compact.
+        \item $E$ is closed and bounded.
+        \item Every infinite subset of $E$ admits a limit point in $E$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    We show $(1) \implies (2)$ in a general metric space $(X, d)$.
+    Let $E \subseteq X$ be compact.
+    Let $z \in E^c$.
+    For any $y \in E$, let $\delta_y = d(y, z) / 2$.
+    Note that $B(z, \delta_y) \cap B(y, \delta_y) = \O$.
+
+    Then $\mcU = \set{B(y; \delta_y) : y \in E}$ is an open cover of $E$.
+    Since $E$ is compact, $\mcU$ admits a finite subcover of $E$.
+    That is, there exist $y_1, \dots, y_k \in E$ such that
+    $E \subseteq \bigcup_{i = 1}^k B(y_i; \delta_{y_i})$.
+    Let $\delta = \min\set{\delta_{y_i}}$.
+    Then $B(z; \delta) \cap \bigcup_{i = 1}^k B(y_i; \delta_{y_i}) = \O$,
+    so $B(z; \delta) \subseteq E^c$.
+
+    For boundedness, take the largest ball in the finite subcover of
+    $\bigcup_{R > 0} B(p; R)$ for some $p \in E$.
+
+    We show $(2) \implies (1)$ in $(\R^n, \norm{\cdot})$.
+    We first show that for any $R \in \R$, the set $[-R, R]^n$ is compact.
+    WLOG let $R = 1$.
+\end{proof}

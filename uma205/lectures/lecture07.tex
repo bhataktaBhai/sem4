@@ -1,0 +1,185 @@
+\lecture{07}{Wed 17 Jan '24}{}
+\section{Integers} \label{sec:Z}
+\begin{definition}
+    An \emph{integer} is an expression of the form $a \lm b$, where
+    $a, b \in \N$.
+    Two integers are said to be equal, $a \lm b = c \lm d$, if
+    $a + d = b + c$.
+    Let \Z\ denote the set of all integers.
+\end{definition}
+\begin{exercise}
+    On $\N \times \N$, $(a, b) \sim (c, d)$ defined by $a + d = b + c$
+    is an equivalence relation.
+\end{exercise}
+
+\begin{definition}
+    The \emph{sum} and \emph{product} of two integers $a \lm b$ and
+    $c \lm d$ is defined to be \begin{align*}
+        (a \lm b) + (c \lm d) &\coloneq (a + c) \lm (b + d) \\
+        (a \lm b) \times (c \lm d) &\coloneq (ac + bd) \lm (ad + bc)
+    \end{align*}
+\end{definition}
+
+\begin{proposition}
+    These operations are well-defined.
+\end{proposition}
+Since $n \lm 0$ behaves like $n$, we identify \N\ with the set of all such
+integers.
+\begin{definition}
+    If $a \lm b \in \Z$, its \emph{negation}, denoted $-(a \lm b)$, is
+    defined to be $b \lm a$.
+    In particular, if $n \in \N$, then $-n = 0 \lm n$.
+\end{definition}
+\begin{definition}
+    We define $(a \lm b) \le (c \lm d)$ if there exists an $n \in \N$ such
+    that $(a \lm b) + n = (c \lm d)$.
+\end{definition}
+
+\begin{lemma}[Trichotomy] \label{thm:Z:trichotomy}
+    
+\end{lemma}
+
+\begin{definition}[Ring] \label{def:ring}
+    A \emph{ring} is a set $S$ with two binary operations $+$ and $\cdot$ such
+    that for all $a, b, c \in S$,
+    \begin{enumerate}[label=\small(R\arabic*)]
+        \item addition is associative, \label{def:ring:asso}
+        \item addition is commutative, \label{def:ring:comm}
+        \item there exists an additive identity $0$, \label{def:ring:zero}
+        \item there exists an additive inverse $-a$, \label{def:ring:inverse}
+        \item multiplication is associative, \label{def:ring:mult_asso}
+        \item there exists a multiplicative identity $1$, \label{def:ring:one}
+        \item multiplication is distributive over addition (on both sides).
+        \label{def:ring:dist}
+    \end{enumerate}
+    If the multiplicative identity does not exist, we call $S$ a
+    \emph{rng}.
+
+    For a \emph{commutative ring}, we require additionally that
+    \begin{enumerate}[label=\small(CR\arabic*)]
+        \item multiplication is commutative. \label{def:ring:mult_comm}
+    \end{enumerate}
+\end{definition}
+Note that inverses are unique, since if $a + b = 0$ and $a + b' = 0$, then
+$b = (b' + a) + b = b' + (a + b) = b'$.
+
+\begin{definition}[Ordered Ring] \label{def:ordered_ring}
+    An \emph{ordered ring} is a ring $S$ with a total order $\le$ such that
+    for all $a, b, c \in S$,
+    \begin{enumerate}[label=\small(OR\arabic*)]
+        \item $a \le b$ implies $a + c \le b + c$,
+            \label{def:ordered_ring:sum}
+        \item $0 \le a$ and $0 \le b$ implies $0 \le ab$.
+            \label{def:ordered_ring:prod}
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}[Algebra of \Z]
+    \Z\ is an ordered commutative ring.
+\end{theorem}
+
+\section{Rationals} \label{sec:Q}
+\begin{definition}
+    A \emph{rational number} is an expression of the form $a \doubleslash b$
+    where $a \in \Z$ and $b \in \Z^* = \Z \setminus \{0\}$.
+    $a \doubleslash 0$ is not a rational number for any $a \in \Z$.
+    Two rational numbers are said to be equal,
+    $a \doubleslash b = c \doubleslash d$, if $ad = bc$.
+
+    \Q\ denotes the set of all rational numbers.
+\end{definition}
+
+\begin{definition}
+    The \emph{sum} and \emph{product} of two rational numbers
+    $a \doubleslash b$ and $c \doubleslash d$ is defined to be
+    \begin{align*}
+        (a \doubleslash b) + (c \doubleslash d)
+            &\coloneq (ad + bc) \doubleslash bd \\
+        (a \doubleslash b) * (c \doubleslash d)
+            &\coloneq (ac) \doubleslash (bd)
+    \end{align*}
+\end{definition}
+
+Since $z \doubleslash 1$ behaves like $z$, we identify \Z\ with the set of
+all such rational numbers.
+
+\begin{definition}
+    The \emph{reciprocal} of a non-zero rational $a \doubleslash b$, denoted
+    $(a \doubleslash b)^{-1}$, is defined to be $b \doubleslash a$.
+\end{definition}
+\begin{remark}
+    The numerator and denominator of a rational number are not well-defined.
+\end{remark}
+
+\begin{definition} \label{def:field}
+    A field is a set $F$ with 2 operations $+ : F \times F \to F$ and
+    $\times : F \times F \to F$ such that
+    \begin{enumerate}[label=\small(F\arabic*)]
+        \item \label{def:field:commutativity}
+            $+$ \& $\times$ are commutative on $F$.
+        \item \label{def:field:associativity}
+            $+$ \& $\times$ are associative on $F$.
+        \item \label{def:field:distributivity}
+            $+$ \& $\times$ satisfy distributivity on $F$, \textit{i.e.},
+            $a \times (b + c) = a \times b + a \times c$ and
+            $(b + c) \times a = a \times b + a \times c$ for all
+            $a, b, c \in F$. 
+        \item \label{def:field:identity}
+            There exist 2 \emph{distinct} elements, called 0 and 1 such that
+            for all $x \in F$,
+            \begin{align*}
+                x + 0 &= x \\
+                x \times 1 = 1 \times x &= x
+            \end{align*}
+        \item \label{def:field:negative}
+            For every $x \in F$, there is a $y \in F$ such that $x + y = 0$.
+        \item \label{def:field:reciprocal}
+            For every $x \in F^*$, there is a $z \in F$ such that
+            $xz = zx = 1$.
+    \end{enumerate}
+    If multiplication is not commutative, we call $F$ a 
+    \emph{division ring}.
+\end{definition}
+
+\begin{definition} \label{def:ordered_field}
+    An \emph{ordered field} is a set that admits two operations $+$ and
+    $\cdot$ and relation $<$ so that $(F, +, \cdot)$ is a field and $(F, <)$
+    is an ordered set and:
+    \begin{enumerate}[label=\small(OF\arabic*)]
+        \item \label{def:order:sum}
+            For $x, y, z \in F$, if $x < y$ then $x + z < y + z$.
+        \item \label{def:order:product}
+            For $x, y \in F$, if $0 < x$ and $0 < y$ then $0 < x \cdot y$.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}
+    \Q\ is an ordered field.
+\end{theorem}
+
+\begin{definition}
+    The quotient of $x \in \Q$, $y \in \Q^*$, denoted $x / y$, is defined to
+    be $x y^{-1}$.
+\end{definition}
+This gives $a \doubleslash b = a / b$ for all $a \in \Z$ and $b \in \Z^*$.
+
+\begin{definition}
+    $x \in \Q$ is a positive (resp. negative) rational number if $x = a / b$
+    for $a, b \in \N^*$ (resp. $x = -y$ for some positive $y$).
+\end{definition}
+
+\begin{proposition}
+    Let $x \in \Q$.
+    Then there exists a unique $n \in \Z$ such that $n \le x < n + 1$.
+    In particular, there exists an $N \in \Z$ such that $x < N$.
+    This unique $n$ is denoted $\floor{x}$.
+\end{proposition}
+
+\begin{proposition}
+    If $x < y$ are rational numbers, then there is a rational $z$ such that
+    $x < z < y$.
+\end{proposition}
+
+\begin{theorem}
+    There is no rational number whose square is $2$.
+\end{theorem}

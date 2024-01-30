@@ -1,0 +1,131 @@
+\lecture{11}{Mon 29 Jan '24}{}
+We define, by convention, $\stirling{n}{0} = \delta_{n, 0}$ and
+$\stirling{n}{k} = 0$ for $k > n$.
+
+We immediately have that $\stirling n1 = \stirling nn = 1$ for $n \ne 0$.
+We enumerate some more values below.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|cccc}
+        \diagbox[width=2.5em,height=2em]{$n$}{$k$} & 1 & 2 & 3 & 4 \\
+        \hline
+        1 & 1 \\
+        2 & 1 & 1 \\
+        3 & 1 & 3 & 1 \\
+        4 & 1 & 6 & 7 & 1 \\
+    \end{tabular}
+    \caption{Stirling numbers of the second kind}
+    \label{tab:stirling}
+\end{table}
+
+\begin{proposition} \label{thm:partition:recurrence}
+    For $1 \le k \le n$, $\stirling nk = \stirling{n-1}{k-1} +
+    k \stirling{n-1}{k}$
+\end{proposition}
+\begin{proof}
+    We split the partitions into two cases:
+    \begin{enumerate}
+        \item The partition contains $\set{n}$ as a singleton.
+            There are $\stirling{n-1}{k-1}$ such partitions.
+        \item $n$ belongs to some other block.
+            There are $\stirling{n-1}{k}$ ways to partition the remaining
+            elements, and $k$ ways to choose which block $n$ belongs to.
+    \end{enumerate}
+\end{proof}
+
+\begin{proposition}
+    The number of surjections from $[n]$ to $[k]$ is $k! \stirling nk$.
+\end{proposition}
+\begin{proof}
+    Any surjection is determined by a sequence $(p_1, p_2, \dots, p_k)$ of
+    preimages of $1, 2, \dots, k$ respectively.
+    These are simply permutations of $k$ blocks of $[n]$.
+\end{proof}
+
+\begin{corollary}
+    For all $n \in \N$, \[
+        \sum_{j=0}^{n} \stirling nj x^{\underline{j}} = x^n
+    \]
+\end{corollary}
+\begin{proof}
+    For $x \in \N$, the RHS counts functions from $[n]$ to $[x]$.
+    We split these functions by the size of the image.
+
+    For functions of image size $j$, there are $\binom{n}{j}$ ways to choose
+    the image, and $j! \stirling nj$ ways to choose the preimage.
+    But $\binom{n}{j} j!$ is precisely $n^{\underline{j}}$.
+
+    Thus both sides agree at infinitely many points, and so they are equal.
+\end{proof}
+
+\begin{definition}[Bell numbers] \label{def:bell}
+    The number of set partitions of $[n]$ is called the $n$th \emph{Bell
+    number}, denoted $B_n \coloneq \sum_{k=0}^{n} \stirling nk$.
+\end{definition}
+
+\begin{exercise}
+    Prove that $B_{n+1} = \sum_{k=0}^{n} \binom{n}{k} B_k$.
+\end{exercise}
+\begin{solution}
+    Let $b_k$ be the number of partitions of $[n+1]$ with $n+1$ in a block
+    of size $k+1$.
+    Then $b_k = \binom{n}{k} B_{n-k}$.
+    This gives the desired result by the re-indexing $k \mapsto n-k$.
+\end{solution}
+Though this seems like a recurrence, it is not (for this course).
+By ``recurrence'' we will mean a recurrence relation dependent upon at most
+$M$ previous terms, for some fixed $M$.
+
+\section{Permutations as Cycles} \label{sec:perm:cycles}
+Let $S_n$ be the set of all permutations of $[n]$.
+Recall that any permutation $\pi \in S_n$ can be written as a product of
+cycles.
+A useful convention is to skip cycles of length $1$.
+Thus we write $\sigma = 6754132$ as $(1635)(27)$.
+This allows us to consider $\pi$ as just a product (under composition) of
+permutations which are cyclic on some subset of $[n]$.
+\textit{E.g.} $\pi = (1635) \circ (27)$, where $(27)$ for example is the
+permutation which swaps $2$ and $7$ and fixes everything else.
+
+\begin{lemma}
+    Let $\sigma \in S_n$ and $j \in [n]$.
+    Then there exists an $i \in \N^*$ such that $\sigma^i(j) = j$.
+\end{lemma}
+\begin{proof}
+    Consider the sequence $(\sigma(j), \dots, \sigma^n(j))$.
+    If any of these are equal to $j$, we are done.
+    Otherwise, by the pigeonhole principle, there exist $k < l$ such that
+    $\sigma^k(j) = \sigma^l(j)$.
+    Then $\sigma^{l-k}(j) = j$ (since $\sigma$ is a bijection).
+\end{proof}
+\begin{corollary}
+    Let $\sigma \in S_n$.
+    Then $\sigma^{n!} = \id$.
+\end{corollary}
+\begin{proof}
+    By the lemma, for each $j \in [n]$, there exists an $i_j \in [n]$ such
+    that $\sigma^{i_j}(j) = j$.
+    Since $i_j \mid n!$ for all $j$, we have $\sigma^{n!}(j) = j$ for all
+    $j$.
+\end{proof}
+
+\begin{notation}
+    We will write cyclic decompositions of permutations as follows:
+    \begin{itemize}
+        \item Each cycle has its smallest element first.
+        \item Cycles are written in increasing order of their smallest
+            elements.
+    \end{itemize}
+\end{notation}
+
+\begin{definition}
+    The \emph{cycle type} of a permutation $\sigma$, denoted
+    $\type(\sigma)$, is the partition formed by arranging its cycle lengths
+    in weakly decreasing order.
+\end{definition}
+
+\begin{definition}
+    The number of permutations in $S_n$ with $k$ cycles is called the
+    (unsigned) \emph{Stirling number of the first kind}, denoted
+    $\ftirling nk$.
+\end{definition}
