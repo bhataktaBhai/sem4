@@ -1,0 +1,90 @@
+\lecture{14}{Thu 01 Feb '24}{}
+\chapter{Sequences \& Series}
+\section{Sequences \& Subsequences} \label{sec:seq}
+\begin{definition}
+    Let $(X, d)$ be a metric space.
+    A squence in $X$ is a function $f\colon \N \to X$, more commonly written
+    as $(f(k))_{k \in \N} \subseteq X$.
+
+    We say that a sequence $(x_n)_{n \in \N}$ \emph{converges} in $X$ if
+    there exists an $x \in X$ such that for every $\varepsilon > 0$ there
+    exists an $N \in \N$ such that for all $n \geq N$,
+    $d(x_n, x) < \varepsilon$.
+    In this case, we call $x$ a limit of $(x_n)_{n \in \N}$ and write \[
+        \lim_{k \to \infty} x_k = x \quad \text{or}
+        \quad x_k \to x \text{ as } k \to \infty.
+    \]
+    If $(x_n)_{n \in \N}$ does not converge, we say that it \emph{diverges}.
+\end{definition}
+\begin{examples}
+    \item When $(X, d) = (\R, \abs{\cdot})$, this definition reduces to the
+    definition in UMA101.
+    \item Let $x_n = (\frac1n, \frac{2}{n^2}) \in (\R^2, \norm{\cdot})$ for
+    each $n \ge 1$. \\
+    We claim that $\lim_{n \to \infty} x_n = (0, 0)$.
+    \begin{proof}
+        Let $\varepsilon > 0$.
+        Choose an $N > \frac{\sqrt 5}{\varepsilon}$.
+        Then for all $n \ge N$, \begin{align*}
+            \norm{\left(\frac1n, \frac{2}{n^2}\right)}^2
+                &= \frac1{n^2} + \frac{4}{n^4} \\
+                &\le \frac{5}{n^2} \\
+                &< \varepsilon. \qedhere
+        \end{align*}
+    \end{proof}
+    \item Let $x = \left(\frac1n, (-1)^n\right)_{n \in \N^*}$ with standard
+    norm.
+    Then $(x_n)_{n \in \N^*}$ diverges.
+\end{examples}
+
+\begin{theorem}
+    Let $(X, d)$ be a metric space.
+    \begin{enumerate}
+        \item Let $(x_n)_{n \in \N} \subseteq X$.
+        Then, $\lim_{n \to \infty} x_n = x$ iff every $\varepsilon$-ball
+        centred at $x$ contains all but finitely many terms of $(x_n)$.
+        \item Suppose $\lim_{n \to \infty} x_n = x$ and
+        $\lim_{n \to \infty} x_n = y$. Then $x = y$.
+        \item If $(x_n)_{n \in \N} \subseteq X$ converges, then
+        $\set{x_n : n \in \N}$ is a bounded set in $(X, d)$.
+        \item Let $E \subseteq X$.
+        Then $x \in \wbar{E}$ iff there exists a sequence $(x_n)\subseteq E$
+        such that $\lim_{n \to \infty} x_n = x$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof} \leavevmode
+    \begin{enumerate}
+        \item Let $(x_n)$ be convergent to $x$.
+        Then all terms except the first $N$ lie inside the $\varepsilon$-
+        neighborhood of $x$.
+        The converse is similarly true.
+        \item Let $x$ and $y$ be distinct limits of $(x_n)$.
+        Choose $\varepsilon = \frac{d(x, y)}{2} > 0$.
+        Then for large enough $n$, \begin{align*}
+            d(x, y) &\le d(x, x_n) + d(x_n, y) \\
+            &< \varepsilon + \varepsilon \\
+            &= d(x, y). \qedhere
+        \end{align*}
+        \item Let $(x_n)$ be convergent to $x$.
+        Let $N$ be such that for all $n \ge N$, $d(x_n, x) < 1$.
+        Then $\rho = \sum_{k=0}^{N} d(x_k, x) + 1$ works as a radius for
+        $B(x, \rho) \supseteq \set{x_n : n \in \N}$.
+        \item Let $x \in \wbar{E}$.
+        Then every $\varepsilon$-neighborhood of $x$ intersects $E$.
+        By the axiom of choice, we can choose a sequence $(x_n) \subseteq E$
+        such that $d(x_n, x) < \frac1n$.
+        This converges to $x$.
+
+        Conversely if there exists a sequence $(x_n) \to x$ within $E$, then
+        every $\varepsilon$-neighborhood of $x$ intersects $E$.
+    \end{enumerate}
+\end{proof}
+
+\begin{definition}
+    Let $(x_n)_{n \in \N} \subseteq X$.
+    Let $(n_k)_{k \in \N}$ be a strictly incresing sequence in \N.
+    Then $(x_{n_k})_{k \in \N}$ is called a \emph{subsequence} of $(x_n)$.
+
+    Any limit of a subsequence of $(x_n)$ is called a \emph{subsequential
+    limit} of $(x_n)$.
+\end{definition}
