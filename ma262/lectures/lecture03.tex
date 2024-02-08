@@ -1,106 +1,175 @@
 \lecture{03}{Thu 11 Jan '24}{}
-    First consider the case where $\abs{S} = 2$.
+    First consider the case $\abs{S} = 2$.
     Let $S = \set{s_1, s_2}$.
-    We know that $g_S = a s_1 + b s_2$ where $a, b \in \Z$.
-    Now \[
-        m g_S = (ma - ks_2) s_1 + (mb + ks_1) s_2
-    \] Choose $k \in \N$ such that $0 \le ma - ks_2 < s_2$.
-    We can write $mg_S = \tilde{a} s_1 + \tilde{b} s_2$ where
-    $0 \le \tilde{a} < s_2$.
+    We know that $g_S = a s_1 + b s_2$ for some $a, b \in \Z$.
+    Now for any $m \in \N^*$, \begin{align*}
+        m g_S &= ma s_1 + mb s_2 + ks_1s_2 - ks_1s_2 \\
+            &= (ma - ks_2) s_1 + (mb + ks_1) s_2
+    \end{align*} Choose $k \in \N$ such that $0 \le ma - ks_2 < s_2$.
+    We can write $mg_S = a_m s_1 + b_m s_2$ where
+    $0 \le a_m < s_2$.
 
-    If $m_S = \frac{s_1 s_2}{g_S} + 1$, then for all $m \ge m_S$,
-    $s_1s_2 < mg_S = \tilde{a}s_1 + \tilde{b}s_2 < s_1s_2 + \tilde{b}s_2$
-    and so $\tilde{b} > 0$.
+    % TODO: why were the following three lines needed?
+    Let $m_0$ be such that $m_0 g_S > s_1 s_2$.
+    Then for all $m \ge m_0$, $mg_S - a_ms_1 > (s_2 - a) s_1 > 0$, so that
+    $b_m > 0$.
+    Thus $m_S = m_0$ works.
 
-    Now let $S = \set{s_1, s_2, \dots, s_{l+1}}$ and
-    $F = \set{s_1, s_2, \dots, s_l}$.
+    Suppose the lemma holds for all sets of size $l-1$. \\
+    Let $S = \set{s_1, s_2, \dots, s_l}$ and $F = S \setminus \set{s_l}$.
+    Then by the previous lemma, $g_S = \gcd(g_F, s_l)$.
 
-    \textbf{Claim:} $\tilde{g}_S = \gcd(g_F, s_{l+1})$ is equal to $g_S$. \\
-    \textbf{Proof of claim:} Huh?
-
-    If $m \ge m_{g_F, s_{l+1}} + \frac{m_F g_F}{g_S}$, then \begin{align*}
+    Let $m_0$ be such that $m g_S - m_F g_F \ge m_{\set{g_F, s_l}}$.
+    Then \begin{align*}
         m g_S - m_F g_F
-            &= \left(m - \frac{m_F g_F}{g_S}\right) g_S \\
-            &= a g_F + b s_{l+1} \text{ for some } a, b \in \Z_{\ge 0} \\
-        m g_S
-            &= (a + m_F) g_F + b s_{l+1} \\
-            &= \sum_{i=1}^{l} a_i s_i + b s_{l+1}
-    \end{align*} where all coefficients are non-negative integers.
+            &= a g_F + b s_l \text{ for some } a \in \N, b \in \N^* \\
+        m g_S &= (a + m_F) g_F + b s_l
+        \shortintertext{but $a + m_F \ge m_F$, so we can write}
+        m g_S &= \sum_{i=1}^{l-1} a_i s_i + b s_l
+    \end{align*} where all $a_i$s are non-negative integers.
     This closes the induction.
 \end{proof}
+We can now prove \cref{thm:schur_recurrence}.
+\begin{proof}
+    Applying Schur's lemma to $F_x$, we have the existence of an $n_x$ such
+    that $nd_x$ can be written as a non-negative integer combination of
+    elements of $F_x$, for all $n \ge n_x$.
+    Let $nd_x = \sum_{i=1}^{k} a_i f_i$.
+    Then by the Chapman-Kolmogorov equation, \begin{align*}
+        p_{xx}^{(nd_x)} &\ge \underbrace{p_{xx}^{(f_1)} \dots p_{xx}^{(f_1)}}_{a_1 \text{ times}} \dots \underbrace{p_{xx}^{(f_k)} \dots p_{xx}^{(f_k)}}_{a_k \text{ times}} \\
+            &\ge \prod_{i=1}^{k} (p_{xx}^{(f_i)})^{a_i} \\
+            &> 0 \qedhere
+    \end{align*}
+\end{proof}
 
-\begin{definition}[Extended reals] \label{def:extended_reals}
-    We define \[
-        \overline{\R} = \R \cup \set{-\infty, +\infty}
-    \] to be the \emph{extended reals}.
+\begin{definition}[The Extended Reals] \label{def:extended_reals}
+    The \emph{extended real line} is the set of real numbers along with $2$
+    formal sumbols $+\infty$ and $-\infty$, denoted by \[
+        \wbar{\R} = \R \cup \set{-\infty, +\infty}.
+    \]
+    $\wbar{\R}$ will be endowed with the order \[
+        -\infty < x < \infty \text{ for all } x \in \R,
+    \] along with the usual order on \R.
+    We extend the algebraic operations on \R\ to $\wbar{\R}$.
+    \begin{itemize}
+        \item $x + \infty = +\infty$, $x - \infty = -\infty$ for all
+            $x \in \R$.
+        \item $x \cdot (+\infty) = +\infty$, $x \cdot (-\infty) = -\infty$
+            for all $x \in \R$, $x > 0$.
+        \item $x \cdot (+\infty) = -\infty$, $x \cdot (-\infty) = +\infty$
+            for all $x \in \R$, $x < 0$.
+        \item $\frac{x}{+\infty} = \frac{x}{-\infty} = 0$, for all
+            $x \in \R$.
+    \end{itemize}
+    If $E \subseteq \R$ is not bounded above in \R, we say
+    $\sup E = +\infty$.
+    If $E = \O$, we say $\inf E = +\infty$.
 \end{definition}
 
 \begin{definition}[Filtration] \label{def:filtration}
-    Let $(\Omega, \F, P)$ be a probability space.
-    A collection $(\F_n)_{n \in \N}$ of $\sigma$-algebras is called a
-    \emph{filitration} if $\F_n \subseteq \F_{n+1} \subseteq \F$ for all
-    $n \in \N$.
+    Let $(\Omega, \F, \Pr)$ be a probability space.
+    A collection $(\F_n)_{n \in \N}$ of $\sigma$-algebras over $\Omega$ is
+    called a \emph{filtration} if $\F_n \subseteq \F_{n+1} \subseteq \F$
+    for all $n \in \N$.
 \end{definition}
 % Consider $X : (\Omega, \F, P) \to \overline{\R}$.
 \begin{definition}[Natural filtration] \label{def:natural_filtration}
-    Let $(X_n)_{n \ge 0}$ be a sequence of $S$-values random variables
-    defined on $(\Omega, \F, P)$.
-    For $n \ge 0$, define \begin{align*}
-        \F_n &= \set{(X_0, X_1, \dots, X_n)^{-1}(A) \mid A \in S^{n+1}} \\
+    Let $(X_n)_{n \in \N}$ be a sequence of $S$-valued random variables
+    defined on $(\Omega, \F, \Pr)$.
+    For $n \in \N$, define \begin{align*}
+        \F_n &= \set{(X_0, X_1, \dots, X_n)^{-1}(A) \mid A \subseteq
+                S^{n+1}} \cap \F \\ %TODO: verify
             &= \sigma(X_0, X_1, \dots, X_n)
     \end{align*}
     Here, $(X_0, \dots, X_n)^{-1}(A) = \set{\omega \in \Omega \mid
-    (X_0(\omega), \dots, X_n(\omega)) \in A}$.
+    (X_0(\omega), \dots, X_n(\omega)) \in A}$. \\
     This sequence of $\sigma$-algebras is called the \emph{natural
-    filtration} of $(X_n)_{n \ge 0}$.
+    filtration} of $(X_n)_{n \in \N}$.
 \end{definition}
-Why is this a $\sigma$-algebra?
-The empty set is in $\F_n$ because $\emptyset \in S^{n+1}$.
-The complement of any set in $\F_n$ is in $\F_n$ because
-$(X_0, \dots, X_n)^{-1}(A^c) = (X_0, \dots, X_n)^{-1}(A)^c$.
+\begin{remark}
+    Note that each $\F_n$ is a subset of $2^\Omega$, not $\Omega$.
+    % In fact, if one defines the equivalence relation $\sim_n$ on $\Omega$ by
+    % $\omega \sim_n \omega'$ iff $X_i(\omega) = X_i(\omega')$ for each
+    % $i \le n$, then $\F_n$ is simply $\Omega /{\sim_n}$.
 
-Why is $\F_n \subseteq \F_{n+1}$?
-For any $A \in S^{n+1}$, we have \[
-    (X_0, \dots, X_n)^{-1}(A) = (X_0, \dots, X_n, X_{n+1})^{-1}(A \times S).
-\]
+    Why is $\F_n$ a $\sigma$-algebra?
+    The empty set is in $\F_n$ because $\O \in S^{n+1}$, and the set of
+    pre-images of the null set is the null set.
+    The complement of any set in $\F_n$ is in $\F_n$ because
+    $(X_0, \dots, X_n)^{-1}(A)^c = (X_0, \dots, X_n)^{-1}(A^c)$.
+
+    Why is $\F_n \subseteq \F_{n+1}$?
+    For any $A \subseteq S^{n+1}$, we have \[
+        (X_0, \dots, X_n)^{-1}(A)
+            = (X_0, \dots, X_n, X_{n+1})^{-1}(A \times S).
+    \]
+    The set $\wbar{\F} = 2^\Omega$ works as a $\sigma$-algebra containing each
+    $\F_n$.
+    \textcolor{Red}{But is this the desired closure?
+    Or did we intend $\F_n$ to be intersected with $\F$?}
+\end{remark}
 
 \begin{definition}[Stopping time] \label{def:stopping_time}
-    Suppose $(X_n)_{n \ge 0}$ is a sequence of $S$-valued random variables
-    on $(\Omega, \F, P)$ with natural filtration $(\F_n)_{n \ge 0}$.
+    Suppose $(X_n)_{n \in \N}$ is a sequence of $S$-valued random variables
+    on $(\Omega, \F, (\F_n)_{n \in \N}, \Pr)$ where $(\F_n)_{n \in \N}$ is
+    the natural filtration of $(X_n)_{n \in \N}$.
 
-    Then $\tau \colon \Omega \to \N \cup \set{\infty}$ is called a
-    \emph{stopping time} with respect to $(\F_n)_{n \ge 0}$ if for all
+    Then $\tau\colon \Omega \to \N \cup \set{\infty}$ is called a
+    \emph{stopping time} with respect to $(\F_n)_{n \in \N}$ if for all
     $n \in \N$, \[
-        \set{\tau \le n} \in \F_n.
+        \set{\omega \in \Omega \mid \tau(\omega) \le n} \in \F_n.
     \]
 \end{definition}
 This is equivalent to saying that for all $n \in \N$, \[
-    \ind{\set{\tau \le n}} = \ind{\set{(X_0, \dots, X_n) \in A}}
+    \1{\set{\tau \le n}} = \1{\set{(X_0, \dots, X_n) \in A}}
     \quad \text{for some } A \in S^{n+1}.
 \]
+Intuitively, a stopping time is a time at which we can decide whether or not
+to stop the process based on the information available up to that time (in
+measurable terms).
 
-Consider the simple randow walk $(X_n)_{n \ge 0}$ on $\Z$.
+Consider the simple random walk $(X_n)_{n \in \N}$ on $\Z$.
 Then the event that the hitting time of $10$ is at most $n$ is \[
     \set{T_{10} \le n} = \bigcup_{i=1}^{n} \set{X_i = 10}.
 \]
 \begin{examples}
-    \item Let $(X_n)_{n \ge 0}$ be an $S$-valued stochastic process and let
+    \item Let $(X_n)_{n \in \N}$ be an $S$-valued stochastic process and let
     $A \subseteq S$.
-    Let $T_A \coloneq \inf\set{n \ge 1 \mid X_n \in A}$, where we take
-    $\inf \O$ to be $+\infty$ by convention.
+    Let $T_A \coloneq \inf\set{n \ge 1 \mid X_n \in A}$ (where we take
+    $\inf \O$ to be $+\infty$).
     Then $T_A$ is a stopping time with respect to the natural filtration
-    associated with $(X_n)_{n \ge 0}$.
+    associated with $(X_n)_{n \in \N}$.
     That is, for all $n \in \N$, \[
         \set{T_A \le n} = \bigcup_{i=1}^{n} \set{X_i \in A} \in \F_n.
     \]
+    Intuitively, say we stop as soon as we hit a desired state.
+    Then we can decide whether or not to stop at time $n$ based on the
+    information available up to time $n$.
     \item SRW($p$) started at the origin.
     Then $L = \sup \set{n \ge 1 \mid X_n < 7}$ is NOT a stopping time.
+    Intuitively, $L$ is the \emph{last} time we are below $7$, which cannot
+    be determined based on the information available from the past.
 \end{examples}
-Now if $\tau$ is a stepping time, then $\set{\tau = n} \in \F_n$ for all
-$n \in \N$.
-This is because \[
-    \set{\tau = n} = \set{\tau \le n} \cap \set{\tau \le n-1}^c
-\] where both sets are in $\F_n$.
+\begin{proposition}
+    $\tau$ is a stopping time iff for all $n \in \N$, \[
+        \set{\tau = n} \in \F_n.
+    \]
+\end{proposition}
+\begin{proof}
+    Suppose $\tau$ is a stopping time.
+    Then $\set{\tau = n} \in \F_n$ for all $n \in \N$.
+    This is because \[
+        \set{\tau = n} = \set{\tau \le n} \cap \set{\tau \le n-1}^c
+    \] where both sets are in $\F_n \supseteq \F_{n-1}$,
+    and therefore so is their intersection (de Morgan's law).
+
+    Conversely, suppose $\set{\tau = n} \in \F_n$ for all $n \in \N$.
+    Since $\F_0 \subseteq \F_1 \subseteq \dots \subseteq \F_n$, we have
+    $\set{\tau = i} \in \F_n$ for all $i \le n$.
+    Hence so is \[
+        \set{\tau \le n} = \bigcup_{i=0}^{n} \set{\tau = i}. \qedhere
+    \]
+\end{proof}
 
 \begin{proposition}
     If $\tau_1$ and $\tau_2$ are stopping times, then so are
@@ -114,89 +183,207 @@ This is because \[
             &= \set{\tau_1 \le n} \cap \set{\tau_2 \le n} \\
         \set{\tau_1 + \tau_2 \le n}
             &= \bigcup_{i=0}^{n} \set{\tau_1 \le i} \cap \set{\tau_2 \le n-i}
+            \qedhere
     \end{align*}
 \end{proof}
+We can interpret the above operations as follows.
+\begin{itemize}
+    \item $\tau_1 \wedge \tau_2$ is the stopping time if we stop when either
+    of our conditions are met.
+    \item $\tau_1 \vee \tau_2$ is the stopping time if we stop when both of
+    our conditions are met.
+    \item $\tau_1 + \tau_2$ is the stopping time if we stop when we have
+    waited for $\tau_1$ before we started looking for $\tau_2$.
+\end{itemize}
 
-\begin{problem}
+\begin{exercise}
     Give an example of two stopping times $\tau_1$ and $\tau_2$ such that
     $\Pr(\tau_1 \le \tau_2) = 1$ but $\tau_2 - \tau_1$ is not a stopping
     time.
-\end{problem}
+\end{exercise}
 \begin{solution}
-    Consider the SSRW($p$) started at the origin, with \begin{align*}
-        \tau_1 &= \inf\set{n \ge 1 \mid X_n = 10} \\
-        \tau_2 &= \inf\set{n \ge \tau_1 \mid X_n = 0}.
+    Consider the SRW($p$) started at the origin, with \begin{align*}
+        \tau_1 &= \inf\set{n \ge 1 \mid X_n = 1} \\
+        \tau_2 &= \inf\set{n \ge 1 \mid X_n = 2}
     \end{align*}
 \end{solution}
 
-\begin{theorem}[Strong Markov property] \label{thm:strong_markov}
-    Let $(X_n)_{n \ge 0}$ be in $MC(\mu_0, p)$, and let $\tau$ be a stopping
-    time.
-    Let $A = [0, \infty)$.
+\begin{theorem}[Strong Markov property] \label{thm:smp}
+    Let $(X_n)_{n \in \N}$ be in $MC(\mu_0, p)$,
+    and let $\tau$ be a stopping time.
+    Let $A \subseteq \N$.
     Then \begin{multline*}
-        \Pr\nolimits_{\mu_0}(X_{\tau+1} = x_1, \dots, X_{\tau+n} = x_n
+        \Pr_{\mu_0}(X_{\tau+1} = x_1, \dots, X_{\tau+n} = x_n
             \given \tau \in A, X_\tau = x) \\
-        = \Pr\nolimits_x(X_1 = x_1, \dots, X_n = x_n)
+        = \Pr_x(X_1 = x_1, \dots, X_n = x_n)
     \end{multline*}
 \end{theorem}
-\begin{proof}
+\begin{remark}
     The SMP is equivalent to \begin{equation*}
-        E_{\mu_0}[f((X_{\tau+j})_{j \ge 0}) \mid \tau \in A, X_\tau = x]
-            = E_x\left[f\left((X_j)_{j \ge 0}\right)\right]
+        \E_{\mu_0}\left[f\big((X_{\tau+j})_{j \in \N}\big) \mid \tau \in A,
+        X_\tau = x\right]
+            = \E_x\left[f\big((X_j)_{j \in \N}\big)\right]
     \end{equation*} for any bounded function $f \colon S^\infty \to \R$.
-    Now \begin{align*}
-        P_{\mu_0}(&X_{\tau+1} = x_1, \dots, X_{\tau+n} = x_n, \tau \in A,
+\end{remark}
+\begin{proof}
+    \begin{align*}
+        \Pr_{\mu_0}(&X_{\tau+1} = x_1, \dots, X_{\tau+n} = x_n, \tau \in A,
         X_\tau = x) \\
-            &= \sum_{m \in A} P_{\mu_0}(X_{m+1} = x_1, \dots, X_{m+n} = x_n,
+            &= \sum_{m \in A} \Pr_{\mu_0}(X_{m+1} = x_1, \dots, X_{m+n} = x_n,
                 \tau = m, X_m = x) \\
-            &= \sum_{m \in A} P_{\mu_0}(\tau = m, X_m = x)
-                P_x(X_1 = x_1, \dots, X_n = x_n) \\
-            &= P_x(X_1 = x_1, \dots, X_n = x_n)
-                P_{\mu_0}(\tau \in A, X_\tau = x)
+            &= \sum_{m \in A} \Pr_{\mu_0}(\tau = m, X_m = x) \\
+            &\qquad\qquad \times \Pr_{\mu_0}(X_{m+1} = x_1, \dots,
+                X_{m+n} = x_n \given \tau = m, X_m = x) \\
+            &= \sum_{m \in A} \Pr_{\mu_0}(\tau = m, X_m = x)
+                \Pr_{x}(X_1 = x_1, \dots, X_n = x_n)
+        \intertext{by the \nameref{thm:mp}, since $\tau = m$ is equivalent
+        to $(X_0, \dots, X_m)$ belonging to some set in $\F_m$.
+        Summing over $A$ gives}
+            &= \Pr_{\mu_0}(\tau \in A, X_\tau = x)
+                \Pr_{x}(X_1 = x_1, \dots, X_n = x_n)
     \end{align*}
+    and dividing by $\Pr_{\mu_0}(\tau \in A, X_\tau = x)$ yields the result.
 \end{proof}
 
 \begin{definition}
     Suppose $X$ takes values in $\N \cup \set{\infty}$, and let
     $p_k \coloneq \Pr(X = k)$, $k \in \N \cup \set{\infty}$.
-    Then the \emph{probability generating function} of $X$ is defined as \begin{align*}
+    Then the \emph{probability generating function} of $X$ is defined as
+    \begin{align*}
         G_X(s) &= p_0 + p_1 s + p_2 s^2 + \dots, \quad s \in (-1, 1) \\
-            &= E[s^X]
+            &= \E[s^X]
     \end{align*} where we take $s^\infty = 0$ for $\abs{s} < 1$.
 \end{definition}
 \begin{remark}
     The left limit $G_X(1^-) = \lim_{s \uparrow 1} G_X(s) = 1 - p_\infty$.
 \end{remark}
-If $p_\infty > 0$, then $EX = \infty$.
-Otherwise, $EX = \sum_{k=0}^{\infty} k p_k = G_X'(1^-)$.
+If $p_\infty > 0$, then $\E X = \infty$.
+Otherwise, $\E X = \sum_{k=0}^{\infty} k p_k = G_X'(1^-)$.
 
-Let $X$, $Y$ be two random variables taking values in $\N \cup \infty$ and
-$G_X(s) = G_Y(s) \forall s \in (-1, 1)$, then $X \eqd Y$.
+\begin{fact} \label{thm:pgf}
+    Let $X$, $Y$ be two random variables taking values in $\N \cup \infty$ and
+    $G_X(s) = G_Y(s) \;\forall s \in (-1, 1)$, then $X \eqd Y$.
+\end{fact}
 
-\begin{problem}
-    Suppose $(X_n)_{n \ge 0}$ is an SRW($p$) on \Z\ started at the origin.
-    Find $\mathcal{G} = G_{T_{-1}}$.
-\end{problem}
+\begin{exercise}
+    Suppose $(X_n)_{n \in \N}$ is an SRW($p$) on \Z\ started at the origin.
+    Find $G = G_{T_{-1}}$, where $T_{-1}$ is the first hitting time of $-1$.
+\end{exercise}
 \begin{solution}
     \begin{align*}
-        G(s) &= E_0[s^{T_{-1}}] \\
-            &= p E_0[s^{T_{-1}} \given X_1 = 1]
-                + q E_0[s^{T_{-1}} \given X_1 = -1] \\
-            &= p E_1[s^{T_{-1}}] + q s \\
-            &= p E_1[s^{1 + T_{-1}}] + q s \\
-            &= p s E_0[s^{T_{-2}}] + q s
+        G(s) &= \E_0[s^{T_{-1}}] \\
+            &= p \E_0[s^{T_{-1}} \given X_1 = 1]
+                + q \E_0[s^{T_{-1}} \given X_1 = -1] \\
+            &= p \E_1[s^{1 + T_{-1}}] + q s \\
+            &= p s \E_0[s^{T_{-2}}] + q s
     \end{align*}
     Since $s^\infty = 0$ by our convention, we have \begin{align*}
-        E_0[s^{T_{-2}}] &= E_0[s^{T_{-2}} \ind{T_{-1} < \infty}]
-            &= \sum_{m} E_0[s^{T_{-2}} \ind{T_{-1} = m}] \\
-            &= \sum_{m} \Pr_0(T_{-1} = m) E_{-1}[s^{m + T_{-2}}] \\
-            &= \sum_{m} \Pr_0(T_{-1} = m) s^m E_0[s^{T_{-1}}] \\
+        \E_0[s^{T_{-2}}] &= \E_0[s^{T_{-2}} \1{T_{-1} < \infty}] \\
+            &= \sum_{m} \E_0[s^{T_{-2}} \1{T_{-1} = m}] \\
+            &= \sum_{m} \Pr_0(T_{-1} = m) \E_{-1}[s^{m + T_{-2}}] \\
+            &= \sum_{m} \Pr_0(T_{-1} = m) s^m \E_{-1}[s^{T_{-2}}] \\
+            &= \E_0[s^{T_{-1}}] \sum_{m} \Pr_0(T_{-1} = m) s^m \\
             &= G(s)^2
     \end{align*}
     Thus \begin{align*}
         G(s) &= p s G(s)^2 + q s \\
-        G(s) &= \frac{1 \pm \sqrt{1 - 4pq s}}{2ps}
+        G(s) &= \frac{1 \pm \sqrt{1 - 4pq s^2}}{2ps}
     \end{align*}
     \textbf{Claim:} $G(s) = \frac{1 - \sqrt{1 - 4pqs^2}}{2ps}$ for all
     $s \in (-1, 1) \setminus \set{0}$.
+    % TODO: WTF how
+\end{solution}
+We get several results from this exercise.
+The probability of ever hitting $-1$ is \begin{align*}
+    1 - \Pr_0(T_{-1} = \infty) &= \lim_{s \uparrow 1} G(s) \\
+        &= \frac{1 - \sqrt{1 - 4pq}}{2p} \\
+        &= \frac{1 - \abs{2p - 1}}{2p} \\
+        &= \begin{cases}
+            1 & \text{if the walk is left-biased,} \\
+            \frac{q}{p} & \text{otherwise.}
+        \end{cases}
+        &= \frac{q}{p} \wedge 1
+\end{align*}
+Another way to see the left-biased case is to note that $X_n$'s are sums of
+iid $\mathrm{Ber}_{\pm}(p)$ random variables, and so by the strong law of
+large numbers, \[
+    \frac{X_n}{n} \asto p - q.
+\] Thus if $p < q$, then $X_n \asto -\infty$.
+
+\begin{exercise}
+    Consider the SRW($p$) on $\Z$ started at the origin.
+    Show that $T_{-2} \eqd \tau_1 + \tau_2$, where $\tau_1$ and $\tau_2$ are
+    iid copies of $T_{-1}$.
+\end{exercise}
+\begin{solution}
+    \begin{align*}
+        \E_0[s^{T_{-2}}] &= \E_0[s^{T_{-2}} \1{T_{-1} < \infty}] \\
+            &= \sum_m \E_0[s^{T_{-2}} \1{T_{-1} = m}] \\
+            &= \sum_m \Pr_0(T_{-1} = m) \E_{-1}[s^{m + T_{-2}}] \\
+            &= \sum_m \Pr_0(T_{-1} = m) s^m \E_{-1}[s^{T_{-2}}] \\
+            &= \E_0[s^{T_{-1}}] \sum_m \Pr_0(T_{-1} = m) s^m \\
+            &= G(s)^2
+    \end{align*}
+    On the other hand, $\E_0[s^{\tau_1 + \tau_2}] = \E_0[s^{\tau_1}]^2
+    = G(s)^2$ by independence.
+
+    Thus, $T_{-2} \eqd \tau_1 + \tau_2$ by \cref{thm:pgf}.
+\end{solution}
+
+\begin{exercise}
+    Consider the SRW($p$) on \Z\ started at the origin.
+    Find $\Pr_0(T_{-1} = n)$, $n \in \N$.
+\end{exercise}
+\begin{solution}
+    We have $G(s) = \frac{1-\sqrt{1-4pqs^2}}{2ps}$.
+    We first need a nice expression for $\binom{1/2}{k}$ in order to
+    use the binomial theorem.
+    \begin{align*}
+        \binom{1/2}{k}
+        &= \frac{\frac12(\frac12 - 1) \dots (\frac12 - k + 1)}{k!} \\
+        &= \frac1{2^k} \frac{1(1 - 2) \dots (1 - 2k + 2)}{k!} \\
+        &= \frac{(-1)^{k-1}}{2^k} \frac{(2k - 3)!!}{k!}
+        \intertext{We can rewrite $(2k-3)!!$ as}
+        (2k-3)!! &= \frac{(2k-3)!}{(2k-4)!!}
+            = \frac{(2k-3)!!}{2^{k-2} (k-2)!}
+        \intertext{so that}
+        \binom{1/2}{k}
+        &= \frac{(-1)^{k-1}}{2^{2k-2}} \frac{(2k - 3)!}{k! (k-2)!} \\
+        &= \frac{(-1)^{k-1}}{2^{2k-2} k} \binom{2k-3}{k-2}
+        \intertext{but multiplying by $\frac{2k-2}{2(k-1)}$ yields an even
+        nicer}
+        &= \frac{(-1)^{k-1}}{2^{2k-1}} \frac{1}{k} \binom{2k-2}{k-1}
+    \end{align*}
+    The expression doesn't make sense for $k = 0$, for which the coefficient
+    is $1$, and the derivation doesn't make sense for $k = 1$, but for which
+    the expression happens to match the coefficient.
+
+    But if we look closely, we see that this is just \[
+        \frac{(-1)^{k-1}}{2^{2k-1}} C_{k-1}
+    \] where $C_{k-1}$ is the $(k-1)$th
+    \href{https://en.wikipedia.org/wiki/Catalan_number}{Catalan number}!
+
+    From the binomial theorem, \begin{align*}
+        (1 - x)^{\frac12} &= \sum_{k=0}^{\infty} \binom{1/2}{k} (-x)^k \\
+            &= 1 - \sum_{k=1}^{\infty} \frac1{2^{2k-1}} C_{k-1} x^k
+        \shortintertext{but more interestingly,}
+        (1 - 4x)^{\frac12} &= 1 - 2 \sum_{k=1}^{\infty} C_{k-1} x^k
+    \end{align*}
+    In fact, this gives that \[
+        \frac{1 - \sqrt{1 - 4x}}{2x} \text{ is the generating function for }
+        (C_k)_{k \in \N}.
+    \] Getting back to the problem at hand, we have \begin{align*}
+        G(s) &= \frac{1 - \sqrt{1 - 4pqs^2}}{2ps} \\
+            &= qs \sum_{k=0}^{n} C_k (pqs^2)^k
+    \end{align*}
+    So we have \[
+        \Pr_0(T_{-1} = n) = \begin{cases}
+            0 & \text{if $n$ is even} \\
+            p^k q^{k+1} C_k & \text{if $n = 2k+1$}
+        \end{cases}
+    \] In the case of $p = q = \frac12$, this in fact proves that the
+    number of SRW paths of length $2n$ from the origin to the origin, that
+    never go below the origin, is the $n$th Catalan number.
+    Why? Because each such path can be extended bijectively to a path of
+    length $2n+1$ that hits $-1$ for the first time at time $2n+1$.
 \end{solution}

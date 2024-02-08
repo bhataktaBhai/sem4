@@ -1,0 +1,177 @@
+\lecture{04}{Sun 04 Feb '24}{}
+\section{Transience \& Recurrence} \label{sec:tnr}
+\begin{definition}
+    Let $(X_n)_{n \in \N}$ be $MC_S(\mu_0, P)$.
+    Define $T_y = \text{\textcolor{Red}{???}} = \inf \set{n \in \N^* \mid X_n = y}$,
+    where we take $\inf \O$ to be $+\infty$.
+
+    For $x, y \in S$, define $f_{xy} = \Pr_x(T_y < \infty)$.
+    A state $x \in S$ is said to be \emph{recurrent} if $f_{xx} = 1$, and
+    \emph{transient} otherwise.
+
+    A state $x$ is said to be \emph{absorbing} if $f_{xy} > 0$ only when
+    $x = y$.
+
+    We further define \begin{align*}
+        N_y     &= \#\set{n \in \N^* \mid X_n = y} \\
+        G(x, y) &= \E_x[N_y]
+    \end{align*}
+\end{definition}
+
+\begin{lemma}
+    For all $x, y \in S$, $G(x, y) = \sum_{n \in \N} p_{xy}^{(n)}$.
+\end{lemma}
+\begin{proof}
+    We write $N_y$ as $\sum_{n=1}^{\infty} \1{X_n = y}$.
+    Then, \begin{align*}
+        G(x, y) &= \E_x\left[\sum_{n=1}^{\infty} \1{X_n = y}\right] \\
+                &= \sum_{n=1}^{\infty} \E_x[\1{X_n = y}] \tag{MCT} \\
+                &= \sum_{n=1}^{\infty} \Pr_x(X_n = y) \\
+                &= \sum_{n=1}^{\infty} p_{xy}^{(n)}
+    \end{align*}
+    The interchange of the sum and the expectation is justified by the
+    monotone convergence theorem stated below.
+    % TODO: why is montone convergence theorem needed?
+\end{proof}
+\begin{theorem}[Monotone convergence theorem] \label{thm:tnr:mct}
+    Let $(\Omega, \F, \Pr)$ be a probability space.
+    Let $X_n\colon \Omega \to [0, \infty]$ be a sequence of random variables
+    and $X\colon \Omega \to [0, \infty]$ be another random variable.
+    Suppose that $X_n(\omega)\le X_{n+1}(\omega)$ for each $n$ and $\omega$,
+    and that $X_n(\omega) \to X(\omega)$ for each $\omega$.
+    Then, $\E[X_n] \to \E[X]$.
+\end{theorem}
+\begin{remark}
+    The statement holds even if $X_n \asto X$.
+\end{remark}
+
+\begin{theorem}
+    For all $x, y \in S$, \[
+        \Pr_x(N_y = m) = \begin{cases}
+            1 - f_{xy} & \text{if } m = 0 \\
+            f_{xy} f_{yy}^{m-1} (1 - f_{yy}) & \text{if } m \in \N^* \\
+            f_{xy} [f_{yy} = 1] & \text{if } m = +\infty
+        \end{cases}
+    \]
+\end{theorem}
+\begin{proof}
+    $N_y = 0$ if and only if $T_y = +\infty$.
+    This occurs with probability $1 - f_{xy}$.
+
+    We define $T_y^{(1)} = T_y$ and for $m \ge 1$, \[
+        T_y^{(m+1)} = \inf\set{n > T_y^{(m)} \mid X_n = y}.
+    \] Note that $T_y^{(m)} = +\infty$ implies $T_y^{(m+1)} = +\infty$.
+Now \begin{align*}
+        \Pr_x(T_y^{(m+1)} < \infty)
+            &= \Pr_x(T_y^{(m)} < \infty \text{ and } T_y^{(m+1)} < \infty)\\
+            &= \Pr_x(T_y^{(m)} < \infty) \Pr_y(T_y < \infty)
+                \tag{Strong Markov property}
+        \shortintertext{and by induction,}
+        \Pr_x(N_y \ge m) &= \Pr_x(T_y^{(m)} < \infty) \\
+            &= f_{xy} f_{yy}^{m-1}.
+    \end{align*}
+    The result follows by taking the difference.
+    Or more directly, \[
+        \Pr_x(N_y = m)
+            = \Pr_x(T_y^{(m)} < \infty) \Pr_y(T_y = +\infty)
+            = f_{xy} f_{yy}^{m-1} (1 - f_{yy}).
+    \]
+    Finally, \begin{align*}
+        \Pr_x(N_y = +\infty)
+            &= 1 - \sum_{m=0}^{\infty} \Pr_x(N_y = m) \\
+            &= 1 - (1 - f_{xy}) - f_{xy} (1 - f_{yy})
+                \sum_{m=0}^{\infty} f_{yy}^m \\
+            &= \begin{cases}
+                f_{xy} & \text{if } f_{yy} = 1 \\
+                0 & \text{if } f_{yy} < 1
+            \end{cases} \\
+            &= f_{xy} [f_{yy} = 1]. \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{theorem} \leavevmode
+    \begin{enumerate}[label=(\arabic*)]
+        \item Suppose $y$ is transient.
+        Then for all $x \in S$, $\Pr_x(N_y < \infty) = 1$ and
+        $G(x, y) = \frac{f_{xy}}{1 - f_{yy}} < \infty$.
+        \item Suppose $y$ is recurrent.
+        Then $\Pr_y(N_y = \infty) = 1$ and $G(y, y) = +\infty$.
+        Further, for all $x \in S \setminus \set{y}$,
+        $\Pr_x(N_y = \infty) = f_{xy}$ and \[
+            G(x, y) = \begin{cases}
+                0 & \text{if } f_{xy} = 0, \\
+                \infty & \text{if } f_{xy} > 0.
+            \end{cases}
+        \]
+    \end{enumerate}
+\end{theorem}
+\begin{proof} \leavevmode
+    \begin{enumerate}[label=(\arabic*)]
+        \item Since $y$ is transient, $f_{yy} < 1$.
+        Thus by the previous theorem, $\Pr_x(N_y = \infty) = 0$.
+        Then, \begin{align*}
+            G(x, y) &= \sum_{m=1}^{\infty} m \Pr_x(N_y = m) \\
+                    &= f_{xy} (1 - f_{yy})
+                        \sum_{m=1}^{\infty} m f_{yy}^{m-1} \\
+                    &= f_{xy} (1 - f_{yy}) \frac{1}{(1 - f_{yy})^2} \\
+                    &= \frac{f_{xy}}{1 - f_{yy}}.
+        \end{align*}
+        \item Since $y$ is recurrent, $f_{yy} = 1$.
+        By the previous theorem, for any $x \in S$, \[
+            \Pr_x(N_y = m) = \begin{cases}
+                1 - f_{xy} & \text{if } m = 0, \\
+                0 & \text{if } m \in \N^*, \\
+                f_{xy} & \text{if } m = +\infty.
+            \end{cases}
+        \] Thus $G(x, y) = +\infty$ if $f_{xy} > 0$ and $0$ otherwise.
+        \qedhere
+    \end{enumerate}
+\end{proof}
+\begin{corollary}
+    A state $x$ is recurrent iff
+    $G(x, x) = \sum_{m=1}^{\infty} p_{xx}^{(m)} = +\infty$.
+\end{corollary}
+
+\begin{definition}
+    A DTMC is said to be \emph{recurrent} (resp. \emph{transient}) if all
+    states are recurrent (resp. transient).
+\end{definition}
+
+\begin{theorem}
+    If $\abs{S} < \infty$, then there exists a recurrent state.
+\end{theorem}
+\begin{proof}
+    Suppose not.
+    Then for all $x, y \in S$, $G(x, y) = \sum_{m=0}^{\infty} p_{xy}^{(m)}
+    < \infty$.
+    Then the individual terms of the series must tend to $0$.
+    Thus \begin{align*} % TODO: sum over x or y?
+        \sum_{y \in S} \lim_{m \to \infty} p_{xy}^{(m)}
+            &= 0 \\
+        \implies \lim_{m \to \infty} \sum_{y \in S} p_{xy}^{(m)}
+            &= 0.
+    \end{align*}
+    The interchange of the limit and the sum is justified since the sum
+    is finite.
+    But $\sum_{y \in S} p_{xy}^{(m)} = 1$ for all $m$. % TODO: why?
+    Thus we have a contradiction.
+\end{proof}
+
+\begin{theorem}
+    Suppose $x \ne y \in S$, $x$ is recurrent and $x \leadsto y$.
+    Then $y$ is recurrent, $y \leadsto x$ and $f_{xy} = f_{yx} = 1$.
+\end{theorem}
+By $x \leadsto y$, we mean that there exists $n \in \N^*$ such that
+$p_{xy}^{(n)} > 0$.
+In other words, $f_{xy} > 0$.
+\begin{proof}
+    Since $x \leadsto y$, there exists $n \in \N^*$ and $x_1,\dots,x_{n-1}$
+    distinct from $x$ such that $p_{xx_1}p_{x_1x_2}\dots p_{x_{n-1}y} > 0$.
+    Since $x$ is recurrent, \[
+        0 = \Pr_x(T_x = +\infty)
+            \ge p_{xx_1}p_{x_1x_2}\dots p_{x_{n-1}y} \Pr_y(T_x = +\infty)
+    \] so $\Pr_y(T_x = +\infty)$ must be $0$.
+    Thus $y \leadsto x$ with $f_{yx} = 1$.
+    If $y$ is recurrent, then $f_{xy}$ would be $1$ by the same argument.
+    Thus we need only show that $y$ is recurrent.
+\end{proof}

@@ -1,7 +1,28 @@
-\documentclass[12pt]{article}
+\documentclass[12pt]{report}
 \input{preamble}
 \usepackage{geometry}
-\geometry{a4paper, margin=1.5in}
+\geometry{a4paper, hmargin={0.5in, 2.5in}}
+% \usepackage{xstring}
+% \usepackage{etoolbox}
+% make ^ an active character
+% \catcode`\^ = 13
+\newcounter{parentheses}
+\setcounter{parentheses}{0}
+\newcommand{\makebracketsgrouping}{%
+    \catcode`(=\active
+    \catcode`)=\active
+    \def({\stepcounter{parentheses}(}%
+    \def){\addtocounter{parentheses}{-1})\egroup%
+        \ifnum\value{parentheses}=0
+            \catcode`\(=12
+            \catcode`\)=12
+        \fi
+    }
+}
+
+% \def^{\catcode`\(=1 \catcode`\)=2 \sp}
+% \makeatletter
+% \makeatother
 
 \title{MA262: Introduction to Stochastic Processes}
 \author{Naman Mishra}
@@ -13,4 +34,6 @@
     \input{lectures/lecture01}
     \input{lectures/lecture02}
     \input{lectures/lecture03}
+    \input{lectures/lecture04}
+    \input{lectures/lecture05}
 \end{document}

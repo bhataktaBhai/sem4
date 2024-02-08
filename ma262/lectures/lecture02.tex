@@ -1,6 +1,176 @@
 \lecture{02}{Tue 9 Jan '24}{}
-\begin{theorem}[Schur's Lemma] \label{thm:schur}
-    
+\begin{definition}[Sigma algebra] \label{def:sigma_algebra}
+    A \emph{$\sigma$-algebra} over a set $\Omega$ is a collection $\mcF$ of
+    subsets of $\Omega$ such that
+    \begin{enumerate}
+        \item $\O \in \mcF$,
+        \item if $A \in \mcF$, then $A^c \in \mcF$,
+        \item if $\mcA \subseteq \mcF$ is countable, then
+            $\bigcup \mcA \in \mcF$.
+    \end{enumerate}
+\end{definition}
+\begin{definition}[Probability Space] \label{def:probability_space}
+    A \emph{probability space} is a triple $(\Omega, \mcF, \Pr)$, where
+    $\Omega$ is a set, \mcF\ is a $\sigma$-algebra over $\Omega$, and
+    $\Pr$ is a probability measure over $(\Omega, \mcF)$.
+\end{definition}
+
+\begin{definition}
+    Let $X_1$, $X_2$, \ldots and $X$ be random variables over a probability
+    space $(\Omega, \mcF, \Pr)$.
+    We define
+    \begin{description}
+        \item[Almost sure convergence.] $X_n \asto X$ if \[
+            \Pr\{\omega \in \Omega : \lim_{n \to \infty} X_n(\omega)
+                = X(\omega)\} = 1.
+        \]
+        \item[Convergence in probability.] $X_n \pto X$ if for every
+        $\varepsilon > 0$, \[
+            \lim_{n \to \infty} \Pr \set{\abs{X_n - X} \le \varepsilon} = 1.
+        \]
+        \item[Convergence in distribution.] $X_n \dto X$ if for every $x$,
+        \[
+            \lim_{n \to \infty} F_{X_n}(x) = F_X(x),
+        \] where $F$'s are cumulative distribution functions and $F_X$ is
+        continuous.
+    \end{description}
+\end{definition}
+
+\begin{exercise}
+    Derive the Chapman-Kolmogorov equation \[
+        p_{xy}^{(m+n)} = \sum_{z \in S} p_{xz}^{(m)} p_{zy}^{(n)}
+    \] for all $x, y \in S$ and $m, n \in \N$.
+\end{exercise}
+\begin{solution}
+    We have \begin{align*}
+        p_{xy}^{(m+n)} &= P^{m+n}_{xy} \\
+            &= (P^m P^n)_{xy} \\
+            &= \sum_{z \in S} P^m_{xz} P^n_{zy} \\
+            &= \sum_{z \in S} p_{xz}^{(m)} p_{zy}^{(n)}.
+    \end{align*}
+\end{solution}
+
+\begin{definition}[Period] \label{def:period}
+    Let $(X_n)_{n \in \N}$ be $MC(S, \mu_0, P)$.
+    For each $x \in S$, let $F_x = \set{n \in \N^* : p_{xx}^{(n)} > 0}$.
+    The \emph{period} of $x$ is defined as $d_x = \gcd F_x$, where
+    $\gcd \O$ is considered to be $0$.
+
+    A state $x$ is \emph{aperiodic} if $d_x = 1$.
+    A Markov chain is \emph{aperiodic} if all its states are aperiodic.
+    % TODO: every state or any state?
+\end{definition}
+\begin{examples}
+    \item The simple random walk on $\Z$ is periodic with period $2$.
+    \item Consider the walk on $\Z$ given by
+    \begin{center}
+        \begin{tikzpicture}[scale=2]
+            \draw (-2.5, 0) -- (2.5, 0);
+            \foreach \x in {-2, -1, 0, 1, 2}{
+                \draw (\x, 0.05) -- (\x, -0.05);
+                \node at (\x, 0) [below] {$\x$};
+            }
+            \path[->, thick]
+                (-2, 0) edge node[above] {$1$} (-1.6, 0)
+                (-1, 0) edge node[above] {$1$} (-0.6, 0)
+                (0, 0) edge node[above] {$\frac13$} (0.4, 0)
+                    (0, 0) edge node[above] {$\frac13$} (-0.4, 0)
+                    (0, 0) edge[loop above] node[above] {$\frac13$} (0, 0)
+                (1, 0) edge node[above] {$1$} (0.6, 0)
+                (2, 0) edge node[above] {$1$} (1.6, 0);
+        \end{tikzpicture}
+    \end{center}
+    $0$ is aperiodic.
+    $0$'s aperiodicity induces aperiodicity on all other states.
+    Thus the chain is aperiodic.
+\end{examples}
+\begin{theorem}
+    If $x \leftrightarrow y$, then $d_x = d_y$.
 \end{theorem}
+Here, $x \leftrightarrow y$ denotes the existence of a path from $x$ to $y$
+and from $y$ to $x$.
+That is, $x \leftrightarrow y$ if there exist $n, m \in \N$ such that
+$p_{xy}^{(n)} > 0$ and $p_{yx}^{(m)} > 0$.
 \begin{proof}
-    
+    Trivial when $x = y$.
+    Suppose $x \ne y$ and let $n, m \in \N$ be lengths of paths from
+    $x$ to $y$ and from $y$ to $x$, respectively.
+    Note that $d_x, d_y \ne 0$.
+    By the Chapman-Kolmogorov equation,
+    $p_{xx}^{(n+m)} \ge p_{xy}^{(n)} p_{yx}^{(m)} > 0$, so $d_x \mid n + m$.
+
+    Now let $p$ be a path length from $y$ to itself.
+    Then $p_{xx}^{(n + m + p)} \ge p_{xy}^{(n)} p_{yy}^{(p)} p_{yx}^{(m)}
+    > 0$, so $d_x \mid n + m + p$.
+    This implies $d_x \mid p$.
+    Since $p$ was arbitrary, $d_x \mid d_y$.
+
+    By symmetry, $d_y \mid d_x$, so $d_x = d_y$.
+\end{proof}
+
+\begin{theorem} \label{thm:schur_recurrence}
+    If $d_x \ge 1$, then there exists an $n_x \in \N^*$ such that for all
+    $n \ge n_x$, $p_{xx}^{(nd_x)} > 0$. \\
+    As a special case, if $d_x = 1$, then $p_{xx}^{(n)} > 0$ for all
+    large enough $n$.
+\end{theorem}
+We first prove a general number-theoretic result.
+
+\begin{theorem}[Schur's Lemma] \label{thm:schur}
+    Suppose $S \subseteq \N^*$ and denote $\gcd(S)$ by $g_S$.
+    Then there exists an $m_s \in \N^*$ such that for all $m \ge m_s$,
+    there exist $k \in \N^*$, $e_1, \dots, e_k \in \N^*$ and
+    $s_1, \dots, s_k \in S$ such that $m g_S = \sum_{i=1}^k e_i s_i$.
+\end{theorem}
+We prove the following lemma to restrict $S$ to a finite set.
+\begin{lemma}
+    Let $S \subseteq \N^*$.
+    Then there exists a finite set $S' \subseteq S$ such that
+    $\gcd(S) = \gcd(S')$.
+\end{lemma}
+\begin{proof}
+    Let $g_S = \gcd(S)$.
+    For any finite set $S' \subseteq S$, we either have $\gcd(S') = g_S$
+    in which case we are done, or $\exists s \in S \setminus S'$ such that
+    $\gcd(S') \nmid s$.
+    In the latter case, we can add $s$ to $S'$ and continue, producing a
+    sequence of finite sets with \emph{strictly decreasing} gcds.
+    Since the gcd can decrease only a finite number of times, this process
+    must terminate with a finite set whose gcd is $g_S$.
+\end{proof}
+We will also use the following characterization of the gcd.
+\begin{lemma}
+    Let $X \subseteq \N^*$ and let $Y = X \cup \set{n}$.
+    Then $\gcd(Y) = \gcd\set{\gcd(X), n}$.
+\end{lemma}
+\begin{proof}
+    Let $g = \gcd(Y)$ and $\tilde{g} = \gcd\set{\gcd(X), n}$.
+    \begin{itemize}
+        \item Since $\tilde{g} \mid \gcd(X)$ and $\tilde{g} \mid n$, we have
+        $\tilde{g} \mid y$ for all $y \in Y$.
+        Thus $g \mid \tilde{g}$.
+        \item Since $g \mid y$ for all $y \in Y$, we have $g \mid \gcd(X)$
+        and $g \mid n$.
+        Thus $\gcd\set{\gcd(X), n} = \tilde{g} \mid g$. \qedhere
+    \end{itemize}
+\end{proof}
+We are now ready to prove Schur's Lemma.
+\begin{proof}[Proof of Schur's Lemma]
+    Let $S = \set{s_1, s_2, \dots, s_k}$.
+    Define $\tilde{g}_S$ to be the minimum positive linear combination of
+    $S$ over \Z.
+    That is, \[
+        \tilde{g}_S = \min\left([1, \infty) \cap
+            \set{\sum_{i=1}^{j} a_i x_i \mid 1 \le j \le k,
+            a_i \in \Z, x_i \in S}\right).
+    \] We claim that $\tilde{g}_S = g_S$.
+    \begin{itemize}
+        \item $g_S \mid \tilde{g}_S$ by definition.
+        \item Let $s \in S$ be decomposed as $s = q \tilde{g}_S + r$ with
+        $0 \le r < \tilde{g}_S$.
+        Then $r = s - q \tilde{g}_S$.
+        However, this is a linear combination of $S$ over \Z, so
+        $r = 0$.
+        Thus $\tilde{g}_S \mid g_S$.
+    \end{itemize}
+    Thus we can write $g_S = \sum_{s \in S} a_s s$ where $a_s \in \Z$.

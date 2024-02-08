@@ -1,7 +1,7 @@
 \lecture{01}{Thu 04 Jan '24}{}
 
-\setcounter{section}{-1}
-\section{The Course} \label{sec:course}
+\setcounter{chapter}{-1}
+\chapter{The Course} \label{sec:course}
 \textbf{Texts:} \begin{itemize}
     \item \textit{Markov Chains}, J. R. Norris
     \item \textit{Introduction to Stochastic Processes}, Hoel, Port, Stone
@@ -14,115 +14,125 @@
     \item[(50\%)] Final
 \end{itemize}
 
-\section{Discrete time Markov Chains} \label{sec:dtmc}
-\begin{definition}
+\chapter{Discrete time Markov Chains} \label{sec:dtmc}
+\begin{definition}[Stochastic matrix] \label{def:stochastic_matrix}
     Let $S$ be a state set (at most countable).
-    A matrix $P = (p_{xy}; x, y \in S)$ is called a \emph{stochastic matrix}
+    A matrix $P = (p_{xy})_{x,y \in S}$ is called a \emph{stochastic matrix}
     if $p_{xy} \ge 0$ for all $x, y \in S$ and $\sum_{y \in S} p_{xy} = 1$
     for all $x \in S$.
 \end{definition}
 
-\begin{definition}
+\begin{definition}[Markov chain] \label{def:markov}
     Let $S$ be a state set, $P = (p_{xy})$ a stochastic matrix, and $\mu_0$
     a probability distribution on $S$, \ie, $\mu_0(x) \ge 0$ for all
     $x \in S$ and $\sum_{x \in S} \mu_0(x) = 1$.
 
     Suppose $X_0, X_1, \dots$ are random variables defined on the same
     probability space taking values in $S$.
-    Then $(X_n; n \ge 0)$ is called a Markov chain with initial distribution
-    $\mu_0$ and transition matrix $P$, denoted $MC(\mu_0, P)$, if $X_0$ has
-    distribution $\mu_0$ and for all $n \ge 0$, \[
-        P(X_{n+1} = x_{n+1} \mid X_n = x_n, \dots, X_0 = x_0)
+    Then $(X_n)_{n \in \N}$ is called a \emph{Markov chain} with initial
+    distribution $\mu_0$ and transition matrix $P$, denoted $MC(\mu_0, P)$,
+    if $X_0$ has distribution $\mu_0$ and for all $n \ge 0$, \[
+        \Pr(X_{n+1} = x_{n+1} \mid X_n = x_n, \dots, X_0 = x_0)
             = p_{x_n x_{n+1}}
-    \] whenever $P(X_n = x_n, \dots, X_0 = x_0) > 0$.
+    \] whenever $\Pr(X_n = x_n, \dots, X_0 = x_0) > 0$.
 \end{definition}
 \begin{notation}
-    Whenever writing $P(X_n \in A \mid (X_0, \dots, X_{n-1}) \in B)$, it is
-    understood that only $P((X_0, \dots, X_{n-1}) \in B) > 0$ is considered.
+    Whenever writing $\Pr(X_n \in A \mid (X_0, \dots, X_{n-1}) \in B)$, it
+    will be understood that only $\Pr((X_0, \dots, X_{n-1}) \in B) > 0$ is
+    considered.
 \end{notation}
 
 \begin{theorem}
-    $(X_n; 0 \le n \le N)$ is $MC(\mu_0, P)$ iff \[
-        P(X_0 = x_0, \dots, X_N = x_N) = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-1} x_N}
+    $(X_n)_{n=0}^N$ is $MC(\mu_0, P)$ iff \[
+        \Pr(X_0 = x_0, \dots, X_N = x_N)
+            = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-1} x_N}
     \] for all $x_0, \dots, x_N \in S$.
 \end{theorem}
 \begin{proof}
     Both directions are proven by induction.
 
-    Suppose $(X_n; 0 \le n \le N)$ is $MC(\mu_0, P)$.
-    $P(X_0 = x_0) = \mu_0(x_0)$.
-    If $P(X_0 = x_0) > 0$, then
-    $P(X_0 = x_0, X_1 = x_1) = \mu_0(x_0) p_{x_0 x_1}$.
-    If $P(X_0 = x_0) = 0$, then $P(X_0 = x_0, X_1 = x_1) \le P(X_0 = x_0) = 0$,
-    and so $P(X_0 = x_0, X_1 = x_1) = 0 = \mu_0(x_0) p_{x_0 x_1}$.
+    Suppose $(X_n)_{n=0}^N$ is $MC(\mu_0, P)$.
+    Then $\Pr(X_0 = x_0) = \mu_0(x_0)$. \\
+    If $\Pr(X_0 = x_0) > 0$, then
+    $\Pr(X_0 = x_0, X_1 = x_1) = \mu_0(x_0) p_{x_0 x_1}$. \\
+    If $\Pr(X_0 = x_0) = 0$, then
+    $\Pr(X_0 = x_0, X_1 = x_1) \le \Pr(X_0 = x_0) = 0$,
+    and so $\Pr(X_0 = x_0, X_1 = x_1) = 0 = \mu_0(x_0) p_{x_0 x_1}$.
 
     \textbf{Induction:} Suppose \[
-        P_j \coloneq P(X_0 = x_0, \dots, X_j = x_j)
+        P_j \coloneq \Pr(X_0 = x_0, \dots, X_j = x_j)
         = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{j-1} x_j}.
     \] If this is zero, so is $P_{j+1}$, and so it is equal to
     $\mu_0(x_0) p_{x_0 x_1} \dots p_{x_{j-1} x_j} p_{x_j x_{j+1}}$. \\
     If not, then \begin{align*}
         P_{j+1}
-            &= P_j P(X_{j+1} = x_{j+1} \mid X_0 = x_0, \dots, X_j = x_j) \\
+            &= P_j\Pr(X_{j+1} = x_{j+1} \mid X_0 = x_0, \dots, X_j = x_j) \\
             &= P_j p_{x_j x_{j+1}} \\
             &= \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{j-1} x_j} p_{x_j x_{j+1}},
     \end{align*} closing the induction.
     In particular, \[
-        P(X_0 = x_0, \dots, X_N = x_N) = \mu_0(x_0) p_{x_0 x_1} \dots
+        \Pr(X_0 = x_0, \dots, X_N = x_N) = \mu_0(x_0) p_{x_0 x_1} \dots
         p_{x_{N-1} x_N}.
-    \]
-
-    Now suppose \[
-        P(X_0 = x_0, \dots, X_N = x_N)
+    \] Now for the converse, suppose \[
+        \Pr(X_0 = x_0, \dots, X_N = x_N)
         = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-1} x_N}
-    \]
-    for all $x_0, \dots, x_N \in S$.
+    \] for all $x_0, \dots, x_N \in S$.
     Then for any $x_0, \dots, x_{N-1} \in S$,
     \begin{align*}
-        P(X_0 = x_0, \dots, X_{N-1} = x_{N-1})
-            &= \sum_{x_N \in S} P(X_0 = x_0, \dots, X_N = x_N) \\
+        \Pr(X_0 = x_0, \dots, X_{N-1} = x_{N-1})
+            &= \sum_{x_N \in S} \Pr(X_0 = x_0, \dots, X_N = x_N) \\
             &= \sum_{x_N \in S} \mu_0(x_0) p_{x_0 x_1} \dots 
                 p_{x_{N-2} x_{N-1}} p_{x_{N-1} x_N} \\
             &= \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-2} x_{N-1}}.
     \end{align*}
     We have by backwards induction that for all $1 \le i \le N$, \[
-        P(X_0 = x_0, \dots, X_i = x_i)
+        \Pr(X_0 = x_0, \dots, X_i = x_i)
         = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{i-1} x_i}
-    \] and $P(X_0 = x_0) = \mu_0(x_0)$.
+    \] and $\Pr(X_0 = x_0) = \mu_0(x_0)$.
     This allows us to deduce that \[
-        P(X_{i+1} = x_{i+1} \mid X_0 = x_0, \dots, X_i = x_i)
+        \Pr(X_{i+1} = x_{i+1} \mid X_0 = x_0, \dots, X_i = x_i)
         = p_{x_i x_{i+1}}
     \] by definition of conditional probability.
 \end{proof}
 
-\begin{theorem}[Strong Law of Large Numbers] \label{thm:dtmc:slln}
-    Suppose $Z_1, Z_2, \dots$ are iid \R-valued random variables and $E[Z_1]$
-    exists.
+\begin{fact}[Strong Law of Large Numbers] \label{thm:dtmc:slln}
+    Suppose $Z_1, Z_2, \dots$ are iid \R-valued random variables and
+    $\E[Z_1]$ exists.
     Then \[
-        \frac{Z_1 + \dots + Z_n}{n} \to E[Z_1]
+        \frac{Z_1 + \dots + Z_n}{n} \asto \E[Z_1]
     \] as $n \to \infty$, that is, \[
-        P\left\{\omega \in \Omega : \lim_{n \to \infty}
-        \frac{Z_1(\omega) + \dots + Z_n(\omega)}{n} = E[Z_1]\right\} = 1.
+        \Pr\left\{\omega \in \Omega : \lim_{n \to \infty}
+        \frac{Z_1(\omega) + \dots + Z_n(\omega)}{n} = \E[Z_1]\right\} = 1.
     \]
-\end{theorem}
-\begin{theorem}[Weak Law of Large Numbers] \label{thm:dtmc:wlln}
-    
-\end{theorem}
-\begin{theorem}[Central Limit Theorem] \label{thm:dtmc:clt}
-    Suppose $Z_1, Z_2, \dots$ are iid \R-valued random variables and $E[Z_1^2]$
-    exists.
+\end{fact}
+\begin{fact}[Weak Law of Large Numbers] \label{thm:dtmc:wlln}
+    Suppose $Z_1, Z_2, \dots$ are iid \R-valued random variables and
+    $\E[Z_1]$ exists.
     Then \[
-        \frac{\sqrt n}{\sqrt{V(Z_1)}} \left(\frac{Z_1 + \dots + Z_n}{n}
-        - E[Z_1]\right) \stackrel{d}{\to} N(0, 1).
+        \frac{Z_1 + \dots + Z_n}{n} \pto \E[Z_1]
+    \] as $n \to \infty$, that is, for any $\delta > 0$, \[
+        \lim_{n \to \infty}
+        \Pr\set{\abs{\frac{Z_1 + \dots + Z_n}{n} - \E[Z_1]} \le \delta} = 1.
     \]
-\end{theorem}
+\end{fact}
+\begin{fact}[Central Limit Theorem] \label{thm:dtmc:clt}
+    Suppose $Z_1, Z_2, \dots$ are iid \R-valued random variables and
+    $\E[Z_1^2]$ exists.
+    Then \[
+        Y_n \coloneq \frac{\sqrt n}{\sqrt{\Var(Z_1)}}
+        \left(\frac{Z_1 + \dots + Z_n}{n} - \E[Z_1]\right) \dto N(0, 1)
+    \] as $n \to \infty$, that is, \[
+        \lim_{n \to \infty} \Pr\set{Y_n \le y} = \Phi(y)
+    \] for all $y \in \R$, where $\Phi$ is the pdf of the standard normal
+    distribution.
+\end{fact}
 \begin{examples}
     \item A two-state Markov chain.
     \begin{center}
         \begin{tikzpicture}
             \node[state] (1) {$1$};
             \node[state, right=of 1] (2) {$2$};
-            \path
+            \path[->]
                 (1) edge[loop left] node {$p$} (1)
                 (2) edge[loop right] node {$q$} (2)
                 (1) edge[bend left, above] node {$1-p$} (2)
@@ -141,59 +151,65 @@
             \node[state] (1) {$1$};
             \node[state, above right=of 1] (2) {$2$};
             \node[state, below right=of 2] (3) {$3$};
-            \path
+            \path[->]
                 (1) edge node[below] {$\frac12$} (2)
                 (2) edge node[below] {$\frac14$} (3)
                 (3) edge node[above] {$\frac14$} (1)
                 (1) edge[bend right] node[below] {$\frac12$} (3)
                 (3) edge[bend right] node[above] {$\frac34$} (2)
-                (2) edge[bend right] node[above] {$\frac12$} (1);
-            \path
+                (2) edge[bend right] node[above] {$\frac12$} (1)
                 (2) edge[loop above] node {$\frac14$} (2);
         \end{tikzpicture}
     \end{center}
     This has transition matrix \[
         P = \begin{pmatrix}
-            1/2 & 1/2 & 0 \\
+            0 & 1/2 & 1/2 \\
             1/2 & 1/4 & 1/4 \\
             1/4 & 3/4 & 0
         \end{pmatrix}.
     \]
     \item Simple random walk on $\Z$.
-    Staring from $0$, at each step, move right with probability $p$ and left
-    with probability $q = 1-p$.
-    $P(X_{n+1} = x + 1 \mid X_n = x) = p$ and
-    $P(X_{n+1} = x - 1 \mid X_n = x) = q$.
-    All other probabilities are $0$.
-
-    Such a simple random walk is called symmetric if $p = q = \frac12$.
-    A special case is where $\mu_0 = \delta_x$ for some $x \in \Z$, where
-    $\delta_x$ is the Kr\"onecker delta.
-
-    Aside: Suppose $Z_1, \dots, Z_k$ are random variables taking values in a
-    state set $S$ defined on a probability space $(\Omega, \mathcal F, P)$.
-    and $\tilde{Z}_1, \dots, \tilde{Z}_k$ are rvs taking values in a
-    state set $S$ defined on a probability space
-    $(\tilde{\Omega}, \tilde{\mathcal F}, \tilde{P})$.
-    Then $(Z_1, \dots, Z_k)$ and $(\tilde{Z}_1, \dots, \tilde{Z}_k)$ are said to
-    be identically distributed if \[
-        P(Z_1 = x_1, \dots, Z_k = x_k)
-        = P(\tilde{Z}_1 = x_1, \dots, \tilde{Z}_k = x_k).
-    \] This is notated as \[
-        (Z_1, \dots, Z_k) \stackrel{d}{=} (\tilde{Z}_1, \dots, \tilde{Z}_k).
+    Staring from some randomly chosen point, at each step, move right with
+    probability $p$ and left with probability $q \coloneq 1-p$.
+    That is, \[
+        \Pr(X_{n+1} = y \mid X_n = x) = \begin{cases}
+            p & \text{if } y = x + 1, \\
+            q & \text{if } y = x - 1, \text{ and} \\
+            0 & \text{otherwise}.
+        \end{cases}
     \]
+    Such a simple random walk is called symmetric if $p = q = \frac12$.
+    A special case is where $\mu_0 = \delta_x$ for some $x \in \Z$ (where
+    $\delta_x$ is the Kr\"onecker delta).
 
     Suppose that $Y_1, Y_2, \dots$ are iid with distribution
     $\begin{pmatrix}
         1 & -1 \\
         p & 1-p
     \end{pmatrix}$.
-    We have that $(X_n; n \ge 0) \stackrel{d}{=} (\sum_{j=1}^{n} Y_j; n \ge 0)$.
+    Each $Y_i$ has expectation $2p - 1$, and variance \[
+        \E[Y_1^2] - (\E[Y_1])^2 = 1 - (2p - 1)^2 = 4pq.
+    \]
+    We have that $(X_n)_{n \in \N} \eqd (\sum_{j=1}^{n} Y_j)_{n \in \N}$.
+    \begin{definition}
+        % TODO: why is "Definition" in the style of "Example"?
+        Suppose $Z_1, \dots, Z_k$ are random variables taking values in a
+        state set $S$ defined on a probability space $(\Omega, \mcF, \Pr)$.
+        and $\tilde{Z}_1, \dots, \tilde{Z}_k$ are rvs taking values in a
+        state set $S$ defined on a probability space
+        $(\tilde{\Omega}, \tilde{\mcF}, \tilde{P})$.
+        Then $(Z_1, \dots, Z_k)$ and $(\tilde{Z}_1, \dots, \tilde{Z}_k)$ are
+        said to be identically distributed if \[
+            \Pr(Z_1 = x_1, \dots, Z_k = x_k)
+                = \Pr(\tilde{Z}_1 = x_1, \dots, \tilde{Z}_k = x_k).
+        \] This is denoted as \[
+            (Z_1, \dots, Z_k) \eqd (\tilde{Z}_1, \dots, \tilde{Z}_k).
+        \]
+    \end{definition}
     Then from the weak law of large numbers, \[
-        \frac{X_n}{n} \to E[Y_1] = 2p - 1.
+        \frac{X_n}{n} \to \E[Y_1] = 2p - 1.
     \] From the central limit theorem, \[
-        \frac{X_n - n(p - q)}{\sqrt{n} \sqrt{1 - (p-q)^2}} \stackrel{d}{\to}
-        N(0, 1).
+        \frac{X_n - n(p - q)}{\sqrt{n} \sqrt{4pq}} \dto N(0, 1).
     \]
 
     On a graph, a simple symmetric random walk is a random walk on a graph
@@ -216,39 +232,53 @@
 \end{examples}
 
 \begin{theorem}
-    If $(X_n; n \ge 0)$ is a DTMC with transition matrix $P$, then \[
-        P_{\mu_0}(X_n = y) = (\mu_0 P^n)_y.
-    \] In particular, $P_x(X_n = y) = (P^n)_{x,y} = p_{xy}^{(n)}$.
+    If $(X_n)_{n \in \N}$ is a DTMC with transition matrix $P$, then \[
+        \Pr_{\mu_0}(X_n = y) = (\mu_0 P^n)_y.
+    \] In particular, $\Pr_x(X_n = y) = (P^n)_{x,y} \eqcolon p_{xy}^{(n)}$.
+    % DONE: wtf is $p_{xy}^{(n)}$?
+    % it is notation for $\Pr_x(X_n = y)$
 \end{theorem}
-Here, $\mu_0$ is viewed as a row vector, and $P_{\mu_0}$ is the distribution
+Here, $\mu_0$ is viewed as a row vector, and $\Pr_{\mu_0}$ is the distribution
 under the assumption that $X_0 \sim \mu_0$.
-Also, $P_x$ is under the assumption that $\mu_0 = \delta_x$.
+Also, $\Pr_x$ is under the assumption that $\mu_0 = \delta_x$.
 \begin{proof}
     \begin{align*}
-        P_{\mu_0}(X_n = y)
-            &= \sum_{\substack{x_j \in S \\ 0 \le j < n}}
-                P(X_0 = x_0, \dots, X_{n-1} = x_{n-1}, X_n = y) \\
-            &= \sum_{\substack{x_j \in S \\ 0 \le j < n}}
+        \Pr_{\mu_0}(X_n = y)
+            &= \smashoperator{\sum_{x_0, \dots, x_{n-1} \in S}}
+                \Pr(X_0 = x_0, \dots, X_{n-1} = x_{n-1}, X_n = y) \\
+            &= \smashoperator{\sum_{x_0, \dots, x_{n-1} \in S}}
                 (\mu_0)_{x_0} p_{x_0 x_1} \dots p_{x_{n-1} y} \\
             &= (\mu_0 P^n)_y \qedhere
     \end{align*}
 \end{proof}
 
-\begin{theorem}
-    Let $(X_n; n \ge 0)$ be $MC(\mu_0, P)$.
+\begin{theorem}[Markov property] \label{thm:mp}
+    Let $(X_n)_{n \in \N}$ be $MC(\mu_0, P)$.
     Then for any $n \ge 0$, $l \ge 1$, $x_n, \dots, x_{n+l} \in S$ and
     $A \subseteq S^n$, \begin{multline*}
-        P_{\mu_0}(X_i = x_i, n < i \le n + l \mid X_n = x_n, (X_0, \dots, X_{n-1}) \in A) \\
-        = P_{x_n}(X_1 = x_{n+1}, \dots, X_l = x_{n+l})
+        \Pr_{\mu_0}(X_i = x_i, n < i \le n + l \mid X_n = x_n, (X_0, \dots, X_{n-1}) \in A) \\
+        = \Pr_{x_n}(X_1 = x_{n+1}, \dots, X_l = x_{n+l})
     \end{multline*}
 \end{theorem}
 In other words, conditioning on $X_n = x_n$ and $(X_0, \dots, X_{n-1}) \in A$,
 the process $(X_n, X_{n+1}, \dots)$ is $MC(\delta_{x_n}, P)$.
 \begin{proof}
     \begin{align*}
-        P(X_{n+l} = x_{n+l}, &\dots, X_n = x_n, (X_0, \dots, X_{n-1}) \in A) \\
-            &= p_{x_{n} x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}}
-            \sum_{(x_0, \dots, x_{n-1}) \in A} \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n} \\
-            &= P_{\mu_0}(X_n = x_n, (X_0, \dots, X_{n-1}) \in A) p_{x_n x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}} \\
+        \Pr_{\mu_0}(X_{n+l} &= x_{n+l}, \dots, X_n = x_n,
+        (X_0, \dots, X_{n-1}) \in A) \\
+            &= \smashoperator{\sum_{(x_0, \dots, x_{n-1}) \in A}}
+                p_{x_{n} x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}}
+                \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{n-1} x_n} \\
+            &= \Bigg(\sum_{(x_0, \dots, x_{n-1}) \in A}
+                \mu_0(x_0) p_{x_0x_1} \dots p_{x_{n-1} x_n}\Bigg)
+                p_{x_n x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}} \\
+            &= \Pr_{\mu_0}(X_n = x_n, (X_0, \dots, X_{n-1}) \in A)
+                \cdot p_{x_n x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}}.
+        \intertext{By the definition of conditional probability,}
+        \Pr_{\mu_0}(X_{n+l} &= x_{n+l}, \dots, X_n = x_n \mid
+        X_n = x_n, (X_0, \dots, X_{n-1}) \in A) \\
+            &= p_{x_n x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}} \\
+            &= \delta_{x_n}(x_n) p_{x_n x_{n+1}} \dots p_{x_{n+l-1} x_{n+l}} \\
+            &= \Pr_{x_n}(X_1 = x_{n+1}, \dots, X_l = x_{n+l}). \qedhere
     \end{align*}
 \end{proof}

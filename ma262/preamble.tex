@@ -1,9 +1,7 @@
-\let\emph\textsl
-\input{~/IISc/preamble}
+\input{~/IISc/sem4/preamble}
 \usepackage{tikz}
 \usetikzlibrary{automata,positioning,arrows}
 \tikzset{
-    ->, % makes the edges directed
     >=stealth', % makes the arrow heads bold
     node distance=3cm, % specifies the minimum distance between two nodes. Change if necessary.
     every state/.style={thick, fill=gray!10}, % sets the properties for each 'state' node
@@ -12,11 +10,17 @@
     shorten >=1pt
 }
 
-\newcommand\F{\mathcal{F}}
+\DeclareMathOperator{\E}{\mathrm{E}}
+\newcommand\F{\mcF}
 % \usepackage{bbm}
-\newcommand{\ind}[1]{\bm{1}_{#1}}
-\newcommand{\given}{\mid}
-\newcommand{\eqd}{\overset{d}{=}}
+\newcommand\1[1]{\bm{1}_{#1}}
+\newcommand\given\mid
+\newcommand\eqd{\overset{d}{=}}
+\DeclareMathOperator\Var{Var}
+% almost sure convergence
+\newcommand\asto{\xrightarrow{\text{a.s.}}}
+% convergence in probability
+\newcommand\pto{\xrightarrow{\text{\tiny P}}}
+% convergence in distribution
+\newcommand\dto{\xrightarrow{d}}
 
-\theoremstyle{definition}
-\newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem}{Problem}[section]
