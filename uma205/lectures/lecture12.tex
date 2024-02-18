@@ -1,0 +1,121 @@
+\lecture{12}{Wed 31 Jan '24}{}
+\begin{notation}
+    We write a cycle type $\lambda$ in \emph{frequency notation} as \[
+        \lambda = \angled{1^{a_1}, 2^{a_2}, \dots, n^{a_n}}
+    \] where $a_i$ is the number of times $i$ appears in $\lambda$.
+\end{notation}
+\begin{theorem*}
+    The number of permutations in $S_n$ with cycle type
+    $\lambda = \angled{1^{a_1}, 2^{a_2}, \dots, n^{a_n}}$ is given by \[
+        \frac{n!}{(1^{a_1}a_1!)(2^{a_2}a_2!)\dots (n^{a_n}a_n!)}
+    \]
+\end{theorem*}
+\begin{proof}
+    For every permutation in $S_n$ in one-line notation, insert parentheses
+    so that we first form $a_1$ cycles of length $1$, $a_2$ cycles of length
+    $2$, and so on.
+    This gives another permutation in cycle notation.
+
+    How many times does a given permutation $\sigma$ occur?
+    For a cycle of length $j$, the same cycle occurs in $j$ ways.
+    Since we have $a_j$ such cycles, we get a factor of $j^{a_j}$.
+    Next, among all $j$-cycles, we get $\sigma$ if we permute these cycles,
+    and this happends in $j!$ ways.
+    Finally, note that for different values of $j$, these rearrangements are
+    independent.
+\end{proof}
+\begin{example}
+    There are $\frac{n!}{n^1 1!} = (n-1)!$ permutations with cycle type
+    $\lambda = (n) = \angled{n^1}$.
+\end{example}
+\begin{notation}
+    We write $\cycle{n}{k}$ for the number of permutations in $S_n$ with
+    exactly $k$ cycles.
+\end{notation}
+
+\begin{proposition*}
+    For $1 \le k \le n$,
+    $\cycle{n}{k} = \cycle{n-1}{k-1} + (n-1)\cycle{n-1}{k}$.
+\end{proposition*}
+\begin{proof}
+    Consider a permutation $\sigma \in S_n$ with $k$ cycles.
+    If $n$ is a fixed point, then $\sigma$ restricted to $[n-1]$ has $k-1$
+    cycles.
+    This gives the first term.
+
+    If $n$ is not a fixed point, then removing $n$ gives a permutation in
+    $S_{n-1}$ with $k$ cycles.
+    There are $n-1$ ways to insert $n$ \emph{after} any element of any
+    cycle.
+\end{proof}
+\begin{table}
+    \centering
+    \begin{tabular}{c|cccc}
+        \diagbox[width=2.5em,height=2em]{$n$}{$k$} & 1 & 2 & 3 & 4 \\
+        \hline
+        1 & 1 \\
+        2 & 1 & 1 \\
+        3 & 2 & 3 & 1 \\
+        4 & 6 & 11 & 6 & 1
+    \end{tabular}
+    \caption{The first few values of $\cycle{n}{k}$.}
+    \label{tab:cycle}
+\end{table}
+
+\begin{proposition*} \label{thm:cycle:sum}
+    Let $n \in \N$.
+    Then \[
+        \sum_{k=0}^{n} \cycle{n}{k} x^k = x^{\wbar{n}}
+    \]
+\end{proposition*}
+\begin{proof}
+    Let $G_n(x) = x^{\wbar{n}} = (x+n-1) G_{n-1}(x)$.
+    Suppose the result holds for $n-1$.
+    Then \begin{align*}
+        G_n(x) &= (x + n - 1) \sum_{k=0}^{n} \cycle{n-1}{k} x^k \\
+            &= \sum_{k=0}^{n} \cycle{n-1}{k} x^{k+1}
+                + \sum_{k=0}^{n} (n-1) \cycle{n-1}{k} x^k \\
+            &= \sum_{k=1}^{n} \cycle{n-1}{k-1} x^k
+                + (n-1) \sum_{k=0}^{n} \cycle{n-1}{k} x^k \\
+            &= \sum_{k=1}^{n} \left(\cycle{n-1}{k-1} + (n-1) \cycle{n-1}{k}
+                \right) x^k \tag{because $\cycle{n}{0} = 0$} \\
+            &= \sum_{k=0}^{n} \cycle{n}{k} x^k
+    \end{align*}
+    The base case is $G_1(x) = x$. %TODO: or is it $G_0(x) = 1$?
+\end{proof}
+
+\begin{definition*}
+    The \emph{signed Stirling numbers of the first kind} are
+    $(-1)^{n-k} \cycle{n}{k}$.
+\end{definition*}
+
+\textbf{Recall:} $V = \Q[x]$ is the space of polynomials with rational
+coefficients.
+This is a vector space over $\Q$.
+The natural basis for $V$ is $\mcB_1 = \set{1, x, x^2, \dots}$.
+But we also have another basis, $\mcB_2 = \set{x^{\underline{0}},
+x^{\underline{1}}, x^{\underline{2}}, \dots} = \set{1, x, x(x-1), \dots}$.
+
+Let $S$ be the $\N \times \N$ matrix whose $(n, k)^{\text{th}}$ entry is
+$\stirling{n}{k}$.
+Then \cref{thm:stirling:sum} shows that $S$ is the transition matrix from
+$\mcB_2$ to $\mcB_1$.
+Similarly, let $s$ be the $\N \times \N$ matrix whose $(n, k)^{\text{th}}$
+entry is $(-1)^{n-k} \cycle{n}{k}$.
+Then $s$ is the transition matrix from $\mcB_1$ to $\mcB_2$.
+% TODO: why?
+Thus we have shown that:
+\begin{proposition}
+    $Ss = sS = \id$.
+\end{proposition}
+
+\section{Inclusion-Exclusion formula} \label{sec:pie}
+Given sets $A_1, \dots, A_n$ so that we know the size of the intersection of
+any $k$ of them, we can compute the size of the union of all of them.
+\begin{theorem*}[Principle of Inclusion-Exclusion] \label{thm:pie}
+    \[
+        \bigg\lvert\bigcup_{i\in[n]} A_i\bigg\rvert
+            = \sum_{j=1}^{n} (-1)^{j-1} \sum_{\substack{S \subseteq [n] \\
+            \abs{S} = j}} \bigg\lvert\bigcap_{i \in S} A_i\bigg\rvert
+    \]
+\end{theorem*}

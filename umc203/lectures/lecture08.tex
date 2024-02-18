@@ -1,0 +1,100 @@
+\lecture{08}{Tue 06 Feb '24}{}
+\section{Convex Optimisation} \label{sec:convex}
+\begin{definition}[Convex function] \label{def:convex}
+    A set $C \subseteq \R^d$ is said to be \emph{convex} if for all
+    $x, y \in C$ and $\lambda \in [0, 1]$, \[
+        (1-\lambda)x + \lambda y \in C.
+    \]
+    A function $f\colon C \to \R$ over a convex set $C \subseteq \R^d$ is
+    said to be \emph{convex} if for all $x, y \in C$ and
+    $\lambda \in [0, 1]$, \[
+        f((1-\lambda)x + \lambda y) \le (1-\lambda)f(x) + \lambda f(y).
+    \]
+\end{definition}
+
+\begin{theorem}
+    Let $f \in C^1(C)$, where $C \subseteq \R^d$ is convex.
+    Then $f$ is convex iff \[
+        f(y) \ge f(x) + \innerp{\nabla f(x)}{y-x}
+    \]
+\end{theorem}
+
+\begin{notation}
+    Let $A$ and $B$ be symmetric matrices.
+    We write $A \succeq B$ if $A - B$ is positive semidefinite.
+\end{notation}
+\begin{theorem}
+    $\succeq$ is a partial order.
+\end{theorem}
+\begin{proof} \leavevmode
+    \begin{itemize}
+        \item Reflexivity: $A - A = 0 \succeq 0$.
+        \item Antisymmetry: $A - B \succeq 0$ and $B - A \succeq 0$ implies
+            $A - B = 0$, since $\lambda$ and $-\lambda$ are both nonnegative
+            for each eigenvalue $\lambda$ of the difference.
+        \item Transitivity: Suppose $A \succeq B \succeq C$.
+        Then for all $u$,
+        \begin{align*}
+            \innerp{u}{(A - B)u} &\ge 0 \\
+            \innerp{u}{(B - C)u} &\ge 0 \\
+            \implies \innerp{u}{(A - C)u} &= \innerp{u}{(A - B + B - C)u} \\
+            &= \innerp{u}{(A - B)u} + \innerp{u}{(B - C)u} \\
+            &\ge 0. \qedhere
+        \end{align*}
+    \end{itemize}
+\end{proof}
+
+\begin{theorem}
+    Let $f \in C^2(C)$, where $C \subseteq \R^d$ is convex.
+    Let $H(x) = (\hess f)(x)$.
+    Then $f$ is convex iff \[
+        H(x) \succeq 0 \quad \forall x \in C.
+    \]
+\end{theorem}
+
+\begin{definition}[Convex optimisation problem] \label{def:convexopt}
+    Let $f\colon \R^d \to \R$ and $f_i\colon \R^d \to \R$ be convex
+    functions for each $1 \le i \le m$.
+    Let $(a_j)_{j=1}^n \subseteq \R^d$ and $(b_j)_{j=1}^n \subseteq \R$.
+    The \emph{convex optimisation problem} is to find \[
+        \min_{x \in \R^d} f(x) \quad \text{such that} \quad \begin{cases}
+            f_i(x) \le 0 \text{ for all } i \in [m], \\
+            \innerp{a_j}{x} = b_j \text{ for all } j \in [n].
+        \end{cases}
+    \]
+\end{definition}
+\begin{definition}[Lagrangian] \label{def:convex:lagrangian}
+    Let $\lambda \in \R^m$ and $\mu \in \R^n$.
+    The \emph{Lagrangian} of the convex optimisation problem is \[
+        L(x, \lambda, \mu) = f(x) + \sum_{i=1}^{m} \lambda_i f_i(x)
+            + \sum_{j=1}^{n} \mu_j \left(\innerp{a_j}{x} - b_j\right).
+    \] We say that $x^*$ is a \emph{KKT point} if there exist $\lambda$ and
+    $\mu$ such that
+    \begin{align*}
+        \nabla_{\!x\,} L(x^*, \lambda, \mu) &= 0, \\
+        \innerp{a_j}{x^*} - b_j &\le 0 \quad \forall j \in [n], \\
+        f_i(x^*) &\le 0 \quad \forall i \in [m], \\
+        \lambda_i f_i(x^*) &= 0 \quad \forall i \in [m].
+    \end{align*}
+\end{definition}
+\begin{theorem}
+    If $x^*$ is a KKT point for the convex optimisation problem, then
+    $x^*$ is a minimiser of the problem (for most problems).
+\end{theorem}
+\begin{example}
+    Consider the convex optimisation problem \[
+        \min_{x \in \R^d} \frac12 \norm{x - z}^2 \quad \text{such that}
+            \quad \innerp{w}{x} + b = 0.
+    \] The Lagrangian is \[
+        L(x, \mu) = \frac12 \norm{x - z}^2 + \mu(\innerp{w}{x} + b).
+    \] The KKT conditions are \begin{align*}
+        \nabla_{\!x\,} L(x^*, \mu) = x - z + \mu w &= 0, \\
+        \implies x^* &= z - \mu w, \\
+        \innerp{w}{x^*} + b &= 0 \\
+        \implies \innerp{w}{z - \mu w} + b &= 0 \\
+        \implies \innerp{w}{z} - \mu \norm{w}^2 + b &= 0
+        \intertext{So the minimiser is}
+        x^* &= z - \frac{(\innerp{w}{z} + b)}{\norm{w}^2} w.
+    \end{align*}
+    This is the orthogonal projection of $z$ onto the hyperplane.
+\end{example}

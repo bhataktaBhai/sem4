@@ -1,0 +1,175 @@
+\section{Chomsky Normal Form} \label{sec:cnf}
+\lecture{13}{Tue 13 Feb '24}{}
+\begin{definition}[Chomsky normal form] \label{def:cnf}
+    A context-free grammar $G$ is said to be in \emph{Chomsky normal form}
+    if all of its production rules are of the form \begin{align*}
+        X &\to YZ \\
+        X &\to a
+    \end{align*} where $Y$ and $Z$ are non-terminals, and $a$ is a
+    terminal.
+\end{definition}
+\begin{example}
+    Consider $G_4$ in the examples above, which generates balanced
+    parentheses. \begin{align*}
+        S &\to \texttt{(}S\texttt{)} \mid SS \mid \epsilon
+    \intertext{This can be converted into a CNF as follows}
+        L &\to \texttt{(} \\
+        R &\to {\texttt{)}} \\
+        S &\to LR \mid SS \mid LX \\
+        X &\to SR
+    \end{align*}
+\end{example}
+Why do we care about Chomsky normal form?
+Suppose we have a context-free grammar $G$ and a string $w$.
+We want to know if $w \in L(G)$.
+This is hard to do in general, but it is trivial if $G$ is in CNF.
+Any production rule applied to an intermediate string $w$ cannot decrease
+the length of $w$, so we will know to terminate in finitely many steps.
+
+\begin{theorem}
+    Every context-free grammar $G$ can be converted into a Chomsky normal
+    form grammar $G'$ such that $L(G') = L(G) \setminus \set{\epsilon}$.
+\end{theorem}
+Choose any problematic production rule in $G$.
+If the RHS has more than two (say $n$) non-terminals, we can introduce a new
+non-terminal in place of $n-1$ of them, from which we generate those $n-1$
+non-terminals in sequence. \\
+If the RHS has more than one terminal, we can introduce a new non-terminal
+for each of those, and we have just shown how to deal with that case. \\
+In fact, if the RHS is of length at least 2,
+we can replace its terminals with non-terminals. \\
+Thus the only problematic case is when the RHS is either a single terminal,
+a single non-terminal, or the empty string.
+
+\begin{theorem}
+    Let $G$ be a context-free grammar.
+    Then there is a context-free grammar $G'$ such that $L(G') = L(G)$ and
+    $G'$ has no unit- or $\epsilon$-productions.
+\end{theorem}
+We give an algorithm to achieve this, and will prove its correctness later.
+
+Let $G = (N, A, S, P)$ be a context-free grammar.
+Create a new set of productions $P'$ as follows:
+First add all the productions from $P$ to $P'$.
+Then,
+\begin{itemize}
+    \item if $P$ has productions $X \to \alpha Y \beta$ and
+    $Y \to \epsilon$, add the rule $X \to \alpha \beta$ to $P'$.
+    \item if $X \to Y$ and $Y \to \gamma$, add $X \to \gamma$ to $P'$.
+\end{itemize}
+This gives us a new grammar $G' = (N, A, S, P')$.
+Finally, drop all unit- and $\epsilon$-productions from $P'$ to get
+$P''$.
+Then $G'' = (N, A, S, P'')$ is an ``equivalent'' grammar without
+unit- or $\epsilon$-productions.
+Equivalence is in the sense that
+$L(G') = L(G) \setminus \set{\epsilon}$.
+
+\begin{example}
+    We apply this to $G_4$ from above.
+    The inital grammar is \begin{align*}
+        S &\to \texttt{(}S\texttt{)} \mid SS \mid \epsilon.
+        \intertext{We can apply the first rule to add the production}
+        S &\to \texttt{()}.
+    \end{align*}
+    There are no more productions to add, so we remove the
+    $\epsilon$-production to get the grammar \[
+        S \to \texttt{()} \mid \texttt{(}S\texttt{)} \mid SS.
+    \]
+\end{example}
+
+\begin{exercise}
+    Put the following grammar into CNF.
+    \begin{align*}
+        S &\to aSbb \mid T \\
+        T &\to bTaa \mid S \mid \epsilon
+    \end{align*}
+\end{exercise}
+\begin{solution}
+    By rule 2, we can add all productions of $S$ to $T$, and vice versa.
+    This gives the grammar \begin{align*}
+        S, T &\to aSbb \mid T \mid bTaa \mid S \mid \epsilon
+    \end{align*}
+    By rule 1, we can add the productions \begin{align*}
+        S &\to abb \quad
+        \text{since } S \to aSbb \text{ and } S \to \epsilon \\
+        S &\to baa \quad
+        \text{since } S \to bTaa \text{ and } T \to \epsilon
+    \end{align*}
+    And add both of these to $T$ as well.
+    This gives the grammar \begin{align*}
+        S, T &\to aSbb \mid T \mid bTaa \mid S \mid \epsilon \mid
+        abb \mid baa.
+    \end{align*}
+    We cannot add any more productions, so we have our grammar $G'$.
+    Dropping unit- and $\epsilon$-productions gives us $G''$ as
+    \begin{align*}
+        S &\to aSbb \mid bTaa \mid abb \mid baa \\
+        T &\to aSbb \mid bTaa \mid abb \mid baa
+    \end{align*}
+    We can obviously omit $T$ and replace it with $S$ to get \begin{align*}
+        S &\to aSbb \mid bSaa \mid abb \mid baa
+    \end{align*}
+\end{solution}
+
+We now prove that the algorithm terminates with a correct grammar.
+\begin{proof}[Termination]
+    The algorithm terminates because any new production added has an RHS
+    that is a subsequence of the RHS of an original production.
+    Only finitely many such subsequences exist.
+\end{proof}
+\begin{proof}[Correctness]
+    We first show that $L(G') = L(G)$.
+    Let $G_i'$ be the grammar after the $i$th iteration of the algorithm.
+    Clearly $L(G_0') = L(G)$.
+    It is easy to see that $L(G_{i+1}') = L(G_i')$.
+    Thus $L(G') = L(G)$.
+
+    We need to show that $L(G'') = L(G') \setminus \set{\epsilon}$.
+    We do this by first showing that for any
+    $w \in L(G') \setminus \set{\epsilon}$,
+    any minimal length derivation of $w \in G'$ does not use unit- or
+    $\epsilon$-productions.
+
+    % Suppose the derivation uses an $\epsilon$-production $Y \to \epsilon$.
+    % This cannot be the first step, since otherwise $w = \epsilon$.
+    % Let $n$ be the first step at which $Y \to \epsilon$ is used.
+    % That is, the $n$th step is
+    % $\alpha Y \beta \xRightarrow{1} \alpha \beta$.
+    % Now if the $(n-1)$th step is
+    % $\alpha' X \beta' \xRigharrow{1} \alpha' \gamma Y \delta \beta'$
+    % where $\alpha' \gamma = \alpha$ and $\delta \beta' = \beta$,
+    % then we can replace the $(n-1)$th and $n$th steps with
+    % $\alpha' X \beta' \to \alpha' \gamma \delta \beta'$.
+
+    % Suppose the previous step was not of this form.
+    % Then it was either 
+    Suppose the derivation uses an $\epsilon$-production $Y \to \epsilon$.
+    Since $w \ne \epsilon$, this cannot be the first step.
+    So the derivation looks like \[
+        S \xRightarrow{l} \alpha X \beta \xRightarrow{1}
+        \alpha \alpha' Y \beta' \beta \xRightarrow{m}
+        \gamma Y \delta \xRightarrow{1} \gamma \delta \xRightarrow{n} w
+    \] where $\alpha \alpha' \leadsto \gamma$ and
+    $\beta' \beta \leadsto \delta$.
+    But then we can give a shorter derivation \[
+        S \xRightarrow{l} \alpha X \beta \xRightarrow{1} \alpha \alpha'
+        \beta' \beta \xRightarrow{m} \gamma \delta \xRightarrow{n} w.
+    \] Similarly, a derivation which contains a unit-production \[
+        S \xRightarrow{l} \alpha X \beta \xRightarrow{1} \alpha Y \beta
+        \xRightarrow{m} \gamma Y \delta \xRightarrow{1} \gamma \phi \delta
+        \xRightarrow{n} w
+    \] can be shortened to \[
+        S \xRightarrow{l} \alpha X \beta \xRightarrow{1} \alpha \phi \beta
+        \xRightarrow{m} \gamma \phi \delta \xRightarrow{n} w.
+    \]
+    This proves that for any $w \in L(G') \setminus \set{\epsilon}$,
+    $w \in L(G'')$.
+    Thus $L(G') \setminus \epsilon \subseteq L(G'')$ and since
+    $P'' \subseteq P'$, $L(G'') \subseteq L(G)$.
+    All that remains to be shown is that $L(G'')$ does not contain
+    $\epsilon$.
+
+    Since each production in $P''$ (weakly) increases the length of any
+    intermediate string, no derivation in $G''$ can produce $\epsilon$.
+\end{proof}

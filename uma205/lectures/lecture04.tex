@@ -6,15 +6,15 @@
     \emph{Cartesian product} of $A$ and $B$. 
 \end{definition}
 This exists by virtue of the axiom of powers (\ref{def:zfc:powers}).
+
+We recall the definition of a relation and some properties.
 \begin{definition}[Relation] \label{def:relation}
     Let $A$ and $B$ be sets.
     Then a subset $R$ of $A \times B$ is called a (binary) \emph{relation}
     from $A$ to $B$.
     If $B = A$, we say that $R$ is a relation on $A$.
 \end{definition}
-
-We define some properties of relations.
-\begin{definition}
+\begin{definition*}
     Let $R$ be a relation on a set $A$.
     We say that $R$ is
     \begin{enumerate}
@@ -31,7 +31,7 @@ We define some properties of relations.
 
     If $R$ satisfies (i), (iii) and (iv), it is a partial order.
     We write $a \le_R b$ or $a \ge_R b$ for $(a, b) \in R$.
-\end{definition}
+\end{definition*}
 
 \begin{definition}[Equivalence class] \label{def:equivalence_class}
     Let $X$ be a set and $\sim_R$ an equivalence relation on $X$.
@@ -52,14 +52,15 @@ We define some properties of relations.
     \]
 \end{definition}
 
-\begin{proposition}[Fundamental theorem of equivalence relations] \label{thm:fter}
+\begin{proposition*}[Fundamental theorem of equivalence relations]
+\label{thm:fter}
     Let $X$ be a set and $\sim_R$ an equivalence relation on $X$.
     Then the family of equivalence classes $\set{[x] \mid x \in X}$ forms
     a partition of $X$.
     Conversely, every partition arises from an equivalence relation.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
-    Exercise.
+    Exercise for the reader.
     % TODO
 \end{proof}
 
@@ -73,13 +74,13 @@ We define some properties of relations.
     The quotient set $\N / R$ is $\set{[0], [1], [2]}$, which is morally the
     same as $\set{0, 1, 2}$.
     \item For any set $A$ with the equality relation $=$, the quotient set
-    $A /{=}$ is the (morally) the same as $A$.
+    $A /{=}$ is (morally) the same as $A$.
     \item Consider $\R^2$ with $(x, y) \sim (z, w)$ if $x^2 + y^2 = z^2 + w^2$.
     Then $\R^2 /{\sim} = \set{[(r, 0)] \mid r \in \R}$ which is morally just
     the set of non-negative reals.
 \end{examples}
 
-\begin{definition}[Function] \label{def:fn}
+\begin{definition*}[Function] \label{def:fn}
     Let $A$ and $B$ be sets.
     A relation $f$ from $A$ to $B$ is said to be a \emph{function} if for
     all $a \in A$, there exists a unique $b \in B$ such that $(a, b) \in f$.
@@ -91,7 +92,7 @@ We define some properties of relations.
 
     For a subset $D \subseteq B$, the \emph{preimage} or \emph{inverse image} of
     $D$ under $f$ is $f^{-1}(D) = \set{a \in A \mid f(a) \in D}$.
-\end{definition}
+\end{definition*}
 Note that $f(C)$ exists by the axiom of replacement.
 \begin{examples}
     \item $A = B = \N$, $f(a) = a\pp$.

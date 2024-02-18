@@ -1,0 +1,71 @@
+\lecture{15}{Mon 05 Feb '24}{}
+% \textbf{Recall:} Let $E \subseteq (X, d)$.
+% We say that $z \in \wbar{E}$ iff there exists a sequence $(x_n)_{n \in \N}$
+% in $E$ such that $\lim_{n \to \infty} x_n = z$.
+\begin{example}
+    Let $x_n = (\frac1n, (-1)^n) \subseteq \R^2$ for $n \ge 1$.
+    Then $(x_n)$ is not convergent, but has subsuential limits $(0, 1)$ and
+    $(0, -1)$ corresponsing to the subsequences $(x_{2n})$ and $(x_{2n-1})$
+    respectively.
+\end{example}
+
+\begin{theorem}
+    Let $(x_n)_{n \in \N} \subseteq (X, d)$.
+    Then $\lim_{n \to \infty} x_n = x$ iff every subsequence converges to
+    $x$.
+\end{theorem}
+\begin{proof}
+    Suppose $(x_n)$ is convergent.
+    Let $(y_k) = (x_{n_k})$ be a subsequence.
+    Then for any $\varepsilon > 0$, there exists $N \in \N$ such that
+    $d(x_n, x) < \varepsilon$ for all $n \ge N$.
+    But this same $N$ works for the subsequence, since $n_k \ge k$.
+    Thus each subsequence converges to $x$.
+
+    Now suppose every subsequence converges to $x$.
+    Since the sequence itself is a subsequence, it converges to $x$.
+\end{proof}
+
+\begin{theorem} \label{thm:compact:subsequential_limit}
+    Let $E \subseteq (X, d)$.
+    Then the following are equivalent.
+    \begin{enumerate}[label=(\arabic*)]
+        \item $E$ is compact.
+        \item Every infinite subset of $E$ has a limit point in $E$.
+        \item Every sequence in $E$ has a subsequential limit in $E$.
+    \end{enumerate}
+\end{theorem}
+(1) $\iff$ (2) is by \cref{thm:compactness}.
+We prove (2) $\iff$ (3).
+\begin{proof}[Proof of $(2) \Rightarrow (3)$]
+    Suppose every infinite subset of $E$ has a limit point in $E$.
+    Let $(x_n)_{n \in \N}$ be a sequence in $E$, and let $S$ be the set of
+    all $x_n$.
+
+    If $S$ is finite, then by the Pigeonhole Principle, there exists
+    some $x \in S$ such that $x_n = x$ for infinitely many $n$.
+    Then the constant sequence $(x)$ is a subsequence of $(x_n)$, whose
+    limit $x$ is in $E$.
+
+    If not, then $S$ is infinite, so it has a limit point $p \in E$.
+    Thus for every $k \in \N$, there exists an $N_k \in \N$ such that
+    $x_{N_k} \ne p \in B(p; \frac1k)$.
+
+    Let $n_1$ be such that $d(x_{n_1}, p) < 1$.
+    For $n_{k+1}$, consider $S \setminus \set{x_0, \ldots, x_{n_k}}$.
+    $p$ is also a limit point of this set (\textcolor{exercise}{why?}),
+    so there exists an $n_{k+1} > n_k$ such that $d(x_{n_{k+1}}, p)
+    < \frac1{k+1}$.
+    Then $(x_{n_k})_k$ is a subsequence of $(x_n)_n$, and
+    $\lim_{k \to \infty} x_{n_k} = p \in E$.
+\end{proof}
+\begin{corollary}
+    Let $(x_n)_{n \in \N} \subseteq (\R^k, \norm{\cdot})$ be a bounded
+    sequence.
+    Then $(x_n)$ has a convergent subsequence.
+\end{corollary}
+\begin{proof}
+    Let $p \in \R^k$ and $R > 0$ be such that $(x_n) \subseteq B(p; R)
+    \subseteq \wbar{B(p; R)}$ which is compact (\textcolor{exercise}{why?}).
+    Then by the previous theorem, $(x_n)$ has a convergent subsequence.
+\end{proof}

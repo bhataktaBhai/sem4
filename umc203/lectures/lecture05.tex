@@ -1,0 +1,22 @@
+\lecture{05}{Tue 23 Jan '24}{}
+
+\begin{exercise}
+    Prove that \begin{align*}
+        \what{\mu} &= \frac{1}{n} \sum_{i=1}^n X_i, \text{ and} \\
+        \what{C} &= \frac{1}{n} \sum_{i=1}^n (X_i - \what{\mu}) (X_i - \what{\mu})^\top
+    \end{align*}
+    are the maximum likelihood estimators of $\mu$ and $C$ for $X_i$ i.i.d.
+    from $d$-dimensional Gaussian distribution $N(\mu, C)$.
+\end{exercise}
+
+\section{Fischer Discriminant} \label{sec:fischer_discriminant}
+Suppose we know the mean and covariance of $X \given Y = y$ for
+$y \in \set{0, 1}$.
+We wish to find $w$ that maximizes \[
+    \frac{\norm{w^\top (\mu_0 \mu_1)}^2}{w^\top C_0 w + w^\top C_1 w}.
+\] We can rewrite this as \[
+    \frac{w^\top A w}{w^\top B w},
+\] where $A = (\mu_0 - \mu_1) (\mu_0 - \mu_1)^\top$ and $B = C_0 + C_1$.
+Note that both $A$ and $B$ are symmetric.
+Suppose that $B$ is invertible and let $L$ be a square root of $B$.
+

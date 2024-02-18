@@ -1,0 +1,23 @@
+\usepackage{xifthen}
+\makeatletter
+\def\@lecture{}%
+% \newcommand*{\lecture}[3]{
+%     \ifthenelse{\isempty{#3}}{%
+%         \def\@lecture{Lecture #1}%
+%     }{%
+%         \def\@lecture{Lecture #1: #3}%
+%     }%
+%     {\large\@lecture}%
+%     \marginpar{\raggedright\small\textsf{#2}}%
+%     \vskip 6pt
+% }
+\newcommand*{\lecture}[3]{
+    \marginpar{\raggedright\small \textsf{\textbf{Lecture #1:} #2}}%
+}
+\g@addto@macro\normalsize{%
+  \setlength\abovedisplayskip{7pt}%
+  \setlength\belowdisplayskip{7pt}%
+  \setlength\abovedisplayshortskip{1pt}%
+  \setlength\belowdisplayshortskip{1pt}%
+}
+\makeatother

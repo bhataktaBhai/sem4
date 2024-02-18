@@ -1,0 +1,69 @@
+\lecture{07}{Tue 23 Jan '24}{}
+
+\begin{theorem}[Closure under Kleene star] \label{thm:closure:kleene}
+    The class of regular languages is closed under Kleene star.
+\end{theorem}
+\begin{proof}
+    Let $L$ be a regular language accepted by a DFA
+    $\mcA = (Q, s, \delta, F)$.
+    We construct an NFA $\mcA' = (Q', S, \Delta, F')$ for $L^*$ by
+    \begin{itemize}
+        \item $Q' = Q \cup \set{Q}$;
+        \item $S = \set{Q}$;
+        \item $F' = \set{Q}$;
+        % \item $\delta'(s', a) = \begin{cases}
+        %     \set{\delta(s, a)} & \text{if } \delta(s, a) \notin F, \\
+        %     \set{s'} & \text{otherwise}.
+        % \end{cases}$
+        \item For $q \in Q$, $\Delta(q, a) = \begin{cases}
+            \set{\delta(q, a)} & \text{if } \delta(q, a) \notin F, \\
+            \set{\delta(q, a), Q} & \text{otherwise}.
+        \end{cases}$
+        \item $\Delta(Q, a) = \Delta(s, a)$.
+    \end{itemize}
+\end{proof}
+
+\section{Regular Expressions} \label{sec:regex}
+Consider the alphabet $\set{a, b}$.
+A regular expression over this language is built from $a$, $b$, $\epsilon$,
+using operators $+$, $\cdot$, $*$, and parentheses.
+\begin{examples}
+    \item $(a^*)\cdot b$ is ``any number of $a$'s followed by one $b$''.
+    \item $(a + b)^*abb(a + b)^*$ is ``contains $abb$ as a subword''.
+    \item $(a+b)^*b(a+b)(a+b)$ is ``third last letter is $b$''.
+    \item $(b^*ab^*a)b^*$ is ``has even number of $a$s''.
+    \item (Exercise) Give a regular expression for ``Every $4$ bit block of
+    the the form $4i$, $4i+1$, $4i+2$, $4i+3$ has an even number of $1$s''.
+    \\
+    (Answer) $(0000 + 0011 + \dots + 1111)^*\cdot(\epsilon + 0 + 1 + 00 + \dots + 111)$.
+\end{examples}
+
+\begin{definition} \label{def:regex}
+    The syntax of regular expressions over an alphabet $A$ is defined by \[
+        r ::= \O \mid a \mid r + r \mid r \cdot r \mid r^*
+    \] with $a \in A$.
+
+    The semantics of regular expressions over an alphabet $A$ is defined by
+    \begin{enumerate}
+        \item $L(\O) = \O$.
+        \item $L(a) = \set{a}$.
+        \item $L(r_1 + r_2) = L(r_1) \cup L(r_2)$.
+        \item $L(r_1 \cdot r_2) = L(r_1) \cdot L(r_2)$.
+        \item $L(r^*) = L(r)^* = \bigcup_{i = 0}^\infty L(r)^i$.
+    \end{enumerate}
+    We give precedence to $*$, $\cdot$, $+$, in that order.
+\end{definition}
+
+\begin{theorem}[Kleene's theorem] \label{thm:regex:kleene}
+    The class of languages defined by regular expressions is exactly the
+    class of regular languages.
+\end{theorem}
+We prove the two directions separately.
+\begin{proof}[RE to NFA]
+    Let $L$ be a language corresponding to a regular expression $r$.
+    We prove by induction on the structure of $r$ that $L$ is regular.
+    For the base cases $r = \O$ and $r = a$, we have $L = \O$ and
+    $L = \set{a}$, both of which are regular.
+    The inductive cases follow from the closure properties of regular
+    languages.
+\end{proof}

@@ -5,12 +5,25 @@
 % long minus
 \newcommand{\lm}{\setminus}
 \newcommand{\doubleslash}{/\!/}
+\newcommand\multichoose[2]{\ensuremath{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}}
 \newcommand\stirling[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
 \newcommand\ftirling[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand\cycle[2]{\genfrac{\langle}{\rangle}{0pt}{}{#1}{#2}}
+\newcommand\1[1]{\bm{1}_{#1}}
 \newcommand\id{\mathrm{id}}
 \DeclareMathOperator\type{type}
 
+\DeclareMathOperator\degree{deg}
+\DeclareMathOperator\diag{diag}
+
 \usepackage{booktabs}
 \usepackage{diagbox}
-% \newcommand\young[1]{\begin{tikz}
-%     \for 
+\usetikzlibrary{graphs,quotes}
+
+\usepackage[usestackEOL]{stackengine}[2013-10-15]
+
+\newcommand\young[2][1]{\begin{tikzpicture}[scale=#1]
+    \foreach[count=\i] \x in #2 {%
+        \draw (0, -\i) grid (\x, -\i-1);
+    }
+\end{tikzpicture}}

@@ -1,0 +1,129 @@
+\lecture{17}{Thu 08 Feb '24}{}
+\section{Sequences in \R} \label{sec:sequences:R}
+\begin{definition}[The Extended Reals] \label{def:sequences:R:extended}
+    The \emph{extended real line} is the set of real numbers along with $2$
+    formal sumbols $+\infty$ and $-\infty$, denoted by \[
+        \wbar{\R} = \R \cup \set{-\infty, +\infty}.
+    \]
+    $\wbar{\R}$ will be endowed with the order \[
+        -\infty < x < \infty \text{ for all } x \in \R,
+    \] along with the usual order on \R.
+    We extend the algebraic operations on \R\ to $\wbar{\R}$.
+    \begin{itemize}
+        \item $x + \infty = +\infty$, $x - \infty = -\infty$ for all
+            $x \in \R$.
+        \item $x \cdot (+\infty) = +\infty$, $x \cdot (-\infty) = -\infty$
+            for all $x \in \R$, $x > 0$.
+        \item $x \cdot (+\infty) = -\infty$, $x \cdot (-\infty) = +\infty$
+            for all $x \in \R$, $x < 0$.
+        \item $\frac{x}{+\infty} = \frac{x}{-\infty} = 0$, for all
+            $x \in \R$.
+    \end{itemize}
+    If $E \subseteq \R$ is not bounded above in \R,
+    we say $\sup E = +\infty$.
+\end{definition}
+When constructing \R\ through Dedekind cuts, $\wbar{\R}$ can be constructed
+by relaxing the condition that a cut must be neither empty nor the whole of
+\Q.
+Then $\O$ is a Dedekind cut represented as $-\infty$,
+and \Q\ is a Dedekind cut represented as $+\infty$.
+
+\begin{definition}
+    Let $(x_n)_{n \in \N} \subseteq \R$.
+    Suppose that for all $M \in \R$, there is an $N \in \N$ such that for
+    all $n \ge N$, $x_n \ge M$.
+    Then we say that $x_n \to +\infty$.
+    If $-x_n \to +\infty$, we say that $x_n \to -\infty$.
+\end{definition}
+
+\begin{definition}
+    Let $(x_n)_{n \in \N} \subseteq \R$.
+    Let $E \subseteq \wbar{\R}$ denote the set of subsequential limits of
+    $(x_n)_n$ in the extended real line.
+    The supremum of $E$ is called the \emph{upper limit} or \emph{limit
+    superior} of $(x_n)_n$, and is denoted by $\limsup_{n \to \infty} x_n$.
+
+    The infimum of $E$ is called the \emph{lower limit} or \emph{limit
+    inferior} of $(x_n)_n$, denoted $\liminf_{n \to \infty} x_n$.
+\end{definition}
+\begin{example}
+    Let $(x_n = (-1)^n)_{n \in \N}$.
+    Then $E = \set{-1, +1}$ so $\limsup_{n \to \infty} x_n = 1$ and
+    $\liminf_{n \to \infty} x_n = -1$.
+\end{example}
+
+\begin{theorem} \label{thm:sequences:R:limsup}
+    Let $(x_n)_n \subseteq \R$ be a sequence and $E$ be the set of
+    subsequential limits of $E$ in $\wbar{\R}$.
+    \begin{enumerate}[label=(\arabic*)]
+        \item $E$ is non-empty.
+        \item $\sup E$ and $\inf E$ are contained in $E$.
+        \item If $x > \sup E$ (resp. $x < \inf E$), then there is an
+            $N \in \N$ such that for all $n \ge N$, $x_n < x$ (resp.
+            $x_n > x$).
+        \item $\sup E$ (resp. $\inf E$) is the only element of $\wbar{\R}$
+            statisfying both (2) and (3).
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \textbf{(1)} If $(x_n)_n$ is bounded, then $E$ is
+    non-empty by \cref{thm:compact:subsequential_limit}.
+
+    Let $(x_n)_{n \in \N}$ be unbounded above.
+    Let $n_0 = 0$, and for $k \ge 0$, let \[
+        n_{k+1} = \min\set{n > n_k \mid x_n > x_{n_k}}
+    \]
+    This exists since $(x_n)_n$ is unbounded above.
+
+    Suppose $m \notin (n_k)_{k \in \N}$.
+    Let $k$ be such that $n_k < m < n_{k+1}$.
+    $x_m > x_{n_k}$ would imply $n_{k+1} \le m$, so $x_m \le x_{n_k}$.
+    This shows that each $x_m$ not in the subsequence is bounded above by
+    some element of the subsequence.
+
+    Thus ${(x_{n_k})}_k$ is unbounded above, for if it weren't, all of
+    $(x_n)_n$ would be bounded above.
+    So for every $M \in \R$, there is a $K$ such that $x_{n_K} > M$, but
+    since the subsequence is increasing, $x_{n_k} > M$ for all $k \ge K$.
+    Thus $\lim x_{n_k} = +\infty$.
+
+    \textbf{(2)}
+    If $\sup E = +\infty$, then for all $M \in \R$, there is an $e_M \in E$
+    larger than $M + 1$, so there is some $x_n$ larger than $M$.
+    Thus $(x_n)_n$ is unbounded above, so by the previous argument,
+    $+\infty \in E$.
+
+    Now suppose $\sup E = x \in \R$.
+    Let $\varepsilon_n = \frac1{2n}$.
+    Let $n_0 = 0$.
+    For $k > 0$, let $e_k$ be an element of $E$ larger than
+    $x - \varepsilon_k$.
+    Let $n_k > n_{k-1}$ be such that $x_{n_k} \in (e_k - \varepsilon_k,
+    e_k + \varepsilon_k)$.
+    Then $\abs{x_{n_k} - x} < 2\varepsilon_k = \frac1k$.
+    Thus $x_{n_k} \to x$, so $x \in E$.
+\end{proof}
+\begin{example}
+    Let $(x_n)_{n \in \N}$ be an enumeration of \Q.
+    Then $E = \wbar{\R}$.
+    \begin{proof}
+        Let $x \in \R$.
+        Then for any $\varepsilon > 0$, there are infinitely many rationals
+        that are $\varepsilon$-close to $x$.
+        Thus $x \in E$.
+
+        For $x = \pm\infty$, replace ``$\varepsilon$-close'' with
+        ``larger/smaller than $M$''.
+    \end{proof}
+\end{example}
+
+\begin{theorem} \leavevmode
+    \begin{enumerate}[label=(\arabic*)]
+        \item Suppose $x_n \le y_n$ for all $n \in \N$.
+        Then \[
+            \liminf x_n \le \liminf y_n \quad \text{and} \quad
+            \limsup x_n \le \limsup y_n.
+        \]
+        \item $\lim x_n = x$ iff $\limsup x_n = \liminf x_n = x$.
+    \end{enumerate}
+\end{theorem}

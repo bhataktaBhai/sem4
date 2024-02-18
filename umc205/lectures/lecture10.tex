@@ -1,0 +1,147 @@
+\lecture{10}{Thu 01 Feb '24}{}
+\begin{definition}[Myhill-Nerode relation] \label{def:mn}
+    An MN relation for a language $L$ over an alphabet $A$ is an equivalence
+    relation $\sim$ on $A^*$ satisfying
+    \begin{itemize}
+        \item $\sim$ is right invariant, \ie, if $x \sim y$, then for all
+        $a \in A$, $xa \sim ya$.
+        \item $\sim$ refines $L$, \ie, if $x \sim y$, then $x \in L$ iff
+        $y \in L$.
+    \end{itemize}
+\end{definition}
+Note that the first condition is equivalent to saying that for all
+$x, y \in A^*$ and $w \in A^*$, $x \sim y$ implies $xw \sim yw$
+This can be proven by induction on the length of $w$ (the base case
+$w = \varepsilon$ is by the refinement condition).
+
+\begin{proposition} \label{thm:mn:canonical}
+   Let $L$ be a language over an alphabet $A$.
+    Then $\equiv_L$ is an MN relation for $L$.
+\end{proposition}
+\begin{proof}
+    $\equiv_L$ is right invariant.
+    $x \equiv_L y$ iff for all $w \in A^*$, $xw \in L$ iff $yw \in L$.
+    So for all $aw \in A^*$, $xaw \in L$ iff $yaw \in L$ and so
+    $x \equiv_L y$.
+
+    $\equiv_L$ refines $L$.
+    $x \equiv_L y$ implies that $x \in L$ iff $y \in L$ (take
+    $w = \varepsilon$).
+\end{proof}
+
+\begin{proposition} \label{thm:mn:correspondence}
+    Let $L$ be a language over an alphabet $A$.
+    Then DFAs for $L$ are in one-to-one correspondence with finite-index MN
+    relations for $L$ in the following manner:
+    \begin{itemize}
+        \item Given a DFA $\mcA = (Q, q_0, \delta, F)$, the relation $\sim$
+        defined by $x \sim y$ iff
+        $\what{\delta}(q_0, x) = \what{\delta}(q_0, y)$ is an MN relation
+        for $L$.
+        Denote by $\Phi$ the map sending $\mcA$ to $\sim$.
+        \item Given an MN relation $\sim$ for $L$, the DFA $\mcA = (Q, q_0,
+        \delta, F)$ defined by \begin{align*}
+            Q &= \set{[x]_{\sim} \mid x \in A^*} \\
+            q_0 &= [\varepsilon]_{\sim} \\
+            \delta([x]_{\sim}, a) &= [xa]_{\sim} \\
+            F &= \set{[x]_{\sim} \mid x \in L}
+        \end{align*} is a DFA accepting $L$.
+        Denote by $\Psi$ the map sending $\sim$ to $\mcA$.
+    \end{itemize}
+    Moreover, these correspondences are inverses of each other, in the sense
+    that for all DFAs $\mcA$ without unreachable states,
+    $\Psi(\Phi(\mcA)) \cong \mcA$; and for all MN relations $\sim$,
+    $\Phi(\Psi(\sim)) = {\sim}$.
+
+    Here, $\cong$ denotes isomorphism of DFAs, \ie, the DFAs are equivalent
+    in the sence that their exists a bijection between their states that
+    preserves the initial state, the transition function, and the set of
+    accepting states.
+\end{proposition}
+\begin{proof}
+    Let $\mcA = (Q, q_0, \delta, F)$ be a DFA for $L$.
+    We need to show that ${\sim} = \Phi(\mcA)$ is an MN relation for $L$.
+    \begin{itemize}
+        \item $\sim$ is right invariant: Let $x \sim y$.
+        Then $\what{\delta}(q_0, x) = \what{\delta}(q_0, y)$.
+        It immediately follows that $\what{\delta}(q_0, xa) =
+        \what{\delta}(q_0, ya)$.
+        \item $\sim$ refines $L$: Let $x \sim y$.
+        Then $\what{\delta}(q_0, x) = \what{\delta}(q_0, y) \eqcolon q$.
+        Then $x \in L$ iff $q \in F$ iff $y \in L$.
+    \end{itemize}
+    Now let $\sim$ be an MN relation for $L$.
+    We need to show that $\mcA = \Psi(\sim)$ is a DFA accepting $L$.
+    \begin{itemize}
+        \item $\delta$ is well-defined: Let $q = [x] = [y]$.
+        Then $x \sim y$ and so for any $a \in A$, $xa \sim ya$.
+        Thus $[xa] = [ya]$ and so $\delta$ is well-defined.
+        \item $\mcA$ accepts $L$: We claim that, \begin{equation}
+            \what{\delta}(q_0, w) = [w] \text{ for all } w \in A^*
+            \label{eq:mn:dfa}
+        \end{equation}
+        The case $w = \varepsilon$ is immediate.
+        Let $w = xa$.
+        Then $\what{\delta}(q_0, w) = \delta(\what{\delta}(q_0, x), a) =
+        \delta([x], a) = [xa] = [w]$.
+        Thus $\mcA$ accepts a string $w$ iff $[w] \in F$ which is true iff
+        $w \in L$.
+    \end{itemize}
+    Why are $\Phi$ and $\Psi$ inverses of each other?
+    Let $\mcA = (Q, q_0, \delta, F)$ be a DFA for $L$ with no unreachable
+    states.
+    Let ${\sim} = \Phi(\mcA)$, and let $\mcA' = \Psi({\sim})$.
+    We need to show that $\mcA \cong \mcA'$.
+    Furthermore, we need to show that $\Phi(\Psi({\sim})) = {\sim}$.
+    \begin{itemize}
+        \item Define $\phi: Q' \to Q$ by $\phi([x]) =
+        \what{\delta}(q_0, x)$.
+        \Cref{eq:mn:dfa} gives that $\phi(\what{\delta'}(q'_0, x)) =
+        \what{\delta}(q_0, x)$ for all $x \in A^*$.
+
+        Note that every state in $\mcA$ is reachable.
+        The same is true for $\mcA'$ since $Q = \set{\what{\delta'}(q'_0,
+        x) \mid x \in A^*}$.
+
+        Thus $\phi$ preserves the initial state (let $x = \varepsilon$), the
+        transition function, and the set of accepting states.
+        \item Let ${\sim'} = \Phi(\Psi({\sim}))$.
+        \begin{align*}
+            x \sim y &\iff [x]_{\sim} = [y]_{\sim} \\
+            &\iff \what{\delta'}(q'_0, x) = \what{\delta'}(q'_0, y) \\
+            &\iff x \sim' y \qedhere
+        \end{align*}
+    \end{itemize}
+\end{proof}
+
+\begin{definition}[Refinement] \label{def:eq:refinement}
+    An equivalence relation $S$ on a set $X$ \emph{refines} an equivalence
+    relation $R$ on $X$ if $S \subseteq R$, \ie, for all $x, y \in X$,
+    if $xSy$ then $xRy$.
+\end{definition}
+
+\begin{lemma} \label{thm:mn:refinement}
+    Let $L$ be a language over an alphabet $A$.
+    Let $\sim$ be an MN-relation for $L$.
+    Then $R$ refines $\equiv_L$.
+\end{lemma}
+\begin{proof}
+    $\sim$ is right invariant.
+    This means that for all $x, y \in A^*$, if $x \sim y$ then
+    $\forall z \in A^* (xz \sim yz)$, so $x \equiv_L y$.
+\end{proof}
+
+\begin{theorem}[Myhill-Nerode] \label{thm:mn:mn}
+    $L \subseteq A^*$ is regular iff $\equiv_L$ is of finite index.
+\end{theorem}
+\begin{proof}
+    Follows from \cref{thm:mn:canonical,%
+    thm:mn:correspondence,thm:mn:refinement}.
+    If $L$ is regular, then there exists a DFA $\mcA$ for $L$.
+    Then $\Phi(\mcA)$ is an MN relation for $L$, but it has finitely many
+    equivalence classes and refines $\equiv_L$.
+    So $\equiv_L$ has finitely many equivalence classes.
+
+    If $\equiv_L$ is of finite index, then $\Psi(\equiv_L)$ is a DFA for
+    $L$.
+\end{proof}

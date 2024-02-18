@@ -18,19 +18,20 @@ We enumerate some more values below.
     \label{tab:stirling}
 \end{table}
 
-\begin{proposition} \label{thm:partition:recurrence}
+\begin{proposition*} \label{thm:partition:recurrence}
     For $1 \le k \le n$, $\stirling nk = \stirling{n-1}{k-1} +
     k \stirling{n-1}{k}$
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     We split the partitions into two cases:
-    \begin{enumerate}
+    \begin{itemize}
         \item The partition contains $\set{n}$ as a singleton.
             There are $\stirling{n-1}{k-1}$ such partitions.
         \item $n$ belongs to some other block.
             There are $\stirling{n-1}{k}$ ways to partition the remaining
             elements, and $k$ ways to choose which block $n$ belongs to.
-    \end{enumerate}
+            \qedhere
+    \end{itemize}
 \end{proof}
 
 \begin{proposition}
@@ -42,30 +43,30 @@ We enumerate some more values below.
     These are simply permutations of $k$ blocks of $[n]$.
 \end{proof}
 
-\begin{corollary}
+\begin{corollary*} \label{thm:stirling:sum}
     For all $n \in \N$, \[
         \sum_{j=0}^{n} \stirling nj x^{\underline{j}} = x^n
     \]
-\end{corollary}
+\end{corollary*}
 \begin{proof}
     For $x \in \N$, the RHS counts functions from $[n]$ to $[x]$.
     We split these functions by the size of the image.
 
-    For functions of image size $j$, there are $\binom{n}{j}$ ways to choose
+    For functions of image size $j$, there are $\binom{x}{j}$ ways to choose
     the image, and $j! \stirling nj$ ways to choose the preimage.
-    But $\binom{n}{j} j!$ is precisely $n^{\underline{j}}$.
+    But $\binom{x}{j} j!$ is precisely $n^{\underline{j}}$.
 
     Thus both sides agree at infinitely many points, and so they are equal.
 \end{proof}
 
-\begin{definition}[Bell numbers] \label{def:bell}
+\begin{definition*}[Bell numbers] \label{def:bell}
     The number of set partitions of $[n]$ is called the $n$th \emph{Bell
     number}, denoted $B_n \coloneq \sum_{k=0}^{n} \stirling nk$.
-\end{definition}
+\end{definition*}
 
-\begin{exercise}
+\begin{exercise*}
     Prove that $B_{n+1} = \sum_{k=0}^{n} \binom{n}{k} B_k$.
-\end{exercise}
+\end{exercise*}
 \begin{solution}
     Let $b_k$ be the number of partitions of $[n+1]$ with $n+1$ in a block
     of size $k+1$.
@@ -118,14 +119,8 @@ permutation which swaps $2$ and $7$ and fixes everything else.
     \end{itemize}
 \end{notation}
 
-\begin{definition}
+\begin{definition*}
     The \emph{cycle type} of a permutation $\sigma$, denoted
     $\type(\sigma)$, is the partition formed by arranging its cycle lengths
     in weakly decreasing order.
-\end{definition}
-
-\begin{definition}
-    The number of permutations in $S_n$ with $k$ cycles is called the
-    (unsigned) \emph{Stirling number of the first kind}, denoted
-    $\ftirling nk$.
-\end{definition}
+\end{definition*}

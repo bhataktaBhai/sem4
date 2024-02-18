@@ -26,11 +26,12 @@ we choose $\tilde{h}(x) = 1$, and $\tilde{h}(x) = -1$ otherwise.
 
 If $\ell(1, 1) = \ell(-1, -1) = 0$ and $\ell(1, -1) = \ell(-1, 1) = 1$, this
 reduces to the Bayes classifier.
-\vspace{0.5em}\hrule
+
+\subsection{Multi-Category Classification} \label{sec:bayes:multi}
 Let us now extend the Bayes classifier to multiple classes.
 We have \begin{align*}
     \mathcal{X} &\subseteq \R^d \quad \text{instance space} \\
-    \mathcal{Y} &= \set{1, \ldots, M} \quad \text{label space} \\
+    \mathcal{Y} &= [M] \quad \text{label space} \\
     \mathcal{D} &= \set{(x_i, y_i) \mid x_i \in \mathcal{X},
         y_i \in \mathcal{Y}}
 \end{align*}

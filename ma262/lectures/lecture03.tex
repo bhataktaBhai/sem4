@@ -257,17 +257,29 @@ We can interpret the above operations as follows.
 \begin{remark}
     The left limit $G_X(1^-) = \lim_{s \uparrow 1} G_X(s) = 1 - p_\infty$.
 \end{remark}
-If $p_\infty > 0$, then $\E X = \infty$.
-Otherwise, $\E X = \sum_{k=0}^{\infty} k p_k = G_X'(1^-)$.
+If $p_\infty > 0$, then $\E[X] = \infty$.
+Otherwise, \[
+    \E[X] = \sum_{k=0}^{\infty} k p_k
+          = \sum_{k=0}^{\infty} p_k k (1)^{k-1}
+          = G_X'(1^-)
+\]
 
-\begin{fact} \label{thm:pgf}
+\begin{theorem} \label{thm:pgf}
     Let $X$, $Y$ be two random variables taking values in $\N \cup \infty$ and
     $G_X(s) = G_Y(s) \;\forall s \in (-1, 1)$, then $X \eqd Y$.
-\end{fact}
+\end{theorem}
+\begin{proof}
+    Since $G_X, G_Y \in C^\infty(-1, 1)$, we have \[
+        G_X^{(n)} = G_Y^{(n)} \text{ for all } n \in \N.
+    \] But $G_X^{(n)}(0) = n! p_n^X$.
+    Thus $p_n^X = p_n^Y$ for all $n \in \N$.
+    % TODO: where is rigour?
+\end{proof}
 
 \begin{exercise}
     Suppose $(X_n)_{n \in \N}$ is an SRW($p$) on \Z\ started at the origin.
-    Find $G = G_{T_{-1}}$, where $T_{-1}$ is the first hitting time of $-1$.
+    Find $G \coloneq G_{T_{-1}}$,
+    where $T_{-1}$ is the first hitting time of $-1$.
 \end{exercise}
 \begin{solution}
     \begin{align*}
@@ -301,7 +313,7 @@ The probability of ever hitting $-1$ is \begin{align*}
         &= \begin{cases}
             1 & \text{if the walk is left-biased,} \\
             \frac{q}{p} & \text{otherwise.}
-        \end{cases}
+        \end{cases} \\
         &= \frac{q}{p} \wedge 1
 \end{align*}
 Another way to see the left-biased case is to note that $X_n$'s are sums of

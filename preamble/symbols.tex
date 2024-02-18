@@ -1,0 +1,81 @@
+\newcommand\ie{\textit{i.e.}}
+\newcommand\eg{\textit{e.g.}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs} % for \mathscr
+\usepackage{bm} % for \bm
+\usepackage{booktabs}
+
+\usepackage{mathtools} % for delimiters and \coloneqq
+\DeclarePairedDelimiter{\oldparen}{(}{)}
+\DeclarePairedDelimiter{\oldbrk}{[}{]}
+\DeclarePairedDelimiter{\oldset}{\{}{\}}
+\DeclarePairedDelimiter{\oldabs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\oldnorm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\oldfloor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\oldceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\oldangled}{\langle}{\rangle}
+\DeclarePairedDelimiterX{\oldinnerp}[2]{\langle}{\rangle}{#1,\,#2}
+
+\makeatletter
+\def\paren{\@ifstar{\oldparen}{\oldparen*}}
+\def\brk{\@ifstar{\oldbrk}{\oldbrk*}}
+\def\set{\@ifstar{\oldset}{\oldset*}}
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\def\floor{\@ifstar{\oldfloor}{\oldfloor*}}
+\def\ceil{\@ifstar{\oldceil}{\oldceil*}}
+\def\angled{\@ifstar{\oldangled}{\oldangled*}}
+\def\innerp{\@ifstar{\oldinnerp}{\oldinnerp*}}
+\makeatother
+
+\renewcommand\O{\ensuremath{\varnothing}}
+\newcommand\N{\ensuremath{\mathbb{N}}}
+\newcommand\Z{\ensuremath{\mathbb{Z}}}
+\newcommand\Q{\ensuremath{\mathbb{Q}}}
+\newcommand\R{\ensuremath{\mathbb{R}}}
+\newcommand\C{\ensuremath{\mathbb{C}}}
+% \renewcommand\P{\ensuremath{\mathbb{P}}}
+
+% fix spacing for \forall and \exists
+\let\oldforall\forall
+\renewcommand{\forall}{\oldforall \, }
+\let\oldexist\exists
+\renewcommand{\exists}{\oldexist \: }
+\newcommand\unique{\oldexist! \: }
+\newcommand\lxor{\oplus}
+
+\providecommand{\dd}{\,\mathrm{d}}
+
+\newcommand\mcA{\ensuremath{\mathcal{A}}}
+\newcommand\mcB{\ensuremath{\mathcal{B}}}
+\newcommand\mcC{\ensuremath{\mathcal{C}}}
+\newcommand\mcD{\ensuremath{\mathcal{D}}}
+\newcommand\mcE{\ensuremath{\mathcal{E}}}
+\newcommand\mcF{\ensuremath{\mathcal{F}}}
+\newcommand\mcG{\ensuremath{\mathcal{G}}}
+\newcommand\mcH{\ensuremath{\mathcal{H}}}
+\newcommand\mcI{\ensuremath{\mathcal{I}}}
+\newcommand\mcJ{\ensuremath{\mathcal{J}}}
+\newcommand\mcK{\ensuremath{\mathcal{K}}}
+\newcommand\mcL{\ensuremath{\mathcal{L}}}
+\newcommand\mcM{\ensuremath{\mathcal{M}}}
+\newcommand\mcN{\ensuremath{\mathcal{N}}}
+\newcommand\mcO{\ensuremath{\mathcal{O}}}
+\newcommand\mcP{\ensuremath{\mathcal{P}}}
+\newcommand\mcQ{\ensuremath{\mathcal{Q}}}
+\newcommand\mcR{\ensuremath{\mathcal{R}}}
+\newcommand\mcS{\ensuremath{\mathcal{S}}}
+\newcommand\mcT{\ensuremath{\mathcal{T}}}
+\newcommand\mcU{\ensuremath{\mathcal{U}}}
+\newcommand\mcV{\ensuremath{\mathcal{V}}}
+\newcommand\mcW{\ensuremath{\mathcal{W}}}
+\newcommand\mcX{\ensuremath{\mathcal{X}}}
+\newcommand\mcY{\ensuremath{\mathcal{Y}}}
+\newcommand\mcZ{\ensuremath{\mathcal{Z}}}
+
+\let\what\widehat
+\let\wbar\overline
+
+\DeclareMathOperator\sgn{sgn}

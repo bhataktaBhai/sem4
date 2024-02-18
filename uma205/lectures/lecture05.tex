@@ -31,10 +31,11 @@ such that $f(a) = b$.
     Then there exists a set, denoted $Y^X$, consisting of all functions
     from $X \to Y$.
 \end{axiom}
-\begin{exercise}
+\begin{exercise*}
     Let $X$ be a set.
-    Then $\set{Y \mid Y \subseteq X}$ is also a set.
-\end{exercise}
+    Then $\set{Y \mid Y \subseteq X}$, called the \emph{power set} of $X$,
+    is a set.
+\end{exercise*}
 \begin{solution}
     The property $P(F, X_F)$ given by \[
         P(F, X_F) \iff F \in 2^X \land X_F = \set{x \in X \mid F(x) = 1}
@@ -66,12 +67,12 @@ such that $f(a) = b$.
     then $X$ is said to be \emph{finite} and have cardinality $n$.
 \end{definition}
 
-\begin{definition}
+\begin{definition*}
     A set $X$ is \emph{countably infinite} or \emph{countable} if it has the
     same cardinality as $\N$, is \emph{at most countable} if it is finite or
     countable, and is \emph{uncountable} otherwise.
-\end{definition}
-\begin{exercise}
+\end{definition*}
+\begin{exercise*}
     Let $m < n$ be naturals.
     Show that there is
     \begin{enumerate}
@@ -79,21 +80,21 @@ such that $f(a) = b$.
         \item no injection from $[n]$ to $[m]$.
         \item a bijection from $[a]$ to $[b]$ iff $a = b$.
     \end{enumerate}
-\end{exercise}
+\end{exercise*}
 \footnotetext{$[n] = \set{1, \dots, n}$}
 
-\begin{exercise}[Properties of countable sets] \leavevmode
+\begin{exercise*}[Properties of countable sets] \leavevmode
     \begin{enumerate}
         \item If $X$ and $Y$ are countable, then so is $X \cup Y$.
         \item The set $\set{(n, m) \in \N \times \N \mid 0 \le m \le n}$ is
             countable.
         \item $\N \times \N$ is countable.
     \end{enumerate}
-\end{exercise}
-\begin{theorem}
+\end{exercise*}
+\begin{theorem*}
     Let $X$ be an arbitrary set.
     Then $X$ and $2^X$ cannot have the same cardinality.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Let $f\colon X \to 2^X$.
     Consider $A = \set{x \in X \mid x \notin f(x)} \subseteq X$.

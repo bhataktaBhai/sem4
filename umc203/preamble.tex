@@ -1,17 +1,13 @@
-\let\emph\textsl
-\input{~/IISc/preamble}
+\input{~/IISc/sem4/preamble}
+\input{~/IISc/sem4/preamble/mvc}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
+\usepackage{tikz}
+\usetikzlibrary{graphs, graphs.standard, quotes, positioning, arrows.meta}
 
-\newcounter{assignment}
-\theoremstyle{definition}
-\newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem}{Problem}[assignment]
-\newmdtheoremenv[nobreak=true]{exercise}[theorem]{Exercise}
-
-\DeclareMathOperator{\sgn}{sgn}
-% \usepackage{bbm}
 \newcommand{\ind}[1]{\bm{1}_{#1}}
 \newcommand{\given}{\mid}
 \newcommand{\pms}{\{-1, 1\}}
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\E}{\mathbb E}

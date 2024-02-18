@@ -1,0 +1,58 @@
+\lecture{07}{Thu 01 Feb '24}{}
+
+\textbf{Setting:} \begin{align*}
+    \mcD &= \set{(x^{(i)}, y^{(i)}) \mid x^{(i)} \in \mcX, y^{(i)} \in \mcY,
+        i \in [N]} \\
+    \mcD &\sim P^{(N)} \\
+    \mcX &\subseteq \R^d \\
+    \mcY &= \pms.
+\end{align*}
+
+Suppose there exists a $w^* \in \R^d$ such that for each $i \in [N]$,
+$\sgn(w^{*\top}x^{(i)}) = y^{(i)}$. \\
+Then the algorithm described in the previous lecture will find such a $w^*$
+in at most $\frac{R^2}{\gamma^{*2}}$ iterations, where $R$ is the maximum
+norm of $x^{(i)}$s and
+$\gamma^* = \min_{i \in [N]} \frac{\abs*{w^{*\top} x^{(i)}}}{\norm{w^*}}$.
+
+Let \mcD\ be linearly separable and let the Perceptron algorithm return a
+classifier $h_\mcD^{(p)}$.
+We have risk $R(h_\mcD^{(p)}) = \Pr(h_\mcD^{(p)}(x) \neq y)$ (\textcolor{%
+exercise}{under what distribution?}). %TODO
+We compute the \emph{expected generalization error} by a classifier returned
+by the Perceptron algorithm acting on a linearly separable sample of size
+$N$ drawn iid from $P$.
+That is, we compute \[
+    \E_{\mcD \sim P^{N}}[R(h_\mcD^{(p)})].
+\] This is hard!
+
+We will instead compute the proxy $\wbar{R}^{LOO}_\mcD(A)$, where $A$ is an
+algorithm acting on a sample \mcD\ of size $m$, returning a classifier
+$h_\mcD^{A}$. \\
+$\wbar{R}^{LOO}_\mcD(A)$ is the \emph{leave-one-out} error of $A$ on \mcD.
+That is, \[
+    \wbar{R}^{\text{LOO}}_\mcD(A) = \frac1m \sum_{i=1}^{m}
+        \left[h_{\mcD_{(i)}}^A\!\!\left(x^{(i)}\right) \ne y^{(i)}\right],
+\] where $\mcD_{(i)} = \mcD \setminus \set{(x^{(i)}, y^{(i)})}$.
+
+We want to compute the expected value of $\wbar{R}^{LOO}_\mcD(A)$ over
+all samples \mcD\ of size $m$ drawn iid from $P$.
+\begin{align*}
+    \E_{\mcD \sim P^m}[\wbar R^{\text{LOO}}_\mcD(A)]
+    &= \frac1m \E_{\mcD \sim P^m} \sum_{i=1}^{m}
+        \left[h_{\mcD_{(i)}}^A\!\!\left(x^{(i)}\right) \ne y^{(i)}\right]
+    \intertext{Since the samples are iid, we have}
+    \E_{\mcD \sim P^m}
+        &= \E_{\mcD \sim P^{m-1}} \E_{(x^{(i)}, y^{(i)}) \sim P}
+    \intertext{We first compute the inner expectation.}
+    \E_{(x^{(i)}, y^{(i)}) \sim P} \left[h_{\mcD_{(i)}}^A\!\!
+    \left(x^{(i)}\right) \ne y^{(i)} \right]
+        &= \Pr \left(h^A_{\mcD_{(i)}}\!\!\left(x^{(i)}\right)
+                \ne y^{(i)}\right) \\
+        &= R(h^A_{\mcD_{(i)}})
+    \intertext{So we have}
+    \E_{\mcD \sim P^m}[\wbar R^{\text{LOO}}_\mcD(A)]
+    &= \frac1m \sum_{i=1}^{m} \E_{\mcD_{(i)} \sim P^{m-1}}
+        R(h^A_{\mcD_{(i)}}) \\
+    &= \E_{\mcD \sim P^{m-1}} R(h^A_{\mcD}).
+\end{align*}

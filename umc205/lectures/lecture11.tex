@@ -1,0 +1,126 @@
+\lecture{11}{Tue 06 Feb '24}{}
+\begin{definition}[Stable partitioning] \label{def:stable_partitioning}
+    Let $\mcA = (Q, q_0, \delta, F)$ be a DFA.
+    An equivalence relation $\sim$ on $Q$ is said to be a
+    \emph{stable partitioning} of \mcA\ if for all $p, q \in Q$,
+    if $p \sim q$, then
+    \begin{itemize}
+        \item $p \in F$ iff $q \in F$, and
+        \item $\delta(p, a) \sim \delta(q, a)$ for all $a \in A$.
+    \end{itemize}
+\end{definition}
+\begin{definition}[DFA refinement] \label{def:dfa_refinement}
+    We say that a DFA $\mcB$ refines a DFA $\mcA$ iff there exists a stable
+    partitioning $\sim$ of $\mcB$ such that $\mcB/{\sim}$ is isomorphic to
+    $\mcA$.
+\end{definition}
+Here, $\mcB/{\sim}$ is the DFA obtained by merging all states in the same
+equivalence class of $\sim$.
+
+\begin{proposition}
+    Let $\sim$ be a stable partitioning of a DFA \mcA.
+    Then $\mcA/{\sim}$ accepts the same language as \mcA.
+\end{proposition}
+\begin{proof}
+    Let $\mcA = (Q, q_0, \delta, F)$.
+    Let $\mcA' = (Q/{\sim}, [q_0], \delta', F')$, where \begin{align*}
+        \delta'([p], a) &= [\delta(p, a)] \\
+        F' &= \set{[p] \mid p \in F}.
+    \end{align*}
+    Suppose $\what{\delta}(q_0, w) = p$.
+    Then we claim that $\what{\delta'}([q_0], w) = [p]$.
+    This is immediate from the definition of $\delta'$.
+    Thus the two automata accept the same language.
+\end{proof}
+
+\begin{definition}
+    Let $\mcA = (Q, s, \delta, F)$ be a DA for $L$ with no unreachable
+    states.
+    We define $\approx_L$ as follows. \[
+        p \approx_L q \iff \exists x \equiv_L y \text{ such that }
+            \what{\delta}(s, x) = p \text{ and } \what{\delta}(s, y) = q.
+    \]
+\end{definition}
+\begin{proposition}
+    $\approx_L$ is a stable partitioning of \mcA.
+\end{proposition}
+\begin{proof}
+    Suppose $p \approx_L q$.
+    Then $p \in F$ iff $x \in L$ iff $y \in L$ iff $q \in F$.
+    Also, since $xa \equiv_L ya$ for all $a \in A$, we have that
+    $\what{\delta}(s, xa) \approx_L \what{\delta}(s, ya)$ and so
+    $\delta(p, a) \approx_L \delta(q, a)$ for all $a \in A$.
+\end{proof}
+
+\begin{theorem}
+    Let $\mcA = (Q, s, \delta, F)$ be a DFA for $L$ with no unreachable
+    states.
+    Define $\approx$ as follows. \[
+        p \approx q \iff \forall z \in A^* \left(
+            \what{\delta}(p, z) \in F \iff \what{\delta}(q, z) \in F
+        \right).
+    \] Then ${\approx} = {\approx_L}$.
+\end{theorem}
+\begin{proof}
+    Let $p \approx q$.
+    Then for all $z \in A^*$, $\what{\delta}(p, z) \in F$ iff
+    $\what{\delta}(q, z) \in F$.
+    Since no state in \mcA\ is unreachable, let $p = \what{\delta}(s, x)$
+    and $q = \what{\delta}(s, y)$.
+    Then $\what{\delta}(s, xz) \in F \iff \what{\delta}(s, yz) \in F$ so
+    that $x \equiv_L y$.
+    Thus $p \approx_L q$.
+
+    Conversely, let $p \approx_L q$.
+    Let $x \equiv_L y$ such that $\what{\delta}(s, x) = p$ and
+    $\what{\delta}(s, y) = q$.
+    Then since $xz \in L$ iff $yz \in L$, we have that
+    $\what{\delta}(p, z) \in F$ iff $\what{\delta}(q, z) \in F$.
+\end{proof}
+
+\begin{exercise}
+    Run algorithm to compute $\approx$ for the DFA below
+\end{exercise}
+\begin{solution} \leavevmode
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{c|cccc}
+              & $s$ & $p$ & $q$ & $r$ \\
+            \hline
+            $s$ &   &   &   &   \\
+            $p$ & \checkmark & & & \\
+            $q$ & & \checkmark & & \\
+            $r$ & \checkmark & & \checkmark &
+        \end{tabular}
+    \end{table}
+\end{solution}
+
+\subsection{Analysis of the minimization algorithm}
+\label{sec:min_alg:analysis}
+We claim that the algorithm always terminates.
+Let $n = \abs{Q}$.
+Since the algorithm terminates when the table is unchanged, it must
+terminate after at most $\binom{n}{2}$ iterations.
+
+In fact, the algorithm terminates after at most $n$ iterations.
+In each iteration, we mark a pair if they lead to some states upon reading
+the same input, which were marked in the previous iteration.
+
+We argue that at the end of the $i$\textsuperscript{th} iteration,
+the algorithm has marked all pairs of states that are distinguishable
+by a string of at most $i$ symbols.
+
+$i = 0$ is trivial.
+Suppose this holds for some $i \ge 0$.
+Let $p, q \in Q$ be such that $p$ and $q$ are distinguishable by a string
+$w$ of at most $i + 1$ symbols.
+If $\abs{w} \le i$, then $p$ and $q$ are marked at the end of the
+$i$\textsuperscript{th} iteration.
+Otherwise, $w = av$ for some $a \in A$ and $v \in A^i$.
+Then since $\what{\delta}(p, w) = \what{\delta}(\delta(p, a), v)$ and
+$\what{\delta}(q, w) = \what{\delta}(\delta(q, a), v)$, we have that
+$\delta(p, a)$ and $\delta(q, a)$ are distinguishable by a string of $i$
+symbols, and so they will be marked at the end of the
+$i$\textsuperscript{th} iteration.
+This means that $p$ and $q$ will be marked at the end of the
+$(i + 1)$\textsuperscript{th} iteration.

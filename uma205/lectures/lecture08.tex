@@ -1,17 +1,16 @@
+\chapter{Combinatorics}
 \lecture{08}{Fri 19 Jan '24}{}
 
-\chapter{Combinatorics}
-
-\begin{theorem}[Pigeonhole principle] \label{thm:php}
+\begin{theorem*}[Pigeonhole principle] \label{thm:php}
     Let $n, k \in \N^*$ and $n > k$.
     Suppose we place $n$ balls in $k$ boxes.
     Then there exists a box with more than one ball.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Suppose not.
     Then each box has at most one ball.
-    If $m$ boxes have $1$ ball, then the total number of balls is
-    $m \le k < n$, a contradiction.
+    If $m$ boxes have $1$ ball and the others have none,
+    then the total number of balls is $m \le k < n$, a contradiction.
 \end{proof}
 
 \begin{example}
@@ -50,11 +49,11 @@
     By the pigeonhole principle, two of the $p_i$'s must be equal.
 \end{proof}
 
-\begin{theorem}[Generalised PHP] \label{thm:php:generalised}
+\begin{theorem*}[Generalised PHP] \label{thm:php:generalised}
     Let $r, m, n \in \N^*$ such that $n > mr$.
     Suppose we place $n$ balls in $m$ boxes.
     Then there exists a box with at least $r+1$ balls.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Suppose not.
     Then each box has at most $r$ balls.

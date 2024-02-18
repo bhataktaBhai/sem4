@@ -1,0 +1,172 @@
+\lecture{14}{Thu 15 Feb '24}{}
+\section{Pumping Lemma} \label{sec:cfl:pumping}
+\begin{theorem}[Pumping lemma for CFLs] \label{thm:cfl:pumping}
+    For every CFL $L$ there is a constant $k \ge 0$ such that such that for
+    any word $z$ in $L$ of length at least $k$,
+    there are strings $u$, $v$, $w$, $x$, $y$ such that
+    \begin{itemize}
+        \item $z = uvwxy$,
+        \item $vx \ne \epsilon$,
+        \item $|vwx| \le k$, and
+        \item for each $i \ge 0$, the string $uv^iwx^iy$ belongs to $L$.
+    \end{itemize}
+\end{theorem}
+Consider a parse tree for any string.
+Note that subtrees hanging at the same non-terminal can be replaced by
+each other.
+For example, if
+\begin{center}
+    \begin{forest}
+        [S
+            [a]
+            [S
+                [a]
+                [S
+                    [a]
+                    [S
+                        [$\epsilon$]
+                    ]
+                    [b]
+                ]
+                [b]
+            ]
+            [b]
+        ]
+    \end{forest}
+\end{center} is a derivation, then so are
+\begin{center}
+    \begin{forest}
+        [S
+            [a]
+            [S
+                [$\epsilon$]
+            ]
+            [b]
+        ]
+    \end{forest}
+\end{center}
+and
+\begin{center}
+    \begin{forest}
+        [S
+            [a]
+            [S
+                [a]
+                [S
+                    [a]
+                    [S
+                        [a]
+                        [S
+                            [a]
+                            [S
+                                [$\epsilon$]
+                            ]
+                            [b]
+                        ]
+                        [b]
+                    ]
+                    [b]
+                ]
+                [b]
+            ]
+            [b]
+        ]
+    \end{forest}
+\end{center}
+\begin{proof}
+    Let $G = (N, A, S, P)$ be a CNF grammar for $L$.
+    A full binary tree of height $h$ has $2^h$ leaves.
+    A parse tree in $G$ with height $h$ has a terminal string of length at
+    most $2^{h-1}$, since a terminal node has no sibling.
+    Thus a string of length $2^n$ or more, must have a parse tree of at
+    least height $n+1$.
+    Let $k = 2^{\abs{N}}$.
+    Consider a parse tree in $G$ of a string $z$ of length at least $k$.
+    The longest path from the root to a leaf has length at least
+    $\abs{N}+1$, and thus has at least $\abs{N} + 2$ nodes, or $\abs{N} + 1$
+    non-terminal nodes.
+    By the pigeonhole principle, two of these nodes must have the same
+    label.
+    Let $X$ be the lowest repeated non-terminal, and let $X_\bot$ and
+    $X^\top$ be the two lowest occurrences of $X$, with $X_\bot$ closer to
+    the leaves.
+
+    Let $w$ be the string of terminals derived from $X_\bot$, and let
+    $vwx$ be the string of terminals derived from $X^\top$.
+    Let $z = uvwxy$.
+    Since the longest path from $X^\top$ down to a leaf has length at most
+    $\abs{N} + 1$, we have $\abs{vwx} \le 2^{\abs{N}} = k$.
+
+    One of the strings $v$ and $x$ must be non-empty, since $G$ is CNF
+    ($X^\bot$ must have a sibling, which must lead to a terminal).
+    We can then replace the subtree at $X^\top$ by the subtree at $X_\bot$,
+    and obtain a parse tree for $uwy$.
+    We can also replace the subtree at $X^\bot$ by the subtree at $X_\top$,
+    and obtain a parse tree for $uv^2wx^2y$.
+
+    Continuing in this way, we can obtain a parse tree for $uv^iwx^iy$ for
+    any $i \ge 0$.
+\end{proof}
+
+\begin{exercise}
+    Show that the following languages are not context-free.
+    \begin{itemize}
+        \item $\set{a^n b^n c^n \mid n \ge 0}$.
+        \item $\set{ww \mid w \in \set{a, b}^*}$.
+    \end{itemize}
+\end{exercise}
+\begin{solution} \leavevmode
+    \begin{itemize}
+        \item Let $k$ be the pumping lemma constant.
+        Then $a^k b^k c^k$ is in the language, and so there are strings
+        $u$, $v$, $w$, $x$, $y$ such that $uvwxy = a^k b^k c^k$, $vx \ne
+        \epsilon$, $\abs{vwx} \le k$, and $uv^2wx^2y$ is in the language.
+        Since $\abs{vwx} \le k$, it cannot contain all three letters.
+        Since $vx \ne \epsilon$, $uwy$ will have more of the letters that
+        $vwx$ does not contain, and less of the letters it does contain.
+        \item Suppose it is.
+        Let $k$ be the pumping lemma constant.
+        Then \[
+            a^{k+1} b^{k+1} a^{k+1} b^{k+1}
+        \] is in the language,
+        and so there are strings $u$, $v$, $w$, $x$, $y$ as above.
+        Since $\abs{vwx} \le k$, it cannot overlap with $3$ or $4$ of the
+        homogenous blocks.
+
+        Thus $uwx$ will still be of the form $a^p b^q a^r b^s$, with
+        none of $p$, $q$, $r$, or $s$ being zero.
+        Since $uwy$ is in the language, $(p, q) = (r, s)$.
+        But removing $v$ and $x$ will change the number of $a$s and $b$s
+        in only one of the blocks, so $uwy \ne a^p b^q a^p b^q$.
+    \end{itemize}
+\end{solution}
+
+\section{Closure properties} \label{sec:cfl:closure}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        & Closed? \\
+        \midrule
+        Union & \cmark \\
+        Intersection & \xmark \\
+        Complement & \xmark \\
+        Concatenation & \cmark \\
+        \bottomrule
+    \end{tabular}
+    \caption{Closure properties of CFLs.}
+    \label{tab:cfl:closure}
+\end{table}
+We have the following closure properties for CFLs.
+\begin{theorem}
+    The class of context-free languages is closed under union and
+    concatenation.
+\end{theorem}
+\begin{proof}
+    Let $G_1 = (N_1, A, S_1, P_1)$ and $G_2 = (N_2, A, S_2, P_2)$ be CFGs
+    for $L_1$ and $L_2$.
+    Let $N = N_1 \cup N_2 \cup \set{S}$, where $S$ is a new start symbol.
+    Let $G = (N, A, S, P)$, where \[
+        P = P_1 \cup P_2 \cup \set{S \to S_1 \mid S_2}.
+    \] Then $G$ is a CFG for $L_1 \cup L_2$.
+\end{proof}

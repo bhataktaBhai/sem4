@@ -1,4 +1,98 @@
-\lecture{04}{Sun 04 Feb '24}{}
+\lecture{04}{Tue 16 Jan '24}{}
+We get several results from this exercise.
+The probability of ever hitting $-1$ is \begin{align*}
+    1 - \Pr_0(T_{-1} = \infty) &= \lim_{s \uparrow 1} G(s) \\
+        &= \frac{1 - \sqrt{1 - 4pq}}{2p} \\
+        &= \frac{1 - \abs{2p - 1}}{2p} \\
+        &= \begin{cases}
+            1 & \text{if the walk is left-biased,} \\
+            \frac{q}{p} & \text{otherwise.}
+        \end{cases} \\
+        &= \frac{q}{p} \wedge 1
+\end{align*}
+Another way to see the left-biased case is to note that $X_n$'s are sums of
+iid $\mathrm{Ber}_{\pm}(p)$ random variables, and so by the strong law of
+large numbers, \[
+    \frac{X_n}{n} \asto p - q.
+\] Thus if $p < q$, then $X_n \asto -\infty$.
+
+\begin{exercise}
+    Consider the SRW($p$) on $\Z$ started at the origin.
+    Show that $T_{-2} \eqd \tau_1 + \tau_2$, where $\tau_1$ and $\tau_2$ are
+    iid copies of $T_{-1}$.
+\end{exercise}
+\begin{solution}
+    \begin{align*}
+        \E_0[s^{T_{-2}}] &= \E_0[s^{T_{-2}} \1{T_{-1} < \infty}] \\
+            &= \sum_m \E_0[s^{T_{-2}} \1{T_{-1} = m}] \\
+            &= \sum_m \Pr_0(T_{-1} = m) \E_{-1}[s^{m + T_{-2}}] \\
+            &= \sum_m \Pr_0(T_{-1} = m) s^m \E_{-1}[s^{T_{-2}}] \\
+            &= \E_0[s^{T_{-1}}] \sum_m \Pr_0(T_{-1} = m) s^m \\
+            &= G(s)^2
+    \end{align*}
+    On the other hand, $\E_0[s^{\tau_1 + \tau_2}] = \E_0[s^{\tau_1}]^2
+    = G(s)^2$ by independence.
+
+    Thus, $T_{-2} \eqd \tau_1 + \tau_2$ by \cref{thm:pgf}.
+\end{solution}
+
+\begin{exercise}
+    Consider the SRW($p$) on \Z\ started at the origin.
+    Find $\Pr_0(T_{-1} = n)$, $n \in \N$.
+\end{exercise}
+\begin{solution}
+    We have $G(s) = \frac{1-\sqrt{1-4pqs^2}}{2ps}$.
+    We first need a nice expression for $\binom{1/2}{k}$ in order to
+    use the binomial theorem.
+    \begin{align*}
+        \binom{1/2}{k}
+        &= \frac{\frac12(\frac12 - 1) \dots (\frac12 - k + 1)}{k!} \\
+        &= \frac1{2^k} \frac{1(1 - 2) \dots (1 - 2k + 2)}{k!} \\
+        &= \frac{(-1)^{k-1}}{2^k} \frac{(2k - 3)!!}{k!}
+        \intertext{We can rewrite $(2k-3)!!$ as}
+        (2k-3)!! &= \frac{(2k-3)!}{(2k-4)!!} \\
+                 &= \frac{(2k-3)!}{2^{k-2} (k-2)!}
+        \intertext{so that}
+        \binom{1/2}{k}
+        &= \frac{(-1)^{k-1}}{2^{2k-2}} \frac{(2k - 3)!}{k! (k-2)!} \\
+        &= \frac{(-1)^{k-1}}{2^{2k-2} k} \binom{2k-3}{k-2}
+        \intertext{but multiplying by $\frac{2k-2}{2(k-1)}$ yields an even
+        nicer}
+        &= \frac{(-1)^{k-1}}{2^{2k-1}} \frac{1}{k} \binom{2k-2}{k-1}
+    \end{align*}
+    The expression doesn't make sense for $k = 0$, for which the coefficient
+    is $1$, and the derivation doesn't make sense for $k = 1$, but for which
+    the expression happens to match the coefficient.
+
+    But if we look closely, we see that this is just \[
+        \frac{(-1)^{k-1}}{2^{2k-1}} C_{k-1}
+    \] where $C_{k-1}$ is the $(k-1)$th
+    \href{https://en.wikipedia.org/wiki/Catalan_number}{Catalan number}!
+
+    From the binomial theorem, \begin{align*}
+        (1 - x)^{\frac12} &= \sum_{k=0}^{\infty} \binom{1/2}{k} (-x)^k \\
+            &= 1 - \sum_{k=1}^{\infty} \frac1{2^{2k-1}} C_{k-1} x^k
+        \shortintertext{but more interestingly,}
+        (1 - 4x)^{\frac12} &= 1 - 2 \sum_{k=1}^{\infty} C_{k-1} x^k
+    \end{align*}
+    In fact, this gives that \[
+        \frac{1 - \sqrt{1 - 4x}}{2x} \text{ is the generating function for }
+        (C_k)_{k \in \N}.
+    \] Getting back to the problem at hand, we have \begin{align*}
+        G(s) &= \frac{1 - \sqrt{1 - 4pqs^2}}{2ps} \\
+            &= qs \sum_{k=0}^{n} C_k (pqs^2)^k
+    \end{align*}
+    So we have \[
+        \Pr_0(T_{-1} = n) = \begin{cases}
+            0 & \text{if $n$ is even} \\
+            p^k q^{k+1} C_k & \text{if $n = 2k+1$}
+        \end{cases}
+    \] In the case of $p = q = \frac12$, this in fact proves that the
+    number of SRW paths of length $2n$ from the origin to the origin, that
+    never go below the origin, is the $n$th Catalan number.
+    Why? Because each such path can be extended bijectively to a path of
+    length $2n+1$ that hits $-1$ for the first time at time $2n+1$.
+\end{solution}
 \section{Transience \& Recurrence} \label{sec:tnr}
 \begin{definition}
     Let $(X_n)_{n \in \N}$ be $MC_S(\mu_0, P)$.
@@ -18,13 +112,13 @@
     \end{align*}
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{thm:tnr:G}
     For all $x, y \in S$, $G(x, y) = \sum_{n \in \N} p_{xy}^{(n)}$.
 \end{lemma}
 \begin{proof}
     We write $N_y$ as $\sum_{n=1}^{\infty} \1{X_n = y}$.
     Then, \begin{align*}
-        G(x, y) &= \E_x\left[\sum_{n=1}^{\infty} \1{X_n = y}\right] \\
+        G(x, y) &= \E_x\!\!\left[\sum_{n=1}^{\infty} \1{X_n = y}\right] \\
                 &= \sum_{n=1}^{\infty} \E_x[\1{X_n = y}] \tag{MCT} \\
                 &= \sum_{n=1}^{\infty} \Pr_x(X_n = y) \\
                 &= \sum_{n=1}^{\infty} p_{xy}^{(n)}
@@ -68,7 +162,8 @@ Now \begin{align*}
                 \tag{Strong Markov property}
         \shortintertext{and by induction,}
         \Pr_x(N_y \ge m) &= \Pr_x(T_y^{(m)} < \infty) \\
-            &= f_{xy} f_{yy}^{m-1}.
+                      &= f_{xy} f_{yy}^{m-1}. \tag{$*$}
+                      \label{eq:tnr:prxny}
     \end{align*}
     The result follows by taking the difference.
     Or more directly, \[
@@ -116,6 +211,11 @@ Now \begin{align*}
                     &= f_{xy} (1 - f_{yy}) \frac{1}{(1 - f_{yy})^2} \\
                     &= \frac{f_{xy}}{1 - f_{yy}}.
         \end{align*}
+        Alternatively, we use \cref{eq:tnr:prxny} to write \begin{align*}
+            G(x, y) &= \sum_{m=1}^{\infty} \Pr_x(N_y \ge m) \\
+                    &= \sum_{m=1}^{\infty} f_{xy} f_{yy}^{m-1} \\
+                    &= \frac{f_{xy}}{1 - f_{yy}}.
+        \end{align*}
         \item Since $y$ is recurrent, $f_{yy} = 1$.
         By the previous theorem, for any $x \in S$, \[
             \Pr_x(N_y = m) = \begin{cases}
@@ -134,7 +234,7 @@ Now \begin{align*}
 
 \begin{definition}
     A DTMC is said to be \emph{recurrent} (resp. \emph{transient}) if all
-    states are recurrent (resp. transient).
+    its states are recurrent (resp. transient).
 \end{definition}
 
 \begin{theorem}
@@ -174,4 +274,14 @@ In other words, $f_{xy} > 0$.
     Thus $y \leadsto x$ with $f_{yx} = 1$.
     If $y$ is recurrent, then $f_{xy}$ would be $1$ by the same argument.
     Thus we need only show that $y$ is recurrent.
+    We can show this by showing that $G(y, y) = +\infty$.
+    Let $p_{yx}^{(n_1)} > 0$ and $p_{xy}^{(n_2)} > 0$.
+    \begin{align*}
+        G(y, y) &\ge \smashoperator{\sum_{m=n_1+n_2+1}^{\infty}}
+                    p_{yy}^{(m)} \\
+                &\ge \sum_{r=1}^{\infty} p_{yx}^{(n_1)}
+                    p_{xx}^{(r)} p_{xy}^{(n_2)} \\
+                &= p_{yx}^{(n_1)} p_{xy}^{(n_2)} G(x, x) \\
+                &= +\infty. \qedhere
+    \end{align*}
 \end{proof}

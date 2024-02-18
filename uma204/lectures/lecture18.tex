@@ -1,0 +1,90 @@
+\lecture{18}{Mon 12 Feb '24}{}
+\begin{proof}[Proof of \cref{thm:sequences:R:limsup} (continued)]
+    Let $\alpha^* = \sup E$.
+    \begin{enumerate}[label=\textbf{(\arabic*)}]
+        \setcounter{enumi}{2}
+        \item Suppose not.
+        Let $x > \sup E$ such that for every $k \in \N$,
+        there exists an $m(k) \ge k$ such that $x_{m(k)} \ge x$.
+        Let $n_0 = m(0)$, and for $l \ge 1$, let $n_k = m(n_{k-1} + 1)$.
+        Then $n_0 < n_1 < n_2 < \cdots$ and $x_{n_k} \ge x$ for all $k$.
+        Thus $\gamma = (x_{n_k})_k$ is a subsequence of $(x_n)_n$, but all
+        subsequential limits of $\gamma$ are at least $x > \sup E$.
+        But a subsequential limit of $\gamma$ is a subsequential limit of
+        $(x_n)_n$, so $\sup E \ge x$, a contradiction.
+        \item Suppose $y < z$ in $\wbar{\R}$ satisfy both (2) and (3).
+        That is, both $y$ and $z$ are sequential limits of $(x_n)_n$,
+        and if $x > y$ (or $x > z$), then there exists an $N \in \N$ such
+        that $x_n < x$ for all $n \ge N$.
+
+        Choose \[
+            x = \begin{cases}
+                0 & \text{if } y = -\infty, z = +\infty \\
+                z - 1 & \text{if } y = -\infty, z \in \R \\
+                y + 1 & \text{if } y \in \R, z = +\infty \\
+                \frac{y + z}{2} & \text{if } y, z \in \R
+            \end{cases}
+        \] In each case, $y < x < z$.
+        By (3) applied to $x$, all but finitely many $x_n$ are less than
+        $x$.
+        By (2) applied to $z$, infinitely many $x_n$ are greater than $x$.
+        Contradiction.
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}
+    \leavevmode
+    \begin{enumerate}[label=(\arabic*)]
+        \item The following sequences admit limits in $\wbar{\R}$.
+        \begin{align*}
+            y_n &= \sup\set{x_k : k \ge n} \\
+            z_n &= \inf\set{x_k : k \ge n}
+        \end{align*}
+        \item Moreover, \begin{align*}
+            \limsup_{n \to \infty} x_n &= \lim_{n \to \infty} y_n \\
+            \liminf_{n \to \infty} x_n &= \lim_{n \to \infty} z_n
+        \end{align*} where limits are taken in $\wbar{\R}$.
+    \end{enumerate}
+\end{theorem}
+\begin{remark}
+    Let $(A_n)_{n \in \N}$ be a sequence of subsets of $X$.
+    Define \begin{align*}
+        A^* = \limsup_{n \to \infty} A_n
+            &= \bigcap_{n \in \N} \bigcup_{k \ge n} A_k \\
+        A_* = \liminf_{n \to \infty} A_n
+            &= \bigcup_{n \in \N} \bigcap_{k \ge n} A_k
+    \end{align*}
+    Then $x \in A^*$ iff $x$ is in infinitely many $A_n$,
+    and $x \in A_*$ iff $x$ is in all but finitely many $A_n$.
+
+    We say that $(A_n)_{n \in \N}$ \emph{converges} if $A^* = A_*$.
+
+    We can characterize this using indicator functions.
+    \begin{align*}
+        \1_{A^*} &= \limsup_{n \to \infty} \1_{A_n} \\
+        \1_{A_*} &= \liminf_{n \to \infty} \1_{A_n}
+    \end{align*}
+    which is to say that for each $x \in X$, \begin{align*}
+        \1_{A^*}(x) &= \limsup_{n \to \infty} \1_{A_n}(x) \\
+        \1_{A_*}(x) &= \liminf_{n \to \infty} \1_{A_n}(x)
+    \end{align*}
+\end{remark}
+\begin{proof}
+    $(y_n)_n$ is a decreasing sequence, so it has a limit in $\wbar{\R}$,
+    since if it is not bounded, it converges to $-\infty$.
+
+    Let $y = \lim_{n \to \infty} y_n$.
+    Since $(y_n)$ is decreasing, given $k \in \N$, there exists an
+    $N(k) \in \N$ such that for all $n \ge N(k)$, \[
+        y \le y_n < y + \frac1k.
+    \] But $y_n = \sup \set{x_i : i \ge n}$, so for all $n \ge N(k)$,
+    there exists an $m(k, n)$ such that
+    $y_n - \frac1k < x_{m(k, n)} \le y_n$.
+
+    Let \begin{align*}
+        n_1 &= m(1, N(1)) \\
+        n_2 &= m(2, n_1 \vee N(2) + 1) > n_1 \vee N(2) \\
+           &\mathrel{\makebox[\widthof{=}]{\vdots}} \\
+        n_k &= m(k, n_{k-1} \vee N(k) + 1) > n_{k-1} \vee N(k)
+    \end{align*}
+\end{proof}

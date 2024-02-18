@@ -1,0 +1,162 @@
+\lecture{06}{Thu 18 Jan '24}{}
+\section{Non-deterministic Finite Automata} \label{sec:nfa}
+\begin{examples}
+    \item An NFA for ``contains $abb$ as a subword''
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (e) {$\epsilon$};
+            \node[state] (a) [right=of e] {$a$};
+            \node[state] (ab) [right=of a] {$ab$};
+            \node[state, accepting] (abb) [right=of ab] {$abb$};
+
+            \path[->]
+                (e) edge node {$a$} (a)
+                    (e) edge [loop above] node {$a$, $b$} (e)
+                (a) edge node {$b$} (ab)
+                (ab) edge node {$b$} (abb)
+                (abb) edge [loop above] node {$a$, $b$} (abb);
+        \end{tikzpicture}
+    \end{center}
+    \item An NFA for ``last symbol is $b$''
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (s) {$s$};
+            \node[state, accepting] (f) [right=of s] {$f$};
+            \path[->]
+                (s) edge [loop above] node {$a$, $b$} (s)
+                (s) edge node {$b$} (f);
+        \end{tikzpicture}
+    \end{center}
+\end{examples}
+\begin{exercise}
+    Give an NFA for the language of strings over $\set{a, b}$ in which the
+    third-last symbol is a $b$.
+\end{exercise}
+\begin{solution} \leavevmode
+    We give an NFA $\mathcal{B}$ below, and claim that \[
+        L(\mathcal{B}) = \set{ubxy \in \set{a, b}^*
+            \mid u \in \set{a, b}^* \land x, y \in \set{a, b}} \eqqcolon L.
+    \]
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (e) {$\epsilon$};
+            \node[state] (b) [right=of e] {$b$};
+            \node[state] (bx) [right=of b] {$bx$};
+            \node[state, accepting] (bxy) [right=of bx] {$bxy$};
+
+            \path[->]
+                (e) edge node {$b$} (b)
+                    (e) edge [loop above] node {$a$, $b$} (e)
+                (b) edge node {$a$, $b$} (bx)
+                (bx) edge node {$a$, $b$} (bxy);
+        \end{tikzpicture}
+    \end{center}
+    Suppose $w = ubxy \in L$.
+    A valid path of $\mathcal{B}$ on $w$ is as follows: \[
+        \epsilon \follows{u} \epsilon \follows{b} b
+        \follows{x} bx \follows{y} bxy.
+    \]
+    Now suppose $w \in L(\mathcal{B})$.
+    Any path to $(bxy)$ must pass through $(b)$ and $(bx)$ consecutively.
+    Hence, $w = ubxy$ for some $u \in \set{a, b}^*$ and
+    $x, y \in \set{a, b}$.
+\end{solution}
+
+\section{NFAs Formally} \label{sec:nfa:formal}
+\begin{definition}
+    An NFA over an alphabet $A$ is a tuple $(Q, S, \Delta, F)$ where
+    \begin{itemize}
+        \item $Q$ is a finite set of states,
+        \item $S \subseteq Q$ is a set of start states,
+        \item $\Delta\colon Q \times A \to 2^Q$ is a transition function
+        that returns a set of states for each state-symbol pair, and
+        \item $F \subseteq Q$ is a set of final states.
+    \end{itemize}
+    We define the relation $p \follows{a} q$ which says there is a path
+    from state  $p$ to state $q$ labelled by $w$, as
+    \begin{itemize}
+        \item $p \follows{\epsilon} p$ for all $p \in Q$, and
+        \item $p \follows{ua} q$ if there is a state $r \in Q$ such that
+        $p \follows{u} r$ and $q \in \Delta(r, a)$.
+    \end{itemize}
+    We define the language accepted by an NFA $\mathcal{A}$ as \[
+        L(\mathcal{A}) \coloneqq \set{w \in A^* \;\big\vert\; s
+        \follows{w} f \text{ for some } s \in S \text{ and } f \in F}.
+    \]
+\end{definition}
+
+\begin{exercise}
+    Convert the ``contains $abb$ as a subword'' NFA to a DFA.
+\end{exercise}
+\begin{solution} \leavevmode
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (e) {$\epsilon$};
+            \node[state] (a) [right=of e] {$a$};
+            \node[state] (ab) [right=of a] {$ab$};
+            \node[state, accepting] (abb) [right=of ab] {$abb$};
+
+            \path[->]
+                (e) edge node {$a$} (a)
+                    (e) edge [loop above] node {$b$} (e)
+                (a) edge node {$b$} (ab)
+                    (a) edge [loop above] node {$a$} (a)
+                (ab) edge node {$b$} (abb)
+                    (ab) edge [bend left] node {$a$} (a)
+                (abb) edge [loop above] node {$a$, $b$} (abb);
+        \end{tikzpicture}
+    \end{center}
+    A more illustrative answer is as follows:
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (0) {$0$};
+            \node[state] (01) [right=of 0] {$01$};
+            \node[state] (02) [right=of 01] {$02$};
+            \node[state, accepting] (03) [below left=of 02] {$03$};
+            \node[state, accepting] (013) [below right=of 03] {$013$};
+            \node[state, accepting] (023) [below left=of 03] {$023$};
+
+            \path[->]
+                (0) edge node {$a$} (01)
+                    (0) edge [loop above] node {$b$} (0)
+                (01) edge node[below] {$b$} (02)
+                    (01) edge [loop above] node {$a$} (01)
+                (02) edge node {$b$} (03)
+                    (02) edge [bend right] node[above] {$a$} (01)
+                (03) edge [in=120, out=150, loop] node {$b$} (03)
+                    (03) edge node {$a$} (013)
+                (013) edge [loop right] node {$a$} (013)
+                (013) edge node[above] {$b$} (023)
+                (023) edge [bend right] node[below] {$a$} (013)
+                    (023) edge node {$b$} (03);
+        \end{tikzpicture}
+    \end{center}
+    This illustrates the idea of the subset construction.
+\end{solution}
+
+\begin{theorem}[Closure under concatenation] \label{thm:dfa:regular:closure2}
+    The class of regular languages is closed under concatenation.
+\end{theorem}
+\begin{proof}
+    Let $A$ and $B$ be regular languages accepted by DFAs $\mathcal{A}$ and
+    $\mathcal{B}$ respectively, with a disjoint set of states.
+
+    We construct an NFA $\mathcal{W}$ for $AB$ as follows:
+    \begin{itemize}
+        \item $Q = Q_{\mathcal{A}} \cup Q_{\mathcal{B}}$;
+        \item $S = \set{s_{\mathcal{A}}, s_\mathcal{B}}$ if
+            $\epsilon \in B$, and $S = \set{s_\mathcal{A}}$ otherwise;
+        \item $F = F_\mathcal{B}$;
+        \item $\Delta(q, a) = \begin{cases}
+            \set{\delta_\mathcal{B}(q, a)}
+                & \text{if } q \in Q_\mathcal{B}, \\
+            \set{\delta_\mathcal{A}(q, a)}
+                & \text{if } q \in A \text{ and }
+                    \delta_\mathcal{A}(q, a) \notin F_A, \\
+            \set{\delta_\mathcal{A}(q, a), s_\mathcal{B}}
+                & \text{otherwise.}
+        \end{cases}$
+    \end{itemize}
+    This accepts the language $AB$.
+    Thus $AB$ is regular.
+\end{proof}

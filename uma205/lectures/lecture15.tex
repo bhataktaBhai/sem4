@@ -1,0 +1,110 @@
+\lecture{15}{Mon 05 Feb '24}{}
+\textbf{Recall:}
+Let $C_n$ be the number of valid words with $n$ pairs of parentheses.
+We had derived the ``recurrence'' \[
+    C_{n+1} = \sum_{k=0}^{n} C_k C_{n-k}
+\] Let $C(x)$ be the ogf of $(C_n)_{n \in \N}$.
+Then the RHS has ogf $C(x)^2$ and the LHS has the ogf $\frac{C(x) - 1}{x}$
+(exercise).
+\begin{solution}
+    The RHS is by the product formula.
+    For the LHS, let $C_{+1}(x)$ be the ogf of $(C_{n+1})_n$.
+    That is, \begin{align*}
+        C_{+1}(x) &= \sum_{n = 0}^{\infty} C_{n+1} x^n \\
+        &= \frac1x \sum_{n=0}^{\infty} C_{n+1} x^{n+1} \\
+        &= \frac1x \sum_{n=1}^{\infty} C_n x^n \\
+        &= \frac1x (C(x) - 1)
+    \end{align*} since $C_0 = 1$ (the empty word).
+\end{solution}
+
+So \begin{align*}
+    C(x) - 1 = x C(x)^2 \\
+    C(x) = \frac{1 \pm \sqrt{1 - 4x}}{2x}
+\end{align*}
+The positive root is not a formal power series,
+so $C(x) = \frac{1 - \sqrt{1 - 4x}}{2x}$.
+
+\begin{exercise*}
+    Use the binomial theorem to get \[
+        C_n = \frac{1}{n+1} \binom{2n}{n}.
+    \] These are called the \emph{Catalan numbers}, since they were first
+    studied by Euler.
+\end{exercise*}
+\begin{solution}
+    \begin{align*}
+        C(x)
+        &= \frac{1 - (1 + \sum_{n=1}^{\infty} \binom{1/2}{n} (-4x)^n}{2x} \\
+        &= \frac12 \sum_{n=0}^{\infty} \binom{1/2}{n+1} (-1)^n 4^{n+1} x^n \\
+        \intertext{so by \cref{thm:half_choose},}
+        &= \frac12 \sum_{n=0}^{\infty} \frac{(-1)^n}{(n+1)2^{2n+1}} \binom{2n}{n}
+            (-1)^n 4^{n+1} x^n \\
+        &= \sum_{n=0}^{\infty} \frac{1}{n+1} \binom{2n}{n} x^n.
+    \end{align*}
+    which gives the desired result.
+\end{solution}
+
+\begin{definition*}[Exponential generating function] \label{def:egf}
+    Given a sequence $(a_n)_{n \in \N}$, the formal power series
+    $A(x) = \sum_{n \in \N} a_n \frac{x^n}{n!}$ is called the
+    \emph{exponential generating function} (egf) of $(a_n)_{n \in \N}$.
+\end{definition*}
+\begin{examples}
+    \item The egf of $(1)_{n \in \N}$ is $e^x$.
+    \item Let $a_0 = 1$, $a_{n+1} = (n + 1)(a_n - n + 1)$ for $n \ge 0$.
+    Then its egf is \begin{align*}
+        A(x) &= \frac{1}{1 - x} + x e^{x} \\
+        \implies a_n &= n! + n
+    \end{align*}
+\end{examples}
+
+\begin{exercise*}[Product formula] \label{thm:egf:product}
+    Let $A$ and $B$ be egfs for $(a_n)_\N$ and $(b_n)_\N$, respectively.
+    Then the sequence $(c_n)_\N$ which has the egf $AB$ is given by \[
+        c_n = \sum_{k=0}^{n} \binom{n}{k} a_k b_{n-k}.
+    \]
+\end{exercise*}
+
+\begin{theorem*}[Exponential formula] \label{thm:egf:formula}
+    Let $a_n$ be the number of ways to build some structure on $[n]$ with
+    $a_0 = 0$ and $h_n$ be the number of ways to form a set partition of
+    $[n]$ and then build the same structure on its blocks, with $h_0 = 1$.
+    If $A$ and $H$ are the egfs of $(a_n)_n$ and $(h_n)_n$ respectively,
+    then \[
+        H(x) = e^{A(x)}.
+    \]
+\end{theorem*}
+\begin{proof}
+    The number of ways of partitioning $[n]$ into $k$ blocks and building
+    the same structure has egf $\frac{A(x)^k}{k!}$ by the product formula
+    (since order doesn't matter).
+    Thus \[
+        H(x) = 1 + \sum_{k=1}^{\infty}\frac{A(x)^k}{k!} = e^{A(x)}. \qedhere
+    \]
+\end{proof}
+\begin{examples}
+    \item Let $a_n$ be the number of sets of $[n]$.
+    That is, $a_n = 1$ for all $n$ except $a_0 = 0$.
+    Then $A(x) = e^x - 1$.
+    This gives $H(x) = e^{e^{x} - 1}$, which is the egf of $B_n$.
+    \item Let $i_n$ be the number of involutions in $S_n$.
+    That is, \[
+        i_n = \#\set{\sigma \in S_n \mid \sigma = \sigma^{-1}}.
+    \]
+    We had shown earlier that an involution has cycle type
+    $\angled{1^{a_1}, 2^{a_2}}$.
+
+    The structure here is to have only one- and two-cycles.
+    So \[
+        a_n = \begin{cases}
+            1 & \text{if } n = 1, \\
+            1 & \text{if } n = 2, \\
+            0 & \text{otherwise}.
+        \end{cases}
+    \] This gives $A(x) = x + \frac{x^2}{2}$.
+    So by the exponential formula, the number of involutions has egf \[
+        H(x) = \sum_{n \in \N} i_n \frac{x^n}{n!} = e^{x + \frac{x^2}{2}}.
+    \]
+\end{examples}
+
+\chapter{Graph Theory}
+$\langle$Insert oft-repeated story about Königsberg bridges.$\rangle$

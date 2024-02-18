@@ -1,0 +1,142 @@
+\lecture{18}{Mon 12 Feb '24}{}
+We aim to generalise Cayley's formula.
+\begin{definition}[Subgraph] \label{def:graph:subgraph}
+    Let $G = (V, E)$.
+    A \emph{subgraph} of $G$ is a graph $G' = (V', E')$ such that
+    $V' \subseteq V$ and $E' \subseteq E \cap 2^{V'}$.
+\end{definition}
+
+\begin{definition}[Spanning tree] \label{def:graph:spanning_tree}
+    A \emph{spanning tree} $T$ of a graph $G = (V, E)$ is a subgraph with
+    vertex set $V$ such that $T$ is a tree.
+\end{definition}
+\begin{example}
+    A spanning tree of the complete graph $K_5$ with vertex set $[5]$ has
+    the edges $\set{1, 2}, \set{2, 3}, \set{3, 4}, \set{4, 5}$.
+\end{example}
+
+\begin{definition}[Complete graph] \label{def:graph:complete}
+    The \emph{complete graph} $K_n$ is the graph on $n$ vertices with
+    an edge between every pair of vertices.
+\end{definition}
+In the language of spanning trees, Cayley's formula states that the number
+of spanning trees of $K_n$ is $n^{n-2}$.
+
+\begin{definition*}[Laplacian] \label{def:graph:laplacian}
+    The \emph{Laplacian} of a graph $G = (V, E)$ is the matrix given by
+    $L = D - A$, where $A$ is the adjacency matrix of $G$ and
+    $D = \diag(\degree(v_1), \dots, \degree(v_n))$.
+
+    The \emph{reduced Laplacian} $L_0$ is obtained by deleting the last row
+    and column of $L$.
+\end{definition*}
+
+\begin{example}
+    Let $G$ be given by
+    \begin{center}
+        \begin{tikzpicture}
+            \graph[nodes={circle, draw}]{
+                1 -- {2, 4};
+                1 -- 3;
+                2 -- 4;
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{example}
+
+\begin{theorem*}[Kirchoff's matrix tree theorem] \label{thm:graph:kirchoff}
+    Let $G$ be a graph and $L_0$ its reduced Laplacian.
+    Then the number of spanning trees of $G$ is given by $\det(L_0)$.
+\end{theorem*}
+
+\begin{definition}
+    Let $G = (V, E)$  be a graph, $V = [n]$, and $m = \abs{E}$, with the
+    edges labelled by $[m]$.
+    Suppose the edges of $G$ are oriented in some way.
+    Then the \emph{incidence matrix} $\mcI(G) = \mcI$ is the $n \times m$
+    matrix given by \[
+        \mcI_{v,e} = \begin{cases}
+            1 & \text{if } v \text{ is the head of } e, \\
+            -1 & \text{if } v \text{ is the tail of } e, \\
+            0 & \text{otherwise}.
+        \end{cases}
+    \]
+\end{definition}
+\begin{exercise*}
+    Let $G = (V, E)$ be a graph with Laplacian $L$.
+    Let $\mcI_0$ be the incidence matrix with the last row removed, for any
+    orientation of the edges of $G$.
+    Then, independent of the choice of orientation,
+    \begin{itemize}
+        \item $L = \mcI \mcI^\top$,
+        \item $L_0 = \mcI_0 \mcI_0^\top$.
+    \end{itemize}
+\end{exercise*}
+
+\begin{theorem*}[Cauchy-Binet formula] \label{thm:cauchy-binet}
+    Let $A$ be an $n \times m$ matrix and $B$ an $m \times n$ matrix with
+    $n < m$.
+    For an $n$-sized subset $S$ of $[m]$,
+    let $A_{[n], S}$ (resp. $B_{S, [n]}$) be the
+    $n \times n$ submatrix of $A$ (resp. $B$)
+    formed by choosing the columns of $A$ (resp. rows of $B$)
+    with indices in $S$.
+    Then \[
+        \det AB = \sum_{S \in \binom{[m]}{n}} \det A_{[n],S} \det B_{S,[n]}.
+    \]
+\end{theorem*}
+
+\begin{proof}[Proof of \cref{thm:graph:kirchoff}]
+    We will use the face that $L_0 = \mcI_0 \mcI_0^\top$ and Cauchy-Binet.
+    Fix a subset $S$ of $[m]$, \ie, edges in $G$, of size $n-1$.
+    Let $X = (\mcI_0)_{[n-1], S}$
+    Then the summand on the right-hand side of Cauchy-Binet for
+    the determinant of $L_0 = \mcI_0 \mcI_0^\top$ is
+    $\det X \det X^\top = (\det X)^2$.
+
+    We claim that $(\det X)^2 = [(V, S) \text{ is a tree}]$.
+
+    Suppose there exists a vertex $i$ of degree $1$ in $G' = (V, S)$.
+    Then the $i$\textsuperscript{th} row in $X$ has only one non-zero
+    entry, either $1$ or $-1$.
+    Expand $\det X$ using that row and use the induction hypothesis.
+    The remaining graph is a tree iff $G'$ is a tree.
+
+    If there are no vertices of degree $1$ in $G'$, then $G'$ cannot be
+    a tree.
+    Since $G'$ has $n - 1$ edges, it is disconnected and must contain a
+    cycle.
+    The columns of $X$ corresponding to the cycle must be linearly
+    dependent, so $\det X = 0$.
+
+    Thus the claim is proved, and therefore
+    $\det L_0 = \det \mcI_0 \mcI_0^\top$ gets a contribution of $1$ from
+    each spanning tree of $G$.
+\end{proof}
+\begin{corollary*}[Cayley's formula] \label{thm:graph:cayley}
+    The number of spanning trees of $K_n$ is $n^{n-2}$.
+\end{corollary*}
+\begin{proof}
+    Let $G = K_n$.
+    Then \begin{align*}
+        \det L_0 &= \det \begin{pmatrix}
+            n-1 & -1 & \cdots & -1 \\
+            -1 & n-1 & \cdots & -1 \\
+            \vdots & \vdots & \ddots & \vdots \\
+            -1 & -1 & \cdots & n-1
+        \end{pmatrix}_{(n-1) \times (n-1)} \\[1em]
+        &= \det \begin{pmatrix}
+            1 & 1 & \cdots & 1 \\
+            -1 & n-1 & \cdots & -1 \\
+            \vdots & \vdots & \ddots & \vdots \\
+            -1 & -1 & \cdots & n-1
+        \end{pmatrix} \\[1em]
+        &= \det \begin{pmatrix}
+            1 & 1 & \cdots & 1 \\
+            0 & n & \cdots & 0 \\
+            \vdots & \vdots & \ddots & \vdots \\
+            0 & 0 & \cdots & n
+        \end{pmatrix} \\
+        &= n^{n-2}. \qedhere
+    \end{align*}
+\end{proof}

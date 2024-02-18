@@ -1,11 +1,27 @@
+\setcounter{chapter}{-1}
+\chapter{The Course}
 \lecture{01}{Tue 02 Jan '24}{}
+
+\textbf{Instructor:} Prof.~Deepak~D'Souza\\
+\textbf{Lecture hours:} Tuesdays and Thusdays 11:30--12:50\\
+\textbf{Course Website:} \url{https://www.csa.iisc.ac.in/~deepakd/atc-2024/}
+
+\section*{Grading}
+\begin{itemize}
+    \item Mid-semester Exam: 20\%
+    \item Assignments + Quizzes + Seminar: 40\%
+    \item End-semester Exam: 40\%
+\end{itemize}
+
+\section*{Course Overview}
+We will be studying different kinds of ``automata'' or ``state machines''.
 
 A \emph{finite state automata} which accepts the language with an odd
 number of $a$'s
 \begin{center}
     \begin{tikzpicture}
         \node[state, initial] (q0) {};
-        \node[state, accepting, right of=q0] (q1) {};
+        \node[state, accepting, right=of q0] (q1) {};
         \path[->]
             (q0) edge [bend left] node {$a$} (q1)
             (q0) edge [loop above] node {$b$} (q0)

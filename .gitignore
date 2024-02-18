@@ -6,6 +6,7 @@
 **/*.synctex.gz
 **/*.aux
 **/*.dvi
+umc205/assignments/
 # **/*.pdf
 **/*.synctex*
 .DS_Store

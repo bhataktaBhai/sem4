@@ -1,0 +1,214 @@
+\lecture{17}{Fri 09 Feb '24}{}
+\begin{proposition}
+    Let $T$ be a tree.
+    \begin{enumerate}[label=(\arabic*)]
+        \item Deleting any edge in $T$ disconnects it.
+        \item Adding a new edge to $T$ creates a cycle.
+        \item For any $v, w \in V(T)$, there is a \emph{unique} path from
+        $u$ to $v$.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    (3) holds because if there is more than one path from $u$ to $v$,
+    then we must create a cycle.
+
+    For (2), suppose $\set{v, w} \notin E(T)$ and we add it.
+    By (3), there is a unique path from $v$ to $w$ in $E(T)$, and so adding
+    this edge creates a cycle.
+
+    For (1), suppose that removing an edge $\set{v, w}$ from $T$ still left
+    it connected.
+    Then we would have two paths from $v$ to $w$, contradicting (3).
+\end{proof}
+
+\begin{definition}
+    A vertex with degree $1$ is called a \emph{leaf} or
+    \emph{pendant vertex}.
+\end{definition}
+
+\begin{lemma}
+    Every tree on $n \ge 2$ vertices has at least $2$ leaves.
+\end{lemma}
+\begin{proof}
+    Let the longest path in the tree be $(v_1, \dots, v_k)$.
+    Then $v_1$ and $v_k$ must be leaves, for otherwise the path could be
+    made longer.
+\end{proof}
+
+\begin{theorem}
+    All trees on $n$ vertices have $n-1$ edges.
+\end{theorem}
+\begin{proof}
+    This is clearly true for the singleton tree.
+    Let $T$ be a tree with $n+1$ vertices, and let $l$ be a leaf (by the
+    previous lemma).
+    Removing $l$ and its incident edge gives a tree of $n$ vertices
+    with $n-1$ edges.
+    Thus, $T$ has $n$ edges.
+    Winduction.
+\end{proof}
+
+\begin{theorem}
+    Any connected graph on $n$ vertices with $n-1$ edges is a tree.
+\end{theorem}
+\begin{proof}
+    True for $n=1$.
+    %TODO
+\end{proof}
+
+\begin{definition} \label{def:forest}
+    A \emph{forest} is a graph with no cycles.
+\end{definition}
+A tree is a connected forest.
+
+We wish to count the number of trees on vertices labelled $[n]$.
+\begin{examples}
+    \item For $n = 3$, first note that there is exactly one unlabelled
+    tree,
+    \begin{center}
+        \begin{tikzpicture}
+            \graph[empty nodes, nodes={circle, draw}]{
+                1 -- 2 -- 3;
+            };
+        \end{tikzpicture}
+    \end{center}
+    This gives rise to $3$ labelled trees
+    \begin{center}
+        \begin{tikzpicture}
+            \graph[nodes={circle, draw}]{ 1 -- 2 -- 3; };
+        \end{tikzpicture}
+        \quad
+        \begin{tikzpicture}
+            \graph[nodes={circle, draw}]{ 1 -- 3 -- 2; };
+        \end{tikzpicture}
+        \quad
+        \begin{tikzpicture}
+            \graph[nodes={circle, draw}]{ 2 -- 1 -- 3; };
+        \end{tikzpicture}
+    \end{center}
+    \item For $n = 4$, there are $2$ unlabelled trees.
+    \begin{center}
+        \begin{tikzpicture}
+            \graph[empty nodes, nodes={circle, draw}]{
+                1 -- 2 -- 3 -- 4;
+            };
+        \end{tikzpicture}
+        \quad
+        \begin{tikzpicture}
+            \graph[empty nodes, nodes={circle, draw}]{
+                1 -- 2 -- 3;
+                2 -- 4;
+            };
+        \end{tikzpicture}
+    \end{center}
+    The first tree gives rise to $4!/2 = 12$ labelled trees, and the
+    second gives rise to $4$ labelled trees.
+    Total: $16$ labelled trees.
+    \item For $n = 5$, there are $3$ unlabelled trees.
+    \begin{center}
+        \begin{tikzpicture}
+            \graph[empty nodes, nodes={circle, draw}]{
+                1 -- 2 -- 3 -- 4 -- 5;
+            };
+        \end{tikzpicture}
+        \quad
+        \begin{tikzpicture}
+            \graph[empty nodes, nodes={circle, draw}]{
+                1 -- 2 -- 3 -- 4;
+                2 -- 5;
+            };
+        \end{tikzpicture}
+        \quad
+        \begin{tikzpicture}
+            \graph[empty nodes, nodes={circle, draw}]{
+                1 -- 2 -- 3;
+                2 -- 4;
+                2 -- 5;
+            };
+        \end{tikzpicture}
+    \end{center}
+    The first tree gives rise to $5!/2 = 60$ labelled trees, the second
+    to $5!/2! = 60$, and the last to $5$.
+    Total: $125$ labelled trees.
+\end{examples}
+We observe the pattern that the number of labelled trees on $n$ vertices
+is $n^{n-2}$.
+
+\begin{theorem*}[Cayley's formula] \label{thm:tree:cayley}
+    The number of trees labelled $[n]$ is $n^{n-2}$.
+\end{theorem*}
+\begin{remark}
+    The book presents a bijective proof.
+\end{remark}
+
+\begin{definition*}
+    A \emph{rooted tree} $T(v)$ is a tree with a marked vertex $v$, called
+    the \emph{root}.
+
+    A \emph{branching} of a rooted tree $T(v)$ is an orientation of $T$,
+    \ie, an assignment of directions to the edges of $T$, in
+    which every edge is directed away from $v$.
+
+    A \emph{rooted forest} is one where every component has a root,
+    and we can constuct branchings in the same way.
+\end{definition*}
+% For a rooted tree $T(v)$, there is exactly one branching.
+
+We will show that the number of branchings which is equal to the number of
+rooted trees is $n^{n-1}$.
+\begin{proof}[Proof of Cayley's formula]
+    We start with the empty graph over $n$ vertices and add edges one at a
+    time to form a branching.
+    Initially, there are $n$ components.
+    At the $k$\textsuperscript{th} stage, we will have $n - k$ components.
+    Consider the following algorithm:
+
+    \begin{center}
+        \begin{minipage}{0.8\textwidth}
+            For $1 \le k \le n - 1$, at the $k$\textsuperscript{th} stage,
+            add an oriented edge $(u, v)$ from any vertex to the root of
+            one of the components to which it does not belong.
+        \end{minipage}
+    \end{center}
+
+    At the first stage, we have $n$ choices for $u$ and $n-1$ choices for
+    $v$.
+    At the second stage, we have $n$ choices for $u$ and $n-2$ choices for
+    $v$, and so on.
+    Thus at the $k$\textsuperscript{th} stage, we have $n(n-k)$ ways of
+    forming a rooted forest.
+    Continuing this way, we get that the number of branchings is
+    $n^{n-1} (n-1)!$.
+
+    But note that every branching occurs $(n-1)!$ times, because of
+    different orderings of the edges.
+    Thus the total number of rooted trees is $n^{n-1}$.
+\end{proof}
+Cayley's formula follows as a corollary.
+(A factor of $n$ comes from the choice of root.)
+
+\begin{exercise}
+    The number of rooted forests on $n$ vertices is $(n+1)^{n-1}$.
+\end{exercise}
+\begin{proof}
+    Introduce a special vertex $v_{-1}$, and consider all rooted trees
+    on $n+1$ vertices with root $v_{-1}$.
+    Removing $v_{-1}$ gives a rooted forest on $n$ vertices, and every
+    rooted forest on $n$ vertices arises in this way.
+    Thus by Cayley's formula, the number of rooted forests on $n$
+    vertices is $(n+1)^{n-1}$.
+\end{proof}
+
+\begin{definition}
+    Let $G = (V, E)$ and $\abs{V} = n$.
+    The \emph{adjacency matrix} $A$ is the $n \times n$ matrix indexed by
+    $V$ whose entries are \[
+        A_{v,w} = \1{\set{v, w} \in E}.
+    \]
+\end{definition}
+
+\begin{proposition*}
+    Let $G$ be a graph and $A$ be its adjacency matrix.
+    Then $(A^k)_{v,w}$ counts the number of walks from $v$ to $w$ of length
+    $k$.
+\end{proposition*}

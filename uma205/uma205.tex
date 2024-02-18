@@ -1,7 +1,14 @@
 \documentclass[12pt]{report}
+\renewcommand{\thechapter}{\Roman{chapter}}
+\usepackage{titlesec}
+% \titleformat{\chapter}[display]
+%   {\normalfont\bfseries}{}{0pt}{\Large}
+\titleformat{\chapter}[display]
+{\normalfont\Huge\bfseries}{\thechapter}{20pt}{\Huge}
+
 \input{preamble}
 \usepackage{geometry}
-\geometry{a4paper, margin=1.5in}
+% \geometry{a4paper, hmargin={0.5in, 2.5in}}
 
 \title{UMA205: Introduction to Algebraic Structures}
 \author{Naman Mishra}
@@ -16,4 +23,17 @@
     \input{lectures/lecture04}
     \input{lectures/lecture05}
     \input{lectures/lecture06}
+    \input{lectures/lecture07}
+    \input{lectures/lecture08}
+    \input{lectures/lecture09}
+    \input{lectures/lecture10}
+    \input{lectures/lecture11}
+    \input{lectures/lecture12}
+    \input{lectures/lecture13}
+    \input{lectures/lecture14}
+    \input{lectures/lecture15}
+    \input{lectures/lecture16}
+    \input{lectures/lecture17}
+    \input{lectures/lecture18}
+    \input{lectures/lecture19}
 \end{document}

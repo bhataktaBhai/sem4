@@ -1,0 +1,75 @@
+\lecture{06}{Thu 25 Jan '24}{}
+\section{Perceptron} \label{sec:perceptron}
+We model a real biological neuron as an electrical circuit, so that it can
+be mimicked by silicon.
+\begin{center}
+    \begin{tikzpicture}
+        %graph
+        \node[draw, circle] (x1) at (0, 0) {$x_1$};
+        \node[draw, circle] (x2) at (0, -1) {$x_2$};
+        \node[draw, circle] (xd) at (0, -4) {$x_d$};
+        \node[draw, circle] (y) at (2, -2) {$y$};
+        \node[draw, circle] (x0) at (2, -3.5) {$x_0$};
+        \coordinate (out) at (3, -2);
+
+        \graph[use existing nodes] {
+            x1 -> y;
+            x2 -> y;
+            xd -> y;
+            x0 -> y;
+            y -> out;
+        };
+    \end{tikzpicture}
+\end{center}
+
+Let $\mcD = \set{(x^{(i)}, y^{(i)}) \mid x^{(i)} \in \mcX, y^{(i)} \in \pms,
+i \in [N]}$.
+
+Suppose there exists a $w^*$ such that \[
+    \sgn((w^*)^\top x^{(i)}) = y^{(i)} \text{ for all } i \in [N].
+\]
+We know $y^{(i)} (w^{*\top} x^{(i)}) > 0$ for all $i \in [N]$.
+
+Define the \emph{margin} of $w$ as \[
+    \gamma(w) = \min_{i \in [N]} \frac{y^{(i)} (w^\top x^{(i)})}{\norm{w}}.
+\] We want to maximize $\gamma(w)$.
+
+We do this iteratively.
+Let $w^{(0)} = 0$.
+
+Let $w^{(k)}$ be the current estimate of $w^*$.
+Let $(x^{(l)}, y^{(l)})$ be the first misclassified sample.
+Then, we update $w^{(k)}$ to $w^{(k+1)}$ by \[
+    w^{(k+1)} = w^{(k)} + y^{(l)} x^{(l)}.
+\] If no such sample exists, then we are done.
+\begin{align*}
+    \norm{w_{k+1}}^2 - \norm{w_k}^2
+        &= (w^{(k+1)} - w^{(k)})^\top (w^{(k+1)} + w^{(k)}) \\
+        &= (y^{(l)} x^{(l)})^\top (2w^{(k)} + y^{(l)} x^{(l)}) \\
+        &= 2 y^{(l)} (x^{(l)})^\top w^{(k)} + \norm{x^{(l)}}^2 \\
+        &\le \norm{x^{(l)}}^2
+    \shortintertext{and so}
+    \norm{w^{(M)}}^2
+        &\le M R^2. \tag{1}
+\end{align*}
+On the other hand, \begin{align*}
+    (w^*)^\top (w^{(k+1)} - w^{(k)})
+        &= (w^*)^\top (y^{(l)} x^{(l)}) \\
+        &\ge \norm{w^*} \gamma^*.
+    \shortintertext{and so}
+    (w^*)^\top w^{(M)}
+        &\ge M \norm{w^*} \gamma^*
+    \shortintertext{and from Cauchy-Schwarz,}
+    \big\lVert w^* \big\rVert \norm{w^{(M)}}
+        &\ge M \norm{w^*} \gamma^* \\
+    \norm{w^{(M)}}
+        &\ge M \gamma^*. \tag{2}
+\end{align*}
+Combining (1) and (2), we get \[
+    M^2 \gamma^{*2} \le M R^2 \iff M \le \frac{R^2}{\gamma^{*2}}.
+\] Thus the algorithm terminates in at most $\frac{R^2}{\gamma^{*2}}$
+iterations.
+
+\subsection{Analysis} \label{sec:analysis}
+Let $\mcD$ be a training set of size $N$ drawn i.i.d. from $P$.
+We denote this as $\mcD \sim P^N$.

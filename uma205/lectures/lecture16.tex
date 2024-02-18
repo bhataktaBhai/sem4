@@ -1,0 +1,129 @@
+\lecture{16}{Wed 07 Feb '24}{}
+\begin{definition}[Simple graph] \label{def:graph}
+    A \emph{simple graph} is an ordered pair $G = (V, E)$, where $V$ is a
+    set of \emph{vertices} and $E$ is a collection of $2$-element subsets of
+    $V$, called \emph{edges}.
+
+    A vertex $v \in V$ is said to be \emph{incident} to an edge $e \in E$ if
+    $v \in e$.
+    Vertices $v_1, v_2 \in V$ are said to be \emph{adjacent} if
+    $\set{v_1, v_2} \in E$.
+\end{definition}
+In general, we could also have \emph{loops}, which are edges from one vertex
+to itself, and \emph{multiple edges}, which are two or more edges between
+the same pair of vertices.
+One could also have \emph{weighted} edges.
+We will not define these formally, since it is too many definitions.
+
+We will also only focus on finite graphs, \ie, graphs with a finite number
+of vertices (which implies a finite number of edges).
+
+\begin{definition}[Walks, paths and trails] \label{def:graph:walk}
+    \leavevmode
+    \begin{itemize}
+        \item A \emph{walk} is a sequence of vertices
+        $(v_1, v_2, \dots, v_n)$, where $v_i$ is adjacent to $v_{i+1}$ for
+        $1 \leq i < n$.
+        \item A walk is a \emph{trail} if all the edges are distinct.
+        \begin{itemize}
+            \item A trail is said to be \emph{Eulerian} if all the edges of
+            the graph are used in it.
+        \end{itemize}
+        \item A walk is a \emph{path} if all the vertices are distinct.
+        \item A walk, trail, or path is \emph{closed} if $v_1 = v_n$.
+        \item A closed path\footnotemark\ is a \emph{cycle}.
+    \end{itemize}
+\end{definition}
+\footnotetext{How can a path be closed?
+    We mean that the first and last vertices are the same,
+    but no other vertex repeats.}
+
+\begin{definition}[Connectedness] \label{def:graph:connected}
+    A graph is \emph{connected} if there is a path between any two vertices.
+\end{definition}
+
+\begin{definition}[Degree] \label{def:graph:degree}
+    The \emph{degree} of a vertex $v$ in a graph $G = (V, E)$ (possibly
+    with loops or parallel edges) is the number of edges incident to $v$.
+    An edge from $v$ to itself counts twice.
+\end{definition}
+\begin{theorem*}[Königsberg] \label{thm:graph:euler}
+    A connected graph $G$ (possibly with loops or parallel edges) has a
+    closed Eulerian trail iff all vertices of $G$ have even degree.
+\end{theorem*}
+\begin{proof}
+    Suppose $G$ has a closed Eulerian trail.
+    Then, every time a vertex is visited, it is also left by a different
+    edge.
+    Thus each vertex has even degree.
+
+    Conversely, suppose all vertices have even degree.
+    Choose any vertex $v$ and an edge $e_1$ incident to $v$ (this exists
+    by connectedness, except in the case of the singleton graph) and
+    go to $v_1$.
+    Pick another edge $e_2$ incident to $v_1$ and go to $v_2$.
+    Continue in this way until we return to $v$, forming a closed trail
+    $C_1$.
+    This must happen, since $G$ is finite, and each vertex has even degree.
+    If $C_1$ contains every edge, we are done.
+
+    Otherwise, there must exist a vertex $w$ in $C_1$, which is incident
+    to an edge not yet visited, since the graph is connected.
+    Continue from $w$ as before to form a disjoint closed trail $C_2$.
+    We can merge this with $C_1$ to form a longer closed trail.
+
+    Continue in this way until we have used all edges.
+\end{proof}
+\begin{corollary}
+    The Königsberg bridge problem has no solution.
+\end{corollary}
+\begin{corollary}
+    A connected graph $G$ (possibly with loops or parallel edges) has an
+    Eulerian trail iff it has at most two vertices of odd degree.
+\end{corollary}
+\begin{proof}
+    First note that it is not possible for exactly one vertex to have odd
+    degree.
+
+    Suppose $G$ has an Eulerian trail.
+    If it is closed, then all vertices have even degree.
+    If not, add an edge between the first and last vertices to form a cycle,
+    and apply the theorem.
+
+    Conversely, suppose $G$ has at most two vertices of odd degree.
+    If there are none, then $G$ has a closed Eulerian trail.
+    If there are two, then add an edge between them to form a cycle,
+    and apply the theorem.
+\end{proof}
+
+\begin{definition*}[Hamiltonian path] \label{def:graph:hamiltonian}
+    A \emph{Hamiltonian path} is a cycle that visits every vertex.
+\end{definition*}
+\begin{fact*}[Dirac's theorem] \label{thm:graph:dirac}
+    If every vertex of $G$ has degree at least $n/2$, where $\abs{v} = n$,
+    then $G$ has a Hamiltonian path.
+\end{fact*}
+
+\begin{definition}[Graph isomorphism] \label{def:graph:isomorphism}
+    Two graphs $G_1 = (V_1, E_1)$ and $G_2 = (V_2, E_2)$ are said to be
+    \emph{isomorphic} if there exists a bijection $\Phi\colon V_1 \to V_2$
+    such that $\set{v_1, v_2} \in E_1$ iff
+    $\set{\Phi(v_1), \Phi(v_2)} \in E_2$.
+\end{definition}
+
+\begin{definition}[Tree] \label{def:tree}
+    A connected graph with no cycles is called a \emph{tree}.
+\end{definition}
+% \begin{example}
+%     These are all the trees with exactly $6$ vertices:
+%     % use the tikzlibrary for graphs
+%     \begin{center}
+%         \begin{tikzpicture}
+%             \graph[empty nodes, nodes={circle, draw}]
+%             { 1 -- 2 -- 3 -- 4 -- 5 -- 6; };
+%             \vspace{1em}
+%             \graph[empty nodes, nodes={circle, draw}]
+%             { 1 -- 2 -- 3 -- 4 -- 5, 3 -- 6; };
+%         \end{tikzpicture}
+%     \end{center}
+% \end{example}

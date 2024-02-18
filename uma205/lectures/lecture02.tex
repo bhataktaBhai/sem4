@@ -1,11 +1,13 @@
 \lecture{02}{Mon 08 Jan '24}{}
 
-\begin{definition}[Addition] \label{def:N:addition}
+\section{Addition} \label{sec:N:addition}
+
+\begin{definition*}[Addition] \label{def:N:addition}
     Suppose $m, n \in \N$.
     We define the binary operation $+$ by setting $0 + m = m$.
     Suppose we have defined $n + m$.
     Then we inductively define $n\pp + m = (n + m)\pp$.
-\end{definition}
+\end{definition*}
 For example, note that $1 + m = (0 + m)\pp = m\pp$.
 
 \begin{lemma} \label{thm:N:add_zero}
@@ -46,9 +48,9 @@ For example, note that $1 + m = (0 + m)\pp = m\pp$.
     by the previous lemma.
 \end{proof}
 
-\begin{problem}
+\begin{exercise}
     (Associativity) For $m, n, p \in \N$, we have $(m + n) + p = m + (n + p)$.
-\end{problem}
+\end{exercise}
 \begin{proof}
     Induct on $m$.
     $(0 + n) + p = n + p = 0 + (n + p)$. \\
@@ -62,9 +64,9 @@ For example, note that $1 + m = (0 + m)\pp = m\pp$.
     This closes the induction.
 \end{proof}
 
-\begin{problem}
+\begin{exercise}
     (Cancellation) For $m, n, p \in \N$, if $m + n = m + p$, then $n = p$.
-\end{problem}
+\end{exercise}
 \begin{proof}
     Induct on $m$.
     $0 + n = 0 + p$ implies $n = p$.
@@ -75,9 +77,9 @@ For example, note that $1 + m = (0 + m)\pp = m\pp$.
     By the inductive hypothesis, $n = p$.
 \end{proof}
 
-\begin{definition}[Positive] \label{def:positive}
+\begin{definition*}[Positive] \label{def:positive}
     A natural number is positive if it is not $0$.
-\end{definition}
+\end{definition*}
 
 \begin{proposition}
     If $a$ is positive and $b \in \N$, then $a + b$ is positive.
@@ -89,17 +91,17 @@ For example, note that $1 + m = (0 + m)\pp = m\pp$.
     natural number.
 \end{proof}
 
-\begin{problem}
+\begin{exercise}
     If $m, n$ in $\N$ with $m + n = 0$, then $m = n = 0$.
-\end{problem}
+\end{exercise}
 \begin{proof}
     Contrapositive of the previous proposition, with commutativity.
 \end{proof}
 
-\begin{problem}
+\begin{exercise}
     Let $a$ be positive.
     Then there exists a unique $b \in \N$ such that $a = b\pp$.
-\end{problem}
+\end{exercise}
 \begin{proof}
     Let $P(n)$ be that $n$ is zero or there exists a unique $b \in \N$ such that
     $n = b\pp$.
@@ -111,14 +113,14 @@ For example, note that $1 + m = (0 + m)\pp = m\pp$.
     Thus $P(n\pp)$ is true.
 \end{proof}
 
-\begin{definition}[Order] \label{def:order}
+\begin{definition*}[Order] \label{def:order}
     Let $m, n \in \N$.
     We say that $n$ is greater than or equal to $m$, written $n \ge m$ or
     $m \le n$, if $n = m + a$ for some $a \in \N$.
 
     Similarly, we say that $n$ is (strictly) greater than $m$, written $n > m$
     or $m < n$, if $n \ge m$ and $n \ne m$.
-\end{definition}
+\end{definition*}
 Note that $n\pp > n$, so there is no largest natural number.
 
 \begin{proposition} \label{thm:N:add_properties}
@@ -167,12 +169,12 @@ Note that $n\pp > n$, so there is no largest natural number.
     This completes the induction.
 \end{proof}
 
-\begin{proposition}[Strong induction] \label{thm:strong_induction}
+\begin{proposition*}[Strong induction] \label{thm:strong_induction}
     Let $m_0 \in \N$ and let $P(m)$ be a property for all $m \in \N$.
     Suppose for all $m \ge m_0$, we have the following:
     if $P(m')$ holds for all $m_0 \le m' < m$, then $P(m)$ holds.
     Then $P(m)$ holds for all $m \ge m_0$.
-\end{proposition}
+\end{proposition*}
 Note that the inductive step is vacuously true for $m = m_0$.
 \begin{proof}
     Define $Q(m)$ to be ``$P(m')$ holds for all $m_0 \le m' < m$''.
@@ -187,12 +189,12 @@ Note that the inductive step is vacuously true for $m = m_0$.
     Thus $Q(m\pp)$ holds.
 \end{proof}
 
-\begin{problem}[Backwards induction] \label{prb:back_induction}
+\begin{exercise*}[Backwards induction] \label{prb:back_induction}
     Let $m_0 \in \N$, and let $P(m)$ be a property pertaining to the natural
     numbers such that whenever $P(m\pp)$ is true, then $P(m)$ is true.
     Suppose that $P(m_0)$ is also true.
     Prove that $P(m)$ is true for all natural numbers $m \le m_0$.
-\end{problem}
+\end{exercise*}
 \begin{proof}
     Define $Q(m)$ to be ``if $P(m)$ is true, then $P(m')$ is true for all
     $m' \le m$''.
@@ -208,13 +210,15 @@ Note that the inductive step is vacuously true for $m = m_0$.
 \end{proof}
 
 From now on, we will assume the usual laws of addition.
-\begin{definition}[Multiplication] \label{def:N:multiplication}
+\section{Multiplication} \label{sec:N:multiplication}
+
+\begin{definition*}[Multiplication] \label{def:N:multiplication}
     Let $m \in \N$.
     The binary operation multiplication, denoted by $*$, is defined as follows.
     Set $0 * m = 0$.
     Then define it inductively as follows.
     If we know $n * m$, set $n\pp * m = (n * m) + m$.
-\end{definition}
+\end{definition*}
 
 \begin{lemma}
     Let $m, n \in \N$,
@@ -267,9 +271,9 @@ precedence, so that $m n + p$ means $(m * n) + p$ and not $m * (n + p)$.
     The second equality follows from the first by commutativity.
 \end{proof}
 
-\begin{problem}
+\begin{exercise}
     (Associativity) For $a, b, c \in \N$, we have $(ab)c = a(bc)$.
-\end{problem}
+\end{exercise}
 \begin{proof}
     Induct on $a$.
     $(0b)c = 0c = 0 = 0(bc)$.
@@ -282,29 +286,29 @@ precedence, so that $m n + p$ means $(m * n) + p$ and not $m * (n + p)$.
                   &= a\pp(bc)
     \end{align*} by definition.
 \end{proof}
-\begin{problem}
+\begin{exercise}
     (Order preservation) For $a, b, c \in \N$ with $a < b$ and $c \ne 0$,
     we have $ac < bc$.
-\end{problem}
+\end{exercise}
 \begin{proof}
     Induct on $c$ with base case $c = 1$.
     If $ac < bc$, then $ac + a < bc + a$ but $bc + a < bc + b$, both by order
     preservation under addition.
     By transitivity, $ac + a < bc + b$ and so $ac\pp < bc\pp$.
 \end{proof}
-\begin{problem}
+\begin{exercise}
     (Cancellation) For $a, b, c \in \N$ with $ac = bc$ and $c \ne 0$, we have
     $a = b$.
-\end{problem}
+\end{exercise}
 \begin{proof}
     From trichotomy and order preservation.
 \end{proof}
 
-\begin{proposition}[Euclidean algorithm] \label{thm:euclidean_algorithm}
+\begin{proposition*}[Euclidean algorithm] \label{thm:euclidean_algorithm}
     Let $n \in \N$ and $m$ be positive.
     Then there exist unique $q, r \in \N$ such that $n = qm + r$ and $r < m$.
     We call $q$ the quotient and $r$ the remainder.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     We first prove uniqueness.
     Suppose $n = qm + r = q'm + r'$.
@@ -324,9 +328,9 @@ precedence, so that $m n + p$ means $(m * n) + p$ and not $m * (n + p)$.
 \end{proof}
 This proposition allows us to divide.
 
-\begin{definition}[Exponentiation] \label{def:exponentiation}
+\begin{definition*}[Exponentiation] \label{def:exponentiation}
     Let $m$ be positive.
     The binary operation exponentiation can be defined inductively as
     $m ^ 0 = 1$ and $m ^ {n\pp} = m ^ n m$.
     We further define $0 ^ k = 0$ for all positive $k$.
-\end{definition}
+\end{definition*}

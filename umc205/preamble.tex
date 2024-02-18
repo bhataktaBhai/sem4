@@ -1,19 +1,30 @@
 \let\emph\textsl
-\input{~/IISc/preamble}
-\newcommand{\size}[1]{\# #1}
-\newcommand{\comp}[1]{\overline{#1}}
+\input{~/IISc/sem4/preamble}
+\input{~/IISc/sem4/preamble/flowchart}
+\usepackage{forest}
+\newcommand\size[1]{\# #1}
+\newcommand\comp[1]{\overline{#1}}
 \DeclareMathOperator{\lengths}{lengths}
+\newcommand\follows\xrightarrow
+% \usepackage[bitstream-charter]{mathdesign}
+% \renewcommand*{\rmdefault}{cmr}
 
 \usepackage{tikz}
-\usetikzlibrary{automata,positioning,arrows}
+\usetikzlibrary{automata,positioning,arrows,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 \tikzset{
-    ->, % makes the edges directed
     >=stealth', % makes the arrow heads bold
-    node distance=3cm, % specifies the minimum distance between two nodes. Change if necessary.
+    node distance=1cm and 1.155cm, % specifies the minimum distance between two nodes. Change if necessary.
     every state/.style={thick, fill=gray!10}, % sets the properties for each 'state' node
     initial text=$ $, % sets the text that appears on the start arrow
     auto,
-    shorten >=1pt
+    shorten >=1pt,
 }
-\theoremstyle{definition}
-\newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem}{Problem}[section]
+% \makeatletter
+% \renewcommand\xRightarrow[2][]{%
+%     \ext@arrow 0055{\Rightarrowfill@}{#1\ }{#2\ }}
+% \makeatother
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%

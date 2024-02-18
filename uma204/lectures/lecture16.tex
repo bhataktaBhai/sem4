@@ -1,0 +1,99 @@
+\lecture{16}{Wed 07 Feb '24}{}
+\begin{proof}[Proof of $(3) \Rightarrow (2)$]
+    Let $S \subseteq E$ be an infinite set.
+    Thus there exists a sequence $(x_n)_n \subseteq S$ of distinct elements.
+
+    By $(3)$, there exists a subsequence $(x_{n_k})_k$ of $(x_n)_n$
+    such that $(x_{n_k})_k$ is convergent to some $x \in E$.
+    By the sequential characterization of closures, $x \in \wbar{S}$.
+
+    Thus for all $\varepsilon > 0$, there exists a $k_\varepsilon \in \N$
+    such that for all $k \ge k_\varepsilon$, we have that
+    $d(x_{n_k}, x) < \varepsilon$.
+    Thus $x$ is a limit point of $S$ in $E$.
+\end{proof}
+
+\section{Cauchy Sequences \& Completeness} \label{sec:cauchy}
+Recall the HW2 problem to show that the sequence $(x_n)_n$ given by \[
+    x_n = \begin{cases}
+        2 & \text{if } n = 0 \\
+        x_{n-1} - \frac{x_{n-1}^2 - 2}{2x_{n-1}} & \text{if } n \ge 1
+    \end{cases}
+\] is \Q-Cauchy but not convergent in \Q.
+This is an application of the Newton-Raphson method.
+\subsection{Newton-Raphson Method (Informal)}
+\label{sec:newton-raphson_method}
+Given a function $f\colon \R \to \R$, we want to find a root of $f$.
+We pick some initial guess $x_0 \in \R$, and iterate via \[
+    x_n = x_{n-1} - \frac{f(x_{n-1})}{f'(x_{n-1})}.
+\] Under \emph{some} assumptions on $f$ and $x_0$, $(x_n)_n$ is Cauchy.
+Then \[
+    f(x_{n-1}) = f'(x_{n-1})(x_{n-1} - x_n) \to 0
+\] If $\lim_{n \to \infty} x_n = l$, and $f$ is continuous, then \[
+    f(l) = \lim_{n \to \infty} f(x_n) = 0.
+\]
+\begin{definition}[Cauchy sequence] \label{def:cauchy:sequence}
+    Let $(x_n)_{n \in \N} \subseteq (X, d)$.
+    We say that $(x_n)$ is a \emph{Cauchy sequence} if for every
+    $\varepsilon > 0$, there exists an $N \in \N$ such that whenever
+    $n, m \ge N$, $d(x_n, x_m) < \varepsilon$.
+\end{definition}
+\begin{definition}[Completeness] \label{def:cauchy:completeness}
+    $(X, d)$ is said to be a \emph{complete} metric space if every Cauchy
+    sequence in $(X, d)$ is convergent.
+\end{definition}
+
+\begin{theorem} \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item Every convergent sequence is Cauchy.
+        \item Every Cauchy sequence is bounded.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    Trivial.
+\end{proof}
+
+\begin{theorem}
+    Every compact metric space is complete.
+\end{theorem}
+\begin{proof}
+    Let $(X, d)$ be compact and let $(x_n)_n$ be a Cauchy sequence in $X$.
+    Since $X$ is compact, $(x_n)_n$ has a convergent subsequence
+    $(x_{n_k})_k$ converging to some $x \in X$
+    (by \cref{thm:compact:subsequential_limit}).
+
+    Then $(x_n)_n$ also converges to $x$ by the triangle inequality.
+    For large enough $n$, $d(x_n, x) \le d(x_n, x_{n_n}) + d(x_{n_n}, x)
+    < 2\varepsilon$.
+\end{proof}
+\begin{theorem}
+    $(\R^d, \norm{\cdot})$ is complete.
+\end{theorem}
+\begin{proof}
+    Let $(x_n)_n$ be a Cauchy sequence in $\R^d$.
+    Then it must be bounded.
+    Take a closed ball $B$ centered at $x_0$ containing all elements of
+    $(x_n)_n$.
+    This is compact, and so the above theorem applies to give that
+    $(x_n)_n$ has a limit in $B \subseteq \R^d$.
+\end{proof}
+
+\begin{exercise}
+    Every increasing and bounded above sequence in \Q\ or \R\ is Cauchy.
+\end{exercise}
+\begin{proof}
+    Suppose not.
+    Then there exists an $\varepsilon > 0$ such that for all $N \in \N$,
+    there exist $n(N) > m(N) \ge N$ such that
+    $\abs{x_{n(N)} - x_{m(N)}} \ge \varepsilon$.
+
+    Let $m_0 = m(0)$ and $n_0 = n(0)$.
+    For $k \ge 1$, let $m_k = m(n_{k-1})$ and $n_k = n(n_{k-1})$.
+    Then \begin{align*}
+        x_{n_k} &\ge x_{m_k} + \varepsilon \\
+               &\ge x_{n_{k-1}} + \varepsilon
+    \end{align*} and so $(x_{n_k})_k$ is a subsequence with each term at
+    least $\varepsilon$ more than the last.
+    Thus $x_{n_k} \ge x_0 + k\varepsilon$ for all $k \in \N$, which
+    contradicts boundedness.
+\end{proof}

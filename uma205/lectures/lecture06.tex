@@ -3,7 +3,7 @@
 \textbf{News:} Quiz 1 tomorrow.
 Material upto and including lecture 6.
 
-\begin{definition}
+\begin{definition*}
     Let $I$ be a possibly infinite indexing set and for all $\alpha \in I$
     let $X_\alpha$ be a set.
     Then its (possibly infinite) Cartesian product is defined as
@@ -14,7 +14,7 @@ Material upto and including lecture 6.
             \text{ for all } \alpha \in I
         \bigg\}
     \]
-\end{definition}
+\end{definition*}
 
 \begin{exercise}
     For any sets $I$ and $X$, $\prod_{\alpha \in I} X = X^I$.
@@ -24,10 +24,10 @@ Material upto and including lecture 6.
     Then $\prod_{\alpha \in I} X_\alpha$ is non-empty.
 \end{axiom}
 
-\begin{definition}
+\begin{definition*}
     A \emph{choice function} on $X$ is a function $f\colon 2^X \setminus \O
     \to X$ such that for all non-empty $S \subseteq X$, $f(S) \in S$.
-\end{definition}
+\end{definition*}
 \begin{fact}
     The existence of a choice function for every $X$ is equivalent to the
     axiom of choice.
@@ -50,22 +50,22 @@ Material upto and including lecture 6.
     Thus $a_n \in E$ for all $n$ and $\lim_{n \to \infty} a_n = \sup E$.
 \end{proof}
 
-\begin{definition}
+\begin{definition*}
     Let $(P, \le)$ be a poset.
     A subset $Y \subseteq P$ is called a \emph{chain} or \emph{totally
     ordered} if for any $y, y' \in Y$, either $y \le y'$ or $y' \le y$.
-\end{definition}
+\end{definition*}
 \begin{definition}
     Let $(P, \le)$ be a poset and $Y \subseteq P$.
     We say that $y$ is a \emph{minimal} (resp. \emph{maximal}) element of
     $Y$ if there is no $y' \in Y$ such that $y' < y$ (resp. $y' > y$).
 \end{definition}
 
-\begin{definition}
+\begin{definition*}
     Let $(P, \le)$ be a poset and $Y \subseteq P$ be a chain.
     We say that $Y$ is \emph{well-ordered} if every non-empty subset of $Y$
     has a minimal element.
-\end{definition}
+\end{definition*}
 
 \setcounter{axiom}{\value{axiom}-1}
 \begin{axiom}[Well-ordering principle] \label{def:zfc:well-ordering}
@@ -79,10 +79,10 @@ Material upto and including lecture 6.
     Then $X$ has a maximal element.
 \end{axiom}
 
-\begin{fact}
+\begin{fact*}
     The axiom of choice, well-ordering principle, and Zorn's lemma are
     equivalent.
-\end{fact}
+\end{fact*}
 \begin{proof}
     \begin{description}
         \item[Zorn $\implies$ AoC.]

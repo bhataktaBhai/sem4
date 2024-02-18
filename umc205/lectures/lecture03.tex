@@ -1,5 +1,5 @@
 \lecture{03}{Tue 09 Jan '24}{}
-\subsection{A good way to construct DFAs} \label{sec:dfa:ideas}
+\section{A good way to construct DFAs} \label{sec:dfa:ideas}
 Suppose we have to construct a DFA for a language $L$ over an alphabet $A$.
 \begin{itemize}
     \item Think of a finite number of properties of strings that you might
@@ -14,7 +14,7 @@ Suppose we have to construct a DFA for a language $L$ over an alphabet $A$.
     in $L$.
 \end{itemize}
 
-\subsection{DFAs Formally} \label{sec:dfa:formal}
+\section{DFAs Formally} \label{sec:dfa:formal}
 \begin{definition}[DFA] \label{def:dfa}
     A \emph{deterministic finite-state automaton} $\mathcal{A}$ over an
     alphabet $A$ is a tuple $(Q, s, \delta, F)$ where
@@ -25,15 +25,17 @@ Suppose we have to construct a DFA for a language $L$ over an alphabet $A$.
         \item $F \subseteq Q$ is the set of \emph{final states}.
     \end{itemize}
 \end{definition}
-For example, the first example in \cref{sec:dfa} can be written as
+For example, the first example in this \namecref{chp:fa} can be written as
 \begin{align*}
     A &= \set{a, b} \\
     Q &= \set{e, o} \\
     s &= e \\
     F &= \set{o}
 \end{align*} and \begin{align*}
-    \delta(e, a) &= o &\delta(o, a) &= e \\
-    \delta(e, b) &= e &\delta(o, b) &= o
+    \delta &= \begin{aligned}
+        (e, a) &\mapsto o, & (o, a) &\mapsto e, \\
+        (e, b) &\mapsto e, & (o, b) &\mapsto o.
+    \end{aligned}
 \end{align*}
 We further define $\hat{\delta} : Q \times A^* \to Q$ as the extension of
 $\delta$ to strings.
@@ -48,7 +50,7 @@ $\delta$ to strings.
     \end{equation*}
 \end{definition}
 
-\subsection{Regular Languages} \label{sec:dfa:regular}
+\section{Regular Languages} \label{sec:dfa:regular}
 \vspace{1em}
 \begin{definition}[Regular Language] \label{def:regular}
     A language $L$ is \emph{regular} if there exists a DFA $\mathcal{A}$
@@ -137,9 +139,3 @@ This immediately yields the following.
     accepts the language $L(\mathcal{A}) \cup L(\mathcal{B})$.
 \end{proof}
 
-\begin{theorem}[Closure under concatenation] \label{thm:dfa:regular:closure2}
-    The class of regular languages is closed under concatenation.
-\end{theorem}
-\begin{proof}
-    
-\end{proof}
