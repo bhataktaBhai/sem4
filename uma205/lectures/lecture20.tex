@@ -1,0 +1,165 @@
+\chapter{Number Theory} \label{chp:nt}
+\lecture{20}{Mon 26 Feb '24}{}
+
+\section{Algebraic Structures} \label{sec:nt:algebraic_structures}
+\begin{definition*}[Group] \label{def:group}
+    A \emph{group} is a set $G$ together with a binary operation
+    $*\colon G \times G \to G$ which satisfies the following conditions:
+    \begin{enumerate}[label=\small(G\arabic*)]
+        \item \textbf{associativity:}
+            $(a * b) * c = a * (b * c)$ for all $a, b, c \in G$.
+        \item \textbf{identity:}
+            there exists an element $e \in G$, called the \emph{identity},
+            such that $a * e = e * a = a$ for all $a \in G$.
+        \item \textbf{inverses:}
+            for all $a \in G$, there exists an element $a^{-1} \in G$
+            called the \emph{inverse} of $a$, such that
+            $a * a^{-1} = a^{-1} * a = e$.
+    \end{enumerate}
+\end{definition*}
+\begin{notation}
+    We write $ab$ for $a * b$.
+\end{notation}
+\begin{examples}
+    \item $(\Z, +)$, which has $e = 0$ and $a^{-1} = -a$.
+    Similarly, $(\Q, +)$, $(\R, +)$ or $(\C, +)$ are groups.
+    \item $(\Q^*, *)$, which has $e = 1$
+    and $a^{-1} = 1/a$.
+    Similarly, $(\R^*, *)$ and $(\C^*, *)$ are groups.
+    But $(\Z^*, *)$ is not a group as it lacks inverses.
+    \item Let $(V, +)$ be a vector space over any field.
+    Then it is also a group.
+    \item Let $S_n$ be the set of all permutations on $[n]$.
+    Then $(S_n, \circ)$ is a group.
+    In fact, it is the only non-abelian (for $n \ge 3$) group in this list.
+\end{examples}
+\begin{definition}[Abelian group] \label{def:group:abelian}
+    A group is said to be \emph{abelian} if the group operation is
+    commutative.
+\end{definition}
+\begin{definition}[Subgroup] \label{def:group:sub}
+    Let $(G, *)$ be a group.
+    A \emph{subgroup} of $G$ is a non-empty subset $H \subseteq G$ which
+    is closed under products and inverses.
+\end{definition}
+\begin{example}
+    $(2\,\Z, +)$ is a subgroup of $(\Z, +)$.
+\end{example}
+
+\begin{definition*}[Ring] \label{def:ring_again}
+    A \emph{ring} is a set $R$ together with two binary operations,
+    $+\colon R \to R$ and $*\colon R \times R \to R$ called addition and
+    multiplication, respectively, which satisfy the following conditions:
+    \begin{enumerate}[label=\small(R\arabic*)]
+        \item $(R, +)$ is an abelian group.
+        \item \textbf{associativity:}
+            $(a * b) * c = a * (b * c)$ for all $a, b, c \in R$.
+        \item \textbf{distributivity:}
+            $(a + b) * c = a * c + b * c$ and
+            $a * (b + c) = a * b + a * c$ for all $a, b, c \in R$.
+    \end{enumerate}
+    $R$ is said to be \emph{commutative} if it saisfies
+    \begin{enumerate}[label=\small(R\arabic*)]
+        \setcounter{enumi}{3}
+        \item \textbf{commutativity:}
+            $a * b = b * a$ for all $a, b \in R$,
+    \end{enumerate}
+    and \emph{with identity} if
+    \begin{enumerate}[label=\small(R\arabic*)]
+        \setcounter{enumi}{4}
+        \item \textbf{identity:}
+            there exists an element $1 \in R$ such that
+            $1 * a = a * 1 = a$ for all $a \in R$.
+    \end{enumerate}
+    A subring of $R$ is a subgroup of $R$ (under addition) which is closed
+    under multiplication.
+\end{definition*}
+\begin{examples}
+    \item $(\Z, +, *)$ is a commutative ring with identity.
+    \item $(2\,\Z, +, *)$ is a commutative ring without identity.
+    It sits inside $(\Z, +, *)$ as a subring.
+    \item Let $M_n(F)$ be the set of all $n \times n$ matrices with entries
+    in a field $F$.
+    Then $(M_n(F), +, *)$ is a non-commutative ring with identity.
+    \item $(\R^\R, +, *)$ is a commutative ring with identity, where
+    addition and multiplication are defined pointwise.
+\end{examples}
+
+\section{Primes} \label{sec:nt:primes}
+\begin{definition*}[Prime] \label{def:prime}
+    An integer $p$ is said to be \emph{prime} if it has no non-trivial
+    divisors (other than $\pm 1$ and $\pm p$).
+    We additionally define $1$ and $-1$ to not be primes.
+\end{definition*}
+\begin{notation}
+    We write $a \mid b$ if $b$ is divisible by $a$ and $a \nmid b$ if not.
+    That is, $a \mid b \iff \exists k (ka = b)$.
+    However, we leave $0 \mid 0$ undefined.
+\end{notation}
+We assume some standard facts about divisibility:
+\begin{itemize}
+    \item for all $a \ne 0$, $a \mid a$.
+    \item if $a \mid b$ and $b \mid a$, then $a = \pm b$.
+    \item if $a \mid b$ and $b \mid c$, then $a \mid c$.
+    \item if $a \mid b$ and $a \mid c$, then $a \mid (b + c)$.
+\end{itemize}
+\begin{definition*}[Order and valuation] \label{def:prime_order}
+    Suppose $n \in \Z$ and $p$ is a prime such that $p^\alpha \mid n$ but
+    $p^{\alpha + 1} \nmid n$.
+    Then we call $\alpha$ the \emph{order of $n$ at $p$} or the
+    \emph{$p$-adic valuation of $n$}, written $\ord_p(n) = \alpha$.
+\end{definition*}
+
+\subsection{Unique prime factorization} \label{sec:nt:ftoa}
+\begin{lemma*}
+    If $a, b \in \Z$ and $b > 0$, then there exist $q, r \in \Z$ such that
+    $a = qb + r$ and $0 \le r < b$.
+\end{lemma*}
+\begin{proof}
+    Take the supremum of the set $X = \set{k \in \Z, kb \le a}$ to be $q$
+    and $r = a - qb$.
+    Since $q \in X$, we have $0 \le r$.
+    Since $q + 1 \notin X$, we have $r < b$.
+\end{proof}
+
+\begin{definition}
+    Let $a_1, \dots, a_n \in \Z$.
+    Define $A = (a_1, \dots, a_n)$ to be the set of all linear combinations
+    of $a_1, \dots, a_n$ over $\Z$.
+\end{definition}
+Note that if $a, b \in A$, then $a \pm b \in A$ and $ka \in A$ for all
+$k \in \Z$.
+This motivates the following generalisation:
+\begin{definition*}[Ideal] \label{def:ring:ideal}
+    A \emph{left} (resp. \emph{right}) \emph{ideal} of a ring $R$
+    is a subring $I \subseteq R$ which is closed under multiplication
+    by elements of $R$.
+    That is, for all $a \in I$ and $r \in R$, we have $ra \in I$.
+
+    For a commutative ring, we simply call it an \emph{ideal}.
+\end{definition*}
+\begin{lemma*}
+    If $a, b \in \Z$, then there exists a $d \in \Z$ such that
+    $(a, b) = (d)$.
+\end{lemma*}
+\begin{proof}
+    Assume that both $a$ and $b$ are non-zero.
+    Then there exist positive elements in $(a, b)$.
+    Let $d$ be the smallest positive element in $(a, b)$.
+    Then $(d) \subseteq (a, b)$.
+
+    For the reverse inclusion, suppose $c \in (a, b)$.
+    Apply the previous lemma to conclude the existence of $q$ and $r$ such
+    that $c = qd + r$ with $0 \le r < d$.
+    Since $c, d \in (a, b)$, $r = c - qd \in (a, b)$.
+    But $d$ is the smallest positive element in $(a, b)$, so $r$ cannot be
+    positive.
+    Thus $r = 0$ and $c = qd \in (d)$.
+\end{proof}
+
+\begin{definition}[GCD] \label{def:gcd}
+    Let $(a, b) \in \Z$.
+    An integer $d$ is a \emph{greatest common divisor} (gcd) of $a$ and $b$
+    if it divides both $a$ and $b$, and any other common divisor also
+    divides $d$.
+\end{definition}

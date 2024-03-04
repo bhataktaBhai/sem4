@@ -1,0 +1,168 @@
+\lecture{23}{Mon 04 Mar '24}{}
+\begin{examples}[UFD]
+    \item $\Z[i]$, the \emph{Gaussian integers}.
+    \item $\Z[\omega]$, the \emph{Eisenstein integers}, where
+    $\omega = e^{\frac{2 \pi i}{3}}$.
+\end{examples}
+\begin{proposition}
+    $\Z[i]$ is a Euclidean domain.
+\end{proposition}
+\begin{proof}
+    Define $\lambda\colon \Z[i] \to \N$ as $\lambda(a + ib) = a^2 + b^2$.
+    Let $\alpha = a + ib$, $\gamma = c + id \ne 0$.
+    Write $\frac{\alpha}{\gamma} = r + is$, where $r, s \in \Q$.
+    Choose $m, n \in \Z$ such that $\abs{r - m} \le \frac12$ and
+    $\abs{s - n} \le \frac12$.
+    Let $\delta = m + in$.
+    Then $\lambda(\frac{\alpha}{\gamma} - \delta) = (r - m)^2 + (s - n)^2
+    \le \frac12$.
+    Define $\rho = \alpha - \gamma \delta$,
+    Either $\rho = 0$, or \begin{align*}
+        \lambda(\rho)
+        &= \lambda(\gamma)
+            \lambda\paren*[\bigg]{\frac{\alpha}{\gamma} - \delta} \\
+        &\le \frac12 \lambda(\gamma) \\
+        &< \lambda(\gamma).
+    \end{align*}
+\end{proof}
+\begin{corollary}
+    $\Z[i]$ is a PID and hence a UFD.
+\end{corollary}
+
+\begin{exercise}
+    Prove that $\Z[\omega]$ is a Euclidean domain.
+\end{exercise}
+
+\chapter{The Study of Primes} \label{chp:primes}
+\begin{theorem}[Euclid] \label{thm:infinitude_of_primes}
+    There are infinitely many primes in \Z.
+\end{theorem}
+\begin{proof}
+    Suppose not.
+    Label the positive primes $p_1, p_2, \dots, p_n$.
+    Define $N = p_1 p_2 \dots p_n + 1$.
+    Clearly, $N$ is not divisible by any $p_i$.
+    But $N$ must be a product of primes.
+    This is a contradiction.
+\end{proof}
+\begin{remark}
+    Check out the proofs of this theorem in \textit{Proofs from THE BOOK}.
+\end{remark}
+
+\begin{exercise}
+    There are infinitely many monic irreducible polynomials in $k[x]$,
+    assuming $k$ is infinite.
+\end{exercise}
+\begin{proof}
+    $x + a$ for each $a \in k$.
+\end{proof}
+
+\section{Arithmetic Functions} \label{sec:arithmetic_functions}
+\begin{itemize}
+    \item $\nu(n) =$ number of positive divisors of $n$.
+    \item $\sigma(n) =$ sum of positive divisors of $n$.
+    \item The \emph{M\"obius function} \[
+        \mu(n) = \begin{cases}
+            1 & \text{if } n = 1 \\
+            0 & \text{if } n \text{ is not square-free} \\
+            (-1)^{\# \text{ prime factors of } n} & \text{otherwise}
+        \end{cases}
+    \]
+    \item The \emph{Euler totient function} \[
+        \phi(n) = \# \set{1 \le m \le n \mid \gcd(m, n) = 1}
+    \]
+\end{itemize}
+\begin{examples}
+    \item $\nu(3) = 2$, $\sigma(3) = 4$, $\mu(3) = -1$, $\phi(3) = 2$.
+    \item $\nu(6) = 4$, $\sigma(6) = 12$, $\mu(6) = 1$, $\phi(6) = 2$.
+    \item $\sigma(28) = 56$, since it is a perfect number.
+\end{examples}
+
+\begin{proposition}
+    Write $n$ as $n = p_1^{a_1} p_2^{a_2} \dots p_l^{a_l}$ in terms of its
+    prime factors.
+    Then
+    \begin{enumerate}
+        \item $\nu(n) = (a_1 + 1)(a_2 + 1) \dots (a_l + 1)$.
+        \item $\sigma(n) = (1 + p_1 + \dots p^{a_l}) \dots (1 + p_l + \dots
+        + p_l^{a_l})$.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    For the first part, every $l$-tuple $(b_1, \dots, b_l)$ can be
+    transformed bijectively to a divisor of $n$.
+
+    For the second, write \begin{align*}
+        \sigma(n) &= \sum_{d \mid n} d \\
+             &= \sum_{\substack{0 \le b_i \le a_i \\ 1 \le i \le l}}
+                p_1^{b_1} \dots p_l^{b_l} \\
+             &= \prod_{i = 1}^l \sum_{0 \le b_i \le a_i} p_i^{b_i} \\
+             &= \prod_{i = 1}^l \frac{p_i^{a_i + 1} - 1}{p_i - 1}. \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{proposition} \label{thm:mobius_sum}
+    $\sum_{d \mid n} \mu(d) = \delta_{n,1}$.
+\end{proposition}
+\begin{proof}
+    True for $n = 1$.
+    For $n > 1$, write $n$ as $p_1^{a_1} \dots p_l^{a_l}$.
+    Since $\mu(d) = 0$ whenever $d$ is not square-free, we have
+    \begin{align*}
+        \sum_{d \mid n} \mu(d)
+        &= \sum_{\substack{b_i \in \set{0, 1} \\ 1 \le i \le l}}
+            \mu(p_1^{b_1} \dots p_l^{b_l}) \\
+        &= \sum_{k = 0}^{l} \binom{l}{k} (-1)^k \\
+        &= (1 - 1)^k \\
+        &= 0 \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{definition*}[Dirichlet convolution] \label{def:dirichlet}
+    Let $f, g\colon \N^* \to \C$.
+    Then the \emph{Dirichlet convolution} of $f$ and $g$ is \[
+        (f \circ g)(n) = \sum_{d \mid n} f(d) g(\frac{n}{d})
+            = \sum_{d_1 d_2 = n} f(d_1) g(d_2)
+    \]
+\end{definition*}
+\begin{exercise}
+    $(f \circ g) \circ h = f \circ (g \circ h)$.
+\end{exercise}
+Let $\varepsilon(n)$ be the multiplicative identity.
+That is, $\varepsilon(n) = \delta_{n,1}$.
+Check that $f \circ \varepsilon = \varepsilon \circ f = f$.
+Let $\mathbbm{1}$ be the constant function $\mathbbm{1}(n) = 1$ for all $n$.
+Then $f \circ \mathbbm{1} = \mathbbm{1} \circ f = \sum_{d \mid \cdot} f(d)$.
+\begin{lemma}
+    $\mathbbm{1} \circ \mu = \mu \circ \mathbbm{1} = \varepsilon$.
+\end{lemma}
+\begin{proof}
+    First, \begin{align*}
+        (\mathbbm{1} \circ \mu)(1) = (\mu \circ \mathbbm{1})(1)
+        &= \sum_{d \mid 1} \mu(d) \\
+        &= \mu(1) \\
+        &= 1.
+    \end{align*}
+    For $n > 1$, \begin{align*}
+        (\mathbbm{1} \circ \mu)(n) = (\mu \circ \mathbbm{1})(n)
+        &= \sum_{d \mid n} \mu(d) \\
+        &= 0
+    \end{align*}
+    by \cref{thm:mobius_sum}.
+\end{proof}
+
+\begin{theorem*}[M\"obius inversion formula] \label{thm:mobius_inversion}
+    Let $F(n) = \sum_{d \mid n} f(d)$.
+    Then $f(n) = \sum_{d \mid n} \mu(d) F(\frac{n}{d})$.
+\end{theorem*}
+\begin{proof}
+    Note that $F = f \circ \mathbbm{1}$.
+    So \begin{align*}
+        \sum_{d \mid \cdot} \mu(d) F\paren*[\Big]{\frac{\cdot}{d}}
+            &= F \circ \mu \\
+            &= (f \circ \mathbbm{1}) \circ \mu \\
+            &= f \circ (\mathbbm{1} \circ \mu) \\
+            &= f \circ \varepsilon \\
+            &= f \qedhere
+    \end{align*}
+\end{proof}

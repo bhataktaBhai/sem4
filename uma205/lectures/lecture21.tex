@@ -1,0 +1,136 @@
+\lecture{21}{Wed 28 Feb '24}{}
+\begin{corollary}
+    Let $a, b \in \Z$.
+    If $(a, b) = (d)$, then $d = \gcd(a, b)$.
+\end{corollary}
+\begin{proof}
+    Since $a, b \in (d)$, $d$ is a common divisor of both $a$
+    and $b$.
+    Let $c$ be another common divisor.
+    Then $c \mid ax + by$, so $c \mid d$.
+    Thus $d$ is the greatest common divisor.
+\end{proof}
+
+\begin{notation}
+    We will write $(a, b)$ for the gcd of $a$ and $b$.
+    Whether this refers to the gcd or the ideal will (should) be clear
+    from the context.
+\end{notation}
+\begin{definition}[Coprime] \label{def:coprime}
+    Two integers are said to be \emph{coprime} if their only common divisors
+    are $\pm 1$.
+\end{definition}
+Thus $a$ and $b$ are coprime iff $(a, b) = 1$.
+There is a generalization of this to other rings,
+where instead of $\pm 1$ we say that two elements are coprime if
+their only common divisors are \emph{units}.
+
+\begin{proposition}
+    Suppose $(a, b) = 1$ and $a \mid bc$.
+    Then $a \mid c$.
+\end{proposition}
+\begin{proof}
+    There exist $x$, $y$ such that $ax + by = 1$.
+    Then $c = cax + cby$.
+    But $a \mid cb$, so $a \mid c$.
+\end{proof}
+
+\begin{corollary}
+    If $p$ is a prime and $p \mid bc$, then $p \mid b$ or $p \mid c$.
+    Equivalently, if $p \nmid b$ and $p \nmid c$, then $p \nmid bc$.
+\end{corollary}
+\begin{proof}
+    Since $p$ is a prime, its only divisors are $\pm 1$ and $\pm p$.
+    Thus, either $(p, b) = 1$ or $p \mid b$.
+    If $p \mid b$, then we are done.
+    Otherwise, by the previous proposition, $p \mid c$.
+\end{proof}
+
+\begin{corollary} \label{thm:order_of_product}
+    Suppose $p$ is a prime and $a, b \in \Z$.
+    Then $\ord_p(ab) = \ord_p(a) + \ord_p(b)$.
+\end{corollary}
+\begin{proof}
+    Let $\alpha = \ord_p(a)$, $\beta = \ord_p(b)$ so that
+    $a = p^\alpha a'$ and $b = p^\beta b'$ where $p \nmid a', b'$.
+    Then $ab = p^{\alpha + \beta} a' b'$.
+    By the previous corollary, $p \nmid cd$.
+    Thus $\ord_p(ab) = \alpha + \beta$.
+\end{proof}
+
+\begin{lemma}[Existence of prime factorization] \label{thm:factorization}
+    Every integer $n \neq 0, \pm 1$ has a prime factorization.
+\end{lemma}
+\begin{proof}
+    Let $n$ be the smallest positive integer without a prime factorization.
+    Then $n$ is not prime, so $n = ab$ for some $a, b \in \Z$.
+    But $a, b < n$ have prime factorizations,
+    so $n$ has a prime factorization.
+
+    If every positive integer has a prime factorization, then so will the
+    negative of any such integer, by taking an additional factor of $-1$.
+\end{proof}
+
+\begin{theorem*}[Fundamental theorem of arithmetic] \label{thm:ftoa}
+    Every integer $n \neq 0$ has a unique prime factorization.
+\end{theorem*}
+\begin{proof}
+    Write $n$ as \[
+        n = (-1)^{\epsilon(n)} \prod_{\substack{p \text{ prime} \\ p > 0}}
+        p^{a(p)}.
+    \] For any prime $q$, apply $\ord_q$ to both sides.
+    Then \[
+        \ord_q(n) = \epsilon(n) \ord_q(-1) + \sum_p^q a(p) \ord_q(p)
+    \] by \cref{thm:order_of_product}.
+    But by the definition of $\ord_q$, $\ord_q(-1) = 0$ and
+    $\ord_q(p) = \delta_{pq}$.
+    Thus $a(q) = \ord_q(n)$ is uniquely determined.
+\end{proof}
+
+\section{In Other Rings} \label{sec:general}
+\begin{definition}[Field] \label{def:field_again}
+    A \emph{field} is a commutative ring with identity $1 \neq 0$,
+    where all non-zero elements have multiplicative inverses.
+\end{definition}
+\begin{example}
+    \Q, \R, \C, finite fields $\mathbb{F}_q$, where $q$ is a prime power.
+\end{example}
+
+\begin{definition*}[Ring of polynomials] \label{def:poly:ring}
+    For a field $k$, $k[x]$ is the \emph{ring of polynomials} in $x$ with
+    coefficients from $k$.
+    There is a notion of divisibility in $k[x]$.
+    We thus write $f \mid g$ if $g = f p$ for some $p \in k[x]$.
+
+    A non-constant polynomial $p$ is \emph{irreducible} if $q \mid p$ only when
+    $q$ is constant or a multiple of $p$.
+\end{definition*}
+\begin{examples}
+    \item $3 \mid 1 + x$.
+    \item Linear polynomials are always irreducible.
+    \item $x^2 + 1$ is irreducible in $\Q[x]$ but not in $\C[x]$.
+\end{examples}
+
+\begin{lemma}
+    Every non-constant polynomial is a product of irreducible polynomials.
+\end{lemma}
+\begin{proof}[Proof idea]
+    Same as for \Z, but we use induction on the degree of the polynomial.
+\end{proof}
+
+\begin{definition}[Monic polynomial] \label{def:poly:monic}
+    A polynomial is \emph{monic} if its leading coefficient is 1.
+\end{definition}
+\begin{definition}[Order] \label{def:poly:order}
+    Let $f, p \in k[x]$, $p$ irreducible.
+    Then $\ord_p(f) = a$ if $f = p^a q$ for some
+    $q \in k[x]$ and $p \nmid q$.
+\end{definition}
+
+\begin{theorem*}[Unique factorization of polynomials] \label{thm:poly:uft}
+    Let $f \in k[x]$.
+    Then we can write \[
+        f = c \prod_p p^{a(p)}
+    \] where the product runs over all monic irreducible polynomials,
+    $a(p) = \ord_p(f)$ and $c \in k$.
+\end{theorem*}
