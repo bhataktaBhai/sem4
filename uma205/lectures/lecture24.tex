@@ -1,0 +1,175 @@
+\lecture{24}{Wed 06 Mar '24}{}
+\begin{definition*}[Dirichlet series] \label{def:dirichlet_series}
+    Given a function $f\colon N^* \to \C$, the \emph{Dirichlet series}
+    (or \emph{generating function}) associated to $f$ is \[
+        F(s) = \sum_{n=1}^\infty \frac{f(n)}{n^s}
+    \] for $s$ in some subset of \C.
+\end{definition*}
+Recall the Dirichlet convolution, \[
+    (f \circ g)(n) = \sum_{d \mid n} f(d)g\paren*[\Big]{\frac{n}{d}}
+\]
+\begin{exercise}
+    The sequence corresponding to a product of two Dirichlet series is the
+    corresponding Dirichlet convolution.
+\end{exercise}
+
+\begin{definition*}[Multiplicative] \label{def:multiplicative}
+    A function $f\colon \N^* \to \C$ is called \emph{multiplicative} if
+    $f(mn) = f(m)f(n)$ whenever $(m, n) = 1$.
+\end{definition*}
+\begin{fact}
+    Let $f$ be a multiplicative sunction.
+    Then \[
+        \sum_{n=1}^\infty \frac{f(n)}{n^s}
+        = \prod_{p \text{ prime}} \left(1 + \frac{f(p)}{p^s} + \frac{f(p^2)}{p^{2s}} + \cdots\right)
+    \] In particular, for $\mathbbm 1$, \[
+        \zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s}
+        = \prod_{p \text{ prime}} \frac{1}{1 - p^{-s}}
+    \] is the \emph{Riemann zeta function}.
+\end{fact}
+
+If $F(s)$ is such that $F(1) \ne 0$, then $F(s)^{-1}$ is also a Dirichlet
+series.
+In particular, $\frac1{\zeta}$ corresponds to the Möbius function $\mu$.
+
+Recall Euler's totient function $\phi(n)$, which counts the number of
+positive integers less than $n$ that are coprime to it.
+\begin{proposition*} \label{thm:totient:sum}
+    \[
+        \sum_{d \mid n} \phi(d) = n
+    \]
+\end{proposition*}
+\begin{proof}
+    Write the rationals $\frac1n, \frac{2}{n}, \dots,
+    \frac{n-1}{n}, \frac{n}{n}$ in lowest terms.
+    Now if $d \mid n$, exactly $\phi(d)$ of these rationals have
+    denominator $d$.
+    Why? Suppose $n = d_1 d$.
+    Then $\frac{d_1 k}{n} = \frac{k}{d} \le 1$ will be in lowest terms iff
+    $(k, d) = 1$ and $k < d$.
+    Conversely, all denominators of the rationals are divisors of $n$.
+    Thus, $\sum_{d \mid n} \phi(d)$ simply counts the number of these
+    rationals, which is $n$.
+\end{proof}
+\begin{example}
+    \[
+        \frac16, \frac26, \frac36, \frac46, \frac56, \frac66
+        = \frac16, \frac13, \frac12, \frac23, \frac56, \frac11
+    \] has $\phi(1) = 1$, $\phi(2) = 1$, $\phi(3) = 2$ and $\phi(6) = 2$.
+\end{example}
+
+\begin{proposition*}
+    If $n = p_1^{a_1} \dots p_l^{a_l}$, then \[
+        \phi(n) = n \prod_{i=1}^l \paren*[\Big]{1 - \frac{1}{p_i}}
+    \]
+\end{proposition*}
+\begin{proof}
+    By \cref{thm:totient:sum} and \nameref{thm:nt:mobius_inversion},
+    \begin{align*}
+        \phi(n) &= \sum_{d \mid n} \mu(d) \frac{n}{d} \\
+             &= \frac{n}{1} - \sum_{i=1}^l \frac{n}{p_i}
+                + \sum_{i < j} \frac{n}{p_i p_j} - \cdots \\
+             &= n \prod_{i=1}^l \paren*[\bigg]{1 - \frac{1}{p_i}}
+    \end{align*} (the last step is similar to Viete's formulas).
+\end{proof}
+
+\begin{definition*}[Prime counting function] \label{def:nt:pi}
+    The \emph{prime counting function} \[
+        \pi(x) = \#\set{1 \le p \le x \mid p \text{ is prime}}.
+    \]
+\end{definition*}
+\begin{proposition*} \label{thm:nt:pi:loglog}
+    \[
+        \pi(x) \ge \log \log x
+    \]
+\end{proposition*}
+\begin{proof}
+    Let $p_n$ be the $n$th prime.
+    Since $p_1, \dots, p_n$ cannot divide $p_1 \dots p_n + 1$,
+    we have that $p_{n+1} \le p_1 p_2 \dots p_n + 1$.
+
+    \textbf{Claim:} $p_n < 2^{2^n}$.
+    True for $n = 1$.
+    Suppose true for $n$.
+    Then \begin{align*}
+        p_{n+1} &\le p_1 p_2 \dots p_n + 1 \\
+             &< 2^{2^1} \dots 2^{2^n} + 1 \\
+             &= 2^{2^1 + \cdots + 2^n} + 1 \\
+             &= 2^{2^{n+1} - 2} + 1 \\
+             &< 2^{2^{n+1}}
+    \end{align*}
+    This proves the claim.
+
+    So $\pi(2^{2^n}) \ge n$.
+    Let $x > e$ and choose $n$ such that $e^{e^{n-1}} < x \le e^{e^n}$.
+    So $n \ge \log \log x$.
+    Since $2/3 < \log 2$, if $n > 3$ we get $e^{n-1} > 2^n$.
+    So \begin{align*}
+        \pi(x) &\ge \pi(e^{e^{n-1}}) \\
+             &\ge \pi(e^{2^n}) \\
+             &\ge \pi(2^{2^n}) \\
+             &\ge n \\
+             &\ge \log \log x \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{fact}
+    \[
+        \frac{\pi(x)}{x} \to 0 \quad\text{as}\quad x \to \infty
+    \]
+\end{fact}
+
+\begin{fact*}[Prime number theorem] \label{thm:nt:pnt}
+    \[
+        \pi(x) \sim \frac{x}{\log x} \quad\text{as}\quad x \to \infty
+    \]
+\end{fact*}
+Proved by Hadamard and de la Vallée Poussin in 1896.
+
+\begin{theorem}[Dirichlet] \label{thm:dirichlet}
+    Let $a, d \in \Z$ with $(a, d) = 1$.
+    Then there are infinitely many primes of the form $a + nd$.
+\end{theorem}
+
+\chapter{Congruences} \label{chp:congruences}
+Let $e / o$ denote an even/odd number.
+Then we can form the addition and multiplication tables given in
+\cref{tab:congruences:mod2}.
+\begin{table}
+    \centering
+    \caption{Addition and multiplication tables modulo $2$}
+    \label{tab:congruences:mod2}
+    \begin{subtable}{.5\textwidth}
+        \centering
+        \begin{tabular}{c|cc}
+            $+$ & $e$ & $o$ \\
+            \hline
+            $e$ & $e$ & $o$ \\
+            $o$ & $o$ & $e$
+        \end{tabular}
+        \caption{Addition}
+    \end{subtable}%
+    \begin{subtable}{.5\textwidth}
+        \centering
+        \begin{tabular}{c|cc}
+            $\times$ & $e$ & $o$ \\
+            \hline
+            $e$ & $e$ & $e$ \\
+            $o$ & $e$ & $o$
+        \end{tabular}
+        \caption{Multiplication}
+    \end{subtable}
+\end{table}
+
+To find solutions of polynomial equations, congruences are useful.
+We want to find roots of polynomials in $\Z[x]$ which are themselves
+integers.
+These are called \emph{Diophantine equations}.
+\begin{example}
+    Can $x^2 - 117x + 31 = 0$ have integer solutions?
+
+    No.
+    Suppose $x$ is even/odd.
+    Then the first two terms are both even/odd, so their sum is even.
+    But $31$ is odd, so the total sum is odd and hence never $0$.
+\end{example}

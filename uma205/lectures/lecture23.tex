@@ -8,7 +8,7 @@
     $\Z[i]$ is a Euclidean domain.
 \end{proposition}
 \begin{proof}
-    Define $\lambda\colon \Z[i] \to \N$ as $\lambda(a + ib) = a^2 + b^2$.
+    Define $\lambda\colon \Q[i] \to \N$ as $\lambda(a + ib) = a^2 + b^2$.
     Let $\alpha = a + ib$, $\gamma = c + id \ne 0$.
     Write $\frac{\alpha}{\gamma} = r + is$, where $r, s \in \Q$.
     Choose $m, n \in \Z$ such that $\abs{r - m} \le \frac12$ and
@@ -24,6 +24,8 @@
         &\le \frac12 \lambda(\gamma) \\
         &< \lambda(\gamma).
     \end{align*}
+    So $\alpha = \delta \gamma + \rho$ with $\rho = 0$ or
+    $\lambda(\rho) < \lambda(\gamma)$.
 \end{proof}
 \begin{corollary}
     $\Z[i]$ is a PID and hence a UFD.
@@ -151,7 +153,7 @@ Then $f \circ \mathbbm{1} = \mathbbm{1} \circ f = \sum_{d \mid \cdot} f(d)$.
     by \cref{thm:mobius_sum}.
 \end{proof}
 
-\begin{theorem*}[M\"obius inversion formula] \label{thm:mobius_inversion}
+\begin{theorem*}[M\"obius inversion formula] \label{thm:nt:mobius_inversion}
     Let $F(n) = \sum_{d \mid n} f(d)$.
     Then $f(n) = \sum_{d \mid n} \mu(d) F(\frac{n}{d})$.
 \end{theorem*}

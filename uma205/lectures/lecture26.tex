@@ -1,0 +1,149 @@
+\lecture{26}{Wed 13 Mar '24}{}
+
+\begin{proposition}
+    There are exactly $\phi(m)$ units in $\Z/m\Z$.
+\end{proposition}
+\begin{proof}
+    $a \in \Z/m\Z$ is a unit iff $ax \equiv 1 \pmod{m}$ for some
+    $x \in \Z/m\Z$.
+    This is equivalent to $(a, m) = 1$, and there are $\phi(m)$
+    such $a$ in $\set{0, 1, \dots, m-1}$.
+\end{proof}
+
+\begin{corollary}
+    $\Z/p\Z$ is a field iff $p$ is prime.
+\end{corollary}
+\begin{proof}
+    If $p$ is prime, then every element is a unit.
+
+    Conversely, if $p = p_1 p_2$,
+    then $\wbar{p_1}, \wbar{p_2} \ne \wbar{0}$,
+    but $\wbar{p_1 p_2} = \wbar{0}$.
+    So $\Z/p\Z$ is not a field.
+\end{proof}
+
+\begin{notation}
+    We will denote by $U(\Z/m\Z)$ the set of units in $\Z/m\Z$.
+\end{notation}
+\begin{lemma}
+    $U(\Z/m\Z)$ forms a group under multiplication.
+\end{lemma}
+\begin{proof}
+    If $a$ and $b$ are units, then so is $ab$.
+
+    $1$ is a unit and an identity.
+
+    If $a$ is a unit, there exists a unique $x$ such that
+    $ax \equiv 1 \pmod{m}$.
+    Then $x$ is a unit and the unique inverse of $a$.
+\end{proof}
+
+\begin{theorem}[Euler] \label{thm:congruences:euler}
+    If $(a, m) = 1$, then $a^{\phi(m)} \equiv 1 \pmod{m}$.
+\end{theorem}
+\begin{proof}
+    By the previous lemma, $a \in G = U(\Z/m\Z)$ and $|G| = \phi(m)$.
+    Consider the map $\psi\colon G \to G$ given by $\psi(x) = ax$.
+
+    \textbf{Claim:} $\psi$ is a bijection. \\
+    \textbf{Proof of claim:}
+    Since $G$ is a group, the inverse of $a$ exists.
+    Suffices to show that $\psi$ is injective (finite set).
+    $\psi(x) = \psi(y) \iff ax = ay \iff x = y$.
+
+    Using this claim, we can write \begin{align*}
+        \prod_{x \in G} ax &= \prod_{x \in G} x \\
+        a^{\phi(m)} \prod_{x \in G} x &= \prod_{x \in G} x \\
+        a^{\phi(m)} &= 1 \qedhere
+    \end{align*}
+\end{proof}
+\begin{corollary}[Fermat's little theorem] \label{thm:congruences:fermat}
+    If $p$ is prime and $p \nmid a$, then $a^{p-1} \equiv 1 \pmod{p}$.
+\end{corollary}
+\begin{proof}
+    $\phi(p) = p - 1$.
+\end{proof}
+
+\begin{lemma} \label{thm:cong:coprime_product}
+    If $a_1$, $a_2$, \dots, $a_j$ are coprime to $m$, then so is
+    $a_1 a_2 \dots a_j$.
+\end{lemma}
+\begin{proof}
+    They are all units, so their product is a unit.
+\end{proof}
+
+\begin{lemma} \label{thm:cong:factor_product}
+    If $a_1$, $a_2$, \dots, $a_j$ divide $m$ and $(a_i, a_j) = 1$ for all
+    $i \ne j$, then $a_1 a_2 \dots a_j$ divides $m$.
+\end{lemma}
+\begin{proof}
+    Induction.
+    The base case $j = 1$ is obvious.
+
+    Suppose the statement is true for $a_1$, $a_2$, \dots, $a_{j-1}$.
+    Then by the previous lemma, $a_1 a_2 \dots a_{j-1}$ is coprime to $a_j$.
+    So we can write $r \cdot a_1 \dots a_{j-1} + s \cdot a_j = 1$.
+    Multiplying by $m$, we get \[
+        r \cdot a_1 \dots a_{j-1} m + s \cdot a_j m = m.
+    \] But $a_j$ divides the $m$ in the first term, and by the induction
+    hypothesis, $a_1 \dots a_{j-1}$ divides the $m$ in the second term.
+    So $a_1 \dots a_j$ divides $m$.
+\end{proof}
+
+\begin{theorem}[Chinese remainder theorem] \label{thm:congruences:chinese}
+    Write $m = m_1 \dots m_k$ with $(m_i, m_j) = 1$ for all $i \ne j$.
+    Let $b_1, \dots, b_j \in \Z$ and consider the system of congruences
+    \begin{align*}
+        x &\equiv b_1 \pmod{m_1} \\
+        x &\equiv b_2 \pmod{m_2} \\
+        &\mathrel{\makebox[\widthof{$\equiv$}]{\vdots}} \\
+        x &\equiv b_k \pmod{m_k}.
+    \end{align*}
+    Then the system always has solutions and any two solutions differ by a
+    multiple of $m$.
+\end{theorem}
+\begin{proof}
+    Let $n_i = \frac{m}{m_i} = m_1 \dots m_{i-1} m_{i+1} \dots m_k$.
+    Each $m_j$, $j \ne i$, is coprime to $m_i$, so
+    by \cref{thm:cong:coprime_product}, $(m_i, n_i) = 1$.
+    Thus we have $r_i$ and $s_i$ such that $r_i m_i + s_i n_i = 1$.
+    Let $e_i = s_i n_i$.
+    Then $e_i \equiv 1 \pmod{m_i}$.
+    Since each $m_j \ne n_j$ divides $m$,
+    $e_i \equiv 0 \pmod{m_j}$ for all $j \ne i$.
+
+    This gives a solution \[
+        x_0 = b_1 e_1 + b_2 e_2 + \dots + b_k e_k.
+    \]
+
+    Suppose $x_1$ is another solution.
+    Then $x_1 - x_0 \equiv 0 \pmod{m_i}$ for all $i$.
+    So each of $m_1$, $m_2$, \dots, $m_k$ divides $x_1 - x_0$.
+    By \cref{thm:cong:factor_product}, $m$ divides $x_1 - x_0$.
+\end{proof}
+\begin{example}[Original example of Sunzi]
+    A certain number leaves a remainder of $2$ when divided by $3$,
+    a remainder of $3$ when divided by $5$, and a remainder of $2$
+    when divided by $7$. What is the number?
+
+    We have \begin{align*}
+        m_1 &= 3 & m_2 &= 5 & m_3 &= 7 \\
+        b_1 &= 2 & b_2 &= 3 & b_3 &= 2 \\
+        \shortintertext{and compute}
+        n_1 &= 35 & n_2 &= 21 & n_3 &= 15.
+    \end{align*}
+    We want \begin{align*}
+        3 r_1 + 35 s_1 &= 1 & 5 r_2 + 21 s_2 &= 1 & 7 r_3 + 15 s_3 &= 1.
+    \end{align*}
+    One solution is \begin{align*}
+        r_1, s_1 &= 12, -1 & r_2, s_2 &= -4, 1 & r_3, s_3 &= -2, 1.
+    \end{align*}
+    This gives \begin{align*}
+        e_1 &= -35 & e_2 &= 21 & e_3 &= 15,
+    \end{align*}
+    and finally the solution \begin{align*}
+        x &= 2 (-35) + 3 (21) + 2 (15) \\
+        &= -70 + 63 + 30 \\
+        &= 23.
+    \end{align*}
+\end{example}

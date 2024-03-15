@@ -8,12 +8,12 @@ $ac = bc \land c \ne 0 \implies a = b$.
     \Z, $k[x]$.
 \end{example}
 
-\begin{definition}[Euclidean domain] \label{def:ring:euclidean_domain}
+\begin{definition*}[Euclidean domain] \label{def:ring:euclidean_domain}
     A \emph{Euclidean domain} is an integral domain $R$ together with
     a function $\lambda\colon R^* \to \N$ such that if
     $a, b \in R$ with $b \ne 0$, there exist $c, d \in R$ with
     $a = cb + d$, then either $d = 0$ or $\lambda(d) < \lambda(b)$.
-\end{definition}
+\end{definition*}
 
 Recall that for $a_1, \dots, a_n \in R$, \[
     (a_1, \dots a_n)
@@ -25,14 +25,15 @@ Recall that for $a_1, \dots, a_n \in R$, \[
     If $I = (a)$, we say that $I$ is a \emph{principal ideal}.
     An integral domain is called a \emph{principal ideal domain} (PID)
     if all finitely generated ideals are principal.
+    % TODO: Ask Ayyer why ``finitely generated'' is necessary.
 \end{definition*}
 \begin{example}
     \Z\ is a PID.
 \end{example}
 
-\begin{proposition}
+\begin{proposition*}
     Every Euclidean domain is a principal ideal domain.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     Let $I$ be an ideal in a Euclidean domain $R$.
     Consider the set $\set{\lambda(b) \mid b \in I^*} \subseteq \N$.
