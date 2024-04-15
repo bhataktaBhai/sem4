@@ -1,0 +1,157 @@
+\lecture{28}{Mon 18 Mar '24}{}
+\begin{definition}[Primitive root] \label{def:nt:primitive_root}
+    An integer $a \in \Z/n\Z$ is called a \emph{primitive root modulo $n$}
+    if it generates $U(\Z/n\Z)$.
+\end{definition}
+\begin{examples}
+    \item 2 is a primitive root modulo 5, but not modulo 7.
+    \item There are no primitive roots modulo 12.
+\end{examples}
+
+\begin{fact} \label{thm:nt:facts} \leavevmode
+    \begin{enumerate}
+        \item If $p$ is an odd prime, then $U(\Z/p^l\Z)$ is cyclic.
+        \item $U(\Z/2\Z)$ and $U(\Z/4\Z)$ are cyclic, but for $l \ge 3$,
+        $U(\Z/2^l\Z)$ is a product of cyclic groups of order
+        $2$ and $2^{l-2}$.
+    \end{enumerate}
+\end{fact}
+
+\begin{theorem}
+    Let $n = 2^a p_1^{a_1} \dots p_l^{a_l}$ be the prime decomposition
+    of $n$.
+    Then \[
+        U(\Z/n\Z) \cong U(\Z/2^a\Z) \times \underbrace{U(\Z/p_1^{a_1}\Z) \times \dots \times U(\Z/p_l^{a_l}\Z)}_{\text{cyclic}}
+    \]
+\end{theorem}
+\begin{corollary}
+    An integer possesses primitive roots iff $n$ is of the form $2$, $4$,
+    $p^a$, or $2p^a$ for some odd prime $p$.
+\end{corollary}
+
+\chapter{Quadratic Residues} \label{chp:quad_res}
+\begin{definition}[Quadratic residue] \label{def:quad_res}
+    Let $(a, m) = 1$.
+    Then $a$ is called a \emph{(quadratic) residue modulo $m$} if there
+    is an $x \in \Z/m\Z$ such that $x^2 \equiv a \pmod{m}$.
+
+    If not, we say that $a$ is a \emph{(quadratic) non-residue modulo $m$}.
+\end{definition}
+\begin{example}
+    For $m = 7$, \[
+        1^2, 2^2, \dots, 6^2 \equiv 1, 4, 2, 2, 4, 1 \pmod{7}.
+    \] So the quadratic residues modulo 7 are precisely $1$, $2$, and $4$.
+\end{example}
+
+\begin{proposition} \label{thm:quad_res:condition}
+    Let $m = 2^e p_1^{e_1} \dots p_l^{e_l}$ and let $(a, m) = 1$.
+    Then $x^2 \equiv a \pmod{m}$ has a solution iff
+    \begin{itemize}
+        \item if $e = 2$, then $a \equiv 1 \pmod 4$ and if $e \ge 3$, then
+        $a \equiv 1 \pmod 8$; and
+        \item for each $i$, $a^{(p_i - 1)/2} \equiv 1 \pmod{p_i}$.
+    \end{itemize}
+\end{proposition}
+\begin{proof}
+    By the proof of the Chinese Remainder Theorem, $x^2 \equiv a \pmod m$
+    has a solution iff \[
+        x^2 \equiv a (2^e), \quad x^2 \equiv a (p_1^{e_1}),
+            \quad \dots, \quad x^2 \equiv a (p_l^{e_l}) % TODO: check
+    \]
+
+    We restrict our attention to $x^2 \equiv a \pmod{2^e}$ to get the first
+    condition.
+    First note that $1$ is the only quadratic residue modulo $4$ and
+    modulo $8$.
+
+    \begin{lemma}
+        If $x^2 \equiv a \pmod 8$, where $a$ is odd, has a solution, then
+        so does $x^2 \equiv a \pmod{2^e}$ for all $e \ge 3$.
+    \end{lemma}
+    \begin{proof}
+        Induction.
+        Suppose $x_0^2 \equiv a \pmod{2^e}$.
+        Note that since $a$ is odd, so is $x_0$.
+        Take $x_0^2 = s 2^e + a$.
+
+        Let $x_1 = x_0 - s2^{e-1}$.
+        Then modulo $2^{e+1}$, \begin{align*}
+            x_1^2 &\equiv (x_0 - s2^{e-1})^2 \\
+                &\equiv x_0^2 + sx_0 2^e + s^2 2^{2e-2} \\
+                &\equiv a + s2^e + sx_0 2^e + s^2 2^{e-3} 2^{e+1} \\
+                &\equiv a + s(1 + x_0) 2^e + 0 \\
+                &\equiv a
+        \end{align*} since $x_0$ is odd.
+        Winduction.
+    \end{proof}
+
+    \begin{lemma}
+        Let $p$ be an odd prime, $p \nmid a$ and $p \nmid n$.
+        Then if $x^n \equiv a \pmod p$ has a solution,
+        so does $x^n \equiv a \pmod{p^e}$ for all $e \ge 1$.
+    \end{lemma}
+    \begin{proof}
+        Induction.
+        If $x_0$ is a solution of $x^n \equiv a \pmod {p^e}$, then
+        let $x_0^n = s p + a$ and choose $x_1 = x_0 + b p^{e-1}$, where
+        $b$ is chosen so that $b \equiv -sx_0 \pmod p$.
+        (This exists since $b$ is non-zero modulo $p$.)
+        This gives a solution modulo $p^{e+1}$.
+        Winduction.
+    \end{proof}
+
+    Thus, it suffices to look at $x^2 \equiv a \pmod{p_i}$.
+
+    Let $g$ be a primitive root modulo $p = p_i$ and let $x = g^y$.
+    We wish to solve $g^{2y} = g^b \pmod p$.
+    It is enough to solve for $2y \equiv b\pmod{p - 1}$.
+    This has a solution if $(2, p - 1) \mid b$.
+
+    If $2 \mid b$, then $a^{\frac{p - 1}{2}} = g^{\frac{b}{2} (p - 1)} \equiv 1 \pmod p$ by Fermat's little theorem.
+
+    Conversely, if $a^{\frac{p - 1}{2}} \equiv 1 \pmod p$,
+    then $g^{\frac{b}{2} (p - 1)} \equiv 1 \pmod p$ and so
+    $p - 1 \mid \frac{b}{2} (p - 1)$ which implies $2 \mid b$.
+\end{proof}
+
+\begin{definition}[Legendre symbol] \label{def:legendre_symbol}
+    Let $p$ be an odd prime.
+    The \emph{Legendre symbol} is defined as \[
+        \lgnd{a}{p} = \begin{cases}
+            \hphantom{-}1 & \text{if } a \text{ is a residue modulo } p \\
+            -1 & \text{if } a \text{ is a non-residue modulo } p \\
+            \hphantom{-}0 & \text{if } p \mid a
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{proposition} \label{thm:legendre} \leavevmode
+    \begin{enumerate}
+        \item $a^{(p - 1)/2} \equiv \lgnd{a}{p} \pmod p$.
+            \label{thm:legendre:p-1}
+        \item $\lgnd{ab}{p} = \lgnd{a}{p} \lgnd{b}{p}$.
+            \label{thm:legendre:product}
+        \item If $a \equiv b \pmod p$, then $\lgnd{a}{p} = \lgnd{b}{p}$.
+            \label{thm:legendre:congruence}
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    If $p \mid a$ or $p \mid b$, then all of these are trivial.
+    Thus assume that $p \nmid ab$.
+    For (i), we have by Fermat's little theorem that \begin{align*}
+        a^{p - 1} &\equiv 1 \pmod p \\
+        (a^{(p - 1)/2} - 1)(a^{(p - 1)/2} + 1) &\equiv 0 \pmod p
+    \end{align*} but since $\Z/p\Z$ is a field,
+    one of these is zero.
+    So $a^{(p - 1)/2} \equiv \pm 1 \pmod p$.
+    By \cref{thm:quad_res:condition}, $a^{(p - 1)/2} \equiv 1 \pmod p$
+    iff $a$ is a residue modulo $p$.
+
+    For (ii), we have using (i) that \begin{align*}
+        (ab)^{(p - 1)/2} &\equiv \lgnd{ab}{p} \pmod p \\
+        \shortintertext{and}
+        a^{(p - 1)/2} b^{(p - 1)/2} &\equiv \lgnd{a}{p} \lgnd{b}{p} \pmod p
+    \end{align*} so $\lgnd{ab}{p} = \lgnd{a}{p} \lgnd{b}{p}$.
+
+    (iii) is obvious from the definition.
+\end{proof}

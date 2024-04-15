@@ -1,0 +1,165 @@
+\lecture{29}{Wed 20 Mar '24}{}
+\begin{remark}
+    By \labelcref{thm:legendre:p-1}, $\lgnd 1 p = 1$.
+\end{remark}
+
+\begin{corollary} \label{thm:quad_res:half}
+    The number of quadratic residues modulo $p$ is equal to
+    the number of quadratic non-residues modulo $p$.
+\end{corollary}
+\begin{proof}
+    
+\end{proof}
+
+\begin{corollary} \label{thm:quad_res:product}
+    The multiplication table of residues modulo $p$ is as follows:
+    \begin{center}
+        \begin{tabular}{c|c|c}
+            $\cdot$ & Residue & Non-residue \\
+            \hline
+            Residue & Residue & Non-residue \\
+            Non-residue & Non-residue & Residue
+        \end{tabular}
+    \end{center}
+\end{corollary}
+\begin{proof}
+    Follows from definition and \labelcref{thm:legendre:product}.
+\end{proof}
+
+\begin{corollary}
+    $(-1)^{\frac{p-1}{2}} = \lgnd{-1}{p}$.
+\end{corollary}
+\begin{proof}
+    Set $a = -1$ in \labelcref{thm:legendre:p-1}.
+\end{proof}
+
+\begin{exercise}
+    Use this result to show that there are infinitely many primes
+    congruent to $1 \pmod{4}$.
+\end{exercise}
+
+\begin{definition}[Least residues] \label{def:quad_res:least_res}
+    Let $p$ be a prime. The set \[
+        S = \set{-\frac{p-1}{2}, -\frac{p-3}{2},
+            \dots, -1, 1, \dots,
+            \frac{p-3}{2}, \frac{p-1}{2}}
+    \] is called the set of \emph{least residues modulo $p$}.
+    These together with $0$ form a complete set of residues modulo $p$.
+\end{definition}
+
+\begin{example}
+    For $p = 7$, $S = \set{-3, -2, -1, 1, 2, 3}$.
+\end{example}
+\begin{definition} \label{def:quad_res:mu}
+    Let $p$ be a prime that does not divide $a$.
+    We define \begin{align*}
+        \mu(p, a) = \text{number of negative least residues modulo $p$ of
+        the integers }\\
+        \set*[\Big]{a, 2a, \dots, \frac{p-1}{2} a}.
+    \end{align*}
+\end{definition}
+
+\begin{theorem}[Gauss' lemma] \label{thm:quad_res:gauss}
+    \[
+        \lgnd a p = (-1)^{\mu(p, a)}
+    \] for $p$ prime and $p \nmid a$.
+\end{theorem}
+\begin{proof}
+    For each $1 \le l \le \frac{p-1}{2}$, let the least residue of $la$ be
+    $\pm m_l$, $m_l > 0$.
+
+    \textbf{Claim:} $m_l = m_k$ iff $l = k$.
+    \begin{proof}
+        If $l \ne k$ and $m_l = m_k$,
+        then $la \equiv \pm ka \pmod p$.
+
+        But $p \nmid a$, so $l \pm k \equiv 0 \pmod p$,
+        But $\abs{l \pm k} \le p - 1$, so $l \not\equiv \pm k \pmod p$.
+        Contradiction.
+    \end{proof}
+
+    Thus $\set{m_1, \dots, m_{\frac{p-1}{2}}}$ is the complete set
+    $\set{1, 2, \dots, \frac{p-1}{2}}$.
+
+    Then \begin{align*}
+        \prod_{l=1}^{(p-1)/2} la
+            &\equiv (-1)^{\mu(p, a)} \prod_{l=1}^{(p-1)/2} m_l  \pmod p \\
+        a^{\frac{p-1}{2}} \paren{\frac{p-1}{2}}!
+            &\equiv (-1)^{\mu(p, a)} \paren{\frac{p-1}{2}}! \\
+        a^{\frac{p-1}{2}} &\equiv (-1)^{\mu(p, a)}.
+    \end{align*}
+    Using \labelcref{thm:legendre:p-1}, we get the result.
+\end{proof}
+\begin{remark}
+    This is a powerful result, but not useful for computation.
+\end{remark}
+
+\begin{proposition}
+    $2$ is a residue (resp. non-residue) for primes of the form $8k \pm 1$
+    (resp. $8k \pm 3$).
+    Equivalently, $\lgnd 2 p = (-1)^{\frac{p^2 - 1}{8}}$.
+\end{proposition}
+\begin{proof}
+    Let $p$ be an odd prime and $a = 2$.
+    By Gauss' lemma, look at $\set{2, 4, \dots, p-1}$.
+    Thus, $\mu(p, 2)$ is equal to the number of elements which are more than
+    $\frac{p-1}{2}$.
+
+    Define $m \in \N$ as the unique natural number such that
+    $2m \le \frac{p-1}{2}$ and $2(m + 1) > \frac{p-1}{2}$.
+    Then $\mu = \frac{p-1}{2} - m$.
+    \begin{itemize}
+        \item If $p = 8k + 1$, then $\frac{p-1}{2} = 4k$ so $m = 2k$.
+        This gives that $\mu = 4k - 2k = 2k$ is even.
+        \item If $p = 8k + 3$, then $\frac{p-1}{2} = 4k + 1$ so $m = 2k$.
+        This gives that $\mu = 4k + 1 - 2k = 2k + 1$ is odd.
+        \item If $p = 8k + 5$, then $\frac{p-1}{2} = 4k+2$ so $m = 2k+1$.
+        This gives $\mu = 4k+2 - 2k - 1 = 2k + 1$ is odd.
+        \item If $p = 8k + 7$, then $\frac{p-1}{2} = 4k + 3$ so $m = 2k+1$.
+        This gives $\mu = 4k+3 - 2k - 1 = 2k + 2$ is even.
+    \end{itemize}
+    Thus $\lgnd 2 p = (-1)^\mu$ is $1$ for $p = 8k \pm 1$ and $-1$ for
+    $p = 8k \pm 3$.
+\end{proof}
+
+\begin{theorem}[Law of quadratic reciprocity] \label{thm:quad_res:reciprocity}
+    Let $p$ and $q$ be distinct odd primes.
+    Then
+    \begin{enumerate}
+        \item $\lgnd{-1}{p} = (-1)^{\frac{p-1}{2}}$.
+        \item $\lgnd 2 p = (-1)^{\frac{p^2 - 1}{8}}$.
+        \item $\lgnd{p}{q} \lgnd{q}{p}
+            = (-1)^{\frac{p-1}{2} \frac{q-1}{2}}$.
+    \end{enumerate}
+\end{theorem}
+\begin{lemma}
+    Let $p$ be an odd prime and $(a, 2p) = 1$.
+    Then \[
+        \lgnd a p = (-1)^t, \quad \text{where } t
+            = \sum_{j=1}^{\frac{p-1}{2}} \floor{\frac{ja}{p}}
+    \]
+\end{lemma}
+\begin{proof}
+    Note that $a$ is odd.
+    Let $\mu$ be as in Gauss' lemma.
+    Let $-r_1, \dots, -r_\mu$ be negative least residues and
+    $s_1, \dots, s_k$ be positive least residues ($k = \frac{p-1}{2} - \mu$).
+    Then \[
+        \sum_{j=1}^{\frac{p-1}{2}} ja = \sum_{j=1}^{\frac{p-1}{2}} p \floor{\frac{ja}{p}} + \sum_{j=1}^{k} s_j + \sum_{j=1}^{\mu} (p - r_j).
+    \] But $\sum_{j=1}^{(p-1)/2} j = \frac{p^2 - 1}{8}$.
+    Also, from the proof of \cref{thm:quad_res:gauss}, we have
+    $\sum r_j + \sum s_j = \sum_{j=1}^{\frac{p-1}{2}} j$.
+
+    Thus we have \begin{align}
+        \frac{p^2 - 1}{8} a
+            &= p \sum_{j=1}^{\frac{p-1}{2}} \floor{\frac{ja}{p}}
+            + \sum s_j + \mu p - \sum r_j \label{eq:quad_res:sum} \\
+        \frac{p^2 - 1}{8} &= \sum s_j + \sum r_j \label{eq:quad_res:sum2}
+    \end{align}
+    Subtracting \cref{eq:quad_res:sum2} from \cref{eq:quad_res:sum} gives
+    \begin{align*}
+        (a - 1) \frac{p^2 - 1}{8}
+            &= p \sum \floor{\frac{ja}{p}} + p \mu - 2 \sum r_j \\
+            &\equiv \sum \floor{\frac{ja}{p}} + \mu \pmod 2.
+    \end{align*}
+\end{proof}

@@ -1,0 +1,104 @@
+\lecture{24}{Thu 28 Mar '24}{}
+\begin{theorem*}[Rice 1956] \label{thm:rice_1956}
+    Any \emph{non-monotone} property of recuresive enumerable languages
+    is not even recursively enumerable.
+    That is, if $P$ is a non-monotone propertty of r.e. languages,
+    then $L_P$ is not even r.e.
+\end{theorem*}
+\begin{remark}
+    Languages that are not recursively enumerable are sometimes called
+    \emph{highly undecidable}.
+\end{remark}
+\begin{proof}
+    We wish to reduce $\neg\HP$ to $L_P$.
+    That is, $\neg\HP \le L_P$.
+
+    That is, we want a computable function $M\#x \xmapsto{\sigma} Q_{M, x}$
+    such that $Q_{M, x}$ is in $L_P$ iff $M$ does not halt on $x$.
+
+    We will define $Q_{M, x}$ as follows:
+    \begin{itemize}
+        \item Since $P$ is non-monotone, there exist r.e. languages
+        $A \subseteq B$ such that $A \in P$ but $B \notin P$.
+        \item Take three tapes.
+        Write the input on the first two tapes.
+        Write $x$ on the third tape.
+        \item Run a Turing machine for $A$ on the first tape,
+        a TM for $B$ on the second tape,
+        and $M$ on the third tape,
+        all in parallel.
+        \item Accept if the first tape accepts, \ie, if $x \in A$.
+        \item Also accept if $M$ halts on $x$, and the second tape accepts.
+        That is, if $M\#x \notin \neg\HP$ and $x \in B$.
+    \end{itemize}
+    Then the language accepted by $Q_{M, x}$ is \[
+        L(Q_{M, x}) = \begin{cases}
+            A & \text{if $M$ does not halt on $x$,} \\
+            B & \text{if $M$ halts on $x$.}
+        \end{cases}
+    \]
+\end{proof}
+
+\section{Decidability Problems Regarding CFLs} \label{sec:cfl:decidability}
+\begin{exercise}
+    Is it decidable whether a given CFG accepts a non-empty language?
+\end{exercise}
+\begin{solution}
+    Yes.
+    One way is to use the bound for the height of minimal parse trees
+    (\cref{TODO}).
+    Check all trees up to that height.
+
+    Another way is to check whether there is a way to reach a terminal
+    string from each non-terminal.
+    First, mark all terminals.
+    Then, iteratively mark each non-terminal $X$ such that $X \to \gamma$
+    is a rule with each symbol in $\gamma$ marked.
+    If the start symbol is marked at the end,
+    the language is non-empty.
+\end{solution}
+
+\begin{exercise}
+    Is it decidable whether a given CFG accepts a finite language?
+\end{exercise}
+\begin{solution}
+    Yes.
+    Check all trees up to height $n + 2n$. % TODO
+\end{solution}
+
+\begin{exercise}
+    Is it decidable whether a given CFG $G$ is universal?
+    That is, is $L(G) = A^*$?
+\end{exercise}
+\begin{solution}
+    No!
+
+    We will reduce $\neg\HP$ to this problem.
+    Highly undecidable!
+
+    Let $M = (Q, A, \Gamma, s, \delta, \leftend, \blank, t, r)$.
+    Let $x = a_1 a_2 \dots a_n$ be an input to $M$.
+
+    We can represent a configuration of $M$ as follows:
+    \begin{center}
+        \begin{tabular}{cccccc}
+            $\leftend$ & $b_1$ & $b_2$ & $b_3$ & $\dots$ & $b_n$ \\
+            $-$ & $-$ & $-$ & $q$ & \dots & $-$
+        \end{tabular}
+    \end{center}
+    Thus we define the double-decker alphabet \[
+        \Delta = \Gamma \times \set{Q \cup \set{-}}
+                \cup \set{\#}
+    \]
+
+    Define a \emph{valid computation} of $M$ on $x$ as a string \[
+        c_0 \# c_1 \# \dots \# c_N \#
+    \] where each $c_i$ is a valid configuration,
+    $c_0$ is the initial configuration,
+    $c_N$ is a \emph{halting} configuration,
+    and $c_i \xRightarrow{1} c_{i+1}$ for all $i$.
+    Further, all $c_i$ are of the same length, and minimal.
+    That is, the length is either the length of the input,
+    or the last cell that is ever read
+    (basically every cell that matters).
+\end{solution}

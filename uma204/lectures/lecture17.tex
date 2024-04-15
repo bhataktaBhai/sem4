@@ -1,5 +1,5 @@
-\lecture{17}{Thu 08 Feb '24}{}
 \section{Sequences in \R} \label{sec:sequences:R}
+\lecture{17}{Thu 08 Feb '24}{}
 \begin{definition}[The Extended Reals] \label{def:sequences:R:extended}
     The \emph{extended real line} is the set of real numbers along with $2$
     formal sumbols $+\infty$ and $-\infty$, denoted by \[
@@ -36,7 +36,7 @@ and \Q\ is a Dedekind cut represented as $+\infty$.
     If $-x_n \to +\infty$, we say that $x_n \to -\infty$.
 \end{definition}
 
-\begin{definition}
+\begin{definition*}
     Let $(x_n)_{n \in \N} \subseteq \R$.
     Let $E \subseteq \wbar{\R}$ denote the set of subsequential limits of
     $(x_n)_n$ in the extended real line.
@@ -45,7 +45,7 @@ and \Q\ is a Dedekind cut represented as $+\infty$.
 
     The infimum of $E$ is called the \emph{lower limit} or \emph{limit
     inferior} of $(x_n)_n$, denoted $\liminf_{n \to \infty} x_n$.
-\end{definition}
+\end{definition*}
 \begin{example}
     Let $(x_n = (-1)^n)_{n \in \N}$.
     Then $E = \set{-1, +1}$ so $\limsup_{n \to \infty} x_n = 1$ and
@@ -53,8 +53,8 @@ and \Q\ is a Dedekind cut represented as $+\infty$.
 \end{example}
 
 \begin{theorem} \label{thm:sequences:R:limsup}
-    Let $(x_n)_n \subseteq \R$ be a sequence and $E$ be the set of
-    subsequential limits of $E$ in $\wbar{\R}$.
+    Let $(x_n)_{n \in \N} \subseteq \R$ be a sequence and $E$ be the set of
+    subsequential limits of $(x_n)_n$ in $\wbar{\R}$.
     \begin{enumerate}[label=(\arabic*)]
         \item $E$ is non-empty.
         \item $\sup E$ and $\inf E$ are contained in $E$.

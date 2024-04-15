@@ -1,5 +1,5 @@
-\lecture{16}{Wed 07 Feb '24}{}
 \begin{proof}[Proof of $(3) \Rightarrow (2)$]
+\lecture{16}{Wed 07 Feb '24}{}
     Let $S \subseteq E$ be an infinite set.
     Thus there exists a sequence $(x_n)_n \subseteq S$ of distinct elements.
 
@@ -38,10 +38,10 @@ Then \[
     $\varepsilon > 0$, there exists an $N \in \N$ such that whenever
     $n, m \ge N$, $d(x_n, x_m) < \varepsilon$.
 \end{definition}
-\begin{definition}[Completeness] \label{def:cauchy:completeness}
+\begin{definition*}[Completeness] \label{def:cauchy:completeness}
     $(X, d)$ is said to be a \emph{complete} metric space if every Cauchy
     sequence in $(X, d)$ is convergent.
-\end{definition}
+\end{definition*}
 
 \begin{theorem} \leavevmode
     \begin{enumerate}[label=(\alph*)]
@@ -53,9 +53,9 @@ Then \[
     Trivial.
 \end{proof}
 
-\begin{theorem}
+\begin{theorem*}
     Every compact metric space is complete.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Let $(X, d)$ be compact and let $(x_n)_n$ be a Cauchy sequence in $X$.
     Since $X$ is compact, $(x_n)_n$ has a convergent subsequence
@@ -97,3 +97,5 @@ Then \[
     Thus $x_{n_k} \ge x_0 + k\varepsilon$ for all $k \in \N$, which
     contradicts boundedness.
 \end{proof}
+Alternatively, we could see \Q\ as a subset of \R, and use the fact that
+a bounded monotone sequence in \R\ is convergent.

@@ -1,6 +1,5 @@
+\chapter*{The Course} \label{chp:course}
 \lecture{01}{Mon 01 Jan '24}{}
-
-\chapter*{The course} \label{chp:course}
 \textbf{Instructor:} Prof.~Purvi~Gupta\\
 \textbf{Office:} L-25\\
 \textbf{Office hours:} Wed 17:00--18:00\\
@@ -20,23 +19,23 @@ For a recap, refer lectures 1 to 3 of UMA101.
     \N \subseteq \Z \subseteq \Q \subseteq \R \subseteq \C
 \]
 \section{The Naturals} \label{sec:naturals}
-(Recall from UM101) $\N$ is the unique minimal inductive set granted by the ZFC
-axioms.
-Addition and multiplication are defined by the recursion principle and we showed
-that they
+(Recall from UM101) $\N$ is the unique minimal inductive set granted by the
+ZFC axioms.
+Addition and multiplication are defined by the recursion principle
+and we showed that they
 \begin{itemize}
     \item are associative and commutative,
     \item admit identity elements $0$ and $1$ respectively,
     \item satisfy the distributive law,
     \item satisfy cancellation laws,
-    \item \textcolor{Red}{but} do not admit inverses.
+    \item but do \textcolor{Red}{not} admit inverses.
 \end{itemize}
 
 \section{Relations} \label{sec:relations}
 (Recall) A relation on a set $A$ is a subset $R \subseteq A \times A$.
 We write $a \mathrel{R} b$ to denote $(a, b) \in R$.
 
-\begin{definition}[Partial order] \label{def:relations:partial_order}
+\begin{definition*}[Partial order] \label{def:relations:partial_order}
     A relation $R$ on $A$ is called a \emph{partial order} if it is
     \begin{itemize}
         \item reflexive -- $a \mathrel{R} a$ for all $a \in A$;
@@ -48,11 +47,11 @@ We write $a \mathrel{R} b$ to denote $(a, b) \in R$.
     Additionally, if for all $x, y \in A$, $x \mathrel{R} y$ or
     $y \mathrel{R} x$, then $R$ is called a \emph{total order}.
 
-    A set $A$ equipped with a partial order $\le$ is called a \emph{partially
-    ordered set} (or \emph{poset}). \\
+    A set $A$ equipped with a partial order $\le$ is called a
+    \emph{partially ordered set} (or \emph{poset}). \\
     A set $A$ equipped with a total order $\le$ is called a \emph{totally
     ordered set} or simply an \emph{ordered set}.
-\end{definition}
+\end{definition*}
 \begin{examples}
     \item $(\N, \le)$ where we say that $a \le b$ if $\exists c \in \N$ such
     that $a + c = b$.
@@ -63,7 +62,8 @@ We write $a \mathrel{R} b$ to denote $(a, b) \in R$.
 In UMA101, we defined order slightly differently, where we said that either
 $a < b$ or $b < a$ but never both.
 This is a ``strict order''.
-We will denote a weak partial order by $\le$ and a strict partial order by $<$.
+We will denote a weak partial order by $\le$
+and a strict partial order by $<$.
 (the notation is suggestive of how to every order there is a corresponding
 strict order and vice versa).
 
@@ -71,8 +71,8 @@ strict order and vice versa).
     An \emph{equivalence relation} on a set $A$ is a relation $R$ satisfying
     \begin{itemize}
         \item reflexivity;
-        \item symmetry -- if $a \mathrel{R} b$ then $b \mathrel{R} a$ for all
-        $a, b \in A$;
+        \item symmetry -- if $a \mathrel{R} b$ then $b \mathrel{R} a$
+            for all $a, b \in A$;
         \item transitivity.
     \end{itemize}
 \end{definition}
@@ -98,19 +98,22 @@ We introduce $\Z$ to solve this problem.
 
 Consider the relation $R$ on $\N \times \N$ given by \[
     (a, b) \mathrel{R} (c, d) \iff a + d = b + c.
-\] (check that this is an equivalence relation \textcolor{solved}{trivial}).
-\begin{definition} \label{def:integers}
-    We define $\Z$ to be the set of equivalence classes of $R$, notated
-    $\N \times \N / R$.
-\end{definition}
+\] (\textcolor{exercise}{check that this is an equivalence relation}
+\textcolor{solved}{trivial}).
+\begin{definition*} \label{def:integers}
+    We define $\Z$ to be the set of equivalence classes of $R$, denoted
+    $(\N \times \N) / R$.
+\end{definition*}
 Further, define
-\begin{itemize}
-    \item $[(a, b)] +_\Z [(c, d)] \coloneq [(a + c, b + d)]$;
-    \item $[(a, b)] \cdot_\Z [(c, d)] \coloneq [(ac + bd, ad + bc)]$.
-    \item $z_1 \le_\Z z_2$ iff there exists $n \in \N$ such that
-    $z_1 +_\Z [(n, 0)] = z_2$ \\
-    (alternatively, $[(a, b)] \le_\Z [(c, d)]$ iff $a + d \le b + c$).
-\end{itemize}
+\begin{definition} \label{def:integers:operations} \leavevmode
+    \begin{itemize}
+        \item $[(a, b)] +_\Z [(c, d)] \coloneq [(a + c, b + d)]$;
+        \item $[(a, b)] \cdot_\Z [(c, d)] \coloneq [(ac + bd, ad + bc)]$.
+        \item $z_1 \le_\Z z_2$ iff there exists $n \in \N$ such that
+        $z_1 +_\Z [(n, 0)] = z_2$ \\
+        (alternatively, $[(a, b)] \le_\Z [(c, d)]$ iff $a + d \le b + c$).
+    \end{itemize}
+\end{definition}
 We need to check that these are well-defined.
 What does this mean?
 Consider \begin{align*}

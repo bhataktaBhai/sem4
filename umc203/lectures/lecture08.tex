@@ -1,5 +1,5 @@
-\lecture{08}{Tue 06 Feb '24}{}
-\section{Convex Optimisation} \label{sec:convex}
+\chapter{Convex Optimisation} \label{chp:convex}
+\lecture{08}{Tue 06 Feb '24}{Primer on convex optimisation}
 \begin{definition}[Convex function] \label{def:convex}
     A set $C \subseteq \R^d$ is said to be \emph{convex} if for all
     $x, y \in C$ and $\lambda \in [0, 1]$, \[
@@ -12,26 +12,28 @@
     \]
 \end{definition}
 
-\begin{theorem}
+\begin{theorem*}
     Let $f \in C^1(C)$, where $C \subseteq \R^d$ is convex.
     Then $f$ is convex iff \[
-        f(y) \ge f(x) + \innerp{\nabla f(x)}{y-x}
-    \]
-\end{theorem}
+        f(y) - f(x) \ge \innerp{\nabla f(x)}{y-x}
+    \] for all $x, y \in C$.
+\end{theorem*}
 
 \begin{notation}
     Let $A$ and $B$ be symmetric matrices.
     We write $A \succeq B$ if $A - B$ is positive semidefinite.
 \end{notation}
-\begin{theorem}
+\begin{proposition}
     $\succeq$ is a partial order.
-\end{theorem}
+\end{proposition}
 \begin{proof} \leavevmode
     \begin{itemize}
         \item Reflexivity: $A - A = 0 \succeq 0$.
         \item Antisymmetry: $A - B \succeq 0$ and $B - A \succeq 0$ implies
-            $A - B = 0$, since $\lambda$ and $-\lambda$ are both nonnegative
-            for each eigenvalue $\lambda$ of the difference.
+            $A - B = 0$, since if $\lambda$ is an eigenvalue of $A - B$,
+            then $-\lambda$ is an eigenvalue of $B - A$.
+            But all eigenvalues of $A - B$ as well as $B - A$ are
+            nonnegative, so $\lambda = 0$.
         \item Transitivity: Suppose $A \succeq B \succeq C$.
         Then for all $u$,
         \begin{align*}
@@ -44,17 +46,17 @@
     \end{itemize}
 \end{proof}
 
-\begin{theorem}
+\begin{theorem*}
     Let $f \in C^2(C)$, where $C \subseteq \R^d$ is convex.
     Let $H(x) = (\hess f)(x)$.
     Then $f$ is convex iff \[
         H(x) \succeq 0 \quad \forall x \in C.
     \]
-\end{theorem}
+\end{theorem*}
 
-\begin{definition}[Convex optimisation problem] \label{def:convexopt}
+\begin{definition*}[Convex optimisation problem] \label{def:convexopt}
     Let $f\colon \R^d \to \R$ and $f_i\colon \R^d \to \R$ be convex
-    functions for each $1 \le i \le m$.
+    functions for each $i \in [m]$.
     Let $(a_j)_{j=1}^n \subseteq \R^d$ and $(b_j)_{j=1}^n \subseteq \R$.
     The \emph{convex optimisation problem} is to find \[
         \min_{x \in \R^d} f(x) \quad \text{such that} \quad \begin{cases}
@@ -62,8 +64,8 @@
             \innerp{a_j}{x} = b_j \text{ for all } j \in [n].
         \end{cases}
     \]
-\end{definition}
-\begin{definition}[Lagrangian] \label{def:convex:lagrangian}
+\end{definition*}
+\begin{definition*}[Lagrangian] \label{def:convex:lagrangian}
     Let $\lambda \in \R^m$ and $\mu \in \R^n$.
     The \emph{Lagrangian} of the convex optimisation problem is \[
         L(x, \lambda, \mu) = f(x) + \sum_{i=1}^{m} \lambda_i f_i(x)
@@ -72,15 +74,19 @@
     $\mu$ such that
     \begin{align*}
         \nabla_{\!x\,} L(x^*, \lambda, \mu) &= 0, \\
-        \innerp{a_j}{x^*} - b_j &\le 0 \quad \forall j \in [n], \\
+        \innerp{a_j}{x^*} - b_j &= 0 \quad \forall j \in [n], \\
         f_i(x^*) &\le 0 \quad \forall i \in [m], \\
         \lambda_i f_i(x^*) &= 0 \quad \forall i \in [m].
     \end{align*}
-\end{definition}
-\begin{theorem}
+\end{definition*}
+The first condition is the \emph{stationarity} condition.
+The second and third conditions are the \emph{primal feasibility}
+conditions.
+The final condition is the \emph{complementary slackness} condition.
+\begin{theorem*}
     If $x^*$ is a KKT point for the convex optimisation problem, then
-    $x^*$ is a minimiser of the problem (for most problems).
-\end{theorem}
+    $x^*$ is a global minimiser.
+\end{theorem*}
 \begin{example}
     Consider the convex optimisation problem \[
         \min_{x \in \R^d} \frac12 \norm{x - z}^2 \quad \text{such that}
@@ -93,8 +99,66 @@
         \innerp{w}{x^*} + b &= 0 \\
         \implies \innerp{w}{z - \mu w} + b &= 0 \\
         \implies \innerp{w}{z} - \mu \norm{w}^2 + b &= 0
-        \intertext{So the minimiser is}
-        x^* &= z - \frac{(\innerp{w}{z} + b)}{\norm{w}^2} w.
     \end{align*}
+    So the minimizer is \[
+        x^* = z - \frac{(\innerp{w}{z} + b)}{\norm{w}^2} w.
+    \]
     This is the orthogonal projection of $z$ onto the hyperplane.
 \end{example}
+
+\section{Wolfe Dual} \label{sec:wolfe_dual}
+\begin{definition*}[Wolfe dual] \label{def:wolfe_dual}
+    For a given convex optimisation problem $P$, the \emph{Wolfe dual}
+    problem $D$ is \[
+        \max_{x, \lambda, \mu} L(x, \lambda, \mu) \quad \text{such that}
+        \quad \begin{cases}
+            \lambda \ge 0, \\
+            \grad_x L(x, \lambda, \mu) = 0.
+        \end{cases}
+    \]
+\end{definition*}
+\begin{theorem*}
+    If $x^*$ is a KKT point for the convex optimisation problem with
+    Lagrange multipliers $\lambda^*$ and $\mu^*$, then
+    $(x^*, \lambda^*, \mu^*)$ solves the Wolfe dual problem.
+\end{theorem*}
+\begin{proof}
+    First absorb the affine equality constraints into the convex
+    inequality constraints.
+    Suppose $x^*$ is a KKT point with Lagrange multipliers
+    $\lambda^*$.
+    Note that $(x^*, \lambda^*)$ is feasible for the Wolfe dual
+    problem.
+    Then \begin{align*}
+        L(x^*, \lambda^*) &= f(x^*) + \sum_{i=1}^{m} \lambda_i^* f_i(x^*) \\
+                    &= f(x^*)
+    \end{align*} by complementary slackness.
+    Also note that by primal feasibility, \begin{align*}
+        L(x^*, \lambda) &= f(x^*) + \sum_{i=1}^{m} \lambda_i f_i(x^*) \\
+                  &\le f(x^*) = L(x^*, \lambda^*).
+    \end{align*}
+
+    Let $f_0 = f$.
+    Now since $f_i$, $i \in \set{0, \dots, m}$, are convex, we have \[
+        f_i(x^*) \ge f_i(x) + \innerp{\nabla f_i(x)}{x^* - x}
+    \] for all $x$.
+
+    Thus \begin{align*}
+        L(x^*, \lambda)
+            &= f(x^*) + \sum_{i=1}^{m} \lambda_i f_i(x^*) \\
+            &\ge f(x) + \innerp{\nabla f(x)}{x^* - x}
+                + \sum_{i=1}^{m} \lambda_i \left(f_i(x)
+                            + \innerp{\nabla f_i(x)}{x^* - x}\right) \\
+            &= f(x) + \sum_{i=1}^{m} \lambda_i f_i(x)
+                + \innerp[\Big]{\nabla f(x)
+                    + \sum_{i=1}^{m} \lambda_i \nabla f_i(x)}{x^* - x} \\
+            &= L(x, \lambda) + \innerp{x^* - x}{\nabla_x L(x, \lambda)}.
+    \end{align*}
+    Then if $x$ is a feasible point for the Wolfe dual problem, \[
+        L(x^*, \lambda) \ge L(x, \lambda)
+    \] by the stationarity condition.
+    Thus for all feasible $x$ and $\lambda$, \[
+        L(x^*, \lambda^*) \ge L(x^*, \lambda) \ge L(x, \lambda). \qedhere
+    \]
+\end{proof}
+Thus we can use the Wolfe dual to hunt for KKT points.

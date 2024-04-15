@@ -1,4 +1,5 @@
 \input{~/IISc/sem4/preamble}
+\input{~/IISc/sem4/preamble/algorithm}
 \input{~/IISc/sem4/preamble/mvc}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
@@ -6,8 +7,29 @@
 \usetikzlibrary{graphs, graphs.standard, quotes, positioning, arrows.meta}
 
 \newcommand{\ind}[1]{\bm{1}_{#1}}
+\newcommand{\1}[1]{\bm{1}_{#1}}
 \newcommand{\given}{\mid}
 \newcommand{\pms}{\{-1, 1\}}
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator*{\argmin}{argmin}
-\DeclareMathOperator*{\E}{\mathbb E}
+\DeclareMathOperator*{\E}{\textbf{E}}
+\DeclareMathOperator*{\Var}{Var}
+\DeclarePairedDelimiterX{\kld}[2]{D_{KL}(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+\DeclareMathOperator{\VC}{VC}
+
+\DeclareMathOperator{\Ber}{Ber}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Pois}{Pois}
+\DeclareMathOperator{\Geo}{Geo}
+\usepackage{cancel}
+% almost sure convergence
+\newcommand\asto{\xrightarrow{\text{a.s.}}}
+% convergence in probability
+\newcommand\pto{\xrightarrow{\text{\tiny P}}}
+% convergence in distribution
+\newcommand\dto{\xrightarrow{d}}
+\DeclareMathOperator\pr{P}
+\DeclareMathOperator\parent{parent}
+\newcommand\indep{\mathrel{\bot\!\!\!\bot}}

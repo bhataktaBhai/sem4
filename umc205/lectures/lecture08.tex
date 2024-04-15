@@ -1,5 +1,5 @@
 \lecture{08}{Thu 25 Jan '24}{}
-\begin{proof}
+\begin{proof}[DFA to RE]
     Let $L$ be a regular language over an alphabet $A$,
     accepted by a DFA $\mcA = (Q, s, \delta, F)$.
     If the set of final states is empty, then $L = \O$.
@@ -10,15 +10,17 @@
     This is the regular expression $r = (a_1 + \dots + a_k)^*$, where
     $A = \set{a_1, \dots, a_k}$.
     Define $L_{pq}$ to be
-    $\set{w \in A^* \mid \what{\delta}(p, w) = q}$.
+    $\set*{w \in A^* \mid \what{\delta}(p, w) = q}$.
     Then $L(\mcA) = \bigcup_{f \in F} L_{sf}$.
     For $X \subseteq Q$, define \begin{multline*}
         L^X_{pq} \coloneq \{w \in A^* \mid \what{\delta}(p, w) = q
         \text{ and } \what{\delta}(p, x) \in X \\
         \text{ for all non-empty proper prefixes } x \text{ of } w\}.
     \end{multline*}
-    \textbf{Claim:}
-        $L^{X+r}_{pq} = L^X_{pq} \cup L^X_{pr} (L^X_{rr})^* L^X_{rq}$.
+    It is easy to see that
+    $L^{X+r}_{pq} = L^X_{pq} \cup L^X_{pr} (L^X_{rr})^* L^X_{rq}$
+    by conditioning on whether the path from $p$ to $q$ goes through $r$.
+
     This is easily converted to regular expressions by substituting $+$
     for $\cup$.
 
@@ -28,8 +30,8 @@
     \] is finite, and hence can be converted to a regular expression.
 
     By induction on $\abs{X}$ with base case $\O$, we go upto $X = Q$
-        to prove that $L = \bigcup_{f \in F} L^Q_{sf}$ can be converted to
-        a regular expression. \qedhere
+    to prove that $L = \bigcup_{f \in F} L^Q_{sf}$ can be converted to
+    a regular expression.
 \end{proof}
 
 \begin{exercise}

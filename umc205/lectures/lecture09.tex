@@ -16,21 +16,21 @@ We will see several %TODO: how to finish this sentence?
     \end{remark}
 \end{itemize}
 
-\begin{definition}[Refinement] \label{def:mn:refinement}
-    Let $\mcA = (Q, s, \delta, F)$ be a deterministic automaton over an
-    alphabet $A$.
-    We say that \mcA' is a \emph{refinement} of \mcA\ if there exists a
-    $Q$-indexed partition $\set{Q'_p}_{p \in Q}$ of $Q'$ such that for all
-    $p, q \in Q$ and $a \in A$ such that $\delta(p, a) = q$, there exists a
-    $p' \in Q'_p$ and a $q' \in Q'_q$ such that $\delta'(p', a) = q'$.
-\end{definition}
+% \begin{definition*}[Refinement] \label{def:mn:refinement}
+%     Let $\mcA = (Q, s, \delta, F)$ be a deterministic automaton over an
+%     alphabet $A$.
+%     We say that \mcA' is a \emph{refinement} of \mcA\ if there exists a
+%     $Q$-indexed partition $\set{Q'_p}_{p \in Q}$ of $Q'$ such that for all
+%     $p, q \in Q$ and $a \in A$ such that $\delta(p, a) = q$, there exists a
+%     $p' \in Q'_p$ and a $q' \in Q'_q$ such that $\delta'(p', a) = q'$.
+% \end{definition*}
 
-\begin{definition}
+\begin{definition*}
     For any language $L \subseteq A^*$, we define the canonical equivalence
     relation $\equiv_L$ on $A^*$ as \[
         x \equiv_L y \iff \forall z \in A^*(xz \in L \iff yz \in L).
     \]
-\end{definition}
+\end{definition*}
 
 \begin{exercise}
     Describe the equivalence classes for $L = $ ``odd number of $a$'s''.
@@ -44,9 +44,13 @@ We will see several %TODO: how to finish this sentence?
     language $L \subseteq \set{a, b}^*$ comprising strings in which the 2nd
     last letter is a $b$.
 \end{exercise}
-\begin{solution}
-    $\epsilon + a + (.^*)aa$, $b + (.^*)ab$, $(.^*)ba$,
-    $(.^*)bb$.
+\begin{solution} \leavevmode
+    \begin{itemize}
+        \item $\epsilon + a + (.^*)aa$,
+        \item $b + (.^*)ab$,
+        \item $(.^*)ba$,
+        \item $(.^*)bb$.
+    \end{itemize}
 \end{solution}
 
 \begin{exercise}
@@ -54,41 +58,6 @@ We will see several %TODO: how to finish this sentence?
     $L = \set{a^nb^n \mid n \ge 0}$.
 \end{exercise}
 \begin{solution}
-    $L$ is the disjoint union of $\bigsqcup_{0 \le m \le n} \set{a^nb^m}$
-    and its complement.
+    $L$ is the disjoint union of
+    $X = \bigsqcup_{0 \le m \le n} \set{a^nb^m}$ and $X^c$.
 \end{solution}
-% \pagebreak
-% \begin{definition}[Limits] \label{def:mn:limits}
-%     Let $f\colon \R \to \R$ be a function and let $p \in \R$.
-%     We say that $\lim\limits_{x \to p} f(x) = L$ if for all
-%     $\varepsilon > 0$, there exists a $\delta_\varepsilon > 0$ such that
-%     whenever $0 < \abs{x - p} < \delta_\varepsilon$, we have
-%     $\abs{f(x) - L} < \varepsilon$.
-% \end{definition}
-% We are writing $\delta_\varepsilon$ to emphasize that $\delta$ depends on
-% $\varepsilon$.
-% One can choose a different $\delta$ for each $\varepsilon$.
-% \begin{exercise}
-%     Complete the following proof of $\lim_{x \to 0} 1 = 1$.
-% \end{exercise}
-% \begin{proof}
-%     The function at hand is $f(x) = 1$ for all $x \in \R$.
-%     To show that $\lim_{x \to 0} f(x) = 1$, we will assume that
-%     $\varepsilon > 0$ is given and produce a $\delta_\varepsilon > 0$ that
-%     satisfies the definition.
-%
-%     Let $\varepsilon > 0$.
-%     Choose $\delta_\varepsilon = $ \underline{\hspace{1cm}}.
-%     Suppose $x \in \R$ such that $0 < \abs{x - 0} < \delta_\varepsilon$.
-%     Then \underline{\hspace{5cm}}.
-%
-%     Since $\varepsilon > 0$ was \emph{arbitrary} (we allowed it to be any
-%     positive real number), and we constructed a $\delta_\varepsilon$ that
-%     works, we have shown that
-%     \begin{center}
-%         For any $\varepsilon > 0$, there exists a $\delta_\varepsilon > 0$
-%         such that whenever $0 < \abs{x - 0} < \delta_\varepsilon$, we have
-%         $\abs{f(x) - 1} < \varepsilon$.
-%     \end{center}
-%     This is precisely the definition of $\lim_{x \to 0} f(x) = 1$.
-% \end{proof}

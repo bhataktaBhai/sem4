@@ -1,0 +1,92 @@
+\begin{examples}
+\lecture{21}{Thu 29 Feb '24}{}
+    \item $\sum_{n=0}^{\infty} \frac{z^n}{n!}$ converges everywhere.
+    \item $\sum_{n=0}^{\infty} z^n$ converges nowhere on $\abs{z} = 1$.
+    \item 
+\end{examples}
+
+\subsection{Combining Series} \label{sec:series:combinations}
+\begin{theorem}
+    For $\sum_{n=0}^{\infty} a_n$ and $\sum_{n=0}^{\infty} b_n$ convergent
+    to $a$ and $b$ respectively,
+    \begin{enumerate}
+        \item (Addition)
+        $\sum (a_n + b_n)$ converges to $a + b$,
+        \item (Scalar product)
+        $\sum c a_n$ converges to $c a$ for any $c \in \C$,
+        \item (Termwise product)
+        $\sum a_n b_n$ need not converge.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    The first two parts are trivial.
+    For the third, consider the series
+    $\sum_{n=1}^{\infty} \frac{(-1)^n}{\sqrt n}$,
+    which converges by the alternating series test.
+    However, taking its termwise product with itself gives
+    $\sum_{n=1}^{\infty} \frac{1}{n}$, which diverges.
+\end{proof}
+
+\begin{definition}[Absolute convergence] \label{def:series:abs}
+    A series $\sum_{n=0}^{\infty} a_n$ is said to be \emph{absolutely
+    convergent} if $\sum_{n=0}^{\infty} \abs{a_n}$ converges.
+    If it converges but not absolutely, it is said to be \emph{conditionally
+    convergent}.
+\end{definition}
+The counterexample in the proof of the theorem is an example of a
+conditionally convergent series.
+
+\begin{theorem*} \label{thm:series:termwise_product}
+    Let $(a_n)_{n \in \N} \subseteq \C$ and $(b_n)_{n \in \N} \subseteq \R$.
+    Suppose that the SOPS of $\sum_{n=0}^{\infty} a_n$ is bounded,
+    and that $b_1 \ge b_2 \ge \dots$ with $b_n \to 0$.
+    Then $\sum_{n=0}^{\infty} a_n b_n$ converges.
+\end{theorem*}
+\begin{proof}
+    Let $(A_n)_n < M$ be the SOPS of $\sum_{n=0}^{\infty} a_n$.
+    Then for any $p < q$, \begin{align*}
+        \sum_{n=p}^{q} a_n b_n &= \sum_{n=p}^{q} (A_n - A_{n-1}) b_n \\
+            &= \sum_{n=p}^{q} A_n b_n - \sum_{n=p}^{q} A_{n-1} b_n \\
+            &= \sum_{n=p}^{q} A_n b_n - \sum_{n=p-1}^{q-1} A_n b_{n+1} \\
+            &= A_q b_q - A_{p-1} b_p + \sum_{n=p}^{q-1} A_n (b_n - b_{n+1})
+        \intertext{Taking absolute values,}
+        \abs{\sum_{n=p}^{q} a_n b_n}
+            &\le \abs{A_q} b_q + \abs{A_{p-1}} b_p
+                + \sum_{n=p}^{q-1} \abs{A_n} (b_n - b_{n+1}) \\
+            &\le M b_q + M b_p
+                + \sum_{n=p}^{q-1} M (b_n - b_{n+1}) \\
+            &= M (b_p + b_q) + M (b_p - b_q) \\
+            &= 2M b_p
+    \end{align*}
+    Since $b_n \to 0$, $2M b_p < \varepsilon$ for sufficiently large $p$.
+    Thus $\sum_{n=0}^{\infty} a_n b_n$ converges by the Cauchy criterion.
+\end{proof}
+\begin{remarks}
+    \item If $\sum a_n$ converges, then the condition on the SOPS is
+    satisfied.
+    But the condition on the $b_n$ is much more special.
+    \item The alternating series test is a special case of this theorem,
+    with $a_n = (-1)^n$ and $b_n$ decreasing to 0.
+    \item Suppose $(b_n)_n$ is as in the theorem, and $\sum b_n z^n$ has
+    radius of convergence $1$.
+    Then it converges for all $\abs{z} = 1$, except possibly at $z = 1$.
+    This is because $\sum_{n=0}^{\infty} z^n$ has bounded sops for each
+    $\abs{z} = 1$, $z \ne 1$.
+    \begin{proof}
+        Let $(Z_n)_n$ be the sops.
+        Since $z \ne 1$, $Z_n = \frac{1 - z^{n+1}}{1 - z}$.
+        The numerator is bounded by $2$, and the denominator is constant.
+    \end{proof}
+\end{remarks}
+\begin{corollary}[Alternating series test] \label{thm:series:ast}
+    Let $(a_n)_{n \in \N} \subseteq \R$ be decreasing to 0.
+    Then $\sum_{n=0}^{\infty} (-1)^n a_n$ converges.
+\end{corollary}
+
+\begin{definition}
+    Given two formal series $\sum_{n \in \N} a_n$ and $\sum_{n \in \N} b_n$,
+    their \emph{Cauchy product} is the series $\sum_{n \in \N} c_n$ where \[
+        c_n = \sum_{k=0}^{n} a_k b_{n-k}
+    \]
+\end{definition}
+This is motivated by the termwise product of power series.

@@ -1,0 +1,116 @@
+\section{Mean Value Theorems \& Applications} \label{sec:mvt}
+\lecture{28}{Mon 18 Mar '24}{}
+\begin{example}
+    Let \[
+        f(x) = \begin{cases}
+            x^2 \sin \frac1x & \text{if } x \ne 0, \\
+            0 & \text{if } x = 0.
+        \end{cases}
+    \]
+    We show that $f$ is differentiable on \R, but $f'$ is discontinuous
+    at $0$.
+    \begin{proof}
+        When $x \ne 0$, we use the fact that polynomials and trignometric
+        functions are differentiable, so that \[
+            f'(x) = 2x \sin \frac1x - \cos \frac1x.
+        \] At $x = 0$, we have \[
+            \lim_{h \to 0} \frac{f(h) - f(0)}{h}
+            = \lim_{h \to 0} h \sin \frac1h = 0.
+        \] Thus the derivative is well-defined with \[
+            f'(x) = \begin{cases}
+                2x \sin \frac1x - \cos \frac1x & \text{if } x \ne 0, \\
+                0 & \text{if } x = 0.
+            \end{cases}
+        \]
+    \end{proof}
+\end{example}
+
+\begin{theorem} \label{thm:stationary}
+    Let $f\colon [a, b] \to \R$ be a function.
+    Suppose $f$ attains a local extremum at $c \in (a, b)$ and $f$ is
+    differentiable at $c$.
+    Then $f'(c) = 0$.
+\end{theorem}
+\begin{proof}
+    Suppose WLOG that $f$ attains a local maximum at $c$.
+    Then we have $f(c) \ge f(x)$ for all $x$ close to $c$.
+    But then for $h > 0$, \[
+        \frac{f(c + h) - f(c)}{h} \le 0
+    \] and \[
+        \frac{f(c - h) - f(c)}{-h} \ge 0.
+    \] If the left hand and right hand limits of the difference quotient
+    exist and are equal, then they must both be zero.
+\end{proof}
+
+\begin{exercise}
+    Let $f\colon (a, b) \to \R$ be a function.
+    Suppose $f$ is differentiable at $c \in (a, b)$ and $f'(c) > 0$.
+    Then does there exist an interval around $c$ such that $f$ is
+    increasing on that interval?
+\end{exercise}
+
+\begin{exercise}
+    Let $f\colon (a, b) \to \R$ be differentiable.
+    Suppose $f'(x) \ge 0$ for all $x \in (a, b)$, and furthermore that
+    \begin{itemize}
+        \item $f'$ is not identically zero on any interval.
+        Is $f$ strictly increasing on $(a, b)$?
+        \item $f'$ is zero on a discrete set of points.
+        Is $f$ strictly increasing on $(a, b)$?
+    \end{itemize}
+\end{exercise}
+
+\begin{theorem}[Intermediate value property] \label{thm:diff:ivt}
+    Suppose $f\colon (p, q) \to \R$ is differentiable and
+    $[a, b] \subseteq (p, q)$.
+    Suppose $f'(a) < \lambda < f'(b)$.
+    Then there exists a $c \in (a, b)$ such that $f'(c) = \lambda$.
+\end{theorem}
+
+\begin{exercise}
+    If $g\colon (a, b) \to \R$ has a simple discontinuity at $c \in (a, b)$,
+    then $g$ does not satisfy the intermediate value property on some
+    neighbourhood of $c$.
+\end{exercise}
+\begin{proof}
+    We have two cases.
+    \begin{description}
+        \item[$\bm{f(c^-) = f(c^+) = L \ne f(c)}$.]
+        Choose $\lambda = \frac12 (L + f(c))$.
+        In some $\delta$ neighbourhood of $c$ (excluding $c$ itself),
+        we have $f(x) - L < \frac12 (f(c) - L)$ so that
+        $f(x) < \lambda$.
+        At $c$ itself, we have $f(c) > \lambda$.
+        Thus $\lambda$ is never attained.
+        \item[$\bm{f(c^-) \ne f(c^+)}$.]
+        Choose $\lambda$ between the two limits, but unequal to $f(c)$.
+        \qedhere
+    \end{description}
+\end{proof}
+
+\begin{corollary}
+    Let $f$ and $[a, b]$ be as in \cref{thm:diff:ivt}.
+    Then $f'$ only has discontinuities of the second kind.
+\end{corollary}
+
+\begin{proof}[Proof of \cref{thm:diff:ivt}]
+    Let $g(x) = f(x) - \lambda x$ for $x \in (p, q) \supseteq [a, b]$.
+    Then $g'(x) = f'(x) - \lambda$ so that $g'(a) < 0 < g'(b)$.
+    This means that $g$ is strictly decreasing from $a$
+    and strictly increasing to $b$.
+
+    Thus $g$ attains a minimum at some $c \in (a, b)$.
+    Then $g'(c) = 0$ so that $f'(c) = \lambda$.
+\end{proof}
+
+\begin{theorem*}[Generalised mean value theorem] \label{thm:mvt:general}
+    Let $f, g\colon [a, b] \to \R$ be continuous functions that are
+    differentiable on $(a, b)$.
+    Then there exists a $c \in (a, b)$ such that \[
+        (f(b) - f(a)) g'(c) = (g(b) - g(a)) f'(c).
+    \]
+\end{theorem*}
+\begin{remark}
+    If $g(x) = x$, we recover the mean value theorem.
+    If furthermore $f(a) = f(b)$, we recover Rolle's theorem.
+\end{remark}

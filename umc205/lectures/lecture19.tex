@@ -1,0 +1,102 @@
+\section{Computability} \label{sec:computability}
+\lecture{19}{Tue 12 Mar '24}{}
+\begin{definition*}[Computability] \label{def:computability}
+    A function $f\colon \N \to \N$ is said to be \emph{computable} if there
+    exists a Turing machine $M$ such that for all $n \in \N$,
+    $M$ given input $\leftend 0^n$ halts with output $\leftend 0^{f(n)}$.
+\end{definition*}
+
+We can view a function on the naturals as a language in the following
+manner.
+\begin{definition}[Language of a function] \label{def:language}
+    Let $f\colon \N \to \N$ be a function. The \emph{language of $f$} is
+    \[
+        L_f = \set{0^n \# 0^{f(n)} \mid n \in \N}.
+    \]
+\end{definition}
+
+\begin{theorem*} \label{thm:computable}
+    A function $f\colon \N \to \N$ is computable if and only if its language
+    $L_f$ is recursive.
+\end{theorem*}
+\begin{proof}
+    Suppose $f$ is computable.
+    Let $M_f$ be the Turing machine that computes $f$.
+
+    We define an $M$ that decides $L_f$ as follows.
+    First, reject all strings not of the form $0^i \# 0^j$.
+    Then, simulate $M_f$ on input $0^i$ (push the hash and $0^j$ forward
+    as needed).
+    Finally, check that the tape is in the form $0^j \# 0^j$ and accept if
+    so.
+
+    For the converse, suppose $L_f$ is recursive, with Turing machine $M$.
+    We define a Turing machine $M_f$ that computes $f$ as follows.
+    We append a \# to the input, then simulate $M$ on the input.
+    If $M$ rejects, we append a $0$ and repeat.
+    When $M$ finally accepts (which it must, since $M$ halts on all inputs),
+    we output the part of the tape after the \#.
+\end{proof}
+
+\section{Equivalent Models} \label{sec:tm:equiv}
+\subsection{Multiple Tapes} \label{sec:tm:equiv:multiple_tapes}
+Consider a Turing machine with $k$ tapes.
+That is, the transition function is of the form
+\[
+    \delta\colon Q \times \Gamma^k \to Q \times \Gamma^k \times \set{L, R}^k.
+\]
+\begin{theorem*} \label{thm:tm:k_tape}
+    A $k$-tape Turing machine is equivalent to a single-tape Turing machine.
+\end{theorem*}
+\begin{proof}
+    We give a recipe to simulate a $k$-tape Turing machine with a
+    single-tape Turing machine.
+    Let the $k$-tape machine be \[
+        M = (Q, A, \Gamma, s, \delta, \vdash, \blank, t, r).
+    \]
+
+    Define a new alphabet $\Gamma' = (\Gamma)^k \set{\vDash}$.
+    Define new states 
+\end{proof}
+
+Consider a Turing machine with a two-way infinite tape.
+That is, the tape extends infinitely to the left and right.
+There is no left-end marker, and the input is given as
+$\blank^\omega x \blank^\omega$, with the read head initially on the
+first letter of $x$.
+\begin{theorem*} \label{thm:tm:two_way}
+    A two-way infinite tape Turing machine is equivalent to a one-way
+    infinite tape Turing machine.
+\end{theorem*}
+\begin{proof}
+    We can simulate a two-way tape using two one-way tapes.
+    In each configuration we also store whether the read head is on the
+    upper or lower tape.
+\end{proof}
+
+Consider a Turing machine with a two-dimensional tape.
+That is, the tape is a grid of cells, and the read head can move in
+four directions.
+
+\begin{theorem*} \label{thm:tm:2d}
+    A two-dimensional tape Turing machine is equivalent to a one-dimensional
+    tape Turing machine.
+\end{theorem*}
+\begin{proof}
+    We can simulate a two-dimensional tape using two one-dimensional tapes.
+    The first tape stores the cells in a diagonally ennumerated pattern,
+    and the second stores the index of the current cell.
+    The mapping from the current index to any of its neighbours is
+    computable, so we can gather the number of cells to move the read head
+    using another Turing machine.
+\end{proof}
+
+\section{Non-deterministic Turing Machine} \label{sec:tm:ntm}
+A non-deterministic Turing machine is a Turing machine with several
+possible transitions from each state.
+A word is accepted if there exists a sequence of transitions that leads
+to an accepting state.
+\begin{theorem*} \label{thm:tm:ntm}
+    A non-deterministic Turing machine is equivalent to a deterministic
+    Turing machine.
+\end{theorem*}

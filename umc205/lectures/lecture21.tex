@@ -1,0 +1,152 @@
+\lecture{21}{Tue 19 Mar '24}{}
+\section{More Decidability Problems} \label{sec:prb:decidability}
+\begin{exercise}
+    Is it decidable whether a given Turing machine has at least $481$
+    states?
+    Assume that the TM is given using our standard encoding.
+\end{exercise}
+\begin{solution}
+    Yes.
+    Simply check the appropriate section of zeros in the encoding.
+\end{solution}
+
+\begin{exercise}
+    Is it decidable whether a given Turing machine takes more than $481$
+    steps on input $\epsilon$ without halting?
+\end{exercise}
+\begin{solution}
+    Yes.
+    Simply simulate the TM for $481$ steps using the universal TM,
+    while storing the number of steps on a separate tape.
+\end{solution}
+
+\begin{exercise}
+    Is it decidable whether a given Turing machine takes more than $481$
+    steps on \emph{some} input without halting?
+\end{exercise}
+\begin{solution}
+    Yes.
+    If the TM halts on some input $w$ of length more than $481$ in at most
+    $481$ steps,
+    then it must halt on $w_1w_2\dots w_{481}$ in at most $481$ steps,
+    since the read head cannot proceed to any letter beyond this.
+
+    Thus, we can simulate the TM on all inputs of length at most $481$ for
+    $481$ steps,
+    and reject if it halts on all of them, accepting otherwise.
+\end{solution}
+
+\begin{exercise}
+    Is it decidable whether a given Turing machine takes more than $481$
+    steps on \emph{all} inputs without halting?
+\end{exercise}
+\begin{solution}
+    Yes.
+    Again check words of length up to $481$.
+    Reject if it halts on any of them, accept otherwise.
+\end{solution}
+
+\begin{exercise}
+    Is it decidable whether a given Turing machine moves its head more than
+    $481$ cells away from the left-end marker, on input $\epsilon$?
+\end{exercise}
+\begin{solution}
+    Yes.
+    The number of possible configurations without ever reading the $482$nd
+    cell is finite (precisely $n \cdot m^{481} \cdot 482$, where $n$ and $m$
+    are the number of states and tape symbols, respectively).
+    Simulate the TM for one more step than this number of configurations.
+
+    If it ever reads the $482$nd cell, accept.
+    If not, then by the pigeonhole principle it must have entered a loop,
+    and we reject.
+\end{solution}
+
+\begin{exercise} \label{thm:decidability:epsilon}
+    Is it decidable whether a given Turing machine accepts the null-string
+    $\epsilon$?
+\end{exercise}
+\begin{solution}
+    No.
+    This is equivalent to the halting problem.
+
+    Suppose $N$ is a TM that decides whether a given TM $M$ accepts
+    $\epsilon$.
+    We can construct a new TM $\mcH$ as follows:
+    \begin{enumerate}
+        \item On input $\enc(M)\#x$, construct a new TM $P_{M, x}$ that
+            erases the input, writes $x$ on the tape,
+            and then simulates $M$ on the input $x$.
+            Accept if $M$ ever halts on $x$.
+        \item Run $N$ on $P_{M, x}$.
+        \item If $N$ accepts, then $M$ halts on $x$. \\
+        If $N$ rejects, then $M$ does not halt on $x$.
+    \end{enumerate}
+    Then this \mcH{} is the fabled decider for the halting problem.
+\end{solution}
+
+Note that the language of $P_{M, x}$ is \[
+    L(P_{M, x}) = \begin{cases}
+        A^* & \text{if } M \text{ halts on } x, \\
+        \O & \text{otherwise}.
+    \end{cases}
+\] This will be useful for the coming exercises.
+
+\begin{exercise} \label{thm:decidability:any}
+    Is it decidable whether a given Turing machine accepts any string
+    at all?
+    That is, is $L(M) \ne \O$?
+
+    Similarly, is it decidable whether a given Turing machine accepts
+    all strings?
+    That is, is $L(M) = A^*$?
+\end{exercise}
+\begin{solution}
+    Neither.
+    If either of these were decidable,
+    we could decide the halting problem by deciding whether
+    $L(P_{M, x}) \ne \O$ or equivalently $L(P_{M, x}) = A^*$.
+\end{solution}
+
+\begin{exercise} \label{thm:decidability:finite}
+    Is it decidable whether a given Turing machine accepts a finite set?
+\end{exercise}
+\begin{solution}
+    No.
+    Again, decide whether $L(P_{M, x})$ is finite.
+\end{solution}
+
+\begin{exercise} \label{thm:decidability:regular}
+    Is it decidable whether a given Turing machine accepts a regular set?
+\end{exercise}
+\begin{solution}
+    No.
+    Construct the Turing machine $Q_{M, x}$ which does the following:
+    \begin{itemize}
+        \item First, check if $x = a^nb^nc^n$ for some $n$.
+            If not, reject.
+        \item Then, simulate $M$ on $x$.
+            If it halts, accept.
+    \end{itemize}
+    Then \[
+        L(Q_{M, x}) = \begin{cases}
+            \set{a^n b^n c^n \mid n \in \N}
+                & \text{if } M \text{ halts on } x, \\
+            \O
+                & \text{otherwise}.
+        \end{cases}
+    \] Then deciding whether $L(Q_{M, x})$ is regular ammounts to deciding
+    whether $M$ halts on $x$.
+\end{solution}
+
+\begin{exercise} \label{thm:decidability:context_free}
+    Is it decidable whether a given Turing machine accepts a CFL?
+\end{exercise}
+\begin{solution}
+    No.
+    Same construction as before.
+\end{solution}
+
+\begin{exercise}
+    Is it decidable whether a given Turing machine accepts a recursive set?
+\end{exercise}

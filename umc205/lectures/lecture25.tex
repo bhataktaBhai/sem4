@@ -1,0 +1,132 @@
+\chapter{G\"odel's Incompleteness Theorem} \label{chp:godel}
+\lecture{25}{Tue 09 Apr '24}{}
+
+\begin{theorem*}[Godel (1931)] \label{thm:godel1}
+    There is no sound and complete proof system for arithmetc, \ie,
+    first-order logic of natural numbers with addition and multiplication
+    $(\N, +, \cdot)$.
+\end{theorem*}
+
+\begin{definition}[Validity] \label{def:validity}
+    A formula $\varphi$ is \emph{valid} if it is true in every model.
+\end{definition}
+\begin{example}
+    $\forall x (x = x)$ is valid.
+    $(p \rightarrow q) \rightarrow (\neg q \rightarrow \neg p)$ is valid.
+\end{example}
+
+\section{Arithmetic} \label{sec:arithmetic}
+The first order logic of $(\N, +, \cdot)$ is defined by
+\begin{itemize}
+    \item Domain $\N = \set{0, 1, 2, \dots}$
+    \item Terms $0$, $1$, $0 + 1$, $1 \cdot x$, $x + y$, $x \cdot y$, etc
+    \item Atomic formulas $t_1 = t_2$
+    \item Formulas derived as
+    \begin{itemize}
+        \item Atomic formulas,
+        \item Quantification $\forall x \varphi$, $\exists x \varphi$,
+        where $\varphi$ is a formula,
+        \item Connectives $\neg$, $\land$, $\lor$, etc.
+    \end{itemize}
+\end{itemize}
+
+\noindent We can build up more complex formulas using these building blocks.
+\begin{itemize}
+    \item ``$x$ gives a quotient $q$ and remainder $r$ when divided by $y$''
+    can be expressed as \[
+        \mathit{intdiv}(x, y, q, r)
+            \coloneq x = (q \cdot y) + r \land r < y.
+    \]
+    \item ``$y$ divides $x$'' can be expressed as \[
+        \mathit{div}(x, y)
+            \coloneq \exists q\; \mathit{intdiv}(x, y, q, 0)
+    \] or more directly as \[
+        \mathit{div}(x, y)
+            \coloneq \exists q (x = q \cdot y).
+    \]
+    \item $x$ is prime. \[
+        \mathit{prime}(x)
+            \coloneq \neg (x = 1) \land
+            \forall y (\mathit{div}(y, x) \rightarrow y = 1 \lor y = x).
+    \]
+    \item $x$ is a power of $2$. \[
+        \mathit{power_2}(x)
+            \coloneq \forall y (\mathit{prime}(y) \land \mathit{div}(y, x) \rightarrow y = 2).
+    \]
+    \item Every number has a successor. \[
+        \forall x \exists y (y = x + 1).
+    \]
+    \item Every number has a predecessor. \[
+        \forall x \exists y (y + 1 = x).
+    \]
+    \item There are only finitely many primes. \[
+        \exists x \forall y (\mathit{prime}(y) \rightarrow y \leq x).
+    \]
+    \item There are infinitely many primes. \[
+        \forall x \exists y (y > x \land \mathit{prime}(y)).
+    \]
+\end{itemize}
+
+\noindent Let $\Th(\N, +, \cdot)$ be the set of sentences of
+$\FO(\N, +, \cdot)$ that are true.
+\section{Peano's Proof System for Arithmetic} \label{sec:peano}
+Peano introduced the axioms
+\begin{itemize}
+    \item $\forall x \neg (x + 1 = 0)$
+    \item $\forall x \forall y (x + 1 = y + 1 \rightarrow x = y)$
+    \item $\forall x (x + 0 = x)$
+    \item $\forall x \forall y \forall z (x + (y + 1) = (x + y) + 1)$
+    \item $\forall x (x \cdot 0 = 0)$
+    \item $\forall x \forall y \forall z (x \cdot (y + 1) = (x \cdot y) + x)$.
+    \item Axiom schema of induction:
+    \[
+        \varphi(0) \land
+        \forall x \big(\varphi(x) \rightarrow \varphi(x + 1)\big)
+            \rightarrow \forall x \varphi(x).
+    \]
+\end{itemize}
+Along with the inference rules from first-order logic, such as modus ponens,
+universal instantiation, etc.,
+this gives a proof system for arithmetic.
+
+\begin{definition}[Proofs] \label{def:proofs}
+    A \emph{proof} of a sentence $\varphi$ is a finite sequence of
+    sentences $\varphi_1, \varphi_2, \dots, \varphi_n$ such that
+    each $\varphi_i$ is either an axiom or follows from previous
+    sentences by an inference rule, and $\varphi_n = \varphi$.
+\end{definition}
+
+\begin{definition*}[Soundness and Completeness] \label{def:peano:sound}
+    A proof system is \emph{sound} if every provable sentence is true,
+    and \emph{complete} if every true sentence is provable.
+\end{definition*}
+
+\begin{lemma}
+    If $\Th(\N, +, \cdot)$ is not recursively enumerable,
+    then there is no sound and complete proof system for arithmetic.
+\end{lemma}
+\begin{proof}
+    Suppose there is a sound and complete proof system for arithmetic.
+    Then we can decide whether a sentence is true by enumerating all
+    proofs.
+\end{proof}
+
+Thus we need to show that $\Th(\N, +, \cdot)$ is not recursively enumerable,
+which of course we will do by reduction to the negative halting problem.
+
+Let $\Delta$ be the alphabet defined for valcomp.
+Let $p > \abs{\Delta}$ be a prime number.
+We can view each string $w \in \Delta^*$ as a number in base $p$.
+We will not assign the digit $0$ to any letter.
+
+Define valid computations as \begin{align*}
+    \mathit{valcomp}_{M, x}(v)
+    &\coloneq \exists c \exists d \big(
+        \mathit{power}_p(c) \land \mathit{power}_p(d) \\
+        &\qquad\qquad\land \mathit{length}(v, d) \\
+        &\qquad\qquad\land \mathit{start}(v, c) \\
+        &\qquad\qquad\land \mathit{move}(v, c, d) \land \mathit{halt}(v, d)
+    \big).
+\end{align*} Define $\varphi_{M, x}$ as \[
+    \varphi_{M, x} \coloneq \exists v\; \mathit{valcomp}_{M, x}(v).
+\]

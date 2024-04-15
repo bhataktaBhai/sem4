@@ -1,0 +1,94 @@
+\lecture{35}{Wed 03 Apr '24}{}
+\begin{theorem}
+    Let $f_n \in \mcD((a, b))$ and $f_n' \unifto g$.
+    Suppose $f_n(x_0) \unifto f(x_0)$ for some $x_0 \in (a, b)$.
+\end{theorem}
+\begin{proof}
+    WLOG assume that $x > x_0$.
+    Apply MVT to $f_n - f_m$ on $[x_0, x]$.
+
+    There exists a $\theta_{m n} \in (x_0, x)$ such that \begin{equation}
+        (f_n - f_m)(x) - (f_n - f_m)(x_0)
+            = (f_n' - f_m')(\theta_{m n}) (x - x_0)
+            \label{eq:unif:mvt}
+    \end{equation} Let $\varepsilon > 0$.
+    Then for $m, n$ beyond some $N$, \begin{align*}
+        \abs{f_n(x_0) - f_m(x_0)} &< \frac{\varepsilon}{2} \\
+        \abs{f_n'(t) - f_m'(t)} &< \frac{\varepsilon}{2(b-a)}
+                                \quad \forall t \in [x_0, x]
+    \end{align*}
+    Applying this to \cref{eq:unif:mvt}, \begin{align*}
+        \abs{f_n(x) - f_m(x)}
+        &\le \abs{f_n(x_0) - f_m(x_0)}
+            + \abs{f_n'(\theta_{m n} - f_m'(\theta_{m n}} \abs{x - x_0} \\
+        &< \frac{\varepsilon}{2} + \frac{\varepsilon(x-x_0)}{2(b-a)} \\
+        &< \varepsilon.
+    \end{align*}
+    Thus by the Cauchy criterior, $f_n \unifto f$ on $(a, b)$.
+
+    Fix a $p \in (a, b)$.
+    Let $\phi_n\colon (a, b) \setminus \set{p} \to \R$ be the difference
+    quotient \[
+        \phi_n(x) = \lim_{x \to p} \frac{f_n(x) - f_n(p)}{x - p}
+    \] and similarly $\phi(x) = \lim \frac{f(x) - f(p)}{x - p}$.
+
+    We show that $\phi_n$ is uniformly Cauchy and $\phi_n \unifto \phi$
+    on $(a, b) \setminus \set{p}$.
+    \begin{align*}
+        \phi_n(x) - \phi_m(x)
+        &= \frac{(f_n - f_m)(x) - (f_n - f_m)(p)}{x - p} \\
+        &= (f_n' - f_m')(\theta)
+    \end{align*} for some $\theta$ between $x$ and $p$ (by MVT).
+    Thus $\phi_n \unifto h$ for some $h$.
+
+    But now fix an $x$. \[
+        \lim_{n \to \infty} \frac{f_n(x) - f_n(p)}{x - p}
+            = \frac{f(x) - f(p)}{x - p} = \phi(x),
+    \] so $\phi_n \pwto \phi$.
+
+    But uniform convergence implies pointwise convergence, and so
+    $\phi_n \pwto h$ which means that $h = \phi$.
+
+    By \cref{TODO}, \begin{align*}
+        \lim_{n \to \infty} \lim_{x \to p} \phi_n(x)
+        &= \lim_{x \to p} \phi(x) \\
+        \implies \lim_{n \to \infty} f_n'(p) &= f'(p)
+    \end{align*}
+    Thus $f_n'(p) \to g(p)$.
+    By IIFTOC, %TODO
+\end{proof}
+
+\subsection{The  Function} \label{sec:the_______function}
+
+Start with $\phi(x) = \abs{x}$ on $[-1, 1]$, and extend it by periodicity
+to the entire number line.
+
+Define \[
+    f_k \coloneq \left(\frac{3}{4}\right)^k \phi(4^k \,\cdot\,)
+\] and \[
+    f \coloneq \sum_{k=0}^{\infty} f_k
+\]
+By the Weierstrass $M$-test, $f$ is continuous, since \[
+    \abs{f_k} \le \left(\frac{3}{4}\right)^k
+        \text{ and }
+    \sum \left(\frac34\right)^k < \infty.
+\]
+Fix an $x \in \R$.
+Also fix an $m \in \N$.
+There is at most one integer in the $\frac12$-ball around any point, so WLOG
+assume that $(4^m x, 4^m x + \frac12)$ contains no integer.
+
+Let $\delta_m = 4^{-m} \frac12$.
+
+\[
+    \frac{f(x + \delta_m) - f(x)}{\delta_m}
+    = \sum_{k=0}^\infty \left(\frac{3}{4}\right)^k
+        \frac{\phi(4^k (x + \delta_m)) - \phi(4^k x)}{\delta_m}
+\]
+But for $k > m$, $4^k \delta_m = 4^{k-m} \frac{1}{2}$ is an even integer,
+so by the periodicity of $\phi$, the summand vanishes.
+
+For $k = m$, the summand becomes \begin{align*}
+    \left(\frac{3}{4}\right)^m \frac{\phi(4^m x + \frac12) - \phi(4^m x)}{\delta_m}
+\end{align*}
+whose absolute value is exactly $4^m$.

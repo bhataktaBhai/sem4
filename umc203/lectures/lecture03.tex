@@ -1,48 +1,46 @@
-\lecture{03}{Tue 16 Jan '24}{}
-
-\subsection{Bayes' Decision Theory} \label{sec:bayes_decision}
-We have a $x \in \R^d$ with label $y \in \pms$.
+\section{Bayes' Decision Theory} \label{sec:bayes_decision}
+\lecture{03}{Tue 16 Jan '24}{Bayes error rate}
+We have an $x \in \R^d$ with label $y \in \pms$.
 We predict $\hat{y} \in \pms$.
 We have a loss function $\ell\colon \pms \times \pms \to \R_{\ge 0}$.
 We wish to minimize the expected loss \[
-    R(h) = E_{XY} \ell(h(X), Y).
+    R(h) = \E_{XY} \ell(h(X), Y).
 \] This is minimized by \[
-    \tilde{h}(x) = \argmin_h E_{Y \mid X = x} \ell(h(x), Y).
+    \tilde{h}(x) = \argmin_h \E_{Y \mid X = x} \ell(h(x), Y).
 \] For a given instance, this rule chooses the label which yields the
 minimum loss.
 
 Now \begin{align*}
-    E_{Y \given X = x} \ell(1, Y)
+    \E_{Y \given X = x} \ell(1, Y)
         &= \ell(1, 1) \Pr(Y = 1 \given X = x)
             + \ell(1, -1) \Pr(Y = -1 \given X = x) \\
         &= \ell(1, 1) \eta(x) + \ell(1, -1) (1 - \eta(x))
 \end{align*}
 Similarly \[
-    E_{Y \given X = x} \ell(-1, Y)
+    \E_{Y \given X = x} \ell(-1, Y)
         = \ell(-1, 1) \eta(x) + \ell(-1, -1) (1 - \eta(x))
 \] $\tilde h$ minimises the loss if whenever
-$E_{Y \given X = x} \ell(1, Y) < E_{Y \given X = x} \ell(-1, Y)$,
+$\E_{Y \given X = x} \ell(1, Y) < \E_{Y \given X = x} \ell(-1, Y)$,
 we choose $\tilde{h}(x) = 1$, and $\tilde{h}(x) = -1$ otherwise.
 
 If $\ell(1, 1) = \ell(-1, -1) = 0$ and $\ell(1, -1) = \ell(-1, 1) = 1$, this
 reduces to the Bayes classifier.
 
-\subsection{Multi-Category Classification} \label{sec:bayes:multi}
+\section{Multi-Category Classification} \label{sec:bayes:multi}
 Let us now extend the Bayes classifier to multiple classes.
 We have \begin{align*}
-    \mathcal{X} &\subseteq \R^d \quad \text{instance space} \\
-    \mathcal{Y} &= [M] \quad \text{label space} \\
-    \mathcal{D} &= \set{(x_i, y_i) \mid x_i \in \mathcal{X},
-        y_i \in \mathcal{Y}}
+    \mcX &\subseteq \R^d \quad \text{instance space} \\
+    \mcY &= [M] \quad \text{label space} \\
+    \mcD &= \set{(x_i, y_i) \mid x_i \in \mcX, y_i \in \mcY}
 \end{align*}
 We also know priors \begin{align*}
     p_i &= \Pr(Y = i) \\
     \intertext{and class condition distributions}
     f_i(x) &= \Pr(X = x \mid Y = i)
 \end{align*}
-We define the posteriors $\eta_i\colon \mathcal{X} \to [0, 1]$ by \[
+We define the posteriors $\eta_i\colon \mcX \to [0, 1]$ by \[
     \eta_i(x) = \Pr(Y = i \mid X = x)
         = \frac{f_i(x) p_i}{\sum_{j = 1}^M f_j(x) p_j}
-\] and the Bayes classifier $h^*\colon \mathcal{X} \to \mathcal{Y}$ by \[
-    h^*(x) = \argmax_{i \in \mathcal{Y}} \eta_i(x).
+\] and the Bayes classifier $\tilde{h}\colon \mcX \to \mcY$ by \[
+    \tilde{h}(x) = \argmax_{i \in \mcY} \eta_i(x).
 \]

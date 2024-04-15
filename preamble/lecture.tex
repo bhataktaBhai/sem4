@@ -11,8 +11,9 @@
 %     \marginpar{\raggedright\small\textsf{#2}}%
 %     \vskip 6pt
 % }
+\setlength\marginparwidth{1in}
 \newcommand*{\lecture}[3]{
-    \marginpar{\raggedright\small \textsf{\textbf{Lecture #1:} #2}}%
+    \marginpar{\raggedright\small \textsf{\textbf{Lecture #1.} \footnotesize#2}}%
 }
 \g@addto@macro\normalsize{%
   \setlength\abovedisplayskip{7pt}%

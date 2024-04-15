@@ -1,1 +1,97 @@
-\lecture{09}{Thu 08 Feb '24}{}
+\chapter{Large margin classification} \label{chp:svm}
+\lecture{09}{Thu 08 Feb '24}{Large margin classification}
+Let $\mcD = \set{(x^{(i)}, y_i)}_{i=1}^m$ be a linearly separable dataset.
+The perceptron algorithm finds a separating hyperplane,
+but there are many such hyperplanes.
+Which one is the best?
+
+We can focus on the margin of the hyperplane.
+The margin is as defined in \cref{def:margin}.
+The hyperplane with the largest margin is deemed the best.
+
+\begin{definition*}[The SVM problem] \label{def:svm}
+    The \emph{support vector machine} (SVM) problem is to find the
+    hyperplane with the largest margin.
+    That is, find $w$ that solves \[
+        \max_w \min_i \frac{y_i \innerp{w}{x^{(i)}}}{\norm{w}}.
+    \]
+\end{definition*}
+What about the more general classifiers using $\innerp w x + b$?
+We can append a constant $1$ to each $x^{(i)}$ and append $b$ to $w$.
+Hence we can restrict our attention to the case where $b = 0$.
+
+Note that the objective function is homogeneous in $w$.
+So we can scale $w$ such that $\min_i y_i \innerp{w}{x^{(i)}} = 1$.
+Then the problem becomes \[
+    \max_w \min_i \frac1{\norm{w}} \quad \text{subject to} \quad
+    \min_i y_i \innerp{w}{x^{(i)}} = 1.
+\] When is $\min_i y_i \innerp{w}{x^{(i)}} = 1$?
+When $y_i \innerp{w}{x^{(i)}} \ge 1$ for all $i$, but also
+$y_i \innerp{w}{x^{(i)}} = 1$ for some $i$.
+What if $y_i \innerp{w}{x^{(i)}} > 1$ for all $i$?
+Then we can shrink $w$ to increase the objective function.
+Thus the problem becomes \[
+    \max_w \frac1{\norm{w}} \quad \text{subject to} \quad
+    y_i \innerp{w}{x^{(i)}} \ge 1 \text{ for all } i.
+\] But maximizing $1/\norm{w}$ is the same as minimizing $\norm{w}^2$.
+So we again rewrite the problem as \[
+    \min_w \frac12 \norm{w}^2 \quad \text{subject to} \quad
+    \innerp{w}{y_i x^{(i)}} \ge 1 \text{ for all } i.
+\] Note that $w \mapsto \norm{w}^2$ is a strictly convex function.
+
+We have the Lagrangian \[
+    L(w, \lambda) = \frac12 \norm{w}^2
+        - \sum_{i=1}^m \lambda_i (\innerp{w}{y_i x^{(i)}} - 1)
+\] and so the KKT conditions \begin{align}
+    \nabla_w L(w, \lambda) = 0 \implies
+        w &= \sum_{i=1}^m \lambda_i y_i x^{(i)} \label{eq:svm-w} \\
+    \innerp{w}{y_i x^{(i)}} &\ge 1 \quad \text{for all } i, \\
+    \lambda_i (\innerp{w}{y_i x^{(i)}} - 1) &= 0 \quad \text{for all } i.
+\end{align}
+If $\lambda_i > 0$, then $\innerp{w}{y_i x^{(i)}} = 1$.
+If $\innerp{w}{y_i x^{(i)}} > 1$, then $\lambda_i = 0$.
+
+The $x^{(i)}$s for which $\lambda_i > 0$ are called the
+\emph{support vectors}.
+These are at most the points for which $\innerp{w}{y_i x^{(i)}} = 1$.
+
+Substituting \cref{eq:svm-w} into the Lagrangian gives \begin{align*}
+    L &= \frac12 \norm*[\Big]{\sum_i \lambda_i y_i x^{(i)}}^2
+        - \sum_i \lambda_i
+            \innerp[\Big]{\sum_j \lambda_j y_j x^{(j)}}{y_i x^{(i)}}
+        + \sum_{i=1}^{m} \lambda_i \\
+      &= \sum_i \lambda_i - \frac12 \sum_{i,j}
+            \lambda_i \lambda_j \innerp{y_i x^{(i)}}{y_j x^{(j)}}
+\end{align*}
+Thus the SVM problem is to solve \[
+    \boxed{\quad\max_\lambda \sum_i \lambda_i - \frac12 \sum_{i,j}
+        \lambda_i \lambda_j \innerp*{y_i x^{(i)}}{y_j x^{(j)}}
+    \quad \text{subject to} \quad
+    \begin{cases}
+        \lambda_i \ge 0, \\
+        \sum_i \lambda_i y_i = 0.
+    \end{cases}}
+\] If we find such a $\lambda$, we have \begin{align*}
+    w &= \sum_{i=1}^m \lambda_i y_i x^{(i)}
+    \shortintertext{and the classifier}
+    h(x) &= \sgn(\innerp{w}{x}).
+\end{align*}
+
+Note that the only dependence on $x^{(i)}$ is through the inner product.
+Thus we can use the \emph{kernel trick} to solve the SVM problem
+in linearly non-separable cases.
+
+Suppose $(x^{(i)}, y_i)$ are not linearly separable, but there is a
+transformation $\Phi$ such that $(\Phi(x^{(i)}), y_i)$
+are linearly separable.
+Then we can apply SVM to the transformed dataset.
+\[
+    \max_{\lambda} \sum_i \lambda_i - \frac12 \sum_{i,j}
+        \lambda_i \lambda_j \innerp*{y_i \Phi(x^{(i)})}{y_j \Phi(x^{(j)})}
+    \quad \text{subject to} \quad
+    \begin{cases}
+        \lambda_i \ge 0, \\
+        \sum_i \lambda_i y_i = 0.
+    \end{cases}
+\] If we can compute $\innerp*{\Phi(x^{(i)})}{\Phi(x^{(j)})}$,
+then we can solve the SVM problem for the transformed dataset.

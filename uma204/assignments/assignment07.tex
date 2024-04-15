@@ -1,0 +1,299 @@
+\documentclass[12pt]{article}
+\input{../preamble}
+
+\title      {Assignment 7}
+\setcounter{assignment}{7}
+\setcounter   {section}{7}
+\author{Naman Mishra}
+\date{28 February, 2024}
+
+\begin{document}
+\maketitle
+\begin{problem*}
+    Consider the function $f\colon \R \to [0, 1]$ given by \[
+        f(x) = \begin{cases}
+            \frac1q & x = \frac{p}{q}, \text{ with } p \in \Z \text{ and }
+                q \in \N^*, \gcd(p, q) = 1, \\
+            0 & x \notin \Q.
+        \end{cases}
+    \] Show that $f$ is discontinuous at every rational number,
+    and continuous elsewhere.
+    (Here, we have used the fact that every rational number $x \in \Q$
+    admits a unique representation of the form $p/q$,
+    with $p$ and $q$ as described above.)
+\end{problem*}
+\begin{solution}
+    Discontinuity at rational numbers is easy.
+    Let $x$ be a rational number, so $f(x) > 0$.
+    Then, for any $\delta > 0$, there exists a
+    $y = x + \frac{\delta}{\sqrt 2} \in B(x; \delta)$
+    such that $f(y) = 0$.
+
+    For continuity at an irrational number $x$, let $\epsilon > 0$.
+    Let $q \in \N^*$ be such that $\frac1q < \epsilon$.
+    Choose \[
+        \delta = \inf\set*[\Big]{\abs*[\Big]{x - \frac{p}{q!}} : p \in \Z}.
+    \] This is positive since $B(x; \frac1{2q!})$ can contain at most one
+    such $p/q!$, which cannot be $x$.
+
+    Note that for $f(y) = \frac1n$, $n \le q$, $y$ must be of the form
+    $m/n$, and hence of the form $p/q!$ for some $p \in \N$.
+
+    Then $B(x; \delta)$ contains no such $y$.
+    This is obvious by some light casework.
+
+    Thus for all $y \in B(x; \delta)$, $f(y) = 0$ if $y \notin \Q$, and
+    $f(y) = \frac1n < \frac1q$ for some $n > q$ if $y \in \Q$.
+    In any case, $\abs{f(y) - f(x)} < \varepsilon$.
+\end{solution}
+
+\begin{problem*}
+    Let $(X, d)$ be a metric space and $A \subseteq X$ be a nonempty subset.
+    Define \[
+        f_A(x) = \inf\set{d(x, y) \mid y \in A}, \quad x \in X.
+    \]
+    \begin{enumerate}[label=(\alph*)]
+        \item Show that $f_A$ is uniformly continuous on $X$.
+        \item Prove that $x \in \wbar{A}$ if and only if $f_A(x) = 0$.
+    \end{enumerate}
+\end{problem*}
+\begin{solution}
+    Notation: $D_x = \set{d(x, a) \mid a \in A}$.
+
+    For uniform continuity, choose $\delta < \varepsilon$ for any given
+    $\varepsilon > 0$.
+    Let $x, y \in X$ be such that $d(x, y) < \delta$.
+    By the triangle inequality, $d(x, a) \le d(x, y) + d(y, a)
+    < d(y, a) + \varepsilon$ for every $a \in A$.
+
+    Then $f_A(x) \le d(x, a) < d(y, a) + \delta$ for every $a \in A$.
+    Thus $f_A(x) - \delta \le d(y, a)$ for every $a \in A$.
+    Hence $f_A(x) - \delta$ is a lower bound of $D_y$.
+    So $f_A(y) \ge f_A(x) - \delta$.
+
+    Similarly $f_A(x) \ge f_A(x) - \delta$.
+    Thus $\abs{f_A(x) - f_A(y)} \le \delta < \varepsilon$.
+
+    For the second part, \begin{align*}
+        x \in \wbar{A}
+        &\iff \forall \varepsilon > 0 \;\exists a \in A (d(x, a) < \varepsilon) \\
+        &\iff \forall \varepsilon > 0 \;\exists d \in D_x (d < \varepsilon) \\
+        &\iff f_A(x) = 0. \qedhere
+    \end{align*}
+\end{solution}
+
+\begin{problem*}
+    Show that uniformly continuous functions map Cauchy sequences to
+    Cauchy sequences.
+    Is the converse true?
+\end{problem*}
+\begin{proof}
+    Let $f\colon X \to Y$ be uniformly continuous.
+    Let $(x_n)_{n \in \N}$ be a Cauchy sequence in $X$.
+
+    Let $\varepsilon > 0$ be given.
+    Choose $\delta > 0$ such that $d_X(x, y) < \delta$ implies
+    $d_Y(f(x), f(y)) < \varepsilon$.
+    Since $(x_n)_n$ is Cauchy, there exists $N \in \N$ such that
+    $d_X(x_n, x_m) < \delta$ for all $n, m \ge N$.
+
+    Then $d_Y(f(x_n), f(x_m)) < \varepsilon$ for all $n, m \ge N$.
+
+    Is the converse true?
+    Take $f\colon \R \to \R$ to be $x \mapsto x^2$.
+    $f$ is continuous, so it maps Cauchy (hence convergent) sequences
+    to convergent (hence Cauchy) sequences
+    (sequential characterization of continuity).
+    But $f$ is not uniformly continuous, since for any $\delta > 0$,
+    $f(\frac1{\delta} + \delta) - f(\frac1{\delta}) = 2 + \delta^2 > 1$.
+
+    What went wrong?
+    Both the domain and codomain are unbounded.
+    Which one is the problem?
+\end{proof}
+
+\begin{proposition} \label{thm:cauchy_unif_when}
+    Let $X$ and $Y$ be metric spaces.
+    Suppose that $X$ is compact and $Y$ is complete.
+    Let $f\colon X \to Y$ be such that it maps every Cauchy sequence
+    to a Cauchy sequence.
+    Then $f$ is uniformly continuous.
+\end{proposition}
+
+\begin{lemma}
+    Let $f$ be a function from some metric space $X$ to a
+    complete metric space $Y$.
+    Suppose that $f$ maps Cauchy sequences to Cauchy sequences.
+    Then $f$ is continuous.
+\end{lemma}
+\begin{proof}
+    Let $x \in X$.
+    Let $(x_n)_n$ be a sequence in $X$ converging to $x$.
+    Then $(x_n)_n$ is Cauchy.
+    Since $f$ maps Cauchy sequences to Cauchy sequences,
+    $(f(x_n))_n$ is Cauchy.
+    Since $Y$ is complete, $(f(x_n))_n$ converges to some $y \in Y$.
+    Thus $\lim_{n \to \infty} f(x_n) = y$ exists.
+
+    Let $(x_n)_n$ and $(x'_n)_n$ be sequences in $X$ converging to $x$.
+    Interleave the sequences to get a sequence $(\tilde{x}_n)_n$
+    converging to $x$.
+    Then $\lim_{n \to \infty} f(\tilde{x}_n)$ exists, so
+    $\lim_{n \to \infty} f(x_n) = \lim_{n \to \infty} f(x'_n)$.
+
+    \textbf{Sequential characterization:}
+    Suppose $f$ is not continuous at $x$.
+    Then there exists $\varepsilon > 0$ such that for all $\delta > 0$,
+    there exist $x_\delta \in B_X(x; \delta)$ such that
+    $d_Y(f(x_\delta), f(x)) \ge \varepsilon$. \\
+    Consider the sequence $(x_{1/n})_n$.
+    Then $(x_{1/n})_n$ converges to $x$, so $(f(x_{1/n}))_n$ converges to
+    whatever $(f(x))_n$ converges to, which is $f(x)$.
+    Contradiction.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:cauchy_unif_when}]
+    Let $\varepsilon > 0$.
+    Let $\delta_x > 0$ be such that
+    $f(B_X(x; \delta_x)) \subseteq B_Y(f(x); \varepsilon/2)$
+    {\footnotesize [which exists by continuity]}.
+
+    Let $\mcU$ be a finite subcover of $\set{B_X(x; \delta_x/2)}_{x \in X}$
+    {\footnotesize [which exists by compactness]}.
+    Choose the minimum of these $\delta_x/2$ to get $\delta > 0$.
+
+    Let $x_1, x_2 \in X$ within $\delta$ of each other.
+    Since $\mcU$ is a cover, there exists $x \in X$ such that
+    $x_1 \in B_X(x; \delta_x/2) \in \mcU$, so
+    $d(f(x_1), f(x)) < \varepsilon/2$.
+    By the $\triangle$ inequality,
+    $d(x_2, x) < \delta_x/2 + \delta < \delta_x$,
+    so that $d(f(x_2), f(x)) < \varepsilon/2$.
+    Then $d(f(x_1), f(x_2)) < \varepsilon$.
+\end{proof}
+
+\begin{proposition*} \label{thm:cauchy_unif_when_better}
+    Completeness in \cref{thm:cauchy_unif_when} is unnecessary.
+\end{proposition*}
+\begin{proof}
+    Let $x \in X$ and $(x_n)_{n \in \N} \to x$.
+    Interleave this with the constant sequence $(x)_{n \in \N}$ to get
+    a sequence $(\tilde{x}_n)_{n \in \N}$ converging to $x$.
+    Then $(f(\tilde{x}_n))_{n \in \N}$ is Cauchy.
+    But every other term is $f(x)$, so $(f(x_n))_{n \in \N} \to f(x)$.
+    By sequential characterization, $f$ is continuous.
+
+    The rest of the proof doesn't require completeness of $Y$.
+\end{proof}
+
+\begin{exercise}
+    The counterexample $x \mapsto x^2$ had both the domain and codomain
+    unbounded.
+
+    Construct a function $f\colon X \to Y$ between metric spaces $X$ and $Y$
+    such that $X$ is closed, $Y$ is compact,
+    $f$ maps Cauchy sequences to Cauchy sequences,
+    but $f$ is not uniformly continuous.
+\end{exercise}
+\begin{solution}
+    Take $f\colon \R \to [-1, 1]$ to be $x \mapsto \sin x^2$.
+    This is continuous, so it maps Cauchy sequences to Cauchy sequences.
+
+    But $f$ is not uniformly continuous.
+    Take $\varepsilon = 1$.
+    For any $\delta > 0$, choose $n = \ceil{\frac1{\delta^2}}$
+    and $x^2 = n \pi$, $y^2 = (n + \frac12) \pi$.
+    Then $y^2 - x^2 = (y - x)(x + y) = \frac12 \pi$.
+    So $y - x < \frac1{4\sqrt n} \sqrt \pi < \frac1{\sqrt n} \le \delta$.
+    But $\abs{f(x) - f(y)} = 1$.
+\end{solution}
+
+\begin{exercise}
+    Construct a function $f\colon X \to Y$ between metric spaces $X$ and $Y$
+    such that $X$ is bounded,
+    $f$ maps Cauchy sequences to Cauchy sequences,
+    but $f$ is not uniformly continuous.
+\end{exercise}
+\begin{solution}
+    Take $f\colon (-\frac{\pi}{2}, \frac{\pi}{2}) \to \R$
+    to be $x \mapsto \tan^{-1} x$.
+\end{solution}
+
+\begin{exercise*}
+    Construct a function $f\colon X \to Y$ between metric spaces $X$ and $Y$
+    such that $X$ is bounded, $Y$ is compact,
+    $f$ maps Cauchy sequences to Cauchy sequences,
+    but $f$ is not uniformly continuous.
+\end{exercise*}
+\begin{solution}
+    Take $f\colon (-\frac{\pi}{2}, \frac{\pi}{2}) \to [-1, 1]$ to be
+    $x \mapsto \sin((\tan^{-1} x)^2)$.
+\end{solution}
+
+\begin{exercise*}
+    Construct a function $f\colon X \to Y$ between metric spaces $X$ and $Y$
+    such that $f(X)$ is bounded but incomplete,
+    $f$ maps Cauchy sequences to Cauchy sequences,
+    but $f$ is not uniformly continuous.
+\end{exercise*}
+\begin{solution}
+    Take $f\colon [1, \infty) \to (0, 2]$ to be
+    $x \mapsto \cos^2(\pi x^2) + \frac1{x^2}$.
+
+    If boundedness of $X$ is desired, compose $f$ with $\tan^{-1}$ again.
+\end{solution}
+
+\begin{problem*}
+    An $F_\sigma$ set is a countable union of closed sets.
+    Complete the following steps to prove that the discontinuity set $D_f$
+    of any function $f\colon \R \to \R$ is an $F_\sigma$ set.
+    \begin{enumerate}[label=(\alph*)]
+        \item Given $f\colon \R \to \R$ and $\alpha > 0$,
+        $f$ is said to be $\alpha$-continuous at $x \in \R$
+        if there exists a $\delta > 0$ such that for all
+        $y, z \in B(x; \delta)$, $\abs{f(y) - f(z)} < \alpha$.
+        Show that the set $D^\alpha = \set{x \in \R \mid f \text{ is not
+        $\alpha$-continuous at } x}$ is closed, for each $\alpha > 0$.
+        \item Show that $D^\alpha \subseteq D_f$ for any $\alpha > 0$.
+        \item Show that \[
+                D_f = \bigcup_{n \in \N} D^{1/n}.
+            \]
+    \end{enumerate}
+\end{problem*}
+\begin{solution}
+    Let $x$ be a limit point of $D^\alpha$.
+    Suppose $f$ is $\alpha$-continuous at $x$.
+    Then there exists a $\delta$-ball around $x$ such that
+    $\abs{f(y) - f(z)} < \alpha$ for all $y, z \in B(x; \delta)$.
+    But $x$ is a limit point, so there exists a $y \in D^\alpha$ such that
+    $y \in B(x; \delta/2)$.
+    Then $B(y; \delta/2) \subseteq B(x; \delta)$,
+    so $f$ is $\alpha$-continuous at $y$.
+    Contradiction.
+
+    Suppose $f$ is continuous at $x$.
+    Then for any $\alpha > 0$, there exists a $\delta$-ball around $x$
+    such that the output of every point in the ball is within $\alpha/2$
+    of $f(x)$.
+    Hence the output of any pair of points in the ball is within $\alpha$
+    of each other.
+    Thus $f$ is $\alpha$-continuous at $x$.
+    Thus $D_f^C \subseteq (D^\alpha)^C$ for any $\alpha > 0$.
+
+    Finally, \begin{align*}
+        x \in D_f &\iff
+        \exists \alpha > 0 \; \forall \delta > 0 \;\exists y \in B(x; \delta)
+        \text{ such that } \abs{f(x) - f(y)} \ge \alpha \\
+        &\implies \exists \alpha > 0 \; \forall \delta > 0 \; \exists z, y
+        \in B(x; \delta) \text{ such that } \abs{f(y) - f(z)} \ge \alpha \\
+    \intertext{by taking $z = x$}
+        &\iff \exists \alpha > 0 (x \in D^\alpha) \\
+        &\iff \exists n \in \N (x \in D^{1/n}) \\
+    \intertext{since $D^a \subseteq D^b$ for $a < b$.}
+        &\iff x \in \bigcup_{n \in \N} D^{1/n}.
+    \end{align*}
+    Conversely $\bigcup_{n \in \N} D^{1/n} \subseteq D_f$ by step (b).
+    Thus, $D_f \in F_\sigma$.
+\end{solution}
+
+\end{document}

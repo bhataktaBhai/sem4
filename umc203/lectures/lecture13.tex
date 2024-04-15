@@ -1,0 +1,199 @@
+\chapter{Regression} \label{chp:regression}
+\lecture{13}{Mon 4 Mar '24}{Least squares and Ridge regression for linear
+models}
+We move onto \emph{continuous} data.
+Consider the data \begin{align*}
+    \mcD &= \set{(x^{(i)}, y_i)}_{i=1}^n \subseteq \mcX \times \mcY \\
+    \mcX &= \R^d \\
+    \mcY &= \R \quad\longleftarrow \text{woah, continuous!}
+\end{align*}
+We again wish to find a classifier $f: \mcX \to \mcY$ that minimizes some
+notion of loss.
+We will first focus on the affine case, that is, $f(x) = \innerp w x + b$.
+We can again employ the trick of appending a $1$ to the input vector,
+so that we can focus on the linear case $f(x) = \innerp w x$.
+
+\section{Least Squares Regression} \label{sec:regression:least_squares}
+The most natural choice of loss function for continuous data is the squared
+error loss, given by \[
+    \ell(\hat{y}, y) = (\hat{y} - y)^2
+\]
+We can solve for the optimal $w$ by minimizing the empirical risk, that is,
+\[
+    w_{LS} = \argmin_{w \in \R^d}
+            \frac12 \sum_{i=1}^n \paren{y_i - \innerp* w {x^{(i)}}}^2.
+\] There are no constraints, so we need not worry about the KKT business.
+
+\textbf{SOLVE!}
+
+Define \begin{align*}
+    D &= \begin{bmatrix}
+        x^{(1)} & \cdots & x^{(n)}
+    \end{bmatrix}^\top \in \R^{n \times d}
+    & t &= \begin{bmatrix}
+        y_1 \\ \vdots \\ y_n
+    \end{bmatrix} \in \R^n
+\end{align*}
+Then the empirical risk can be written as \begin{align*}
+    R(w) &= \frac12 \begin{bmatrix}
+        \innerp{x^{(1)}} w - y_1 \\
+        \vdots \\
+        \innerp{x^{(n)}} w - y_n
+    \end{bmatrix}^2 \\
+    &= \frac12 \norm{Dw - t}^2
+\end{align*}
+Note that this is convex, since \begin{align*}
+    \nabla R(w) &= D^\top (Dw - t) \\
+    \nabla^2 R(w) &= D^\top D \succeq 0
+\end{align*}
+Thus the minimizer is given by \[
+    \boxed{w_{LS} = (D^\top D)^{-1} D^\top t}
+\]
+What if $D^\top D$ is not invertible?
+More realistically, what if $\det (D^\top D)$ is very small?
+Adding a small multiple of the identity matrix to $D^\top D$ can help.
+
+\section{Ridge Regression} \label{sec:regression:ridge}
+Instead of minimizing the empirical risk, we can minimize the empirical risk
+plus a regularization term.
+\[
+    w_{RR} = \argmin_{w \in \R^d}
+                \frac12 \sum_i \paren{y_i - \innerp* w {x^{(i)}}}^2
+                + \frac{\lambda}{2} \norm{w}^2
+\] where $\lambda > 0$ is the regularization parameter.
+This is called \emph{Ridge Regression}.
+
+We now have \begin{align*}
+    \nabla R(w) &= \frac12 D^\top (Dw - t) + \lambda w \\
+    \nabla^2 R(w) &= D^\top D + \lambda I
+\end{align*}
+This is still convex, and now the minimizer is \[
+    \boxed{w_{RR} = (D^\top D + \lambda I)^{-1} D^\top t}
+\]
+
+\section{Optimal Classifier} \label{sec:regression:optimal}
+Suppose that $\mcD$ is drawn from a distribution with \[
+    Y = f^*(X) + \varepsilon,
+\] where $\varepsilon$ is a random variable with mean $0$ and variance
+$\sigma^2$.
+That is, \[
+    \Pr(Y \le y \given X = x) = \Pr(f^*(x) + \varepsilon \le y).
+\] If $\varepsilon$ is Gaussian, then \[
+    \Pr(Y \given X = x) = N(f^*(x), \sigma^2)
+\]
+
+Let $f$ be a classifier.
+Then the risk of $f$ is given by \begin{align*}
+    R(f) &= \E_{X, Y} \ell(f(X), Y) \\
+    &= \E_{X, Y} (f(X) - Y)^2 \\
+    &= \E_X \E_{Y \given X} (Y - f(X))^2 \\
+    &= \E_X \Var_{Y \given X} Y + \E_X (\E_{Y \given X} Y - f(X))^2 \\
+    &\ge \E_X \Var_{Y \given X} Y
+\end{align*}
+The equality holds iff $f(X) = \E_{Y \given X} Y$ almost surely.
+Thus the optimal classifier is given by \[
+    f_B(x) = \E_{Y \given X} Y
+\]
+
+This computation is due to the following general result: \begin{align}
+    \E (X - a)^2 &= \E (X - \E X + \E X - a)^2 \nonumber \\
+    &= \E (X - \E X)^2 + \E [2(X - \E X)(\E X - a)] + \E (\E X - a)^2 \nonumber \\
+    &= \Var X + (\E X - a)^2 \label{eq:bias-variance}
+\end{align}
+This is called the \emph{bias-variance decomposition}.
+
+For $Y = f^*(X) + \varepsilon$, we have \begin{align*}
+    \E_X \Var_{Y \given X} Y &= f^*(X) & \Var_{Y \given X} Y &= \sigma^2
+\end{align*} so that \[
+    R(f) = \sigma^2 + \E_X (f(X) - f^*(X))^2 \ge \sigma^2
+\] The optimal classifier is, unsurprisingly, $f^*$.
+
+\section{Generalization Errors} \label{sec:regression:generalization}
+Let $f(x; \mcD)$ be the classifier returned on the data set $\mcD$.
+The generalization error is given by \begin{align*}
+    \E_\mcD R(f(x; \mcD)) &= \E_\mcD \E_{X, Y} \ell(f(X; \mcD), Y) \\
+    &= \E_{X, Y} \E_\mcD \ell(f(X; \mcD), Y)
+\end{align*}
+From \cref{eq:bias-variance} again, \begin{align*}
+    \E_\mcD \ell(f(X; \mcD), Y)
+        &= \E_\mcD (f(X; \mcD) - Y)^2 \\
+        &= \Var_\mcD f(X; \mcD) + (\E_\mcD f(X; \mcD) - Y)^2
+\end{align*}
+So the generalization error is given by \begin{align*}
+    \E_{X, Y} \Var_{\mcD \given X} f(X; \mcD)
+        &+ \E_{X, Y} (\E_{\mcD \given X} f(X; \mcD) - Y)^2 \\
+    &\quad= \E_X \Var_{\mcD \given X} f(X; \mcD)
+        + \E_X \E_{Y \given X} (Y - \E_{\mcD \given X} f(X; \mcD))^2
+    \intertext{and again using \cref{eq:bias-variance},}
+    &\quad= \E_X \Var_{\mcD \given X} f(X; \mcD)
+        + \E_X \Var_{Y \given X} Y
+        + \E_X \Big(\E_{\mcD \given X} f(X; \mcD) - \E_{Y \given X} Y\Big)^2 \\
+    &\quad= \underbrace{\E_X \Var_{\mcD \given X} f(X; \mcD)}_{\text{variance}}
+        + \underbrace{\E_X \Var_{Y \given X} Y}_{\text{noise}}
+        + \underbrace{\E_X \Big(\E_{\mcD \given X} f(X; \mcD) - f_B(X)\Big)^2}_{\text{bias}^2}
+\end{align*}
+For $Y = f^*(X) + \varepsilon$, this becomes \[
+    \E_X \Var_{\mcD \given X} f(X; \mcD)
+        + \sigma^2 + \E_X \Big(\E_{\mcD \given X} f(X; \mcD) - f^*(X)\Big)^2
+\]
+
+Finally, we come to the linear case, with specific algorithms.
+\subsection{Least Squares} \label{sec:generalization:least_squares}
+We have \[
+    Y = \innerp w X + \varepsilon
+\] and \[
+    f(x; \mcD) = \innerp{w_{LS}} x
+\] where \[
+    w_{LS} = (D^\top D)^{-1} D^\top t
+\] We have three terms to compute:
+\begin{itemize}
+    \item \textbf{Bias:} \[
+        \E_{\mcD \given X} f(X; \mcD) - \innerp w X
+    \]
+    \item \textbf{Variance:} \[
+        \Var_{\mcD \given X} f(X; \mcD)
+    \]
+    \item \textbf{Noise:} This we already know to be \[
+        \sigma^2
+    \]
+\end{itemize}
+Since $t = D w + \varepsilon$, $\E[t] = D w$.
+So \[
+    \E_{\mcD \given X} f(X; \mcD)
+        = \E_{\mcD \given X} \innerp X {w_{LS}}
+        = \innerp X {\E_{\mcD \given X} w_{LS}}
+        = \innerp X {{D^\top D}^{-1} D^\top D w}
+        = \innerp X w.
+\] Thus the bias is $0$.
+
+The variance is hard to compute.
+We will find an estimate using the \emph{fixed design setting}.
+That is, we will assume that the data set $\mcD$ precisely represents the
+distribution of $X$. \[
+    \Pr(X = x) = \frac1n \sum_{i=1}^n [x = x^{(i)}].
+\] Then \begin{align*}
+    \Var_{\mcD \given X} f(X; \mcD)
+    &= \E_{\mcD \given X} (f(X; \mcD) - \E_{\mcD \given X} f(X; \mcD))^2 \\
+    &= \E_{\mcD \given X} (f(X; \mcD) - \innerp w X)^2 \\
+    &= \E_{\mcD \given X} \innerp{w_{LS} - w} X^2 \\
+    &= \E_\varepsilon \frac1n \sum_{i=1}^n \innerp{(D^\top D)^{-1} D^\top \varepsilon}
+            {x^{(i)}}^2 \tag{fixed design} \\
+    &= \frac1n \E_\varepsilon \varepsilon^\top D (D^\top D)^{-1} \sum_{i=1}^n x^{(i)} x^{(i)\top} (D^\top D)^{-1} D^\top \varepsilon \\
+    &= \frac1n \E_\varepsilon \varepsilon^\top D (D^\top D)^{-1} (D^\top D) (D^\top D)^{-1} D^\top \varepsilon \tag{$\star$} \label{eq:x_cov} \\
+    &= \frac1n \E_\varepsilon  \Tr\paren{\varepsilon^\top D (D^\top D)^{-1} D^\top \varepsilon}
+        \tag{since it is a scalar} \\
+    &= \frac1n \Tr((D^\top D)^{-1} D^\top \E_\varepsilon \varepsilon
+            \varepsilon^\top D (D^\top D)^{-1}) \tag{cyclic property} \\
+    &= \frac{\sigma^2}n \Tr((D^\top D)^{-1} D^\top D) \\
+    &= \frac{\sigma^2 d}n
+\end{align*}
+In \cref{eq:x_cov}, we used the fact that \[
+    \sum_{i=1}^n x^{(i)} x^{(i)\top} = D^\top D.
+\] To see this, note that \[
+    (D^\top D)_{ij} = \sum_{k=1}^n x^{(k)}_i x^{(k)}_j
+\] and that \[
+    (x^{(k)} x^{(k)\top})_{ij} = x^{(k)}_i x^{(k)}_j.
+\]
+Thus we have \[
+    \boxed{R(f_{LS}) = \sigma^2 \paren{1 + \frac dn}}.
+\]

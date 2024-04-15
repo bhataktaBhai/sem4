@@ -1,13 +1,13 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage[dvipsnames]{xcolor}
-\colorlet{exercise}{red!80!black}
-\colorlet{solved}{green!30!black}
+\colorlet{exercise}{cyan!70!black}
+\colorlet{solved}{green!40!black}
 \colorlet{self_proof}{blue!70!black}
 \colorlet{Red}{red!80!black}
 
 \usepackage{hyperref}
-\usepackage{cleveref}
+\usepackage[noabbrev]{cleveref}
 
 % Gilles Castel's theorems
 \newtheoremstyle{mddefinition}% <name>
@@ -22,7 +22,7 @@
 \newtheoremstyle{mdplain}% <name>
   {-\topsep}%                 <space above>
   {}%                         <space below>
-  {\itshape}%              <body font>
+  {\itshape}%                 <body font>
   {}%                         <indent amount>
   {\bfseries}%                <theorem head font>
   {.}%                        <punctuation after theorem head>
@@ -58,16 +58,17 @@
     rightmargin = 7,
     backgroundcolor = yellow!10
 }
+\providecommand\theoremnumberwithin{section}
 \ifundef{\chapter}{%
     \theoremstyle{mddefinition}
     \newmdtheoremenv[nobreak=true, style=axiomstyle]{axiom}{Axiom}[section]
     \theoremstyle{plain}
-    \newtheorem{theorem}{Theorem}[section]
+    \newtheorem{theorem}{Theorem}[\theoremnumberwithin]
 }{
     \theoremstyle{mddefinition}
     \newmdtheoremenv[nobreak=true, style=axiomstyle]{axiom}{Axiom}[chapter]
     \theoremstyle{plain}
-    \newtheorem{theorem}{Theorem}[chapter]
+    \newtheorem{theorem}{Theorem}[\theoremnumberwithin]
 }
 \newcounter{assignment}
 \theoremstyle{mddefinition}
@@ -79,8 +80,10 @@
 \newmdtheoremenv[nobreak=true]{lemma*}[theorem]{Lemma}
 \newmdtheoremenv[nobreak=true]{corollary*}[theorem]{Corollary}
 \newmdtheoremenv[nobreak=true, style=thmstyle]{fact*}[theorem]{Fact}
-\newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem*}{Problem}[assignment]
 \newmdtheoremenv[nobreak=true]{exercise*}[theorem]{Exercise}
+
+\theoremstyle{mddefinition}
+\newmdtheoremenv[nobreak=true, outerlinewidth=0.7]{problem*}{Problem}[assignment]
 
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
@@ -90,7 +93,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{fact}[theorem]{Fact}
-\newtheorem{problem}[assignment]{Problem}
+\newtheorem{problem}[problem*]{Problem}
 \newtheorem{exercise}[theorem]{Exercise}
 
 \theoremstyle{remark}
@@ -98,8 +101,19 @@
 \newtheorem*{remarkx}{Remarks}
 \newtheorem*{example}{Example}
 \newtheorem*{examplex}{Examples}
-\newtheorem*{solution}{Solution}
-\newtheorem*{answer}{Answer}
+%%%% HAXXXXXX %%%%
+\let\oldproof\proof
+\let\endoldproof\endproof
+\newenvironment{solution}[1][]
+  {\renewcommand\qedsymbol{$\blacksquare$}%
+  \begin{oldproof}[Solution\ifx&#1&\else\ (#1)\fi]}
+  {\end{oldproof}}
+\newenvironment{answer}
+  {\renewcommand\qedsymbol{$\blacksquare$}\begin{oldproof}[Answer]}
+  {\end{oldproof}}
+\renewenvironment{proof}
+  {\renewcommand\qedsymbol{$\square$}\begin{oldproof}}
+  {\end{oldproof}}
 \newtheorem*{notation}{Notation}
 \newtheorem*{claim}{Claim}
 
@@ -114,10 +128,18 @@
 \crefname{exercise}{exercise}{exercises}
 \crefname{fact}{fact}{facts}
 \crefname{remark}{remark}{remarks}
-\crefname{example}{example}{examples}
+\crefname{example}{example}{example}
 \crefname{notation}{notation}{notations}
 \crefname{claim}{claim}{claims}
 % \crefname{section}{\S}{\S\S}
+\crefname{theorem*}{theorem}{theorems}
+\crefname{proposition*}{proposition}{propositions}
+\crefname{lemma*}{lemma}{lemmas}
+\crefname{corollary*}{corollary}{corollaries}
+\crefname{definition*}{definition}{definitions}
+\crefname{problem*}{problem}{problems}
+\crefname{exercise*}{exercise}{exercises}
+\crefname{fact*}{fact}{facts}
 % </cref>
 
 % <hyperlinks>
@@ -139,8 +161,8 @@
   ,font=\bfseries Case \stepcounter{casecount}\thecasecount:
 }
 
-\newenvironment{examples}
-{\begin{examplex}\leavevmode\begin{itemize}}{\end{itemize}\end{examplex}}
+\newenvironment{examples}[1][]
+{\begin{examplex}[#1]\leavevmode\begin{itemize}}{\end{itemize}\end{examplex}}
 \newenvironment{remarks}
 {\begin{remarkx}\leavevmode\begin{itemize}}{\end{itemize}\end{remarkx}}
 

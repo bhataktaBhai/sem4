@@ -1,21 +1,21 @@
-\lecture{01}{Tue 09 Jan '24}{}
-
-\setcounter{section}{-1}
-\section{The Course} \label{sec:course}
+\chapter*{The Course} \label{chp:course}
+\lecture{01}{Tue 09 Jan '24}{Classification and Bayes classifier}
 \textbf{Instructor:} Prof.~Chiranjib~Bhattacharyya \\
 \textbf{Office:} CSA, 254 \\
 \textbf{Office hours:} TBD\\
 \textbf{Lecture hours:} TuTh 10:00--11:20
 
-\subsection{References} \label{sec:references}
+\section*{References} \label{sec:references}
 \begin{enumerate}
     \item \textit{Pattern Classification} by Duda, Hart, and Stork
     \item \textit{Probabilistic Theory of Pattern Recognition} by Devroye,
         Györfi, and Lugosi
     \item \textit{Pattern Recognition and Machine Learning} by Bishop
+    \item \textit{Foundations of Machine Learning} by Mohri, Rostamizadeh,
+        and Talwalkar
 \end{enumerate}
 
-\section{}
+\chapter{Bayes' Classifier} \label{chp:bayes}
 Consider a machine which can measure the diameter of any fruit placed on it.
 Can the machine distinguish between an apple and an orange?
 Now suppose the machine also has the \emph{capacity} to measure the weight
@@ -76,7 +76,7 @@ apples and oranges respectively.
 Then $h$ is a function from $\R^2$ to $\set{-1, 1}$.
 We wish to measure the probability $\Pr(h(X) \ne Y)$.
 
-\subsection{Probability Review} \label{sec:probability_review}
+\section{Probability Review} \label{sec:probability_review}
 Suppose a coin is given with unknown probability of heads $p$.
 How do we estimate $p$?
 We flip the coin $n$ times and count the number of heads $n_H$.
@@ -119,7 +119,7 @@ Our rule for classification is \[
     \end{cases}
 \] This is called the \emph{Bayes classifier}.
 
-\subsection{Multivariate Gaussians} \label{sec:multivariate_gaussians}
+\section{Multivariate Gaussians} \label{sec:multivariate_gaussians}
 \[
     f(x) = \frac{1}{\sqrt{(2\pi)^d \det(\Sigma)}}
     \exp\left(-\frac{1}{2} (x - \mu)^\top \Sigma^{-1} (x - \mu)\right)
@@ -132,9 +132,16 @@ scalar), $\mu$ is the mean, and $\Sigma$ is the covariance matrix.
 \textbf{Reading assignment:} Let $A$ be a square symmetric real-valued matrix.
 What is known about the eigenvalues and positive definiteness of $A$?
 
-\begin{definition}[Positive definite] \label{def:multivariate_gaussians:positive_definite}
-    A matrix $A_{n \times n}$ is \emph{positive definite} if $u^\top A u > 0$
-    for all $u \in \R^n \setminus \set{0}$.
+\begin{definition}[Definite matrix] \label{def:definite}
+    A matrix $A_{n \times n}$ is said to be \emph{positive definite}
+    if $u^\top A u > 0$ for all $u \in \R^n \setminus \set{0}$.
+
+    $A$ is said to be \emph{positive semidefinite} if $u^\top A u \ge 0$
+    for all $u \in \R^n$.
+
+    $A$ is said to be \emph{negative definite} and \emph{negative
+    semidefinite} if $-A$ is positive definite and positive semidefinite
+    respectively.
 \end{definition}
 
 \begin{exercise}

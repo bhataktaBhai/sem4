@@ -1,22 +1,125 @@
-\lecture{05}{Tue 23 Jan '24}{}
-
 \begin{exercise}
+\lecture{05}{Tue 23 Jan '24}{Fisher discriminant}
     Prove that \begin{align*}
         \what{\mu} &= \frac{1}{n} \sum_{i=1}^n X_i, \text{ and} \\
-        \what{C} &= \frac{1}{n} \sum_{i=1}^n (X_i - \what{\mu}) (X_i - \what{\mu})^\top
+        \what{\Sigma} &= \frac{1}{n} \sum_{i=1}^n (X_i - \what{\mu}) (X_i - \what{\mu})^\top
     \end{align*}
-    are the maximum likelihood estimators of $\mu$ and $C$ for $X_i$ i.i.d.
-    from $d$-dimensional Gaussian distribution $N(\mu, C)$.
+    are the maximum likelihood estimators of $\mu$ and $\Sigma$ for $X_i$ i.i.d.
+    from $d$-dimensional Gaussian distribution $N(\mu, \Sigma)$.
 \end{exercise}
 
-\section{Fischer Discriminant} \label{sec:fischer_discriminant}
+\chapter{Fisher Discriminant} \label{chp:fisher}
 Suppose we know the mean and covariance of $X \given Y = y$ for
 $y \in \set{0, 1}$.
-We wish to find $w$ that maximizes \[
-    \frac{\norm{w^\top (\mu_0 \mu_1)}^2}{w^\top C_0 w + w^\top C_1 w}.
-\] We can rewrite this as \[
-    \frac{w^\top A w}{w^\top B w},
-\] where $A = (\mu_0 - \mu_1) (\mu_0 - \mu_1)^\top$ and $B = C_0 + C_1$.
+Fisher wished to find a $w$ that maximizes \[
+    \frac{\innerp{w}{\mu_0 - \mu_1}^2}
+    {\braket{w}{\Sigma_0}{w} + \braket{w}{\Sigma_1}{w}},
+\] in order to find a $w$ along which the class means are well-separated
+with low variance.
+We can rewrite this as \[
+    \frac{\braket{w}{A}{w}}{\braket{w}{B}{w}},
+\] where $A = \outerp{\mu_0 - \mu_1}{\mu_0 - \mu_1}
+= (\mu_0 - \mu_1)(\mu_0 - \mu_1)^\top$ and $B = \Sigma_0 + \Sigma_1$.
+\begin{definition}[Rayleigh quotient] \label{def:rayleigh_quotient}
+    The \emph{Rayleigh quotient} of a Hermitian matrix $M$
+    and a non-zero vector $x$ is defined as \[
+        R(M; x) = \frac{\norm{x}^2_{M}}{\norm{x}^2}.
+    \]
+\end{definition}
+\begin{theorem} \label{thm:rayleigh}
+    The Rayleigh quotient is maximized at the largest eigenvalue of $M$,
+    by the corresponding eigenvector.
+\end{theorem}
+\begin{proof}
+    Let $M$ be a Hermitian matrix and let $v_1, \dots, v_n$ be
+    an orthonormal eigenbasis of $M$ with corresponding eigenvalues
+    $\lambda_1, \dots, \lambda_n$.
+    For any vector $x$, we can write \[
+        x = \sum_{i=1}^n \innerp{x}{v_i}v_i.
+    \] Then we have \begin{align*}
+        \norm{x}^2   &= \sum_{i=1}^n \abs{\innerp{x}{v_i}}^2,
+        \shortintertext{and}
+        \norm{x}^2_M &= \sum_{i=1}^n \abs{\innerp{x}{v_i}}^2\lambda_i,
+        \shortintertext{so that}
+        R(M; x) &= \frac{\sum_{i=1}^n \abs{\innerp{x}{v_i}}^2\lambda_i}
+        {\sum_{i=1}^n \abs{\innerp{x}{v_i}}^2}
+    \end{align*}
+    which is a weighted average of the eigenvalues.
+    Then clearly the maximum is achieved at the largest eigenvalue
+    $\lambda^*$ when $x$ is a multiple of the corresponding eigenvector.
+\end{proof}
+
+\begin{definition}[Generalized Rayleigh quotient] \label{def:gen_rayleigh}
+    The \emph{generalized Rayleigh quotient} of matrices $A$ and $B$ with
+    a non-zero vector $x$ is defined as \[
+        R(A, B; x) = \frac{\braket{x}{A}{x}}{\braket{x}{B}{x}},
+    \] where $A$ and $B$ are Hermitian and $B$ is invertible.
+\end{definition}
+\begin{lemma}[Square roots] \label{thm:square_roots}
+    Let $B$ be a positive definite matrix.
+    Then there exists a positive definite matrix $L$ such that $L^2 = B$.
+\end{lemma}
+\begin{proof}
+    Let $B = QDQ^\top$ be the eigenvalue decomposition of $B$.
+    Then we can take $L = Q\sqrt{D}Q^\top$.
+\end{proof}
+\begin{lemma} \label{thm:gen_rayleigh_to_rayleigh}
+    The generalized Rayleigh quotient $R(A, B; x)$ is equal to the
+    Rayleigh quotient $R(L^{-1}AL^{-1}; \cdot L x)$,
+    where $L$ is a square root of $B$.
+\end{lemma}
+\begin{proof}
+    We have \begin{align*}
+        R(A, B; x) &= \frac{\braket{x}{A}{x}}{\braket{x}{B}{x}} \\
+        &= \frac{\braket{Lx}{L^{-1}AL^{-1}}{Lx}}{\innerp{Lx}{Lx}} \\
+        &= R(L^{-1}AL^{-1}; Lx). \qedhere
+    \end{align*}
+\end{proof}
+\begin{theorem} \label{thm:gen_rayleigh}
+    The generalized Rayleigh quotient $R(A, B; x)$ is maximized at the
+    largest eigenvalue of $B^{-1}A$, by the corresponding eigenvector.
+\end{theorem}
+\begin{proof}
+    By \cref{thm:square_roots}, we can find a square root $L$ of $B$.
+    Then by \cref{thm:gen_rayleigh_to_rayleigh}, we have \[
+        R(A, B; x) = R(L^{-1}AL^{-1}; Lx),
+    \] so that by \cref{thm:rayleigh}, the maximum is achieved at the
+    largest eigenvalue of $L^{-1}AL^{-1}$ by $Lx$ being the corresponding
+    eigenvector.
+
+    But if $Lx$ is an eigenvector of $L^{-1}AL^{-1}$ with eigenvalue
+    $\lambda$, then $L^{-1}AL^{-1}Lx = L^{-1}A x = \lambda Lx$, or
+    $L^{-2} A x = \lambda x$.
+    Thus $x$ is an eigenvector of $B^{-1}A$ with the same eigenvalue.
+\end{proof}
 Note that both $A$ and $B$ are symmetric.
 Suppose that $B$ is invertible and let $L$ be a square root of $B$.
 
+Thus the above theorem gives us that the maximum of the Fisher criterion
+is achieved at the largest eigenvalue of $B^{-1}A$.
+Let this be $\lambda^*$ and let $w^*$ be the corresponding eigenvector.
+Then we have \begin{align*}
+    B^{-1} A w^* &= \lambda^* w^* \\
+    \implies (\Sigma_0 + \Sigma_1)^{-1} \outerp{\mu_0 - \mu_1}{\mu_0 - \mu_1} (w^*) &= \lambda^* w^*.
+    \intertext{But $\outerp{v}{w}(x) = \innerp{w}{x}v$ for any vector $x$.
+    So}
+    \innerp{\mu_0 - \mu_1}{w^*} (\Sigma_0 + \Sigma_1)^{-1} (\mu_0 - \mu_1)
+        &= \lambda^* w^*
+\end{align*}
+This gives that $w^*$ is a multiple of $(\Sigma_0 + \Sigma_1)^{-1} (\mu_0 - \mu_1)$.
+Taking $w^* = (\Sigma_0 + \Sigma_1)^{-1} (\mu_0 - \mu_1)$ gives the
+eigenvalue $\lambda^* = \braket{\mu_0 - \mu_1}{(\Sigma_0 + \Sigma_1)^{-1}}{\mu_0 - \mu_1}$.
+Thus we have proven the following theorem.
+
+\begin{theorem*}[Fisher's criterion] \label{thm:fisher}
+    The vector \[
+        w^* = (\Sigma_0 + \Sigma_1)^{-1} (\mu_0 - \mu_1)
+    \] maximizes the Fisher criterion.
+    The maximum value is \[
+        \lambda^* =
+        \braket{\mu_0 - \mu_1}{(\Sigma_0 + \Sigma_1)^{-1}}{\mu_0 - \mu_1}.
+    \]
+\end{theorem*}
+
+If $B$ were not invertible, we would be solving the generalized eigenvalue
+problem $Bw = \lambda Aw$.

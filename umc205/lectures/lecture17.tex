@@ -1,0 +1,104 @@
+\lecture{17}{Tue 05 Mar '24}{}
+\subsection{Equivalence of acceptance criteria}
+\label{sec:criteria_equivalence}
+\begin{theorem*}
+    Any language is accepted by a PDA via empty stack if and only if
+    it is accepted by another PDA via final state.
+\end{theorem*}
+\begin{proof}
+    Suppose $L$ is accepted by a PDA \mcM\ via final state.
+    Then we can add a new state \textsc{Hole} and a new
+    $\epsilon$-transition from every final state to \textsc{Hole}.
+    For \textsc{Hole}, we add an $\epsilon$-transition loop to itself
+    that pops the stack and goes to the final state.
+
+    But what if the stack is emptied without reaching a final state?
+    We introduce a new bottom-of-stack symbol $\bbot$.
+    Let $\mcM = (Q, A, \Gamma, s, \delta, \bot, F)$.
+    Define \[
+        \mcM' = (Q \cup \set{s', \textsc{Hole}}, A, \Gamma \cup \set{\bbot}, s', \delta', \bbot, \set{\textsc{Hole}})
+    \] where $\delta'$ has transitions from $\delta$ and the new transitions
+    \begin{align*}
+        (s', \epsilon, \bbot) &\to (s, \bot\bbot) \\
+        (f, \epsilon, X) &\to (\textsc{Hole}, \epsilon) \quad \text{for all } f \in F, X \in \Gamma \cup \set{\bbot} \\
+        (\textsc{Hole}, \epsilon, X) &\to (\textsc{Hole}, \epsilon) \quad \text{for all } X \in \Gamma \cup \set{\bbot}
+    \end{align*}
+
+    Suppose a word $w$ is accepted by \mcM\ via final state.
+    Then once \mcM'\ reads $w$, it will land on a final state in \mcM\ and
+    will have a non-empty stack (since $\mcM$ transitions cannot pop the
+    new $\bbot$ symbol).
+    Then it will transition to \textsc{Hole} and empty the stack.
+
+    Suppose a word $w$ is accepted by \mcM'\ via empty stack.
+    The stack can only be emptied by the transitions from \textsc{Hole}
+    at the end of the input tape.
+    But to get to \textsc{Hole}, \mcM\ must have been in a final state
+    after reading the entire input.
+\end{proof}
+
+\section{CFGs and PDAs} \label{sec:cfg:pda_equivalence}
+\begin{theorem}[Chomsky] \label{thm:cfg:chomsky}
+    The class of languages accepted by a PDA is precisely the class of
+    context-free languages.
+\end{theorem}
+\begin{proof}[CFG to PDA]
+    Let $G = (N, A, S, P)$ be a CFG.
+    Assume WLOG that all rules of $G$ are of the form \[
+        X \to c B_1 B_2 \dots B_k
+    \] where $c \in A \cup \set{\epsilon}$ and $B_i \in N$.
+    This can always be done, since for any $a \in A$ we can introduce a new
+    non-terminal $A'$ and a rule $A' \to a$.
+
+    We construct a PDA \mcM\ that simulates a leftmost derivation of $G$ on
+    the given input.
+    Define $\mcM = (\set{s}, A, N, s, \delta, S)$ where $\delta$ is given
+    by \[
+        (s, c, X) \to (s, B_1 B_2 \dots B_k)
+    \] for any rule $X \to c B_1 B_2 \dots B_k$ in $P$.
+    Then \mcM\ accepts $L(G)$ by empty stack.
+\end{proof}
+
+\begin{exercise}
+    Construct a PDA for the CFG \begin{align*}
+        S &\to \texttt{(}SR \mid SS \mid \epsilon \\
+        R &\to \texttt{)}
+    \end{align*}
+\end{exercise}
+\begin{proof}
+    We have the following transitions in $\delta$:
+    \begin{align*}
+        (s, \texttt{(}, S) &\to (s, SR) \\
+        (s, \epsilon, S) &\to (s, SS) \\
+        (s, \epsilon, S) &\to (s, \epsilon) \\
+        (s, \texttt{)}, R) &\to (s, \epsilon) \qedhere
+    \end{align*}
+    % Diagrammatically, the PDA looks like this:
+    % \begin{center}
+    %     \begin{tikzpicture}
+    %         \node[state, initial] (s) {$s$};
+    %         \path[->] (s) edge[loop above] node {\texttt{(}, 
+    %     \end{tikzpicture}
+    % \end{center}
+\end{proof}
+
+\begin{lemma}
+    For any PDA \mcM\ that accepts via empty stack, there is a PDA \mcM'
+    with a single state that accepts the same language via empty stack.
+\end{lemma}
+\begin{proof}
+    Let $\mcM = (Q, A, \Gamma, s, \delta, \bot, F)$.
+    Define \[
+        \mcM' = (\set{Q}, A, Q \times \Gamma \times Q, Q, \delta', (s, \bot), \O)
+    \] where we will define $\delta'$ as follows.
+    For every original transition \[
+        (p, a, X) \to (q, B_1 B_2 \dots, B_k),
+    \] we add the transitions \[
+        (Q, a, \angled{p, X, r}) \to (Q, \angled{q B_1 q_1}\angled{q_1 B_2 q_2}\dots\angled{q_{k-1} B_k r})
+    \] for every $q_1, q_2, \dots, q_{k-1}, r \in Q$.
+    In particular, for every original transition \[
+        (p, \epsilon, X) \to (q, \epsilon),
+    \] we add the transition \[
+        (Q, \epsilon, (p, X, r)) \to (Q, \epsilon)
+    \] for every $r \in Q$.
+\end{proof}

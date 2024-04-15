@@ -1,4 +1,5 @@
-\lecture{02}{Thu 11 Jan '24}{}
+\lecture{02}{Thu 11 Jan '24}{Bayes classifier, multivariate gaussians and
+optimality}
 
 We come back to apples and oranges.
 \begin{align*}
@@ -8,7 +9,7 @@ We come back to apples and oranges.
         y_i \in \mathcal{Y}}
 \end{align*}
 We also know \emph{priors} \begin{align*}
-    \Pr(Y = 1) &= p_1 & \Pr(Y = -1) = 1 - p_1 &\eqcolon p_2
+    \Pr(Y = 1) &= p_1 & \Pr(Y = -1) &= 1 - p_1 \eqcolon p_2
     \intertext{and \emph{class condition distributions}}
     \Pr(X = x \mid Y = 1) &= f_1(x) & \Pr(X = x \mid Y = -1) &= f_2(x)
 \end{align*}
@@ -19,9 +20,9 @@ We also know \emph{priors} \begin{align*}
 From Bayes' rule, we have the \emph{posterior}
 $\eta\colon \mathcal{X} \to [0, 1]$ defined by
 \begin{align*}
-    \eta(x) \coloneq \Pr(Y = 1 \mid X = x)
-        &= \frac{\Pr(X = x \mid Y = 1) \Pr(Y = 1)}{\Pr(X = x)} \\
-        &= \frac{f_1(x) p_1}{f_1(x) p_1 + f_2(x) p_2}
+    \eta(x) &\coloneq \Pr(Y = 1 \mid X = x) \\
+         &= \frac{\Pr(X = x \mid Y = 1) \Pr(Y = 1)}{\Pr(X = x)} \\
+         &= \frac{f_1(x) p_1}{f_1(x) p_1 + f_2(x) p_2}
 \end{align*}
 We can then define the \emph{Bayes classifier} as \begin{align*}
     h^*(x) &\coloneq \sgn(2\eta(x) - 1) \\
@@ -37,9 +38,9 @@ We can then define the \emph{Bayes classifier} as \begin{align*}
 
 For the specific case of multivariate Gaussians, \ie, $f_1$ and $f_2$ of the
 form \begin{align*}
-    N(x \mid \mu, C) &= \frac{1}{\sqrt{(2\pi)^d \det(C)}}
-        \exp\left(-\frac{1}{2}(x - \mu)^\top C^{-1} (x - \mu)\right),
-\end{align*} with same covariance $C$ but different means $\mu_1$ and $\mu_2$,
+    N(x \mid \mu, \Sigma) &= \frac{1}{\sqrt{(2\pi)^d \det \Sigma}}
+        \exp\left(-\frac{1}{2} \norm{x - \mu}^2_{\Sigma^{-1}}\right)
+\end{align*} with same covariance $\Sigma$ but different means $\mu_1$ and $\mu_2$,
 we write \[
     h^*(x) = \begin{cases}
         \hphantom{-}1 & \text{if } \log \frac{\eta(x)}{1 - \eta(x)} > 0 \\
@@ -48,23 +49,23 @@ we write \[
 \] Now \begin{align*}
     \log \frac{\eta(x)}{1 - \eta(x)}
         &= \log \frac{f_1(x) p_1}{f_2(x) p_2} \\
-        &= \log \frac{p_1}{p_2} - \frac12 \left((x-\mu_1)^\top C^{-1}(x-\mu_1)\right) \\
-        &\qquad + \frac12 \left((x-\mu_2)^\top C^{-1}(x-\mu_2)\right) \\
-        &= \log \frac{p_1}{p_2} + (\mu_1 - \mu_2)^\top C^{-1} x
-            - \frac12 (\mu_1^\top C^{-1} \mu_1 - \mu_2^\top C^{-1} \mu_2) \\
-        &= w^\top x - b
-\end{align*} where $w = C^{-1}(\mu_1 - \mu_2)$ (since $C$ is symmetric) and
+        &= \log \frac{p_1}{p_2} - \frac12 \braket{x - \mu_1}{\Sigma^{-1}}{x - \mu_1}
+            + \frac12 \braket{x - \mu_2}{\Sigma^{-1}}{x - \mu_2} \\
+        &= \log \frac{p_1}{p_2} + \braket{\mu_1 - \mu_2}{\Sigma^{-1}}{x}
+            - \frac12 \left(\norm{\mu_1}^2_{\Sigma^{-1}} - \norm{\mu_2}^2_{\Sigma^{-1}}\right) \\
+        &= \innerp{w}{x} - b
+\end{align*} where $w = \Sigma^{-1}(\mu_1 - \mu_2)$ (since $\Sigma$ is symmetric) and
 $b$ is something.
-Thus $h^*(x) = \sgn(w^\top x - b)$.
+Thus $h^*(x) = \sgn(\innerp{w}{x} - b)$.
 \begin{remark}
-    $w^\top x = b$ is a hyperplane in $\R^d$, dividing the space into two
-    half-spaces: $w^\top x < b$ and $w^\top x > b$.
+    $\innerp{w}{x} = b$ is a hyperplane in $\R^d$, dividing the space into two
+    half-spaces: $\innerp{w}{x} < b$ and $\innerp{w}{x} > b$.
     So a line is a very good guess for a classifier!
 \end{remark}
 
 \begin{exercise}
-    Examine the special case of $C_1 = \sigma_1^2 I$ and
-    $C_2 = \sigma_2^2 I$.
+    Examine the special case of $\Sigma_1 = \sigma_1^2 I$ and
+    $\Sigma_2 = \sigma_2^2 I$.
 \end{exercise}
 \begin{solution}
     We have \begin{equation*}
@@ -79,7 +80,7 @@ Thus $h^*(x) = \sgn(w^\top x - b)$.
     \] and class $2$ otherwise.
 \end{solution}
 
-\subsection{How Good is the Bayes Classifier?} \label{sec:bayest}
+\section{How Good is the Bayes Classifier?} \label{sec:bayest}
 We wish to compute the error $\Pr(h(X) \ne Y)$ for some rule $h$.
 \begin{align*}
     \Pr(h(X) \ne Y)

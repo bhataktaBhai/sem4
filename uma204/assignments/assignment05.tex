@@ -1,0 +1,125 @@
+\documentclass[12pt]{article}
+\input{../preamble}
+
+\title{Assignment 5} \setcounter{assignment}{5}
+                     \setcounter{section}   {5}
+\author{Naman Mishra}
+\date{28 February, 2024}
+
+\begin{document}
+\maketitle
+\begin{problem*}
+    Let $(x_n)_{n \in \N}$ be a convergent sequence in \R,
+    with $x_n \ge 0$ for all $n \in \N$.
+    Let $k \in \N^*$.
+    Show that \[
+        \lim_{n \to \infty} (x_n)^{1/k}
+            = \left(\lim_{n \to \infty} x_n\right)^{1/k}.
+    \]
+\end{problem*}
+\begin{solution}
+    Call the limit of $(x_n)_n$ $L$.
+    Let $\varepsilon > 0$ and let
+    $\varepsilon' = \frac{\varepsilon}{L^{1/k}}$.
+    Then for sufficiently small $\varepsilon'$, \begin{align*}
+        (L^{1/k} - \varepsilon)^k &\le L(1 - k \varepsilon' + 2^k (\varepsilon')^2) < L \\
+        (L^{1/k} + \varepsilon)^k &\ge L(1 + k \varepsilon') > L
+    \end{align*}
+    But $x_n \to L$, so eventually
+    $x_n \in (L(1 - k \varepsilon' + 2^k (\varepsilon')^2), L(1 + k \varepsilon'))$. \\
+    Then $x_n^{1/k} \in (L^{1/k} - \varepsilon, L^{1/k} + \varepsilon)$.
+\end{solution}
+\begin{solution}[Alternative]
+    Let $L = \lim_{n \to \infty} x_n$.
+    Then $\frac{x_n}{L} \to 1$.
+    But notice that for any real $a > 0$, \[
+        \abs{1 - a^{1 / k}} \le \abs{1 - a}
+    \] because $x^k - 1 = (x - 1)(x^{k-1} + x^{k-2} + \cdots + 1)$ where the
+    second term is obviously larger than $1$.
+
+    But then \[
+        \left(\frac{x_n}{x}\right)^{1/k} \to 1
+    \] which proves the result.
+\end{solution}
+
+\begin{problem*}
+    Let $(X, d)$ be a complete metric space, and $Y \subseteq X$.
+    Show that $(Y, d\vert_Y)$ is a complete metric space if and only if
+    $Y$ is closed in $(X, d)$.
+\end{problem*}
+\begin{solution}
+    $Y$ is a complete metric space iff every Cauchy sequence in
+    $Y$ converges in $Y$.
+    But $X$ is complete, so every Cauchy sequence in $Y$ converges in $X$.
+    Thus, $Y$ is complete iff every convergent sequence in $Y$ (viewed as a
+    sequence in $X$) converges in $Y$.
+    This is true iff $Y$ is closed in $X$.
+\end{solution}
+
+\begin{problem*}
+    Let $(X, d)$ be a metric space and $A \subseteq X$ be a dense subset,
+    \ie, $\wbar{A} = X$.
+    Show that if every Cauchy sequence in $A$ converges to a limit in $X$,
+    then $X$ is a complete metric space.
+\end{problem*}
+\begin{solution}
+    Let $(x_n)_n$ be a Cauchy sequence in $X$.
+    For each $n \in \N$, there exists $a_n \in A$ such that
+    $d(x_n, a_n) < \frac1n$.
+    Then $(a_n)_n$ is a Cauchy sequence in $A$, so it converges to some
+    $a \in X$.
+    But $d(x_n, a_n) \to 0$, so $x_n \to a$.
+\end{solution}
+
+\begin{problem*}
+    For any real sequences $(x_n)_{n \in \N}$ and $(y_n)_{n \in \N}$
+    show that \begin{align*}
+        \limsup_{n \to \infty} (x_n + y_n) &\le \limsup_{n \to \infty} x_n + \limsup_{n \to \infty} y_n, \\
+        \liminf_{n \to \infty} (x_n + y_n) &\ge \liminf_{n \to \infty} x_n + \liminf_{n \to \infty} y_n.
+    \end{align*}
+\end{problem*}
+\begin{solution}
+    Let $X = \limsup_{n \to \infty} x_n$ and
+    $Y = \limsup_{n \to \infty} y_n$.
+    Then for any $z > X + Y$, rewrite $z$ as
+    $(X + \delta) + (Y + \delta) + \delta$.
+    Then there is an $N$ such that for all $n \ge N$, \[
+        x_n < X + \delta \quad \text{and} \quad y_n < Y + \delta
+    \] so that \[
+        x_n + y_n < z - \delta.
+    \] But then $z - \delta$ cannot be a subsequential limit of
+    $(x_n + y_n)_n$.
+    Thus \[
+        \limsup_{n \to \infty} x_n + y_n \le X + Y. \qedhere
+    \]
+\end{solution}
+
+\begin{problem*}
+    Compute $\limsup_{n \to \infty} x_n$ and $\liminf_{n \to \infty} x_n$,
+    where the sequence $(x_n)_{n \in \N^*} \subseteq \R$
+    is given by \begin{align*}
+        x_1    &= 0, \\
+        x_{2m}   &= \frac{x_{2m-1}}{2}, \quad m \ge 1, \\
+        x_{2m+1} &= \frac12 + x_{2m}, \quad m \ge 1.
+    \end{align*}
+\end{problem*}
+\begin{solution}
+    \textbf{Claim:} $x_{2m+1} = 1 - \frac{1}{2^m}$.
+    \begin{proof}
+        Induction.
+    \end{proof}
+    \textbf{Corollary:} $x_{2m} = \frac12 - \frac{1}{2^m}$.
+
+    Thus $\inf_{n \ge 2m} x_n = x_{2m}$.
+    Then \[
+        \liminf_{n \to \infty} x_n = \lim_{n \to \infty} \left(\frac12 - \frac1{2^n}\right) = \frac12.
+    \]
+
+    For limsup, note that each term is less than $1$, but $1$ is a
+    subsequential limit via the odd terms.
+    Thus \[
+        \limsup_{n \to \infty} x_n = 1. \qedhere
+    \]
+\end{solution}
+
+\end{document}

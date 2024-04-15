@@ -1,26 +1,39 @@
 \lecture{07}{Tue 23 Jan '24}{}
 
-\begin{theorem}[Closure under Kleene star] \label{thm:closure:kleene}
-    The class of regular languages is closed under Kleene star.
-\end{theorem}
+\begin{theorem*}[Glushkov construction] \label{thm:glushkov}
+    For every regular language $L$, there exists an NFA with exactly one
+    initial and final state that accepts $L \setminus \set{\epsilon}$.
+\end{theorem*}
 \begin{proof}
-    Let $L$ be a regular language accepted by a DFA
-    $\mcA = (Q, s, \delta, F)$.
-    We construct an NFA $\mcA' = (Q', S, \Delta, F')$ for $L^*$ by
-    \begin{itemize}
-        \item $Q' = Q \cup \set{Q}$;
-        \item $S = \set{Q}$;
-        \item $F' = \set{Q}$;
-        % \item $\delta'(s', a) = \begin{cases}
-        %     \set{\delta(s, a)} & \text{if } \delta(s, a) \notin F, \\
-        %     \set{s'} & \text{otherwise}.
-        % \end{cases}$
-        \item For $q \in Q$, $\Delta(q, a) = \begin{cases}
-            \set{\delta(q, a)} & \text{if } \delta(q, a) \notin F, \\
-            \set{\delta(q, a), Q} & \text{otherwise}.
-        \end{cases}$
-        \item $\Delta(Q, a) = \Delta(s, a)$.
-    \end{itemize}
+    Let $\mcA = (Q, S, \Delta, F)$ be an NFA accepting $L$.
+    Let $s$ and $f$ be new states.
+    We construct an NFA \[
+        \mcA' = (Q \cup \set{s, f}, \set{s}, \Delta', \set{f})
+    \] where \begin{align*}
+        \Delta'(s, a) &= \bigcup_{q \in S} \Delta(q, a), \\
+        \Delta'(q, a) &= \begin{cases}
+            \Delta(q, a) & \text{if } \Delta(q, a) \cap F = \O \\
+            \Delta(q, a) \cup \set{f} & \text{otherwise}.
+        \end{cases}
+    \end{align*}
+    Let $w \in L \setminus \set{\epsilon}$.
+    Then there exists a path from some initial state $s_i$ to some final
+    state $f_j$ in $\mcA$.
+    This path is preserved in $\mcA'$, only with $s$ in place of $s_i$ and
+    $f$ in place of $f_j$.
+
+    Conversely, every path from $s$ to $f$ in $\mcA'$ corresponds to a
+    path from some initial state to some final state in $\mcA$.
+\end{proof}
+
+\begin{theorem*}[Closure under Kleene star] \label{thm:closure:kleene}
+    The class of regular languages is closed under Kleene star.
+\end{theorem*}
+\begin{proof}
+    Let $L$ be a regular language with NFA $\mcA = (Q, S, \Delta, F)$.
+    Let $\mcA'$ be the NFA constructed using the Glushkov construction.
+    Now fuse the initial and final states of $\mcA'$ to obtain an NFA
+    accepting $L^*$.
 \end{proof}
 
 \section{Regular Expressions} \label{sec:regex}
@@ -38,7 +51,7 @@ using operators $+$, $\cdot$, $*$, and parentheses.
     (Answer) $(0000 + 0011 + \dots + 1111)^*\cdot(\epsilon + 0 + 1 + 00 + \dots + 111)$.
 \end{examples}
 
-\begin{definition} \label{def:regex}
+\begin{definition*} \label{def:regex}
     The syntax of regular expressions over an alphabet $A$ is defined by \[
         r ::= \O \mid a \mid r + r \mid r \cdot r \mid r^*
     \] with $a \in A$.
@@ -52,12 +65,12 @@ using operators $+$, $\cdot$, $*$, and parentheses.
         \item $L(r^*) = L(r)^* = \bigcup_{i = 0}^\infty L(r)^i$.
     \end{enumerate}
     We give precedence to $*$, $\cdot$, $+$, in that order.
-\end{definition}
+\end{definition*}
 
-\begin{theorem}[Kleene's theorem] \label{thm:regex:kleene}
+\begin{theorem*}[Kleene's theorem] \label{thm:regex:kleene}
     The class of languages defined by regular expressions is exactly the
     class of regular languages.
-\end{theorem}
+\end{theorem*}
 We prove the two directions separately.
 \begin{proof}[RE to NFA]
     Let $L$ be a language corresponding to a regular expression $r$.

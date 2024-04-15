@@ -1,0 +1,70 @@
+\chapter{Branching Processes} \label{chp:branching}
+\lecture{11}{Thu 8 Feb '24}{Branching Processes}
+\begin{definition*}[Branching process] \label{def:branching_process}
+    Let $P = (p_i)_{i \in \N}$ be a probability distribution on $\N$ and let
+    $X_{n, i} \sim P$ be iid random variables for each $n, i \in \N$.
+    We define the \emph{branching process} $(Z_n)_{n \in \N}$ by
+    \[
+        Z_0 = 1, \quad Z_{n+1} = \sum_{i=1}^{Z_n} X_{n, i}.
+    \]
+    $P$ is called the \emph{offspring/progeny distribution}.
+    The associated random tree (the $i$th node on the $n$th level, if it
+    exists, having $X_{n, i}$ children) is called the
+    \emph{Galton-Watson tree} or the \emph{Bienaym\'e tree}.
+\end{definition*}
+
+Clearly $Z_{n+1}$ depends only on $Z_n$, so the process is a Markov chain.
+\begin{definition}[Extinction] \label{def:extinction}
+    The \emph{extinction probability} of a branching process
+    $(Z_n)_{n \in \N}$ is \[
+        \eta = \Pr(Z_n = 0 \text{ for some } n \in \N).
+    \]
+\end{definition}
+
+\begin{proposition*}[Expectation] \label{thm:expectation}
+    Let $\mu = \E_{X \sim P}[X] = \E[Z_1]$.
+    Then $\E[Z_n] = \mu^n$.
+\end{proposition*}
+\begin{proof}
+    By induction, $\E[Z_0] = 1 = \mu^0$.
+    Then \[
+        \E[Z_{n+1} \given Z_n]
+            = \E\left[\sum_{i=1}^{Z_n} X_{n, i} \given Z_n\right]
+            = Z_n \E[X_{n, 1}]
+            = Z_n \mu.
+    \] So \[
+        \E[Z_{n+1}]
+            = \E[\E[Z_{n+1} \given Z_n]]
+            = \E[Z_n \mu]
+            = \mu \E[Z_n]
+    \] and by induction follows the result.
+\end{proof}
+
+\begin{proposition}
+    If $\E[Z_1] < 1$, then the process becomes extinct with probability 1.
+\end{proposition}
+\begin{proof}
+    Markov's inequality gives \[
+        \Pr(Z_n \geq 1) \leq \E[Z_n] = \mu^n.
+    \] So \[
+        \lim_{n \to \infty} \Pr(Z_n \ne 0) = 0.
+    \]
+\end{proof}
+
+\begin{theorem*}
+    Consider a branching process with $p_1 < 1$.
+    Let $G$ be the pgf of $Z_1$.
+    Then the extinction probability $\eta$ is the smallest solution to
+    $G(s) = s$ in $[0, 1]$.
+
+    Further, \begin{align*}
+        \eta &= 1 \text{ if } \E[Z_1] \leq 1, \\
+        \eta &< 1 \text{ if } \E[Z_1] > 1.
+    \end{align*}
+\end{theorem*}
+
+\begin{definition}[Criticality] \label{def:criticality}
+    An offspring distribution is called \emph{critical} if $\E[Z_1] = 1$.
+    It is called \emph{subcritical} (resp. \emph{supercritical}) if
+    $\E[Z_1] < 1$ (resp. $\E[Z_1] > 1$).
+\end{definition}

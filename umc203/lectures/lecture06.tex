@@ -1,5 +1,5 @@
-\lecture{06}{Thu 25 Jan '24}{}
-\section{Perceptron} \label{sec:perceptron}
+\chapter{Perceptron} \label{chp:perceptron}
+\lecture{06}{Thu 25 Jan '24}{The perceptron algorithm}
 We model a real biological neuron as an electrical circuit, so that it can
 be mimicked by silicon.
 \begin{center}
@@ -19,57 +19,107 @@ be mimicked by silicon.
             x0 -> y;
             y -> out;
         };
+        \path (x2) -- node[midway]{\rotatebox{90}{$\cdots$}} (xd);
     \end{tikzpicture}
 \end{center}
 
-Let $\mcD = \set{(x^{(i)}, y^{(i)}) \mid x^{(i)} \in \mcX, y^{(i)} \in \pms,
-i \in [N]}$.
+Let $\mcD = \set{(x^{(i)}, y_i) \mid x^{(i)} \in \mcX, y_i \in \pms,
+                                i \in [N]}$.
+\begin{definition}[Margin] \label{def:margin}
+    Let $\mcD$ be as above.
+    For any vector $w \in \R^d$, the \emph{margin} of $w$ with respect to
+    $\mcD$ is \[
+        \gamma(w) = \min_{i \in [N]} \frac{y_i \innerp{w}{x^{(i)}}}{\norm{w}}.
+    \]
+\end{definition}
 
 Suppose there exists a $w^*$ such that \[
-    \sgn((w^*)^\top x^{(i)}) = y^{(i)} \text{ for all } i \in [N].
+    \sgn \innerp{w^*}{x^{(i)}} = y_i \text{ for all } i \in [N].
 \]
-We know $y^{(i)} (w^{*\top} x^{(i)}) > 0$ for all $i \in [N]$.
+In other words, $\gamma(w^*) > 0$ or $y_i \innerp{w^*}{x^{(i)}} > 0$ for all
+$i \in [N]$.
 
-Define the \emph{margin} of $w$ as \[
-    \gamma(w) = \min_{i \in [N]} \frac{y^{(i)} (w^\top x^{(i)})}{\norm{w}}.
-\] We want to maximize $\gamma(w)$.
+We wish to find a $w$ that maximizes $\gamma(w)$.
+For the time being, we'll be satisfied with any $w$ that has positive margin.
+
+\section{The Algorithm} \label{sec:perceptron:algo}
 
 We do this iteratively.
 Let $w^{(0)} = 0$.
 
-Let $w^{(k)}$ be the current estimate of $w^*$.
-Let $(x^{(l)}, y^{(l)})$ be the first misclassified sample.
+Let $w^{(k)}$ be the current weight vector.
+Let $(x^{(l)}, y_i)$ be the first misclassified sample.
 Then, we update $w^{(k)}$ to $w^{(k+1)}$ by \[
-    w^{(k+1)} = w^{(k)} + y^{(l)} x^{(l)}.
+    w^{(k+1)} = w^{(k)} + y_i x^{(l)}.
 \] If no such sample exists, then we are done.
-\begin{align*}
-    \norm{w_{k+1}}^2 - \norm{w_k}^2
-        &= (w^{(k+1)} - w^{(k)})^\top (w^{(k+1)} + w^{(k)}) \\
-        &= (y^{(l)} x^{(l)})^\top (2w^{(k)} + y^{(l)} x^{(l)}) \\
-        &= 2 y^{(l)} (x^{(l)})^\top w^{(k)} + \norm{x^{(l)}}^2 \\
-        &\le \norm{x^{(l)}}^2
-    \shortintertext{and so}
-    \norm{w^{(M)}}^2
-        &\le M R^2. \tag{1}
-\end{align*}
-On the other hand, \begin{align*}
-    (w^*)^\top (w^{(k+1)} - w^{(k)})
-        &= (w^*)^\top (y^{(l)} x^{(l)}) \\
-        &\ge \norm{w^*} \gamma^*.
-    \shortintertext{and so}
-    (w^*)^\top w^{(M)}
-        &\ge M \norm{w^*} \gamma^*
-    \shortintertext{and from Cauchy-Schwarz,}
-    \big\lVert w^* \big\rVert \norm{w^{(M)}}
-        &\ge M \norm{w^*} \gamma^* \\
-    \norm{w^{(M)}}
-        &\ge M \gamma^*. \tag{2}
-\end{align*}
-Combining (1) and (2), we get \[
-    M^2 \gamma^{*2} \le M R^2 \iff M \le \frac{R^2}{\gamma^{*2}}.
-\] Thus the algorithm terminates in at most $\frac{R^2}{\gamma^{*2}}$
-iterations.
 
-\subsection{Analysis} \label{sec:analysis}
-Let $\mcD$ be a training set of size $N$ drawn i.i.d. from $P$.
-We denote this as $\mcD \sim P^N$.
+Since the numbering of samples is arbitrary, we can implement it as follows.
+\begin{algo}
+    \Fn{Perceptron}{$\mcD$}
+        \State $w \gets 0$
+        \For{ever}
+            \State $\Varr{error} \gets \text{false}$
+            \For{$i \gets 1$ to $N$}
+                \If{$y_i \innerp{w}{x^{(i)}} \le 0$}
+                    \State $w \gets w + y_i x^{(i)}$
+                    \State $\Varr{error} \gets \text{true}$
+                \EndIf
+            \EndFor
+            \If{$\neg \Varr{error}$}
+                \State \Return $w$
+            \EndIf
+        \EndFor
+    \EndFn
+\end{algo}
+Notice that this does not break out of the current iteration when it finds
+a misclassified sample.
+It continues to check for more misclassified samples.
+For some reason, this gives \emph{much} better results for the assignment
+problem.
+
+\section{Termination} \label{sec:perceptron:termination}
+\begin{theorem*} \label{thm:perceptron:termination:iterations}
+    Let $\mcD = \set{(x^{(i)}, y_i) \mid x^{(i)} \in \mcX, y_i \in \pms,
+    i \in [N]}$ be linearly separable by a weight vector $w^*$.
+    Then the Perceptron algorithm terminates in at most
+    $\frac{R^2}{\gamma^{*2}}$ iterations, where \begin{align*}
+        R &= \max_{i \in [N]} \norm{x^{(i)}}, \text{ and} \\
+        \gamma^* &= \min_{i \in [N]}
+                \frac{\abs*{w^{*\top} x^{(i)}}}{\norm{w^*}}.
+    \end{align*}
+\end{theorem*}
+\begin{proof}
+    Let $w^{(k)}$ misclassify $x^{(l)}$.
+    Then \begin{align*}
+        \norm{w_{k+1}}^2 - \norm{w_k}^2
+            &= \innerp{w_{k+1} - w_k}{w_{k+1} + w_k} \\
+            &= \innerp{y_l x^{(l)}}{w_{k+1} + w_k} \\
+            &= y_l \innerp{x^{(l)}}{2w_k + y_l x^{(l)}} \\
+            % &= 2 y_l (x^{(l)})^\top w^{(k)} + \norm{x^{(l)}}^2 \\
+            &= 2 y_l \innerp{x^{(l)}}{w^{(k)}} + \norm{x^{(l)}}^2 \\
+            &\le \norm{x^{(l)}}^2
+        \shortintertext{since this sample is misclassified.
+        Then for each iteration $M$, prior to which at least one sample is
+        misclassified,}
+        \norm{w^{(M)}}^2
+            &\le M R^2. \tag{1}
+    \end{align*}
+    On the other hand, \begin{align*}
+        \innerp{w^*}{w^{(k+1)} - w^{(k)}}
+            &= \innerp{w^*}{y_l x^{(l)}} \\
+            &\ge \norm{w^*} \gamma^*.
+        \shortintertext{and so}
+        \innerp{w^*}{w^{(M)}}
+            &\ge M \norm{w^*} \gamma^*.
+        \shortintertext{From Cauchy-Schwarz,}
+        \big\lVert w^* \big\rVert \norm{w^{(M)}}
+            &\ge M \norm{w^*} \gamma^* \\
+        \norm{w^{(M)}}
+            &\ge M \gamma^*. \tag{2}
+    \end{align*}
+    Combining (1) and (2), we get \[
+        M^2 \gamma^{*2} \le M R^2 \iff M \le \frac{R^2}{\gamma^{*2}}.
+    \] Thus no sample is misclassified after $\frac{R^2}{\gamma^{*2}}$
+    iterations, so the algorithm terminates in at most
+    $\frac{R^2}{\gamma^{*2}}$ iterations.
+\end{proof}

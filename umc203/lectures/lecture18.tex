@@ -1,0 +1,134 @@
+\chapter{Maximum Likelihood Estimation} \label{chp:mle}
+\lecture{18}{Tuesday 26 Mar '24}{Maximum Likelihood Estimation}
+
+\begin{definition} \label{def:mle}
+    Let $X_1, X_2, \dots$ be i.i.d. random variables drawn from a
+    distribution $\Pr_{\theta}$, where $\theta \in \Theta$.
+    The \emph{likelihood function} is defined as \[
+        L_n(\theta) = \prod_{i=1}^{n} \Pr_{\theta}(X_i),
+    \]
+    which of course motivates the
+    \emph{log-likelihood function} \[
+        \ell_n(\theta) = \sum_{i=1}^{n} \log \Pr_{\theta}(X_i).
+    \] The \emph{maximum likelihood estimator} (MLE) is defined as \[
+        \hat{\theta}_n = \argmax_{\theta \in \Theta} \ell_n(\theta).
+    \]
+\end{definition}
+
+\begin{definition*}[KL divergence] \label{def:kl_div}
+    The \emph{Kullback-Leibler divergence} of the distribution $P$ from the
+    distribution $Q$ is defined as \[
+        \kld{P}{Q} = \E_P \left[\log \frac{P(X)}{Q(X)} \right].
+    \]
+    For discrete distributions, this is \[
+        \kld{P}{Q} = \sum_{x} P(x) \log \frac{P(x)}{Q(x)}.
+    \]
+\end{definition*}
+
+\begin{lemma}
+    For all $x \in \R_+$, \[
+        \log x \le x - 1
+    \]
+\end{lemma}
+\begin{proof}
+    $\log$ is convex down, so the tangent at $x = 1$ always lies above the
+    curve.
+\end{proof}
+\begin{proposition}
+    For all distributions $P$ and $Q$, \[
+        \kld{P}{Q} \ge 0.
+    \]
+\end{proposition}
+\begin{proof}
+    \begin{align*}
+        -\kld{P}{Q} &= \E_P \left[\log \frac{Q(X)}{P(X)} \right] \\
+        &\le \E_P \left[\frac{Q(X)}{P(X)} - 1 \right] \\
+        &= \int \frac{Q(x)}{P(x)} P(x) \dd x - 1 \\
+        &= 0.
+    \end{align*}
+    For equality to hold, $P(X) = Q(X)$ with probability 1.
+\end{proof}
+
+\begin{exercise}
+    Find the MLE of $X_1, X_2, \dots, X_n \sim \Ber(\theta)$.
+\end{exercise}
+\begin{solution}
+    The log-likelihood function is \begin{align*}
+        \ell_n(\hat\theta)
+            &= \sum_{i=1}^{n} \log \Pr_{\hat\theta}(X_i) \\
+            &= \sum_{i=1}^{n} X_i \log \hat\theta
+                + (1 - X_i) \log{}(1 - \hat\theta) \\
+            &= n \wbar{X}_n \log \hat\theta
+                + n (1 - \wbar{X}_n) \log{}(1 - \hat\theta),
+    \end{align*} where $\wbar{X}_n = \frac{1}{n} \sum_{i=1}^{n} X_i$.
+    Then for any $\hat\theta, \theta' \in [0, 1]$, \begin{align*}
+        \frac{\ell_n(\hat\theta) - \ell_n(\theta')}n
+            &= \wbar{X}_n \log \frac{\hat\theta}{\theta'}
+                + (1 - \wbar{X}_n) \log \frac{1 - \hat\theta}{1 - \theta'}.
+    \end{align*}
+    For $\hat\theta = \wbar{X}_n$, this is precisely \[
+        \frac{\ell_n(\hat\theta) - \ell_n(\theta')}n
+            = \kld{\Ber \hat\theta}{\Ber \theta'}
+            \ge 0.
+    \] Thus the MLE is $\what\theta_n = \wbar{X}_n$.
+\end{solution}
+
+\begin{definition*}[Entropy] \label{def:entropy}
+    The \emph{entropy} of a distribution $P$ is defined as \[
+        H(P) = -\E_P \log P(X).
+    \]
+\end{definition*}
+
+\begin{exercise*}
+    Find MLE of $X_1, X_2, \dots, X_n \sim \mcN(\mu_0, \Sigma_0)$.
+\end{exercise*}
+\begin{solution}
+    The log-likelihood function is \[
+        \ell_n(\mu, \Sigma)
+            = -\frac12 \log \det \Sigma
+                -\frac12 \sum_{i=1}^n \norm{X_i - \mu}^2_{\Sigma^{-1}}
+                + \text{constant}.
+    \] Let us first fix $\Sigma$.
+    Let $\wbar{X}_n = \frac1n \sum_{i=1}^{n} X_i$.
+    Then ignoring the constant terms, we have to maximize \begin{align*}
+        &\mkern-10mu\sum_{i=1}^{n} \norm{X_i - \wbar{X}_n
+                + \wbar{X}_n - \mu}^2_{\Sigma^{-1}} \\
+        &= \sum_{i=1}^{n} \bigg(\norm{X_i - \wbar{X}_n}^2_{\Sigma^{-1}}
+            + 2 \innerp{X_i - \wbar{X}_n}{\wbar{X}_n - \mu}_{\Sigma^{-1}}
+            + \norm{\wbar{X}_n - \mu}^2_{\Sigma^{-1}}\bigg) \\
+        &= \sum_{i=1}^{n} \norm{X_i - \wbar{X}_n}^2_{\Sigma^{-1}}
+            + 2 \braket[\bigg]{\cancelto{0}{\sum_{i=1}^{n} X_i - n \wbar{X}_n}}{\Sigma^{-1}}{\wbar{X}_n - \mu}
+            + n \norm{\wbar{X}_n - \mu}^2_{\Sigma^{-1}} \\
+        &= \sum_{i=1}^{n} \norm{X_i - \wbar{X}_n}^2_{\Sigma^{-1}}
+            + n \norm{\wbar{X}_n - \mu}^2_{\Sigma^{-1}}.
+    \end{align*}
+    Thus for any value of $\Sigma$, $\ell(\mu, \Sigma)$ is maximized when
+    $\mu = \wbar{X}_n$.
+
+    Now let us fix $\mu = \wbar{X}_n$.
+    Let $S = \sum_{i=1}^{n} \outerp{X_i - \mu}{X_i - \mu}$.
+    Then \begin{align*}
+        \sum \norm{X_i - \mu}^2_{\Sigma^{-1}}
+        &= \sum \braket{X_i - \mu}{\Sigma^{-1}}{X_i - \mu} \\
+        &= \sum \Tr(\Sigma^{-1} \outerp{X_i - \mu}{X_i - \mu}) \\
+        &= \Tr(\Sigma^{-1} S).
+    \end{align*}
+
+    Then \begin{align*}
+        \ell_n(\mu, \Sigma) - \ell_n(\mu, S)
+            &\propto -\log \det \Sigma - \Tr(\Sigma^{-1} S)
+                +\log \det S + \Tr(S^{-1} S) \\
+            &= \log \det (\Sigma^{-1} S) - \Tr(\Sigma^{-1} S) + n \\
+            &= \sum \log \lambda_i - \sum \lambda_i + n,
+        \intertext{where $\lambda$s are the eigenvalues of $\Sigma^{-1} S$.}
+            &= \sum (\log \lambda_i - (1 - \lambda_i)) \\
+            &\le 0
+    \end{align*} with equality iff each $\lambda_i = 1$, that is,
+    $\Sigma^{-1} S = I \iff \Sigma = S$.
+
+    Thus the MLE is \[
+        \what\mu_n = \wbar{X}_n, \quad
+        \what\Sigma_n = \frac1n
+                \sum_{i=1}^{n} \outerp{X_i - \wbar{X}_n}{X_i - \wbar{X}_n}.
+    \]
+\end{solution}

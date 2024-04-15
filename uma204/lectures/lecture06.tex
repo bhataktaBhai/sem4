@@ -2,14 +2,14 @@
 
 We define an isomorphism from \Q\ into \R\ as \[
     r \in \Q \mapsto [(r, r, \dots)] \in \R.
-\]
-\begin{theorem}
+\] The proof is direct.
+\begin{theorem*}
     $(\R, +, \cdot, \le)$ satisfies the Archimedean property.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Let $[a], [b] > 0$ be in \R.
     Since $[b]$ is \Q-Cauchy, there exists a positive $M \in \Q$ such that
-    $b_n < M$ for all $n \in \N$. % TODO: why?
+    $b_n < M$ for all $n \in \N$.
 
     Since $[a] > 0$, let $c \in \Q^+$ and $N \in \N$ be such that $a_n > c$
     for all $n \ge N$.
@@ -20,22 +20,22 @@ We define an isomorphism from \Q\ into \R\ as \[
     $[m + 1] [a] > [b]$.
 \end{proof}
 
-\begin{theorem}
+\begin{theorem*}
     $(\R, +, \cdot, \le)$ satisfies the LUB property.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Let $A \subseteq \R$ be a non-empty bounded above set.
 
-    For $n \in \N^*$, let
-    $U_n = \set{m \in \Z : \frac mn \text{ is an upper bound of } A}$.
+    For $n \in \N^*$, let \[
+        U_n = \set{m \in \Z : \frac mn \text{ is an upper bound of } A}.
+    \]
     From the Archimedean property of \R, $U_n$ is non-empty and bounded below.
     By well-ordering, $U_n$ has a minimum $m(n)$.
     Let $a_n = \frac{m(n)}{n}$ for each $n \in \N^*$.
 
     \textbf{Claim:} $(a_n)_{n \in \N^*}$ is \Q-Cauchy. \\
     Let $\varepsilon$ be a positive rational number.
-    By Archimedean, there $\frac1n < \varepsilon$ for all $n$ above some
-    $N$ in \N.
+    By Archimedean, $\frac1n < \varepsilon$ for all $n$ above some $N$ in \N.
     Note that for any $n \in \N^*$, $a_n$ is an upper bound of $A$, and
     $a_n - \frac1n$ is not an upper bound of $A$.
 
@@ -51,5 +51,5 @@ We define an isomorphism from \Q\ into \R\ as \[
     That is, there is some positive rational $c$ such that $c < x_n - a_n$
     for all $n$ larger than some $N_1 \in \N^*$.
     Since $(x_n)$ is \Q-Cauchy, $-c/2 < x_n - x_m < c/2$ for all $n$, $m$
-    larger than some $N_2 \in \N^*$.
+    larger than some $N_2 \in \N^*$. %TODO
 \end{proof}

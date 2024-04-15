@@ -1,19 +1,19 @@
 \chapter{Languages} \label{chp:languages}
 \lecture{02}{Thu 04 Jan '24}{Deterministic Finite-State Automata}
 
-\begin{definition}
+\begin{definition*}
     An \emph{alphabet} is a non-empty finite set of symbols or ``letters''.
 
     A \emph{string} or \emph{word} over an alphabet $A$ is a finite sequence
     of letters from $A$.
     Equivalently, a string is a map from a prefix (possibly empty) of $\N$
     to $A$.
-    The length of a string $s$, notated $\size s$, is the cardinality of its
-    domain.
+    The length of a string $s$, denoted $\abs{s}$,
+    is the cardinality of its domain.
     The empty string is denoted $\epsilon$.
 
     The set of all strings over $A$ is denoted $A^*$.
-\end{definition}
+\end{definition*}
 \begin{example}
     $A = \set{a, b, c}$ and $\Sigma = \set{0, 1}$ are both alphabets.
     $aaba$ is a string over $A = \set{a, b, c}$.
@@ -35,9 +35,9 @@
     \nameref{def:languages:lexicographic}.
 \end{proof}
 
-\begin{definition}[Language] \label{def:languages:language}
+\begin{definition*}[Language] \label{def:languages:language}
     A \emph{language} over an alphabet $A$ is a subset of $A^*$.
-\end{definition}
+\end{definition*}
 \begin{example}
     Let $A = \set{a, b, c}$.
     Then $\set{abc, aaba}$,
@@ -45,7 +45,7 @@
     $\set{}$ are all languages over $A$.
 \end{example}
 
-\begin{definition}[Concatenation] \label{def:languages:concatenation}
+\begin{definition*}[Concatenation] \label{def:languages:concatenation}
     Let $u$, $v$ be strings over an alphabet $A$.
     Then $u \cdot v$ or simply $uv$ is the string obtained by appending $v$
     to the end of $u$.
@@ -53,18 +53,18 @@
     For two languages $L_1$, $L_2$ over $A$, define their concatenation \[
         L_1 \cdot L_2 \coloneq \set{uv \mid u \in L_1, v \in L_2}.
     \]
-\end{definition}
+\end{definition*}
 We will also write $ua$ where $u$ is a string and $a$ is a letter to mean
 $u$ concatenated with the string of length 1 consisting of the letter $a$.
 
-\begin{definition}[Lexicographic order] \label{def:languages:lexicographic}
+\begin{definition*}[Lexicographic order] \label{def:languages:lexicographic}
     Let $(A, <)$ be a totally ordered alphabet.
     We say $u < v$ for $u, v \in A^*$ if either $\size u < \size v$ or
     $\size u = \size v$ and $u = pxu'$, $v = pyv'$ for some $p, u', v' \in A^*$
     and $x, y \in A$ with $x < y$.
 
     This is called the \emph{lexicographic order} on $A^*$.
-\end{definition}
+\end{definition*}
 
 \begin{proposition}
     Let $A$ be an alphabet.
@@ -76,11 +76,6 @@ $u$ concatenated with the string of length 1 consisting of the letter $a$.
     Then define $L_\Phi = \set{s \in A^* \mid s \notin \Phi(s)}$.
     Then $L_\Phi$ is a language over $A$ that is not in the image of $\Phi$.
 \end{proof}
-
-\begin{definition}[Concatenations] \label{def:languages:concatenations}
-    Let $L_1$, $L_2$ be languages over an alphabet $A$.
-    Then $L_1 \cdot L_2$ is the language $\set{uv \mid u \in L_1, v \in L_2}$.
-\end{definition}
 
 \chapter{Finite-State Automata} \label{chp:fa}
 \begin{center}

@@ -1,5 +1,5 @@
 \lecture{10}{Thu 01 Feb '24}{}
-\begin{definition}[Myhill-Nerode relation] \label{def:mn}
+\begin{definition*}[Myhill-Nerode relation] \label{def:mn}
     An MN relation for a language $L$ over an alphabet $A$ is an equivalence
     relation $\sim$ on $A^*$ satisfying
     \begin{itemize}
@@ -8,16 +8,16 @@
         \item $\sim$ refines $L$, \ie, if $x \sim y$, then $x \in L$ iff
         $y \in L$.
     \end{itemize}
-\end{definition}
+\end{definition*}
 Note that the first condition is equivalent to saying that for all
 $x, y \in A^*$ and $w \in A^*$, $x \sim y$ implies $xw \sim yw$
 This can be proven by induction on the length of $w$ (the base case
 $w = \varepsilon$ is by the refinement condition).
 
-\begin{proposition} \label{thm:mn:canonical}
+\begin{proposition*} \label{thm:mn:canonical}
    Let $L$ be a language over an alphabet $A$.
     Then $\equiv_L$ is an MN relation for $L$.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     $\equiv_L$ is right invariant.
     $x \equiv_L y$ iff for all $w \in A^*$, $xw \in L$ iff $yw \in L$.
@@ -29,7 +29,7 @@ $w = \varepsilon$ is by the refinement condition).
     $w = \varepsilon$).
 \end{proof}
 
-\begin{proposition} \label{thm:mn:correspondence}
+\begin{proposition*} \label{thm:mn:correspondence}
     Let $L$ be a language over an alphabet $A$.
     Then DFAs for $L$ are in one-to-one correspondence with finite-index MN
     relations for $L$ in the following manner:
@@ -52,12 +52,11 @@ $w = \varepsilon$ is by the refinement condition).
     that for all DFAs $\mcA$ without unreachable states,
     $\Psi(\Phi(\mcA)) \cong \mcA$; and for all MN relations $\sim$,
     $\Phi(\Psi(\sim)) = {\sim}$.
-
-    Here, $\cong$ denotes isomorphism of DFAs, \ie, the DFAs are equivalent
-    in the sence that their exists a bijection between their states that
-    preserves the initial state, the transition function, and the set of
-    accepting states.
-\end{proposition}
+\end{proposition*}
+Here, $\cong$ denotes isomorphism of DFAs, \ie, the DFAs are equivalent
+in the sence that their exists a bijection between their states that
+preserves the initial state, the transition function, and the set of
+accepting states.
 \begin{proof}
     Let $\mcA = (Q, q_0, \delta, F)$ be a DFA for $L$.
     We need to show that ${\sim} = \Phi(\mcA)$ is an MN relation for $L$.
@@ -114,7 +113,7 @@ $w = \varepsilon$ is by the refinement condition).
     \end{itemize}
 \end{proof}
 
-\begin{definition}[Refinement] \label{def:eq:refinement}
+\begin{definition}[Equivalence refinement] \label{def:eq:refinement}
     An equivalence relation $S$ on a set $X$ \emph{refines} an equivalence
     relation $R$ on $X$ if $S \subseteq R$, \ie, for all $x, y \in X$,
     if $xSy$ then $xRy$.
@@ -131,9 +130,9 @@ $w = \varepsilon$ is by the refinement condition).
     $\forall z \in A^* (xz \sim yz)$, so $x \equiv_L y$.
 \end{proof}
 
-\begin{theorem}[Myhill-Nerode] \label{thm:mn:mn}
+\begin{theorem*}[Myhill-Nerode] \label{thm:mn:mn}
     $L \subseteq A^*$ is regular iff $\equiv_L$ is of finite index.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Follows from \cref{thm:mn:canonical,%
     thm:mn:correspondence,thm:mn:refinement}.

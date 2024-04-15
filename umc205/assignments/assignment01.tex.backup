@@ -1,0 +1,340 @@
+\documentclass[12pt]{article}
+\input{~/IISc/sem4/umc205/preamble}
+\usetikzlibrary{bbox}
+
+\title{Assignment 1} \setcounter{assignment}{1}
+\author{Naman Mishra}
+\date{16 January, 2024}
+\newcommand\state[3]{%
+    % #1#2#3
+    \begin{tikzpicture}[scale=0.13]
+        \ifthenelse{\equal{#1}{L}}{\draw (0, 0) -- (1, 1);}{\draw (0, 1) -- (1, 0);}
+        \ifthenelse{\equal{#2}{L}}{\draw (2, 0) -- (3, 1);}{\draw (2, 1) -- (3, 0);}
+        \ifthenelse{\equal{#3}{L}}{\draw (1, -2) -- (2, -1);}{\draw (1, -1) -- (2, -2);}
+    \end{tikzpicture}
+}
+
+\begin{document}
+\maketitle
+
+\begin{problem}
+    Give a DFA for the language of all strings over the alphabet
+    $\set{0, 1}$ which contain an occurrence of $010$ or $100$ as a
+    contiguous substring.
+\end{problem}
+\begin{solution} \leavevmode
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (e) {};
+            \node[state, above right=of e] (1) {};
+            \node[state, right=of 1] (10) {};
+            \node[state, accepting, below right=of 10] (F) {};
+            \node[state, below right=of e] (0) {};
+            \node[state, right=of 0] (01) {};
+            \path[->]
+                (e) edge node {$1$} (1)
+                    (e) edge node[swap] {$0$} (0)
+                (1) edge node {$0$} (10)
+                    (1) edge[loop above] node {$1$} (1)
+                (10) edge node {$0$} (F)
+                    (10) edge node {$1$} (01)
+                (F) edge[loop right] node {$0, 1$} (F)
+                (0) edge node[swap] {$1$} (01)
+                    (0) edge[loop below] node {$0$} (0)
+                (01) edge node[swap] {$0$} (F)
+                    (01) edge node {$1$} (1);
+        \end{tikzpicture}
+    \end{center}
+\end{solution}
+
+\begin{problem}
+\end{problem}
+\begin{solution}
+    We take the following liberties while drawing the DFA.
+    \begin{itemize}
+        \item If two states $q$ and $q'$ are such that $\delta(q, a) =
+        \delta(q', a)$ for all $a \in \set{A, B}$, where $\delta$ is the
+        transition function, we join them to a ``junction'' in between, and
+        draw a single path from the junction instead of one from each state.
+        \item Instead of labelling each edge with the input symbol, we color
+        the edges red for input $A$ and blue for input $B$.
+    \end{itemize}
+    \begin{center}
+        \begin{tikzpicture}[every node/.style={font=\scriptsize},
+        % every edge.style={every node/.style={very near start}},
+        node distance=2cm and 2cm,
+        bezier bounding box]
+            \node[state, initial] (LLLC) {$\epsilon$};
+            \node[state, accepting, right=0.5cm of LLLC] (LLLD){\state LLL};
+            \coordinate (LLL) at ([yshift=-1cm]$(LLLC)!0.5!(LLLD)$);
+            \draw (LLLC) -- (LLL) -- (LLLD);
+
+            \node[state, below left=of LLL] (RLLC) {\state RLL};
+            \node[state, accepting, below=0.5cm of RLLC] (RLLD) {\state RLL};
+            \coordinate (RLL) at ([xshift=1cm]$(RLLC)!0.5!(RLLD)$);
+            \draw (RLLC) -- (RLL) -- (RLLD);
+
+            \node[state, below right=of LLL] (LRR) {\state LRR};
+
+            \node[state, accepting, below right=of LRR] (LLRD){\state LLR};
+            \node[state, left=0.5cm of LLRD] (LLRC) {\state LLR};
+            \coordinate (LLR) at ([yshift=-1cm]$(LLRC)!0.5!(LLRD)$);
+            \draw (LLRC) -- (LLR) -- (LLRD);
+
+            \node[state, left=of LLRC] (RRR) {\state RRR};
+
+            \node[state, accepting, below=of LLR] (LRL) {\state LRL};
+
+            \node[state, accepting, left=1cm of LRL] (RLRC) {\state RLR};
+            \node[state, below left=0.5cm and 0.5cm of RLRC] (RLRD) {\state RLR};
+            \coordinate (RLR) at ([xshift=-0.2cm, yshift=0.2cm]$(RLRC)!0.5!(RLRD)$);
+            \draw (RLRC) -- (RLR) -- (RLRD);
+
+
+            \node[state, accepting, below=1.5cm of LRL] (RRLD) {\state RRL};
+            \node[state, above right=0.1cm and 0.5cm of RRLD] (RRLC){\state RRL};
+            \coordinate (RRL) at ([xshift=0.4cm, yshift=-1cm]$(RRLC)!0.5!(RRLD)$);
+            \draw (RRLC) -- (RRL) -- (RRLD);
+
+            \path[->]
+                (LLL) edge[color=Red] (RLLC)
+                    (LLL) edge[color=blue] (LRR)
+                (RLL) edge[color=Red] (LLRC)
+                    (RLL) edge[color=blue] (RRR)
+                (LRR) edge[color=Red] (RRR)
+                    (LRR) edge[color=blue] (LLRD)
+                (LLR) edge[color=Red] (RLRC)
+                    (LLR) edge[color=blue] (LRL)
+                (RRR) edge[color=Red] (LRL)
+                    (RRR) edge[color=blue] (RLRD)
+                (LRL) edge[color=Red] (RRLC)
+                    (LRL) edge[color=blue] [bend right=3cm] (LLLD)
+                (RRL) edge[color=Red] [bend right=3cm] (LRR)
+                    (RRL) edge[color=blue] [bend left=2cm] (RLLD)
+                (RLR) edge[color=Red] [bend left=1.5cm] (LLLD)
+                    (RLR) edge[color=blue] (RRLD);
+
+            \node[circle, draw, inner sep=0.6pt, fill=black] at (LLL) {};
+            \node[circle, draw, inner sep=0.6pt, fill=black] at (RLL) {};
+            \node[circle, draw, inner sep=0.6pt, fill=black] at (LLR) {};
+            \node[circle, draw, inner sep=0.6pt, fill=black] at (RRL) {};
+            \node[circle, draw, inner sep=0.6pt, fill=black] at (RLR) {};
+        \end{tikzpicture}
+    \end{center}
+\end{solution}
+
+\begin{problem}
+    Show that the set of strings in $\set{0, 1, 2}^*$ which are base $3$
+    representations of even numbers, is regular.
+\end{problem}
+\begin{proof}
+    Let $s \in \set{0, 1, 2}^*$ be a non-empty string.
+    We zero-index the string from right to left.
+    Then $s$ encodes the number $n = \sum_{i=0}^n s_i 3^i$ in base $3$.
+    \begin{align*}
+        n &= \sum_{i=0}^n s_i 3^i \\
+        n &\equiv \sum_{i=0}^n s_i 1^i \pmod{2} \\
+        n &\equiv \#_1(s) \pmod{2}
+    \end{align*} where $\#_1(s)$ is the number of $1$'s in $s$.
+    Thus $n$ is even iff $s$ contains an even number of $1$'s.
+    This is a regular language, as it is accepted by the following DFA.
+    \begin{center}
+        \begin{tikzpicture}[every node/.style={font=\scriptsize}]
+            \node[state, initial] (e) {$\epsilon$};
+            \node[state, accepting, above right=of e] (even) {even};
+            \node[state, below right=of e] (odd) {odd};
+            \path[->]
+                (e) edge node {$0$, $2$} (even)
+                    (e) edge node[swap] {$1$} (odd)
+                (even) edge node[swap] {$1$} (odd)
+                    (even) edge[loop above] node {$0$, $2$} (even)
+                (odd) edge[loop below] node {$0$, $2$} (odd)
+                    (odd) edge[bend right] node[swap] {$1$} (even);
+        \end{tikzpicture}
+    \end{center}
+    We have rejected the empty string, as it is not a valid base $3$
+    representation of any number.
+\end{proof}
+
+\begin{problem}
+    Let $\mcA = (Q, s, \delta, F)$ be a DFA over alphabet $A$.
+    Give a formal proof that for any strings $x, y \in A^*$: \[
+        \widehat{\delta}(s, xy)
+            = \widehat{\delta}(\widehat{\delta}(s, x), y)
+    \]
+\end{problem}
+\begin{proof}
+    We will prove this by induction on the length of $y$.
+    For $\size y = 0 \iff y = \epsilon$, we have \begin{align*}
+        \widehat{\delta}(s, x\epsilon)
+            &= \widehat{\delta}(s, x) \\
+            &= \widehat{\delta}(\widehat{\delta}(s, x), \epsilon)
+    \end{align*} by definition of $\widehat\delta$.
+
+    Suppose the statement holds for all $y$ of length $\size y = n \geq 0$.
+    Let $y$ be a string of length $\size y = n + 1$.
+    Then $y = y' a$ for some $y'$ of length $n$ and $a \in A$.
+    \begin{align*}
+        \widehat{\delta}(s, xy)
+            &= \widehat{\delta}(s, xy'a) \\
+            &= \delta(\widehat{\delta}(s, xy'), a) \tag{definition} \\
+            &= \delta(\widehat{\delta}(\widehat{\delta}(s, x), y'), a)
+                \tag{induction hypothesis} \\
+            &= \widehat{\delta}(\widehat{\delta}(s, x), y'a) \tag{definition} \\
+            &= \widehat{\delta}(\widehat{\delta}(s, x), y).
+    \end{align*}
+    Thus by induction, the statement holds for all $y \in A^*$.
+    Since $x$ was arbitrary, the statement holds for all $x, y \in A^*$.
+\end{proof}
+
+\begin{problem}
+    Consider the language of nested C-style comments.
+    The aphabet comprises characters ``\verb|/|'', ``\verb|*|'', and
+    ``\verb|c|'' (the latter symbol representing any ASCII character apart
+    from ``\verb|/|'' and ``\verb|*|'').
+    The language allows all well-nested and complete comments.
+    Thus strings like ``\verb|cc/*ccc*/c|'' and
+    ``\verb|cc/*cc/*ccc*/c*/ccc|'' are in the language, but not 
+    ``\verb|cc/*c/*cc*/cc|''.
+    Is this language regular? Justify your answer. 
+\end{problem}
+\begin{proof}
+    Suppose this language $L$ is regular.
+    Let $k$ be a pumping length for $L$.
+    That is, let $k \in \N$ be such that for any word $t \in L$ of the form
+    $xyz$ with $\abs{y} \ge k$, there exist strings $u$, $v$ and $w$ with
+    $y = uvw$, $v \ne \epsilon$, and $xuv^iwz \in L$ for each $i \ge 0$.
+
+    Let $t = xyz$ where $x = (\verb|/*|)^k$, $y = (\verb|*/|)^k$, and
+    $z = \epsilon$.
+    Then $t \in L$ since all comments are well-nested and closed.
+    Let $u$, $v$ and $w$ be strings following the above statement for this
+    $y$.
+
+    Since the first $2k$ characters of $xuwz$ constitute $k$ comment opening
+    delimiters, but the rest of the string has less than $2k$ characters,
+    it cannot contain $k$ comment closing delimiters.
+    Thus $xuwz \notin L$, a contradiction.
+
+    Therefore $L$ can not be regular.
+\end{proof}
+
+\begin{problem}
+    For a set of natural numbers $X$, define $binary(X)$ to be the set of
+    binary representations of numbers in $X$.
+    Similarly define $unary(X)$ to be the set of ``unary'' representations
+    of numbers in $X$: $unary(X) = \set{1^n \mid n \in X}$.
+    Thus for $X = \set{2, 3, 6}$, $binary(X) = \set{10, 11, 110}$ and
+    $unary(X) = \set{11, 111, 111111}$.
+    Consider the two propositions below:
+    \begin{enumerate}[label=(\alph*)]
+        \item For all $X$, if $binary(X)$ is regular then so is $unary(X)$.
+        \item For all $X$, if $unary(X)$ is regular then so is $binary(X)$.
+    \end{enumerate}
+    One of the statements above is true and the other is false.
+    Which is which?
+    Justify your answer.
+\end{problem}
+The second statement is true and the first is false.
+We first prove the falsity of the first statement.
+One crucial observation for both proofs is that \[
+    lengths(unary(X)) = \set{\abs{1^n} : n \in X} = X.
+\]
+\begin{proof}
+    Let $X = \set{2^n \mid n \in \N}$.
+    Then $binary(X) = \set{10^n \mid n \in \N}$ is regular.
+    A DFA for this language is
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (e) {};
+            \node[state, accepting, right=of e] (1) {};
+            \node[state, right=of 1] (11) {};
+            \path[->]
+                (e) edge node {$1$} (1)
+                    (e) edge[loop above] node {$0$} (e)
+                (1) edge node {$1$} (11)
+                    (1) edge[loop above] node {$0$} (1)
+                (11) edge[loop above] node {$0$, $1$} (11);
+        \end{tikzpicture}
+    \end{center}
+    However, $unary(X) = \set{1^{2^n} \mid n \in \N}$ is not regular as its
+    lengths, that is $X$, is not ultimately periodic.
+    This is because for any alleged period $p \in \N^+$ and any $N \in \N$,
+    we have $2^{N+p} \in X$ but $p + 2^{N+p} \notin X$ since
+    $2^{N+p} < p + 2^{N+p} < 2^{N+p+1}$ (note also that $2^{N+p} > N$).
+\end{proof}
+We now prove the truth of the second statement.
+\begin{proof}
+    Let $X$ be such that $unary(X)$ is regular.
+    Then $X$ is ultimately periodic.
+    Let $N, p \in \N^+$ be such that for all $n \ge N$, $n \in X \iff n + p
+    \in X$.
+
+    Then $X = F \cup \set{n \in \N \mid n \ge 2^N, n \bmod p \in K}$ for
+    some finite subset $F \subseteq \set{0, 1, \ldots, N-1}$ and some
+    $K \subseteq \set{0, 1, \dots, p-1}$.
+    We write $X$ as $F \cup (M \cap B)$, where \begin{align*}
+        M &= \set{n \in \N \mid n \bmod p \in K} \\
+        B &= \set{n \in \N \mid n \ge N}
+    \end{align*}
+    Since there exists a unique binary representation of each natural number
+    (without leading zeroes), $binary(X) = binary(F) \cup (binary(M) \cap
+    binary(B))$.
+    We show that each of these three sets is regular by constructing DFAs
+    over the alphabet $A = \set{0, 1}$ that accept them.
+
+    First, $binary(F)$ is regular since it is finite.
+
+    We now give an NFA which accepts $Z$, the set of strings which have
+    leading zeroes.
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (e) {};
+            \node[state, right=of e] (0) {};
+            \node[state, accepting, right=of 0] (0x) {};
+            \path[->]
+                (e) edge node {$0$} (0)
+                (0) edge node {$0$, $1$} (0x)
+                (0x) edge[loop right] node {$0$, $1$} (0x);
+        \end{tikzpicture}
+    \end{center}
+    This gives us that $Z$ is regular.
+
+    We define $binary^0(S)$ to be the set of all strings which are
+    a binary representation of some number in $S$, possibly with leading
+    zeroes.
+    Then $binary(S) = binary^0(S) \cap \comp Z$ for all $S \subseteq \N$.
+    Thus it suffices to show that $binary^0(M)$ and $binary^0(B)$ are
+    regular.
+
+    $binary^0(B)$ is regular since it is accepted by the following DFA.
+    \begin{align*}
+        Q &= \set{0, 1, \ldots, N} \\
+        s &= 0 \\
+        F &= \set{N} \\
+        \delta(q, a) &= \begin{cases}
+            \max\set{2q, N} & \text{if } a = 0, \\
+            \max\set{2q + 1, N} & \text{if } a = 1.
+        \end{cases}
+    \end{align*}
+    Here, each state $q \in \set{0, 1, \dots, N-1}$ corresponds to the
+    property that the string read so far represents the number $q$, where
+    the empty string is interpreted as $0$.
+    State $N$ corresponds to the property that it represents a number at
+    least $N$.
+    Thus this DFA accepts the language $binary(B)$.
+
+    Finally, $binary(M)$ is regular since it is accepted by the following
+    DFA.
+    \begin{align*}
+        Q &= \set{0, 1, \ldots, p-1} \\
+        s &= 0 \\
+        F &= K \\
+        \delta(q, 0) &= 2q \bmod p \\
+        \delta(q, 1) &= (2q + 1) \bmod p
+    \end{align*}
+    Since regular languages are closed under union and intersection,
+    $binary(X)$ is also regular.
+\end{proof}
+
+\end{document}

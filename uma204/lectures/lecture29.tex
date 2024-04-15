@@ -1,0 +1,125 @@
+\lecture{29}{Wed 20 Mar '24}{}
+\begin{proof}
+    Let \[
+        h(x) = (f(b) - f(a))g(x) - (g(b) - g(a))f(x).
+    \] Then \begin{align*}
+        h(a) &= f(b) g(a) - \cancel{f(a) g(a)}
+                - g(b) f(a) + \cancel{g(a) f(a)} \\
+             &= f(b) g(a) - g(b) f(a) \\
+        h(b) &= \cancel{f(b) g(b)} - f(a) g(b)
+                - \cancel{g(b) f(b)} + g(a) f(b) \\
+             &= f(b) g(a) - g(b) f(a).
+    \end{align*}
+    Thus $h(a) = h(b)$.
+    By Rolle's theorem, there exists $c \in (a, b)$ such that $h'(c) = 0$.
+    This proves the result.
+\end{proof}
+
+\begin{theorem*}[Taylor's theorem] \label{thm:taylor}
+    Let $n \in \N^*$.
+    Suppose that
+    $f\colon (a, b) \to \R$ is $n$ times differentiable on $(a, b)$.
+    Further assume that $f, f', \dots, f^{(n-1)}$ extend continuously
+    to $[a, b]$.
+    Then there exists a point $c \in (a, b)$ such that \[
+        f(b) = f(a) + f'(a)(b - a) + \dots
+        + \frac{f^{(n-1)}(a)}{(n-1)!}(b - a)^{n-1} + \frac{f^{(n)}(c)}{n!}(b - a)^n.
+    \]
+\end{theorem*}
+\begin{proof}
+    Suppose the result holds in the case when \begin{equation}
+        f(a) = f'(a) = \dots = f^{(n-1)}(a) = 0. \tag{$\star$}
+        \label{eq:simple_taylor}
+    \end{equation}
+    Let $f$ be given as per the theorem.
+    Define \begin{align*}
+        F(x) &= f(x) - \sum_{j=0}^{n-1} \frac{f^{(j)}(a)}{j!}(x - a)^j \\
+        \implies F^{(k)}(x) &= f^{(k)}(x) - f^{(k)}(a) -
+            \sum_{j=k+1}^{n-1} a_j (x - a)^{j-k} \\
+        \implies F^{(k)}(a) &= 0
+    \end{align*} for every $k \in \set{0, 1, \dots, n-1}$.
+
+    Then from the case (\ref{eq:simple_taylor}),
+    there exists $c \in (a, b)$ such that \[
+        F(b) = \frac{F^{(n)}(c)}{n!}(b - a)^n.
+    \] But $F^{(n)} = f^{(n)}$, so this immediately gives \[
+        f(b) = f(a) + f'(a)(b - a) + \dots
+            + \frac{f^{(n-1)}(a)}{(n-1)!}(b - a)^{n-1}
+            + \frac{f^{(n)}(c)}{n!}(b - a)^n.
+    \]
+    But how do we prove the case (\ref{eq:simple_taylor})?
+
+    Suppose $f$ satisfies (\ref{eq:simple_taylor}).
+    Define \[
+        g(x) = f(x) - f(b) \frac{(x-a)^n}{(b-a)^n}.
+    \] This ensures that $g(a) = g(b) = 0$, and since derivatives of $f$
+    extend continuously to $[a, b]$, so do the derivatives of $g$.
+    Then $g'(a) = g''(a) = \dots = g^{(n-1)}(a) = 0$.
+    For the $n$th derivative, \[
+        g^{(n)}(x) = f^{(n)}(x) - \frac{f(b) n!}{(b - a)^n}.
+    \]
+
+    Now apply Rolle's theorem iteratively to $g$, $g'$, \dots, $g^{(n-1)}$.
+    \begin{itemize}
+        \item[($1$)] From the first application, there exists $c_1 \in (a, b)$
+        such that $g'(c_1) = 0$.
+        \item[($2$)] But $g'(a)$ is also zero, so by a second application
+        there exists $c_2 \in (a, c_1)$ such that $g''(c_2) = 0$.
+        \item[$\vdots$\hphantom{)}]
+        \item[($n-1$)] Continuing in this way, we find $c_{n-1}$ such that
+        $g^{(n-1)}(c_{n-1}) = 0$.
+        \item[($n$)] In the final application, we find $c_n \in (a, c_{n-1})$
+        such that \[
+            g^{(n)}(c_n) = f^{(n)}(c_n) - \frac{f(b) n!}{(b - a)^n} = 0.
+        \]
+    \end{itemize}
+    Thus finally, we have that there exists a point $c_n \in (a, b)$
+    such that $f(b) = \frac{(b - a)^n}{n!} f^{(n)}(c_n)$.
+    This proves the case (\ref{eq:simple_taylor}), and hence the theorem.
+\end{proof}
+
+\begin{theorem}[L'H\^opital's rule] \label{thm:lhopital}
+    Let $a, b \in \wbar{\R}$.
+    Suppose $f, g\colon (a, b) \to \R$ are differentiable on $(a, b)$,
+    and that $g$ and $g'$ are never zero on $(a, b)$.
+    Suppose also that there exists an $A \in \wbar{\R}$ such that \[
+        \lim_{x \to a^+} \frac{f'(x)}{g'(x)} = A.
+    \] Then \[
+        \lim_{x \to a^+} \frac{f(x)}{g(x)} = A
+    \] whenever any of the following conditions hold.
+    \begin{enumerate}
+        \item $\lim_{x \to a^+} f(x) = \lim_{x \to a^+} g(x) = 0$, or
+        \item $\lim_{x \to a^+} g(x) = +\infty$, or
+        \item $\lim_{x \to a^+} g(x) = -\infty$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    We will only consider the case when $a, A \in \R$.
+
+    Let $\varepsilon > 0$.
+    Then there exists $\delta > 0$ such that
+    for every $x \in (a, a + \delta)$, \[
+        A - \varepsilon < \frac{f'(x)}{g'(x)} < A + \varepsilon.
+    \] Fix a $y \in (a, a + \delta)$.
+    Let $(z_n)_{n \in \N} \subseteq (a, y)$ be a sequence converging to
+    $a$ such that $g(z_n)$ is never $g(y)$.
+
+    Why does such a sequence exist?
+    We can construct this iteratively.
+    Since $g'$ is never zero on $(a, b)$,
+    it cannot be constant on any interval.
+    Thus every interval $(a, a+\frac1n) \cap (a, b)$ contains a point $z_n$
+    such that $g(z_n) \ne g(y)$.
+    This gives us the sequence $(z_n)_{n \in \N}$.
+
+    Then by the generalized mean value theorem, for every $n \in \N$,
+    there exists a $w_n \in (z_n, y)$ such that \[
+        \frac{f(y) - f(z_n)}{g(y) - g(z_n)} = \frac{f'(w_n)}{g'(w_n)}.
+    \] But then \[
+        A - \varepsilon
+            < \frac{f(y) - f(z_n)}{g(y) - g(z_n)}
+                < A + \varepsilon.
+    \] Taking limits as $n \to \infty$, we find \[
+        A - \varepsilon < \frac{f(y)}{g(y)} < A + \varepsilon.
+    \] Since $\varepsilon > 0$ was arbitrary, this proves the result.
+\end{proof}

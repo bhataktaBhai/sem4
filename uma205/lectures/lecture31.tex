@@ -1,0 +1,102 @@
+\section{Generators \& Relations} \label{sec:genrel}
+\lecture{31}{Mon 25 Mar '24}{}
+\begin{definition}[Presentation] \label{def:genrel:presentation}
+    Let $S$ be an abstract set of generators (and their inverses).
+    Let $R$ be a set of identities satisfied by these generators.
+    Then $G = \angled{S \mid R}$ forms a group, where the elements are words
+    in the alphabet $S$ and product is concatenation.
+
+    We say that $\angled{S \mid R}$ is a \emph{presentation} of $G$.
+\end{definition}
+This is assuming that the relations are consistent.
+
+\begin{examples}
+    \item $D_{2n} = \set{1, r, \dots, r^{n-1}, s, sr, \dots, sr^{n-1}}$
+    can be written as \[
+        D_{2n} = \angled{r, s \mid r^n = s^2 = 1, rs = sr^{-1}}
+    \]
+    \item \[
+        \Z/n\Z = \angled{x \mid x^n = 1}
+    \]
+    \item \[
+        S_3 = \angled{s, t \mid s^2 = t^2 = 1, sts = tst}.
+    \] The last relation can also be written as $(st)^3 = 1$.
+    \item The quaternion group $Q_8 = \set{\pm 1, \pm i, \pm j, \pm k}$
+    with the relations \begin{align*}
+        1 x = x 1 &= x \quad \forall x, \\
+        (-1) \pm x = \pm x (-1) &= \mp x \quad \forall x, \\
+        i^2 = j^2 = k^2 &= -1, \\
+        ijk &= -1.
+    \end{align*}
+\end{examples}
+Here, when we write ``$1$'' we mean the empty word.
+
+\begin{definition}[Free group] \label{def:genrel:free_group}
+    A group $F$ is \emph{free} if it can be written as \[
+        F = \angled{S \mid \emptyset} \quad \text{for some set $S$.}
+    \]
+\end{definition}
+
+\begin{definition}[Symmetric group] \label{def:s_n}
+    The \emph{symmetric group} of order $n$ is \[
+        S_n = \set{\sigma \in [n]^{[n]} \mid \sigma \text{ is a bijection}}
+    \]
+\end{definition}
+\begin{example}
+    Let $\sigma = \begin{pmatrix}
+        1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+        3 & 8 & 7 & 1 & 2 & 6 & 4 & 5
+    \end{pmatrix} \in S_8$.
+    In cycle notation, $\sigma = (1374)(285)(6)$.
+    It is useful to omit the $1$-cycles, $\sigma = (1374)(285)$.
+    This makes products simple to compute.
+
+    If one calls the cycles $\sigma_1 = (1374)$ and $\sigma_2 = (285)$,
+    then $\sigma = \sigma_1 \sigma_2 = \sigma_2 \sigma_1$.
+\end{example}
+\begin{exercise}
+    The product of disjoint cycles commutes in $S_n$.
+\end{exercise}
+
+\begin{definition}[Morphisms] \label{def:grouphism}
+    Let $(G, *)$ and $(H, \cdot)$ be groups.
+    Then a map $\varphi\colon G \to H$
+    is called a \emph{homomorphism} if for all $g_1, g_2 \in G$, \[
+        \varphi(g_1 * g_2) = \varphi(g_1) \cdot \varphi(g_2).
+    \] If in addition, $\varphi$ is a bijection, then $\varphi$ is called an
+    \emph{isomorphism}.
+\end{definition}
+\begin{examples}
+    \item $\varphi\colon g \in G \mapsto g \in G$ is an isomorphism.
+    \item $\varphi\colon g \in G \mapsto g^{-1} \in G$ is \emph{not} a
+    homomorphism in general.
+    In fact, it is an isomorphism if and only if $G$ is abelian.
+    \item $\exp\colon (\R, +) \to (\R_+, \cdot)$ is an isomorphism.
+    \item $\sgn\colon S_n \to (\set{\pm 1}, \cdot)$ is a homomorphism.
+    \item Let $n > m$ and $\varphi\colon S_m \to S_n$ given by adding
+    singletons is a homomorphism.
+    That is, if $\sigma = c_1 \dots c_k \in S_m$, then \[
+        \varphi(\sigma) = c_1 \dots c_k (m+1) \dots (n).
+    \]
+    \item $\varphi\colon \Z/n\Z \to \Z/n\Z$ given by $x \mapsto 2x$ is a
+    homomorphism.
+    It is an isomorphism iff $n$ is odd.
+    \item $\varphi\colon \pi \in S_n \mapsto \pi^2 \in S_n$ is \emph{not}
+    a homomorphism (for $n \geq 3$).
+\end{examples}
+\begin{notation}
+    The order of $x \in G$ is denoted $\abs{x}$.
+\end{notation}
+
+\begin{exercise*}
+    Suppose $\varphi\colon G \to H$ is an isomorphism.
+    Then
+    \begin{enumerate}[label=(\arabic*)]
+        \item $\abs{G} = \abs{H}$
+        \item $G$ is abelian iff $H$ is abelian.
+        \item $\forall x \in G$, $\abs{x} = \abs{\varphi(x)}$.
+    \end{enumerate}
+\end{exercise*}
+\begin{corollary}
+    $\Z/6\Z$ and $S_3$ are not isomorphic.
+\end{corollary}

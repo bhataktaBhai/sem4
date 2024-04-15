@@ -8,7 +8,7 @@
 
 \begin{document}
 \maketitle
-\begin{problem}
+\begin{problem*}
     Let $F$ and $G$ be ordered fields with the LUB property.
     In Lecture 04, we defined $h\colon F \to G$ as \[
         h(z) = \sup_G\set{w \in \Q : w \le z}.
@@ -18,12 +18,12 @@
         \item $h(x + y) = h(x) + h(y)$ for all $x, y \in F$,
         \item $h(x \cdot y) = h(x) \cdot h(y)$ for all $x, y \in F$.
     \end{enumerate}
-\end{problem}
+\end{problem*}
 \begin{proof}
     \refifdef{thm:R:unique}{\Cref}{Lecture 4}.
 \end{proof}
 
-\begin{problem}
+\begin{problem*}
     In this problem, you may assume the well-definedness, commutativity and
     associativty of addition of Dedekind cuts (as defined in Lecture 04).
     Let $O = \set{z \in \Q : z < 0}$.
@@ -32,12 +32,12 @@
     Let $A$ be a Dedekind cut.
     Define a Dedekind cut $B$ such that $A + B = O$.
     You must justify your answer.
-\end{problem}
+\end{problem*}
 \begin{proof}
     \refifdef{thm:R:dedekind:negative}{\Cref}{Lecture 4}.
 \end{proof}
 
-\begin{problem}
+\begin{problem*}
     Let $a = (a_n)_{n \in \N}$ and $b = (b_n)_{n \in \N}$ be sequences of
     rational numbers such that $b_n \ne 0$ for all $n \in \N$.
     Suppose \[
@@ -47,7 +47,7 @@
         \item Are $a$ and $b$ equivalent?
         \item Are $a$ and $b$ equivalent if $a$ is a \Q-bounded sequence?
     \end{enumerate}
-\end{problem}
+\end{problem*}
 \begin{solution} \leavevmode
     \begin{enumerate}
         \item No. $a_n = n + 1$ and $b_n = n$ gives a counterexample.
@@ -64,23 +64,175 @@
     \] Then for all $n \ge N$, \begin{align*}
         \abs{a_n - b_n} &= \abs{b_n} \abs{\frac{a_n}{b_n} - 1} \\
                   &< 2M \frac{\varepsilon}{2M} \\
-                  &= \varepsilon.
+                  &= \varepsilon. \qedhere
     \end{align*}
 \end{solution}
 
-\begin{problem}
+\begin{problem*}
     You cannot use the existence (or the LUB property) of the ordered field
     of real numbers in this problem, so you must work ``within'' \Q.
-    \begin{enumerate}
-        \item Show that every monotone \Q-bounded sequence of rational
-        numbers is \Q-Cauchy.
+    \begin{enumerate}[label=(\arabic*)]
+        \item Show that every monotone \Q-bounded monotone sequence
+        of rational numbers is \Q-Cauchy.
         \item Consider the following sequence: \[
             x_n = \begin{cases}
                 2, & \text{if } n = 0, \\
-                x_{n-1} - \frac{x_{n-1}^2 - 2}{2 x_{n-1}} & \text{if } n \ge 1
+                x_{n-1} - \dfrac{x_{n-1}^2 - 2}{2 x_{n-1}}
+                    & \text{if } n \ge 1.
             \end{cases}
-        \]
+        \] Confirm that $(x_n)_{n \in \N}$ is well-defined, \ie,
+        $x_n \ne 0$ for all $n \in \N$.
+        Show that $(x_n)_{n \in \N}$ is \Q-Cauchy, but not convergent in \Q.
     \end{enumerate}
-\end{problem}
+\end{problem*}
+\begin{solution}
+    \begin{enumerate}[label=(\arabic*)]
+        \item Let $(x_n)_{n \in \N}$ be a monotone \Q-bounded sequence.
+        WLOG assume that it is increasing.
+
+        Let $\varepsilon > 0$.
+        Let \[
+            N = \inf\set{n \in \Z \mid n\varepsilon \text{ is an upper
+            bound of } (x_n)_n}.
+        \]
+        Why is the set non-empty?
+        There is an upper bound $b$ for $\set{x_n}_n$.
+        Archimedeanly, there is an $n_0 : n_0\varepsilon > b$.
+        Then $n_0$ belongs to the set.
+
+        Why is it bounded below?
+        Archimedeanly, there is an $n_1 : n_1\varepsilon < x_0$.
+        Then $n_1$ is a lower bound of the set.
+
+        Thus $N \varepsilon$ is an upper bound, but $(N-1)\varepsilon$
+        is not.
+        So there exists some $M$ such that $x_M > (N-1)\varepsilon$.
+        Then for all $n \ge M$, $(N-1)\varepsilon < x_n \le N\varepsilon$.
+        So for any $n \ge m \ge M$, \[
+            \abs{x_n - x_m} = x_n - x_m
+                      < N\varepsilon - (N-1)\varepsilon
+                      = \varepsilon.
+        \]
+        % Suppose $(x_n)_n$ is not \Q-Cauchy.
+        %
+        % Then there exists $\varepsilon > 0$ such that for all $N \in \N$,
+        % there exist $n > m \ge N$ such that
+        % $\abs{x_n - x_m} \ge \varepsilon$.
+        %
+        % Let $b$ be an upper bound for $(x_n)_n$.
+        % Suppose $b - \varepsilon$ is not an upper bound.
+        % Then there exists $n_0 \in \N$ such that
+        % $x_{n_0} > b - \varepsilon$, and hence $x_n > b - \varepsilon$ for
+        % all $n \ge n_0$.
+        % So for all $n \ge n_0$, $b - \varepsilon < x_n \le b$.
+        % But there exist $n > m \ge n_0$ such that \[
+        %     \varepsilon \le \abs{x_n - x_m}
+        %       = x_n - x_m
+        %       \le b - (b - \varepsilon)
+        %       = \varepsilon,
+        % \] a contradiction.
+        %
+        % Thus $b - \varepsilon$ is an upper bound for $(x_n)_n$.
+        % By induction, $b - n\varepsilon$ is an upper bound for every $n$.
+        % But this is eventually less than $x_0$, a contradiction.
+        \item \begin{align*}
+            x_n &= \frac{x_{n-1}^2 + 2}{2x_{n-1}}
+                \tag{$*$} \label{eq:simp} \\
+            \implies x_n^2 - 2 &= \frac{x_{n-1}^4 + 4 x_{n-1}^2 + 4 - 8x_{n-1}^2}{4x_{n-1}^2} \\
+                &= \frac{(x_{n-1}^2 - 2)^2}{4x_{n-1}^2} \\
+        \end{align*}
+        This shows that $x_n^2 > 2$ for all $n \in \N$.
+        From \eqref{eq:simp}, $x_{n-1} > 0$ implies $x_n > 0$, so
+        $(x_n)_n > 0$.
+        Thus \[
+            x_n - x_{n-1} = -\frac{x_{n-1}^2 - 2}{2x_{n-1}} < 0
+        \] and so $(x_n)_n$ is decreasing.
+
+        From the first part, $(x_n)_n$ is \Q-Cauchy.
+        But suppose it had a limit $x \in \Q$.
+        Note that $x \ne 0$, since $x_n^2 > 2$.
+        Then \[
+            x = x - \frac{x^2 - 2}{2x} \implies x^2 = 2,
+        \] which is not possible. \qedhere
+    \end{enumerate}
+\end{solution}
+
+\begin{problem*}
+    A \emph{digit} is any element of the set $S = \set{0, 1, \dots, 9}$.
+    An \emph{admissible sequence of digits} is a sequence
+    $(a_n)_{n \in \N^*} \subseteq S$ satisfying the property:
+    there is no $N \ge 1$ such that $a_n = 9$ for all $n \ge N$.
+    Given $x \in [0, 1)$, we say that an admissible sequence of digits
+    $(d_n)_{n \in \N^*}$ is a \emph{decimal representation} of $x$ if \[
+        \sup\set*[\bigg]{D_n \coloneq \sum_{j=1}^n \frac{d_j}{10^j}
+            \Bigm\vert n \in \N} = x.
+    \] Show that every admissible sequence of digits is the decimal
+    representation of a number $x \in [0, 1)$, and conversely, every
+    $x \in [0, 1)$ admits a unique decimal representation defined as above.
+    \\
+    \textbf{Note:} In this problem, you may freely use the standard
+    properties of real numbers.
+\end{problem*}
+\begin{solution}
+    Let $(d_n)_n$ be an admissible sequence of digits.
+    Note that the given set is non-empty, and bounded above by
+    $\sum_{j=1}^n \frac{9}{10^j} = 1$.
+    Thus the supremum exists.
+    It is obviously non-negative.
+
+    Why is it less than $1$?
+    Let $i$ be the first index where $d_i \ne 9$.
+    Then for each $n \ge i$, \begin{align*}
+        \sum_{j=1}^n \frac{d_j}{10^j}
+            &= \sum_{j=1}^{i-1} \frac{d_j}{10^j}
+                + \frac{d_i}{10^i} + \sum_{j=i+1}^n \frac{d_j}{10^j} \\
+            &\le \sum_{j=1}^{i-1} \frac{d_j}{10^j}
+                + \frac{d_i}{10^i} + \sum_{j=i+1}^n \frac{9}{10^j} \\
+            &= \sum_{j=1}^{i-1} \frac{d_j}{10^j}
+                + \frac{d_i + 1}{10^i} \\
+            &\le \sum_{j=1}^{i-1} \frac{d_j}{10^j}
+                + \frac{9}{10^i} < 1.
+    \end{align*} Of course, for each $n < i$, the inequality still holds.
+    Thus $\sum_{j=1}^i \frac{d_j}{10^j} + \frac{1}{10^i}$ is an upper bound
+    less than $1$.
+
+    For the converse, let $d_0 = 0$.
+    For each $n \in \N^*$, let \[
+        d_n =
+            \max\set*[\Big]{d \in S \bigm| D_{n-1} + \frac{d}{10^n} \le x},
+    \] where $D_{n-1} = \sum_{j=1}^{n-1} \frac{d_j}{10^j}$.
+    This ensures that $D_n \le x < D_n + 10^{-n}$ for each $n$.
+    How? Holds trivially for $n = 0$.
+    If it holds for $n-1$, then $d_n$ is chosen such that \[
+        D_n \le x < D_n + \frac{1}{10^n},
+    \] if $d_n \ne 9$.
+    But if $d_n = 9$, then
+    $D_n \le x < D_{n-1} + 10^{-n+1} = D_n + 10^{-n}$.
+    Thus it holds for all $n$.
+
+    Then $x$ is an upper bound for $(D_n)_n$.
+    Suppose there is a lesser upper bound $s$.
+    Then there exists $n$ such that $10^{-n} < x - s$.
+    But then $x < D_n + 10^{-n} < D_n + x - s$ so $s < D_n$.
+    Thus $\sup_n D_n = x$.
+
+    For uniqueness, let $(d_n)_n$ and $(d'_n)_n$ be two distinct admissible
+    sequences of digits.
+    Suppose they first differ at the index $j$, with $d_j < d'_j$,
+    and that $d_k \ne 9$ with $k \ge j$.
+    Then for $n \ge k$,
+    \begin{align*}
+        D_n  &= D'_{j-1} + \frac{d_j}{10^j}
+                + \sum_{i=j+1}^n \frac{d_i}{10^i} \\
+            &\le D'_{j-1} + \frac{d'_j - 1}{10^j}
+                + \sum_{i=j+1}^n \frac{d_i}{10^i} \\
+            &\le D'_{j-1} + \frac{d'_j - 1}{10^j}
+                + \sum_{i=j+1}^n \frac{9}{10^i} - \frac1{10^k} \\
+            &= D'_{j-1} + \frac{d'_j}{10^j} - \frac1{10^k} - \frac1{10^n} \\
+            &< D'_j - \frac1{10^k}.
+    \end{align*} Thus $\set{D_n}$ is bounded above by
+    $\sup_n D'_n - 10^{-k}$.
+    So $\sup_n D_n < \sup_n D'_n$.
+\end{solution}
 
 \end{document}

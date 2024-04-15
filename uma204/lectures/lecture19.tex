@@ -1,0 +1,82 @@
+\section{Series} \label{sec:series}
+\lecture{19}{Mon 26 Feb '24}{}
+We have seen infinite sums already, in the form of decimal expansions,
+and also in computing the ``length'' of the Cantor set.
+
+\begin{definition}
+    Let $(a_n)_{n \in \N} \subseteq \C$.
+    We say that the infinite sum \[
+        \sum_{n=0}^\infty a_n
+    \] converges to $a$ iff the sequence of partial sums $(S_n)_{n \in \N}$
+    given by \begin{align*}
+        S_0 &= a_0 \\
+        S_1 &= a_0 + a_1 \\
+           &\mathrel{\makebox[\widthof{=}]{\vdots}} \\
+        S_n &= a_0 + a_1 + \dots + a_n
+    \end{align*} converges to $a$.
+    In that case, $a$ is said to be the sum of the given series.
+    If $(S_n)_n$ diverges, then the series is said to diverge.
+\end{definition}
+\begin{example}
+    Let $z \in \C$.
+    Let $a_n = z^n$ for $n \in \N$.
+    We wish to compute $\sum_{n=0}^{\infty} z^n$.
+    Note that \begin{align*}
+        S_n &= z^0 + z^1 + \dots + z^n \\
+        \implies (1 - z) S_n &= 1 - z^{n+1}
+        \shortintertext{so if $z \neq 1$,}
+        S_n &= \frac{1 - z^{n+1}}{1 - z}
+    \end{align*}
+    We have three cases:
+    \begin{itemize} % TODO
+        \item If $|z| < 1$, then $\lim_{n \to \infty} \abs{z}^{n+1} = 0$.
+        So by the algebra of limits,
+        $\lim_{n \to \infty} S_n = \frac{1}{1 - z}$ so that the series
+        converges to $\frac{1}{1 - z}$.
+        Here, we have used that for any complex sequence $(z_n)_n$,
+        $z_n \to 0$ iff $\abs{z_n} \to 0$.
+        \item If $|z| > 1$, then
+        $\lim_{n \to \infty} z^{n+1}$ does not exist,
+        so the series diverges.
+        So by the algebra of limits,
+        $\lim_{n \to \infty} S_n$ does not exist.
+        \item For $\abs{z} = 1$, we consider a few special cases first.
+        \begin{itemize}
+            \item If $z = 1$, then $S_n = n+1 \to \infty$.
+            \item If $z = -1$, then $S_n = \1_{\text{$n$ is even}}$ which
+            is divergent.
+        \end{itemize}
+        Even for the general case, we can use \cref{thm:series:convergence}
+        to conclude that the series diverges, since $z^n \not\to 0$.
+    \end{itemize}
+\end{example}
+\begin{theorem} \label{thm:series:convergence}
+    Let $(a_n)_{n \in \N} \subseteq \C$.
+    Then
+    \begin{enumerate}[label=(\arabic*)]
+        \item $\sum_{n = 0}^{\infty} a_n$ converges iff for every
+        $\varepsilon > 0$, there exists an $N \in \N$ such that for all
+        $n > m \ge N$, we have that
+        $\abs{\sum_{j=m}^{n-1} a_j} < \varepsilon$.
+        \item If $\sum_{n = 0}^{\infty} a_n$ converges, then
+        $\lim_{n \to \infty} a_n = 0$.
+        \item Suppose $a_n \ge 0$ ($a_n$ is real).
+        Then $\sum_{n = 0}^{\infty} a_n$ converges iff the sequence of
+        partial sums is bounded above.
+    \end{enumerate}
+\end{theorem}
+\begin{proof} \leavevmode
+    \begin{enumerate}[label=(\arabic*)]
+        \item The metric space
+        $(\C, \abs{\cdot}) \cong (\R^2, \norm{\cdot})$ is complete,
+        so we can use the Cauchy criterion for convergence applied to the
+        sequence of partial sums.
+        \item From (1) using $n = m + 1$.
+        \item Monotone convergence theorem applied to the SOPS. \qedhere
+    \end{enumerate}
+\end{proof}
+\begin{theorem*}[Cauchy condensation test] \label{thm:series:condensation}
+    Let $a_1 \ge a_2 \ge \dots \ge 0$.
+    Then $\sum_{n=1}^\infty a_n$ converges iff
+    $\sum_{n=1}^\infty 2^n a_{2^n}$ converges.
+\end{theorem*}

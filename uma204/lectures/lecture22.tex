@@ -1,0 +1,94 @@
+\lecture{22}{Mon 04 Mar '24}{}
+
+If $\sum_{n \in \N} a_n$ and $\sum_{n \in \N} b_n$ converge, does
+$\sum_{n \in \N} c_n$ have to converge?
+
+No.
+Take the conditionally convergent series $a_n = b_n = \frac{(-1)^n}{\sqrt n}$.
+Then \begin{align*}
+    c_n   &= \sum_{k=1}^n a_k b_{n+1-k} \\
+         &= \sum_{k=1}^n \frac{(-1)^{n+1}}{\sqrt k \sqrt{n+1-k}} \\
+    \abs{c_n} &= \sum_{k=1}^n \frac{1}{\sqrt k \sqrt{n+1-k}} \\
+         &\ge \sum_{k=1}^n \frac{1}{\sqrt n \sqrt n} \\
+         &= \frac{n}{n} = 1.
+\end{align*}
+Thus $\sum_{n \in \N} c_n$ cannot converge.
+
+\begin{theorem}[Mertens] \label{thm:mertens}
+    Suppose that
+    \begin{enumerate}
+        \item $\sum_{n \in \N} a_n$ converges absolutely to $A$, and
+        \item $\sum_{n \in \N} b_n$ converges to $B$.
+    \end{enumerate}
+    Then their Cauchy product $\sum_{n \in \N} c_n$ converges to $AB$.
+\end{theorem}
+\begin{proof}
+    Let $(A_n)_{n \in \N}$, $(B_n)_{n \in \N}$ and $(C_n)_{n \in \N}$ be the
+    sops of $\sum a_n$, $\sum b_n$ and $\sum c_n$ respectively.
+    \begin{align*}
+        C_n &= c_0 + c_1 + \dots + c_n \\
+           &= a_0 b_0 + (a_0 b_1 + a_1 b_0)
+                + \dots + (a_0 b_n + \dots + a_n b_0) \\
+           &= a_0 B_n + a_1 B_{n-1} + \dots + a_n B_0 \\
+           &= A_n B + (a_0 (B_n - B) + \dots + a_n (B_0 - B)).
+        \intertext{Introduce the notation $\beta_k$ for $B_k - B$.}
+           &= A_n B + (a_0 \beta_n + \dots + a_n \beta_0).
+    \end{align*}
+    Define $\delta_n = a_0 \beta_n + \dots + a_n \beta_0$.
+    It suffices to show that \[
+        \lim_{n \to \infty} \delta_n = 0.
+    \] Let $\alpha = \sum_{n \in \N} \abs{a_n}$.
+    Since $\lim_{n \to \infty} \beta_n = 0$,
+    we have that for every $\epsilon > 0$,
+    there exists $m \in \N$ such that $\abs{\beta_n} < \varepsilon$
+    for all $n \ge m$.
+
+    Fix an $\varepsilon > 0$ and choose an appropriate $m$.
+    Then for $n \ge m$, \begin{align*}
+        \abs{\delta_n}
+        &= \abs{a_0 \beta_n + \dots + a_n \beta_0} \\
+        &= \abs{a_0 \beta_n + \dots + a_{n-(m-1)} \beta_{m-1}}
+            + \varepsilon \sum_{j=m}^{n} \abs{a_j}
+    \end{align*}
+    Taking limit as $n \to \infty$, \[
+        \limsup_{n \to \infty} \abs{\delta_n} \le \varepsilon \alpha.
+    \] Since $\varepsilon$ was arbitrary, we have that
+    $\limsup_{n \to \infty} \abs{\delta_n} = 0$ and so
+    $\abs{\delta_n} \to 0$.
+    This gives $\delta_n \to 0$ so that $C_n = A_n B + \delta_n \to AB$.
+\end{proof}
+
+\section{Rearrangements} \label{sec:rearrangements}
+Conditionally convergent real series have the remarkable feature that their
+terms can be rearranged to converge to any real number.
+\begin{example}
+    Consider the series $\sum \frac{(-1)^n}{n}$.
+    Let $(S_n)_{n \in \N^*}$ be its partial sums.
+    Note that $S_3 > S_4, S_5, S_6, \dots$.
+    So the limit is less that $1 - \frac12 + \frac13 = \frac{5}{6}$.
+
+    Now consider the rearranged series \[
+        1 + \frac13 - \frac12
+        + \frac15 + \frac17 - \frac14
+        + \frac19 + \frac1{11} - \frac16
+        + \dots.
+    \] We can show that this converges, by rewriting it as \[
+        1 + \frac13 - \frac{2}{4}
+        + \frac15 + \frac17 - \frac{2}{8}
+        + \frac19 + \frac1{11} - \frac{2}{12}
+        + \dots
+    \] and applying \cref{thm:series:termwise_product} to \begin{align*}
+        (a_n)_{n \in \N} &= (1, 1, -2, 1, 1, -2, 1, 1, -2, \dots) \\
+        (b_n)_{n \in \N} &=
+            \left(1, \frac13, \frac14,
+            \frac15, \frac17, \frac18,
+            \frac19, \frac1{11}, \frac1{12},
+            \dots\right)
+    \end{align*}
+    Grouping terms in groups of three, we notice that each group is
+    positive.
+    So the rearranged series converges to a number greater than
+    $1 + \frac13 - \frac12 = \frac{5}{6}$.
+    Thus rearranging the terms has created a series that has a different
+    sum.
+\end{example}

@@ -1,8 +1,8 @@
-\lecture{15}{Mon 05 Feb '24}{}
 % \textbf{Recall:} Let $E \subseteq (X, d)$.
 % We say that $z \in \wbar{E}$ iff there exists a sequence $(x_n)_{n \in \N}$
 % in $E$ such that $\lim_{n \to \infty} x_n = z$.
 \begin{example}
+\lecture{15}{Mon 05 Feb '24}{}
     Let $x_n = (\frac1n, (-1)^n) \subseteq \R^2$ for $n \ge 1$.
     Then $(x_n)$ is not convergent, but has subsuential limits $(0, 1)$ and
     $(0, -1)$ corresponsing to the subsequences $(x_{2n})$ and $(x_{2n-1})$
@@ -26,7 +26,7 @@
     Since the sequence itself is a subsequence, it converges to $x$.
 \end{proof}
 
-\begin{theorem} \label{thm:compact:subsequential_limit}
+\begin{theorem*} \label{thm:compact:subsequential_limit}
     Let $E \subseteq (X, d)$.
     Then the following are equivalent.
     \begin{enumerate}[label=(\arabic*)]
@@ -34,7 +34,7 @@
         \item Every infinite subset of $E$ has a limit point in $E$.
         \item Every sequence in $E$ has a subsequential limit in $E$.
     \end{enumerate}
-\end{theorem}
+\end{theorem*}
 (1) $\iff$ (2) is by \cref{thm:compactness}.
 We prove (2) $\iff$ (3).
 \begin{proof}[Proof of $(2) \Rightarrow (3)$]

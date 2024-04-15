@@ -1,0 +1,142 @@
+\section{Universal Turing Machine} \label{sec:utm}
+\lecture{20}{Thu 14 Mar '24}{}
+We can construct a Turing Machine $U$ that takes the encoding of a turing
+machine $M$, its input $x$, and simulates $M$ on $x$.
+$U$ accepts, rejects, or loops as $M$ does on $x$.
+
+\subsection{Encoding} \label{sec:tm:encoding}
+Represent a Turing Machine with
+\begin{itemize}
+    \item states $\set{1, 2, \dots, n}$,
+    \item tape alphabet $\set{1, 2, \dots, m}$,
+    \item input alphabet $\set{1, 2, \dots, k}$ (where $k \geq m$),
+    \item start, accept and reject states $s, t, r \in [n]$ (distinct),
+    \item left end marker $u$ and blank symbol $v \in \set{k + 1, \dots, m}$,
+    \item transitions $(i_z, a_z) \to (j_z, b_z, s_z), z \in [l]$
+    $L$ and $R$ are taken to be $0$ and $1$ respectively
+\end{itemize} as \[
+0^n 1 0^m 1 0^k 1 0^s 1 0^t 1 0^r 1 0^u 1 0^v 1 0^{i_1} 1 0^{a_1} 1 0^{j_1} 1 0^{b_1} 1 0^{s_1} \dots 0^{i_l} 1 0^{a_l} 1 0^{j_l} 1 0^{b_l} 1 0^{s_l}.
+\]
+\begin{exercise}
+    Give the Turing machine encoded by \begin{multline*}
+        00010000100101001000100010000\ 1\\
+        01000101000100\ 1\ 0100100100100\ 1\ 010101010.
+    \end{multline*}
+\end{exercise}
+\begin{solution} \leavevmode
+    % The encoding is \begin{multline*}
+    %     0^3 1 0^4 1 0^2 1 0^1 1 0^2 1 0^3 1 0^3 1 0^4 \ 1\\
+    %     0^1 1 0^3 1 0^1 1 0^3 1 0^2 \ 1\ 
+    % \end{multline*}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (1) {1};
+            \node[state, accepting, right=of 1] (2) {$t$};
+            \node[state, right=of 2] (3) {$r$};
+            \path[->]
+            (1) edge[loop above] node[above] {$\leftend/\leftend, R$} (1)
+            (1) edge node {$b/b, R$} (2)
+            (1) edge[loop below] node[below] {$a/a, L$} (1);
+        \end{tikzpicture}
+    \end{center}
+    \vspace{-2em}
+\end{solution}
+
+\subsection{How does the Universal Turing Machine work?}
+\label{sec:utm:working}
+Use $3$ tapes: for the input $M\#x$, for current tape contents of $M$,
+and for current state and position of head.
+
+We assume that the input $x$ is written on the tape in the form
+$0^{x_1} 1 0^{x_2} 1 \dots 0^{x_k} 1$.
+The third tape is in the form $0^q 1 0^n 1$, where $q$ is the current state
+and $n$ is the position of the head.
+
+To simulate one step of $M$ on $x$:
+\begin{enumerate}
+    \item Read the current position $n$ from the third tape.
+    Move to that position on the second tape (skip over $n$ many $1$s).
+    \item Move to the beginning of the third tape.
+    \item Find the transition which matches the current state and the symbol
+    under the head.
+    \item Write the new state and the new symbol under the head
+    on the third and second tapes.
+    \item Increment or decrement the position on the third tape.
+    \item Compare $q$ against $t$ and $r$, and change state accordingly.
+\end{enumerate}
+
+\section{The Halting Problem} \label{sec:hp}
+Fix an encoding $\enc$ of Turing Machines.
+Define the language \[
+    \HP = \set{\enc(M)\#\enc(x) \mid M \text{ halts on } x}.
+\] As an example, the string $\enc(M)\#010010 \notin \HP$, where $M$ is the
+Turing machine in the previous exercise.
+
+What can we say about $\HP$?
+\begin{theorem}
+    $\HP$ is recursively enumerable.
+\end{theorem}
+\begin{proof}
+    We have already constructed a universal Turing machine $U$.
+    Modify it so that it accepts the input whether it is accepted or
+    rejected by $M$.
+    Then $U$ accepts $\enc(M)\#\enc(x)$ if and only if $M$ halts on $x$.
+\end{proof}
+
+\begin{theorem*}
+    $\HP$ is undecidable.
+\end{theorem*}
+\begin{proof}
+    Suppose there is a Turing machine $\mcH$ that decides $\HP$.
+    For each binary string $\gamma$, define the Turing machine $M_\gamma$ as
+    \begin{itemize}
+        \item $M$, if $\gamma = \enc(M)$, and
+        \item $M_{loop}$, if $\gamma$ is not a valid encoding,
+        where $M_{loop}$ is a Turing machine that loops on every input.
+    \end{itemize}
+
+    For all binary strings $\gamma$ and $x$, we can then compute \[
+        H(\gamma, x) = [M_\gamma \text{ halts on } x]
+    \] by running $\mcH$ on $\enc(M_\gamma)\#x$.
+    What if $x$ is not a valid encoding? We deem $H(\gamma, x) = 0$.
+
+    We can then define a new Turing machine $N$ as follows:
+    \begin{enumerate}
+        \item For a binary input $x$, transform it to $\enc(M_x)\#x$.
+        \item Run $\mcH$ on this transformed input.
+        \item If $\mcH$ accepts, then reject $w$.
+            If $\mcH$ rejects, then accept $w$.
+    \end{enumerate}
+
+    Then $N$ halts on $x$ if and only if $M_x$ does not halt on $x$.
+    Thus for all $x$, $N \ne M_x$.
+    But $N$ must occur in the list of all Turing machines, so we have a
+    contradiction.
+
+    In particular, $N$ halts on $\enc(N)$ iff $M_{\enc(N)}$
+    does not halt on $\enc(N)$.
+    This is a contradiction.
+\end{proof}
+
+\begin{corollary*}
+    The language $\neg\HP$ is not even recursively enumerable.
+\end{corollary*}
+We first prove the following lemma.
+\begin{lemma}
+    If $A$ and $\wbar{A}$ are both recursively enumerable, then $A$ is
+    recursive.
+\end{lemma}
+\begin{proof}
+    Let $M$ and $\wbar{M}$ be Turing machines that enumerate $A$ and
+    $\wbar{A}$ respectively.
+    Construct the Turing machine $N$ with two tapes, that simulates $M$ on
+    one and $\wbar{M}$ on the other, alternating between the two.
+    Eventually, one of these must halt, and $N$ will make the appropriate
+    decision.
+\end{proof}
+
+\begin{proof}[Proof of Corollary]
+    Suppose $\neg\HP$ is recursively enumerable.
+    Then $\HP$ and $\neg\HP$ are both recursively enumerable.
+    By the lemma, $\HP$ is recursive, which is a contradiction.
+\end{proof}

@@ -1,0 +1,131 @@
+\chapter{Functional Limits \& Continuity} \label{chp:fn}
+\lecture{23}{Wed 06 Mar '24}{}
+\section{Definitions} \label{sec:fn:def}
+\begin{definition}[Limit] \label{def:fn:limit}
+    Let $f\colon E \to Y$ be a function from a subset $E$ of a metric space
+    $(X, d_X)$ to another metric space $(Y, d_Y)$.
+    Let $p \in X$ be a limit point of $E$.
+    We say that \[
+        \lim_{x \to p} f(x) = q \in Y
+    \] if for every $\varepsilon > 0$, there exists a $\delta > 0$ such that
+    whenever $0 < d_X(x, p) < \delta$ and $x \in E$,
+    then $d_Y(f(x), q) < \varepsilon$.
+\end{definition}
+\begin{remarks}
+    \item $p$ need not be in $E$, \ie, $f$ need not be defined at $p$.
+    \item Even if $f$ is defined at $p$, we are not requiring that
+    $f(p) = q$.
+    For example, consider the function $f\colon \R \to \R$ defined by \[
+        f(x) = 0^{0^{x^2}}.
+    \] Then $\lim_{x \to 0} f(x) = 1$ even though $f(0) = 0$.
+\end{remarks}
+
+\begin{theorem}[Sequential characterization of limits]
+\label{thm:fn:limit:sequential}
+    Let $X$, $Y$, $E$, $f$ and $p$ be as in \cref{def:fn:limit}.
+    Then \[
+        \lim_{x \to p} f(x) = q
+    \] if and only if for every sequence
+    $(p_n)_{n \in \N} \subseteq E \setminus \set{p}$ such that $p_n \to p$,
+    we have $f(p_n) \to q$.
+\end{theorem}
+\begin{proof}
+    Suppose that $\lim_{x \to p} f(x) = q$.
+    Let $(p_n)_{n \in \N} \subseteq E \setminus \set{p} \to p$.
+    Let $\varepsilon > 0$.
+    Then there exists a $\delta > 0$ such that whenever
+    $d_X(x, p) < \delta$ and $x \in E \setminus \set{p}$,
+    then $d_Y(f(x), q) < \varepsilon$.
+
+    But since $(p_n)_{n \in \N} \to p$, there exists an $N \in \N$ such that
+    for all $n \ge N$, $d_X(p_n, p) < \delta$.
+    So for all $n \ge N$, $d_Y(f(p_n), q) < \varepsilon$, which proves that
+    $f(p_n) \to q$.
+
+    For the converse, we will prove the contrapositive.
+    Now suppose that $\lim_{x \to p} f(x) \ne q$.
+    That is, there is an $\varepsilon > 0$ such that for every $\delta > 0$,
+    there exists a $p_\delta \in E$ such that
+    $0 < d_X(p_\delta, p) < \delta$ but
+    $d_Y(f(p_\delta), q) \ge \varepsilon$.
+
+    Consider the sequence $(p_{\frac1n})_{n \in \N}$.
+    Then $p_{\frac1n} \to p$, but $f(p_{\frac1n}) \not\to q$.
+    Thus we have constructed a sequence that does not satisfy the condition
+    in the theorem.
+\end{proof}
+\begin{corollary} \leavevmode
+    \begin{enumerate}
+        \item Functional limits are unique.
+        \item Let $f, g\colon E \to \C$ and $p$ be a limit point of $E$.
+        Assume that limits $\lim_{x \to p} f(x) = q$ and
+        $\lim_{x \to p} g(x) = r$ exist.
+        Then \begin{align*}
+            \lim_{x \to p} (f(x) + g(x)) &= q + r, \\
+            \lim_{x \to p} (f(x) - g(x)) &= q - r, \\
+            \lim_{x \to p} (f(x) \cdot g(x)) &= q \cdot r, \\
+            \lim_{x \to p} (f(x) / g(x)) &= q / r
+                \quad \text{if } r \ne 0.
+        \end{align*}
+        \item Let $f, g\colon E \to \R^m$ and $p$, $q$, $r$ be as above.
+        Then \begin{align*}
+            \lim_{x \to p} (f(x) + g(x)) &= q + r, \\
+            \lim_{x \to p} \innerp{f(x)}{g(x)} &= \innerp{q}{r}
+        \end{align*}
+    \end{enumerate}
+\end{corollary}
+
+\begin{definition}[Continuity] \label{def:fn:continuity}
+    Let $X$ and $Y$ be metric spaces, $E \subseteq X$ and $f\colon E \to Y$.
+    Let $p \in E$.
+    Then we say that $f$ is \emph{continuous at $p$} if for every
+    $\varepsilon > 0$ there exists a $\delta > 0$ such that for all
+    $x \in E$ with $d_X(x, p) < \delta$,
+    we have $d_Y(f(x), f(p)) < \varepsilon$.
+\end{definition}
+\begin{remarks}
+    \item If $p$ is a limit point of $E$, then $f$ is continuous at $p$ iff
+    $\lim_{x \to p} f(x)$ exists and equals $f(p)$.
+    \item If $p$ is an isolated point of $E$,
+    then any $f$ is continuous at $p$.
+\end{remarks}
+
+\begin{theorem}[Sequential characterization of continuity]
+\label{thm:fn:continuity:sequential}
+    Let $X$, $Y$, $E$, $f$ and $p$ be as in \cref{def:fn:continuity}.
+    Then $f$ is continuous at $p$ if and only if for every sequence
+    $(p_n)_{n \in \N} \subseteq E$ converging to $p$,
+    we have $f(p_n) \to f(p)$.
+\end{theorem}
+\begin{corollary} \leavevmode
+    \begin{enumerate}
+        \item Let $f, g\colon E \to \C$ and $p \in E$ such that
+        $f$ and $g$ are continuous at $p$.
+        Then $f + g$, $f - g$, $f \cdot g$ and $f / g$ (if $g(p) \ne 0$)
+        are continuous at $p$.
+        \item Let $f, g\colon E \to \R^m$ and $p$, $q$, $r$ be as above.
+        Then $f + g$ and $\innerp{f}{g}$ are continuous at $p$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{exercise*}[Composition of continuous functions]
+\label{thm:fn:continuity:composition}
+    Let $X$, $Y$, $Z$ be metric spaces and $E \subseteq X$.
+    Let $f\colon E \to Y$ and $g\colon f(E) \to Z$.
+    If $f$ is continuous at $p \in E$ and $g$ is continuous at $f(p)$,
+    then $g \circ f$ is continuous at $p$.
+\end{exercise*}
+\begin{proof}
+    Let $p \in E$ be as in the statement and let $z = g(f(p))$.
+    Let $\varepsilon > 0$.
+    By continuity of $g$ at $f(p)$, there exists a $\delta > 0$
+    such that for all $y \in B_{f(E)}(f(p); \delta)$,
+    we have $g(y) \in B_Z(z; \varepsilon)$.
+
+    But by the continuity of $f$ at $p$, there exists a $\delta' > 0$
+    such that for all $x \in B_E(p; \delta')$,
+    we have $f(x) \in B_{f(E)}(f(p); \delta)$,
+    so that $(g \circ f)(x) \in B_Z(z; \varepsilon)$.
+
+    Thus $g \circ f$ is continuous at $p$.
+\end{proof}

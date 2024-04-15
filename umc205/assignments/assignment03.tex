@@ -1,0 +1,585 @@
+\documentclass[12pt]{article}
+\input{~/IISc/sem4/umc205/preamble}
+\usepackage{ulem}
+\usepackage{rotating}
+\usepackage{geometry}
+% \geometry{a4paper, margin=1in}
+\DeclareMathOperator\period{period}
+\newcommand\firsthalf{\textit{first-halves}}
+\newcommand\hasregex{\rightarrow}
+
+\title{Assignment 3} \setcounter{assignment}{3}
+\author{Naman Mishra}
+\date{16 January, 2024}
+
+\begin{document}
+\maketitle
+\begin{problem*}
+    Give a language $L \subseteq \set{a, b}^*$ such that neither $L$ nor
+    $\set{a, b}^* \setminus L$ contains an infinite regular set.
+\end{problem*}
+We will give a construction by exploiting ultimate periodicity.
+\setcounter{section}{3}
+\begin{lemma*}
+    Let $S \subseteq \N$ be given by \[
+        S = \set{n \in \N \mid \exists k \in \N (2^{2k} \le n < 2^{2k+1})}.
+    \]
+    There neither $S$ nor $\N \setminus S$ contains an
+    infinite ultimately periodic set.
+\end{lemma*}
+\begin{proof}
+    % Let $(a_n)_{n \in \N} = (0, 1, 3, 6, 10, 15, \dots)$ be the sequence of
+    % sums of the first $n$ positive integers.
+    % Let $S = \set{a_n \mid n \in \N}$.
+    % Note that $(a_n)_n$ is strictly increasing, and so is the difference
+    % between consecutive terms.
+    % \begin{description}
+    %     \item[Claim 1] $S$ does not contain an infinite ultimately periodic
+    %         set.
+    %     \item[Proof] Suppose $S$ contains an infinite ultimately periodic
+    %         set $S'$, with period $p > 0$ and starting from $n_0 > 1$, \ie,
+    %         for all $n \ge n_0 > 1$, $n \in S'$ iff $n+p \in S'$.
+    %         Since $S'$ is infinite, it is unbounded, so there exists
+    %         $m \in S'$ such that $m > a_{n_0 p}$.
+    %         Since $S$ is the set of all $a_n$'s, $m = a_n$ for some $n$
+    %         larger than $n_0 p$.
+    %         Then the next largest element in $S$ is $a_{n+1} = a_n + n + 1$,
+    %         which is larger than $a_n + p$.
+    %         Thus $m + p \notin S'$, a contradiction.
+    %     \item[Claim 2] $\N \setminus S$ does not contain an infinite
+    %         ultimately periodic set.
+    %     \item[Proof] Suppose $\N \setminus S$ contains an infinite
+    %         ultimately periodic set $S'$,
+    %         with period $p > 0$ and starting from $n_0$.
+    %         Let $m \in S'$.
+    % \end{description}
+    We have \[
+        \N \setminus S
+            = \set{n \in \N \mid \exists k \in \N
+            (2^{2k+1} \le n < 2^{2k+2})}.
+    \] This is easy to see if one notices that $S$ is the set of all $n$
+    such that $\floor{\log_2 n}$ is even.
+
+    \textbf{Claim:} $S$ does not contain an infinite ultimately periodic
+    set.
+
+    Suppose $S$ contains an infinite ultimately periodic set $S'$,
+    with period $p > 0$ and starting from $n_0$, \ie,
+    for all $n \ge n_0$, $n \in S'$ iff $n+p \in S'$.
+    Since $S$ is infinite, it is unbounded,
+    so there exists some $m \in S'$ larger that $n_0$.
+    Then $m+np \in S'$ for all $n \in \N$.
+    By the well-ordering principle, let \[
+        n = \min\set{n \in \N \mid m+np \ge 2^{2(m + p) + 1}}.
+    \] Then $n \ne 0$ since $m < 2^m < 2^{2(m+p) + 1}$,
+    and $m + (n-1)p < 2^{2(m+p) + 1}$ by minimality of $n$.
+    So \begin{align*}
+        m + np &= m + (n-1)p + p \\
+        &< 2^{2(m+p) + 1} + p \\
+        &< 2^{(m+p)+1} + 2^{(m+p)+1} \\
+        &= 2^{(m+p)+2}
+    \end{align*} which gives that $m+np \in \N \setminus S$.
+    But then $m+np$ cannot be in $S'$, a contradiction.
+
+    \textbf{Claim:} $\N \setminus S$ does not contain an infinite
+    ultimately periodic set.
+
+    This proof is almost identical,
+    \sout{so we leave it as an exercise for the grader}.
+    Let $S'$ be an infinite ultimately periodic subset of
+    $\N \setminus S$, and let $p$, $n_0$ and $m$ be as above.
+    Let $n = \min\set{n \in \N \mid m+np \ge 2^{2(m+p)}}$.
+    Again $n \ne 0$ since $m < 2^m < 2^{2(m+p)}$, and $m + (n-1)p
+    < 2^{2(m+p)}$ by minimality of $n$.
+    Then $m+np < 2^{2(m+p)} + p < 2^{2(m+p)+1}$, so $m+np \in S$.
+    Thus it cannot be in $S'$, a contradiction.
+
+    Alternatively, one can show that if $S' \subseteq \N \setminus S$ is
+    infinite and ultimately periodic, then $S'' = \set{2n \mid n \in S'}$
+    is an infinite and ultimately periodic subset of $S$,
+    which does not exist by the first claim.
+\end{proof}
+We will now use this lemma to construct the language $L$.
+\begin{solution}
+    Let $S$ be as in the lemma.
+    Define $L = \set{w \in A^* \mid \size{w} \in S}$, where $A = \set{a, b}$.
+    Then $\lengths(L) = S$ and $\lengths(A^* \setminus L) = \N \setminus S$.
+    Let $L'$ be an infinite subset of $L$.
+    Then $\lengths(L') \subseteq S$.
+    If $\lengths(L')$ were finite, then $L'$ would be finite,
+    since there are finitely many strings in $A^*$ of each length
+    (to be precise, $\abs{A^n} = 2^n$).
+    But then $\lengths(L')$ is infinite, so it cannot be ultimately periodic
+    and hence $L'$ is not regular.
+
+    Similarly, if $L'$ is an infinite subset of $A^* \setminus L$,
+    then $\lengths(L') \subseteq \N \setminus S$ is infinite, and hence
+    not ultimately periodic, so $L'$ is not regular.
+\end{solution}
+
+\begin{problem*}
+    For a language $L$ over an alphabet $A$ define \[
+        \firsthalf(L) = \set{x \in A^* \mid \exists y
+            (|x| = |y| \text{ and } xy \in L)}
+    \] Prove or disprove: if $L$ is regular, then so is
+    $\firsthalf(L)$.
+\end{problem*}
+\begin{solution}
+    Let $L \subseteq A^*$ be regular with DFA $\mcA = (Q, s, \delta, F)$
+    accepting it, with no unreachable states.
+
+    For each state $q \in Q$, define \begin{align*}
+        \ell(q) &\coloneq \set{n \in \N \mid \exists t \in A^n
+            (\what{\delta}(q, t) \in F)}.
+        \intertext{For any string $w$ such that $\what{\delta}(s, w) = q$,
+        we have $\what{\delta}(q, t) = \what{\delta}(s, wt)$ for all
+        $t \in A^*$.\footnotemark
+        So $\ell(q) = \set{n - \abs{w} : n \in \lengths(L_w)}$,
+        where $L_w$ is the intersection of $L$ with
+        the set of all strings beginning with $w$.
+        By closure, this is regular,
+        so $\ell(q)$ is ultimately periodic.\footnotemark
+        Thus we define}
+        n(q), p(q) &\coloneq (n, p) \text{ such that } \forall m \ge n
+            (m \in l(q) \iff m+p \in l(q)).
+    \end{align*}
+    where $n(q) \in \N$ and $p(q) \in \N \setminus \set{0}$.
+    The particular choice of $n(q)$ and $p(q)$ does not matter,
+    but one can still prescribe a scheme such as the following:
+    Among all such pairs $(n, p)$, choose those with the smallest $p$,
+    and among those, choose the one with the smallest $n$.
+    \footnotetext[1]{This follows from $\what{\delta}(q_1, xy) 
+    = \what{\delta}(\what{\delta}(q_1, x), y)$, proved in the first quiz.}
+    \footnotetext[2]{The set of all strings with prefix $w$ is the
+    concatenation of $\set{w}$ with $A^*$, which are both regular.}
+
+    Now let $P = \prod_{q \in Q} p(q)$ and
+    $N = P \cdot \max_{q \in Q} n(q)$.
+    Then for each state $q$, we have \[
+        \forall m \ge N (m \in \ell(q) \iff m+P \in \ell(q)).
+    \]
+    Let $A^{<N}$ and $A^{\ge N}$ be the sets of all strings of length
+    less than $N$ and at least $N$ respectively.
+    We will show that \[
+        \firsthalf(L) \cap A^{\ge N}
+    \] is regular.
+    Let \begin{align*}
+        Q' &= Q \times \set{0, 1, \dots, P-1} \\
+        s' &= (s, 0) \\
+        \delta'((q, r), a) &= (\delta(q, a), (r+1) \bmod P) \\
+        F' &= \set{(q, r) \in Q' \mid N+r \in \ell(q)}.
+    \end{align*}
+    Let $\mcA' = (Q', s', \delta', F')$.
+    We first show that for any $w \in A^*$, \[
+        \what{\delta'}(s', w) = (\what{\delta}(s, w), \abs{w} \bmod P).
+    \] The base case $w = \epsilon$ is direct substitution.
+    For the inductive step, suppose this is true for some $w$.
+    Then \begin{align*}
+        \what{\delta'}(s', wa) &= \delta'(\what{\delta'}(s', w), a) \\
+        &= \delta'((\what{\delta}(s, w), \abs{w} \bmod P), a) \\
+        &= (\delta(\what{\delta}(s, w), a), (\abs{w}+1) \bmod P) \\
+        &= (\what{\delta}(s, wa), \abs{wa} \bmod P).
+    \end{align*}
+    This closes the induction.
+
+    We claim that \[
+        L(\mcA') \cap A^{\ge N} = \firsthalf(L) \cap A^{\ge N}.
+    \]
+    \begin{proof}
+        Let $|w| \ge N$, so we can write $\abs{w} = N + mP + r$,
+        where $m \in \N$ and $r \in \set{0, 1, \dots, P-1}$.
+        Since $N$ is a multiple of $P$, $r = \abs{w} \bmod P$.
+        Let $q = \what{\delta}(s, w)$.
+        $w$ is said to be in $\firsthalf(L)$ iff there exists an
+        $x \in A^{N+mP+r}$ such that $wx \in L$.
+        But for any $x$, this is the same as saying \[
+            \what{\delta}(s, wx) \in F \quad \text{or} \quad
+            \what{\delta}(q, x) \in F.
+        \] So the existence of such an $x$ is equivalent to \[
+            N + mP + r \in \ell(q)
+        \] But by the construction of $N$ and $P$, this is equivalent to \[
+            N + r \in \ell(q)
+        \] by the periodicity of $\ell(q)$ with period $p(q) \mid P$
+        and starting from $n(q) \le N$.
+        But $\what{\delta'}(s, w) = (q, r)$, so this is in turn
+        equivalent to \[
+            \what{\delta'}(s', w) \in F'.
+        \]
+        Since each step was an equivalence, we have that for any string $w$
+        of length at least $N$, $w \in \firsthalf(L)$ iff $w \in L(\mcA')$.
+        This proves the claim.
+    \end{proof}
+    Finally, \begin{align*}
+        \firsthalf(L) &= \firsthalf(L) \cap A^{<N} \cup
+            \firsthalf(L) \cap A^{\ge N} \\
+        &= \firsthalf(L) \cap A^{<N} \cup L(\mcA') \cap A^{\ge N}.
+    \end{align*}
+    $\firsthalf(L) \cap A^{<N}$ is regular since it is finite,
+    and $A^{\ge N}$ is regular, since it is the complement of $A^{<N}$,
+    which is regular by finiteness.
+    Regularity of $\firsthalf(L)$ follows from the closure properties.
+\end{solution}
+
+\begin{problem*}
+    Use the McNaughton-Yamada construction done in class to construct a
+    regular expression corresponding to the language accepted by the DFA
+    below (i.e. the expression corresponding to $L_{ss}^{\set{s, p, q}}$).
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial, accepting] (s) {$s$};
+            \node[state, below right=1.5cm and 2cm of s] (p) {$p$};
+            \node[state, below left=2.3cm and -0.3cm of s] (q) {$q$};
+            \path[->]
+                (s) edge[loop above] node {$a$} (s)
+                    (s) edge node {$b$} (p)
+                (p) edge[loop right] node {$b$} (p)
+                    (p) edge[bend left] node {$a$} (q)
+                (q) edge[bend left] node {$b$} (p)
+                    (q) edge node {$a$} (s);
+        \end{tikzpicture}
+    \end{center}
+\end{problem*}
+% \begin{figure}
+%         \centering
+%         \begin{forest}
+%             [$L_{ss}^{spq}$
+%                 [$L_{ss}^{sp}$
+%                     [$L_{ss}^{s}$
+%                         [$L_{ss}^\O$]
+%                     ]
+%                     [$L_{sp}^{s}$
+%                         [$L_{sp}^\O$]
+%                     ]
+%                     [$L_{pp}^{s}$, l*=2
+%                         [$L_{pp}^\O$]
+%                         [$L_{ps}^\O$]
+%                     ]
+%                     [$L_{ps}^{s}$ ]
+%                 ]
+%                 [$L_{sq}^{sp}$
+%                     [$L_{sq}^{s}$
+%                         [$L_{sq}^\O$]
+%                     ]
+%                     [$L_{pq}^{s}$
+%                         [$L_{pq}^\O$]
+%                     ]
+%                 ]
+%                 [$L_{qq}^{sp}$, l*=2
+%                     [$L_{qq}^{s}$
+%                         [$L_{qq}^\O$]
+%                         [$L_{qs}^\O$]
+%                     ]
+%                     [$L_{qp}^{s}$
+%                         [$L_{qp}^\O$]
+%                     ]
+%                     [$L_{pq}^{s}$]
+%                 ]
+%                 [$L_{qs}^{sp}$
+%                     [$L_{qs}^{s}$]
+%                 ]
+%             ]
+%         \end{forest}
+% \end{figure}
+\begin{solution}
+    We wish to compute the regular expression for $L_{ss}^{\set{s, p, q}}$,
+    since the only start and final states are $s$.
+    We will write $L \hasregex r$ to mean that the regular expression
+    for $L$ is $r$.
+
+    We will use the equation \begin{align*}
+        L_{ss}^{\set{s, p, q}} &= L_{ss}^{\set{p, q}} \cup
+            L_{ss}^{\set{p, q}} (L_{ss}^{\set{p, q}})^* L_{ss}^{\set{p, q}} \\
+        &= L_{ss}^{\set{p, q}} (\epsilon + (L_{ss}^{\set{p, q}})^+) \\
+        &= L_{ss}^{\set{p, q}} (L_{ss}^{\set{p, q}})^* \\
+        &= (L_{ss}^{\set{p, q}})^* \quad \text{since $\epsilon \in L_{ss}^{\set{p, q}}$.}
+    \end{align*}
+
+    We have \begin{align*}
+        L_{ss}^\O
+        &= \set{\epsilon, a} & L_{sp}^\O &= \set{b} & L_{sq}^\O &= \O \\
+        L_{ps}^\O
+        &= \O & L_{pp}^\O &= \set{\epsilon, b} & L_{pq}^\O &= \set{a} \\
+        L_{qs}^\O
+        &= \set{a} & L_{qp}^\O &= \set{b} & L_{qq}^\O &= \set{\epsilon}
+    \end{align*}
+    First note that $(L_{qq}^\O)^* = \epsilon^* = \epsilon$.
+    So \begin{align*}
+        L_{sq}^\O (L_{qq}^\O)^* &\hasregex \O \\
+        L_{pq}^\O (L_{qq}^\O)^* &\hasregex a
+    \end{align*}
+    Now \begin{align*}
+        L_{ss}^{\set{q}} &= L_{ss}^\O \cup L_{sq}^\O (L_{qq}^\O)^* L_{qs}^\O
+      & L_{sp}^{\set{q}} &= L_{sp}^\O \cup L_{sq}^\O (L_{qq}^\O)^* L_{qp}^\O
+        \\
+        &\hasregex (\epsilon + a) + \O a
+        & &\hasregex b + \O b
+        \\
+        &= \epsilon + a
+      & &= b
+      \\[1em]
+        L_{ps}^{\set{q}} &= L_{ps}^\O \cup L_{pq}^\O (L_{qq}^\O)^* L_{qs}^\O
+      & L_{pp}^{\set{q}} &= L_{pp}^\O \cup L_{pq}^\O (L_{qq}^\O)^* L_{qp}^\O
+        \\
+        &\hasregex \O + a a
+      & &\hasregex (\epsilon + b) + ab
+        \\
+        &= aa
+    \end{align*}
+    And we can now write \begin{align*}
+        L_{ss}^{\set{p,q}}
+            &= L_{ss}^{\set{q}} \cup L_{sp}^{\set{q}} (L_{pp}^{\set{q}})^* L_{ps}^{\set{q}} \\
+            &\hasregex (\epsilon + a) + b (\epsilon + b + ab)^* aa \\
+            &= \epsilon + a + b(b + ab)^*aa
+        \intertext{and so}
+        L_{ss}^{\set{s, p, q}} &\hasregex (\epsilon + a + b(b + ab)^*aa)^* \\
+        &= (a + b(b + ab)^*aa)^*
+    \end{align*} which is the regular expression for the language accepted
+    by the given DFA.
+\end{solution}
+
+\begin{problem*}
+    In the McNaughton-Yamada construction of an RE from an NFA,
+    we inductively define $L(p, X, q)$ to be the words accepted by
+    paths from state $p$ to state $q$ possibly using intermediate states
+    in the set of states X.
+    Inductively define $LA(p, Y, q)$,
+    the words accepted by paths from state $p$ to state $q$,
+    but avoiding using intermediate states in Y.
+    What would be the base case? 
+\end{problem*}
+\begin{solution}
+    Let the NFA be $\mcA = (Q, S, \Delta, F)$.
+    The base case is $Y = Q$, and $LA(p, Q, q)$ is given by \[
+        LA(p, Q, q) = \set{a \in A \cup \set{\epsilon}
+            \mid q \in \Delta(p, a)}.
+    \] The inductive step becomes \[
+        LA(p, Y \setminus \set{y}, q)
+        = LA(p, Y, q) \cup LA(p, Y, y) \cdot (LA(y, Y, y))^* \cdot LA(y, Y, q)
+    \] whenever $y \in Y$.
+    This can be seen simply by noticing that \[
+        L(p, X, q) = LA(p, Q \setminus X, q)
+    \] and using the inductive definition of $L(p, X, q)$.
+\end{solution}
+
+\begin{problem*}
+    Consider the languages $L$ and $M$ below over the alphabet $\set{a, b}$.
+    \begin{itemize}
+        \item $L$ is the language of all strings in which the difference
+        between the number of $a$'s and $b$'s is at most 2.
+        That is: \[
+            L = \set{w \in \set{a, b}^* : \abs{\#_a(w) - \#_b(w)} \le 2}.
+        \]
+        \item $M$ is the language of all strings which satisfy the property
+        that in \emph{every} prefix the difference between the number of
+        $a$'s and $b$'s is at most 2.
+        That is: \[
+            M = \set{w \in \set{a, b}^* \mid
+                \text{for all prefixes $u$ of $w$, }
+                \abs{\#_a(u) - \#_b(u)} \le 2}.
+        \]
+    \end{itemize}
+    Describe the classes of the canonical MN relation $\equiv_L$ for $L$,
+    and similarly for $M$.
+    Finally, conclude whether $L$ and $M$ are regular or not.
+\end{problem*}
+\begin{solution}
+    Let $A = \set{a, b}$.
+    Also define the operator $\delta = \#_a - \#_b$.
+    We claim that for all $v, w \in A^*$, \[
+        v \equiv_L w \iff \delta(v) = \delta(w).
+    \] and therefore, \[
+        A^*/{\equiv_L} = \set{\set{w \in A^* : \delta(w) = k} \mid k \in \Z}.
+    \]
+    \begin{proof}
+        Let $\sim$ be the relation on $A^*$ defined by \[
+            v \sim w \iff \delta(v) = \delta(w).
+        \] We wish to prove that ${\sim} = {\equiv_L}$.
+        Let $v, w \in A^*$ with $v \sim w$.
+        Then for any $z \in A^*$, \begin{align*}
+            vz \in L &\iff \abs{\#_a(vz) - \#_b(vz)} \le 2 \\
+            &\iff \abs{\#_a(v) - \#_b(v) + \#_a(z) - \#_b(z)} \le 2 \\
+            &\iff \abs{\#_a(w) - \#_b(w) + \#_a(z) - \#_b(z)} \le 2 \\
+            &\iff \abs{\#_a(wz) - \#_b(wz)} \le 2 \\
+            &\iff wz \in L.
+        \end{align*}
+        Thus $v \equiv_L w$.
+
+        For the converse, let $a^{-n} = b^n$ for $n \in \Z^+$.
+        Note that $\delta(a^n) = n$ for every $n \in \Z$,
+        and so for every $x \in A^*$, \begin{align*}
+            \delta(xa^n) &= \delta(x) + \delta(a^n) \\
+            &= \delta(x) + n.
+        \end{align*}
+        Suppose $v \equiv_L w$.
+        Let $\delta(v) = k$.
+        Then $va^{-k-2}$ and $va^{-k+2}$ are in $L$ by ($*$).
+        But since $v \equiv_L w$, $wa^{-k-2}$ and $wa^{-k+2}$ are also in $L$.
+        Thus \begin{align*}
+            \abs{\delta(w) - k - 2} &\le 2
+                & \abs{\delta(w) - k + 2} &\le 2 \\
+            \delta(w) - k - 2 &\ge -2
+                & \delta(w) - k + 2 &\le 2 \\
+            \delta(w) &\ge k
+                & \delta(w) &\le k
+        \end{align*}
+        so $\delta(w) = k$, which means $v \sim w$.
+
+        Thus $v \equiv_L w \iff v \sim w$.
+    \end{proof}
+
+    Now for $M$, we first note that for any $x, y \in A^*$, \begin{equation*}
+        xy \in M \implies x \in M, \tag{$\dagger$} \label{eq:prefix}
+    \end{equation*} since each prefix of $x$ is also a prefix of $xy$.
+
+    Let $\sim$ be the relation on $A^*$ defined by \[
+        v \sim w \iff v, w \notin M \text{ or }
+            v, w \in M \land (\delta(v) = \delta(w)).
+    \] We claim that ${\sim} = {\equiv_M}$.
+    \begin{proof}
+        Let $v, w \in A^*$ with $v \sim w$.
+        We have two cases, either $v, w \notin M$,
+        or $v, w \in M$ and $\delta(v) = \delta(w)$.
+        In the first case, $vz, wz \notin M$ for any $z \in A^*$,
+        because of \eqref{eq:prefix}.
+        So $vz \in M \iff wz \in M$.
+
+        In the second case, each prefix $u$ of $v$ or $w$ has
+        $\abs{\delta(u)} \le 2$ (since $v, w \in M$).
+        Thus for any $z \in A^*$, we only need to consider prefixes of $vz$
+        that are longer than $v$, and similarly for $wz$.
+        That is, \begin{align*}
+            vz \in M &\iff \text{for all prefixes $u$ of $z$, }
+                \abs{\delta(vu)} \le 2 \\
+            &\iff \text{for all prefixes $u$ of $z$, }
+                \abs{\delta(v) + \delta(u)} \le 2 \\
+            &\iff \text{for all prefixes $u$ of $z$, }
+                \abs{\delta(w) + \delta(u)} \le 2 \\
+            &\iff \text{for all prefixes $u$ of $z$, }
+                \abs{\delta(wu)} \le 2 \\
+            &\iff wz \in M.
+        \end{align*}
+        In either case, $v \equiv_M w$.
+
+        Now suppose $v \equiv_M w$, \ie, for all $z \in A^*$,
+        $vz \in M \iff wz \in M$.
+        Then $v \in M \iff w \in M$ (take $z = \epsilon$).
+        If $v, w \notin M$, then $v \sim w$ by definition.
+
+        Otherwise, $v, w \in M$.
+        We need to show $\delta(v) = \delta(w)$.
+        Let $\delta(v) = k$.
+        Since $v \in M$, $-2 \le k \le 2$
+        Then $k = \delta(v) < \delta(va) < \dots < \delta(va^{2-k}) = 2$,
+        and $k = \delta(v) > \delta(vb) > \dots > \delta(vb^{k+2}) = -2$.
+        Since $v \in M$, these are all the prefixes we need to consider
+        to conclude that $va^{2-k} \in M$ and $vb^{k+2} \in M$.
+
+        But since $v \equiv_M w$, \begin{align*}
+            wa^{2-k} &\in M & wb^{k+2} &\in M \\
+            \delta(wa^{2-k}) &\le 2 & \delta(wb^{k+2}) &\ge -2 \\
+            \delta(w) + 2 - k &\le 2 & \delta(w) - k - 2 &\ge -2 \\
+            \delta(w) &\le k & \delta(w) &\ge k
+        \end{align*} so $\delta(w) = k = \delta(v)$, which gives $v \sim w$.
+
+        Thus $v \equiv_M w \iff v \sim w$.
+    \end{proof}
+    Thus the equivalence classes of $\equiv_M$ are \begin{align*}
+        A^*/{\equiv_M} &= \set{M \cap \set{w \in A^* : \delta(w) = k} \mid k \in
+        \set{-2, \dots, 2}} \cup \set{A^* \setminus M}.
+    \end{align*}
+
+    Since $A^*/{\equiv_M}$ is finite but $A^*/{\equiv_L}$ is not,
+    \begin{itemize}
+        \item $L$ is not regular.
+        \item $M$ is regular. \qedhere
+    \end{itemize}
+\end{solution}
+
+\begin{problem*}
+    Minimize the DFA below using the algorithm done in class:
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (1) {$1$};
+            \node[state, above right=1cm and 2cm of 1] (2) {$2$};
+            \node[state, below right=1cm and 2cm of 2] (3) {$3$};
+            \node[state, accepting, below=2cm of 1] (4) {$4$};
+            \node[state, accepting, below=2cm of 2] (5) {$5$};
+            \node[state, accepting, below right=1cm and 1.5cm of 5] (6) {$6$};
+
+            \begin{scope}[every node/.style={near start}]
+                \path[->]
+                (1) edge node {$a$} (4)
+                    (1) edge[bend left] node {$b$} (2)
+                (2) edge[bend left=0.7cm] node {$a$} (4)
+                    (2) edge[bend left] node[swap] {$b$} (1)
+                (3) edge node {$a$} (5)
+                    (3) edge node {$b$} (2)
+                (4) edge[loop below] node[midway] {$a$} (4)
+                    (4) edge node[swap] {$b$} (6)
+                (5) edge node {$a$} (4)
+                    (5) edge[bend left] node {$b$} (6)
+                (6) edge[bend left] node[swap] {$a$} (5)
+                    (6) edge node[swap] {$b$} (3);
+            \end{scope}
+        \end{tikzpicture}
+    \end{center}
+\end{problem*}
+\begin{solution}
+    We start with marking all pairs of nodes that contain an accepting
+    state and a non-accepting state.
+    \begin{center}
+        \begin{tabular}{c|cccccc}
+              & 1 & 2 & 3 & 4 & 5 & 6 \\
+            \hline
+            1 &   &   &   & \checkmark & \checkmark & \checkmark \\
+            2 &   &   &   & \checkmark & \checkmark & \checkmark \\
+            3 &   &   &   & \checkmark & \checkmark & \checkmark \\
+            4 & \checkmark & \checkmark & \checkmark &   &   &   \\
+            5 & \checkmark & \checkmark & \checkmark &   &   &   \\
+            6 & \checkmark & \checkmark & \checkmark &   &   &   
+        \end{tabular}
+    \end{center}
+    Now $\delta(4, b) = \delta(5, b) = 6$, but $\delta(6, b) = 3$.
+    Thus we can mark $(4, 6)$ and $(5, 6)$.
+    \begin{center}
+        \begin{tabular}{c|cccccc}
+              & 1 & 2 & 3 & 4 & 5 & 6 \\
+            \hline
+            1 &   &   &   & \checkmark & \checkmark & \checkmark \\
+            2 &   &   &   & \checkmark & \checkmark & \checkmark \\
+            3 &   &   &   & \checkmark & \checkmark & \checkmark \\
+            4 & \checkmark & \checkmark & \checkmark &   &   & \checkmark \\
+            5 & \checkmark & \checkmark & \checkmark &   &   & \checkmark \\
+            6 & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &
+        \end{tabular}
+    \end{center}
+    Now $\set{\delta(1, a), \delta(2, a), \delta(3, a)} = \set{4, 5}$, but
+    no pair from $\set{4, 5}$ is marked. \\
+    $\set{\delta(1, b), \delta(2, b), \delta(3, b)} = \set{1, 2}$, and
+    again no pair from $\set{1, 2}$ is marked.
+
+    Finally, $\delta(4, a) = \delta(5, a)$ and $\delta(4, b) = \delta(5, b)$, but
+    obviously no pair $(q, q)$ is ever marked.
+
+    Thus there are no more pairs to mark, and we get equivalence classes
+    \begin{align*}
+        \set{1, 2, 3} && \set{4, 5} && \set{6}.
+    \end{align*} This gives the minimized DFA
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (123) {$123$};
+            \node[state, accepting, below right=1.732cm and 1cm of 123] (45) {$45$};
+            \node[state, accepting, below left=1.732cm and 1cm of 123] (6) {$6$};
+
+            \path[->]
+            (123) edge node {$a$} (45)
+                (123) edge[loop above] node {$b$} (123)
+            (45) edge[loop right] node {$a$} (45)
+                (45) edge[bend left] node {$b$} (6)
+            (6) edge[bend left] node {$a$} (45)
+                (6) edge node {$b$} (123);
+        \end{tikzpicture}
+    \end{center} \vspace{-1.2cm} % for \qedsymbol
+\end{solution}
+
+\end{document}

@@ -1,29 +1,34 @@
-\lecture{10}{Wed 24 Jan '24}{}
 \section{Compactness} \label{sec:compactness}
-\begin{definition} \label{def:bounded}
-    A subset $E \subseteq (X, d)$ is said to be bounded if there exists a
-    $p \in X$ and $M > 0$ such that $E \subseteq B(p; M)$.
-\end{definition}
+\lecture{10}{Wed 24 Jan '24}{}
+
+\begin{definition*} \label{def:bounded}
+    A subset $E \subseteq (X, d)$ is said to be \emph{bounded} if there
+    exists a $p \in X$ and $M > 0$ such that $E \subseteq B(p; M)$.
+\end{definition*}
+Equivalently, $E$ is bounded if for all $x \in X$, there exists an $M > 0$
+such that $E \subseteq B(x; M)$.
+Or, $E$ is bounded if there exists an $M > 0$ such that
+$d(x, y) < M$ for all $x, y \in E$.
 
 Consider $E = \set{p \in \Q : 2 < p^2 < 3}$.
 Then $E$ is both closed and bounded in $(\Q, \abs{\cdot})$.
 However, continuous functions on $E$ are neither uniformly continuous nor
 bounded.
 
-\begin{definition} \label{def:open_cover}
+\begin{definition}[Open cover] \label{def:open_cover}
     Let $E \subseteq (X, d)$.
     An open cover $\set{\mcU_\alpha}_{\alpha \in \Lambda}$ of $E$ in $X$ is
     a collection of open sets $\mcU_\alpha$ such that
     $E \subseteq \bigcup_{\alpha \in \Lambda} \mcU_\alpha$.
 \end{definition}
 
-\begin{definition} \label{def:compact}
+\begin{definition*}[Compact set] \label{def:compact}
     A subset $E \subseteq (X, d)$ is said to be compact if any open cover
     $\mcU = \set{\mcU_\alpha}_{\alpha \in \Lambda}$ of $E$ in $X$ admits a
     finite subcover of $E$, \ie, there exist
     $\alpha_1, \dots, \alpha_k \in \Lambda$ such that $E \subseteq
     \bigcup_{i = 1}^k \mcU_{\alpha_i}$.
-\end{definition}
+\end{definition*}
 
 \begin{examples}
     \item $E \subseteq (X, d)$ is finite.
@@ -47,7 +52,7 @@ bounded.
     $(\R^n, \norm{\cdot})$.
 \end{examples}
 
-\begin{theorem} \label{thm:compactness}
+\begin{theorem*} \label{thm:compactness}
     Let $E \subseteq (\R^n, \norm{\cdot})$.
     Then the following are equivalent:
     \begin{enumerate}[label=(\arabic*)]
@@ -55,10 +60,17 @@ bounded.
         \item $E$ is closed and bounded.
         \item Every infinite subset of $E$ admits a limit point in $E$.
     \end{enumerate}
-\end{theorem}
-\begin{proof}
-    We show $(1) \implies (2)$ in a general metric space $(X, d)$.
-    Let $E \subseteq X$ be compact.
+\end{theorem*}
+\begin{remark}
+    The equivalence between (1) and (2) is known as the Heine-Borel theorem.
+\end{remark}
+We first show that (1) $\implies$ (2) in a general metric space.
+This is not necessary for the theorem, since we will later show
+$(1) \implies (3) \implies (2) \implies (1)$ anyway.
+But $(2) \implies (1)$ is only valid in $\R^n$, so that won't yield
+$(1) \implies (2)$ in a general space.
+\begin{proof}[Proof that (1) $\implies$ (2) in general]
+    Let $E \subseteq (X, d)$ be compact.
     Let $z \in E^c$.
     For any $y \in E$, let $\delta_y = d(y, z) / 2$.
     Note that $B(z, \delta_y) \cap B(y, \delta_y) = \O$.
@@ -68,13 +80,63 @@ bounded.
     That is, there exist $y_1, \dots, y_k \in E$ such that
     $E \subseteq \bigcup_{i = 1}^k B(y_i; \delta_{y_i})$.
     Let $\delta = \min\set{\delta_{y_i}}$.
-    Then $B(z; \delta) \cap \bigcup_{i = 1}^k B(y_i; \delta_{y_i}) = \O$,
-    so $B(z; \delta) \subseteq E^c$.
+    Then $B(z; \delta) \cap E = \O$, so $B(z; \delta) \subseteq E^c$.
+    This shows that $E^c$ is open, so $E$ is closed.
 
-    For boundedness, take the largest ball in the finite subcover of
-    $\bigcup_{R > 0} B(p; R)$ for some $p \in E$.
+    For boundedness, take the largest ball from finite subcover of
+    $E$ in $\bigcup_{R > 0} B(p; R)$ for some $p \in E$.
+\end{proof}
+To show that $(2) \implies (1)$ in $(\R^n, \norm{\cdot})$,
+we first show that for any $R \in \R$, the set $[-R, R]^n$ is compact.
+\begin{theorem}
+    All rectangles of the form $[-R, R]^n$ are compact in
+    $(\R^n, \norm{\cdot})$.
+\end{theorem}
+\begin{proof}
+    Fix an $R > 0$.
+    Let $I_0 = [-R, R]^n$.
+    Note that \[
+        \operatorname{diam}(I_0)
+            = \max\set{\norm{x - y} \mid x, y \in I_0} = 2R \sqrt n.
+    \] Let $\mcU$ be an open cover of $I_0$.
+    Suppose this has no finite subcover of $I_0$.
+    We partition $I_0$ into $2^n$ equal rectangles of the form
+    $J_1 \times J_2 \times \dots J_n$, where each $J_i$ is either $[-R, 0]$
+    or $[0, R]$.
+    The diameter of each of these rectangles is $R \sqrt n$.
+    By the pigeonhole principle, there exists $I_1$ among these rectangles
+    that does not admit a finite subcover in $\mcU$.
 
-    We show $(2) \implies (1)$ in $(\R^n, \norm{\cdot})$.
-    We first show that for any $R \in \R$, the set $[-R, R]^n$ is compact.
-    WLOG let $R = 1$.
+    We continue this process to obtain a sequence of rectangles
+    $I_0 \supseteq I_1 \supseteq I_2 \supseteq \dots$, none of which admit a
+    finite subcover in $\mcU$, with
+    $\operatorname{diam}(I_k) = \frac{2R}{2^k} \sqrt n$.
+
+    We use the nested interval property (\cref{thm:nested_intervals}) to
+    obtain a point $x \in \bigcap_{k = 1}^\infty I_k$.
+    Since $\mcU$ covers $I_0$, there exists $U \in \mcU$ that contains $x$.
+    Since $U$ is open, it contains some $\varepsilon$-ball around $x$.
+    But the diameters of the $I_k$s decrease to $0$, so $I_k \subseteq U$ for
+    some $k$.
+    This contradicts that $I_k$ does not admit a finite subcover in $\mcU$.
+
+    Thus the original rectangle $I_0$ admits a finite subcover in $\mcU$.
+\end{proof}
+
+\begin{lemma}[Nested interval theorem] \label{thm:nested_intervals}
+    Let $I_0 \supseteq I_1 \supseteq \dots$ be a sequence of closed
+    rectangles in $\R^n$.
+    Then $\bigcap_{k = 1}^\infty I_k \ne \O$.
+\end{lemma}
+\begin{proof}
+    Let each $I_k = [a_{1k}, b_{1k}] \times \dots \times [a_{nk}, b_{nk}]$.
+    Then $(a_{ik})_{k \in \N}$ and $(b_{ik})_{k in \N}$ are
+    bounded sequences in $\R$.
+    Let $A_i = \sup\set{a_{ik} \mid k \in \N}$.
+    Note that each $b_{ik}$ is an upper bound for the set
+    $\set{a_{ik} \mid k \in \N}$, so $A_i \le b_{ik}$ for all $k$.
+
+    Let $A = (A_1, \dots, A_n)$.
+    For each $k$, $A \in I_k$ since $A_i \in [a_{ik}, b_{ik}]$ for all $i$.
+    Thus $\bigcap_{k = 1}^\infty I_k \ni A$.
 \end{proof}

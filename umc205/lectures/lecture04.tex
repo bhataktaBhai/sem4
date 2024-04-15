@@ -2,17 +2,17 @@
 
 \subsection{Two Necessary Conditions for Regular Languages} \label{sec:pumping_periodic}
 In a given DFA $\mcA$ with $n$ states,
-any path of length greater than $n$ must have a loop.
+any path of length greater than $n-1$ must contain a cycle.
 Let $u$ be the string of symbols on the path from the start state
-to the beginning of the loop,
-let $v$ be the (non-empty) string of symbols on the loop,
-and let $w$ be the string of symbols on the path from the end of the loop
+to the beginning of the cycle,
+let $v$ be the (non-empty) string of symbols on the cycle,
+and let $w$ be the string of symbols on the path from the end of the cycle
 to the final state.
 
 Then if $uvw$ is accepted by $\mcA$, then so is $uv^kw$ for any
 $k \geq 0$.
 
-\begin{theorem}[Pumping Lemma]
+\begin{theorem*}[Pumping Lemma]
     For any regular language $L$, there exists a constant $k$, such that
     for any word $t \in L$ of the form $xyz$ with $\abs{y} \ge k$, there
     exist strings $u$, $v$ and $w$ such that
@@ -20,7 +20,7 @@ $k \geq 0$.
         \item $y = uvw$, $v \ne \epsilon$, and
         \item $xu v^i wz \in L$ for each $i \ge 0$.
     \end{enumerate}
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Let $L$ be accepted by a DFA $\mcA = (Q, s, \delta, F)$ with $n$ states.
     Let $t$ be a word in $L$ of the form $xyz$ with $\abs{y} \ge n$.
@@ -43,7 +43,7 @@ $k \geq 0$.
             &= \what{\delta}\bigg(\what{\delta}(q_i, v^k), wz\bigg) \\
             &= \what{\delta}(q_i, wz) \\
             &= \what{\delta}\Big(\what{\delta}(s, xuv), wz\Big) \\
-            &= \what{\delta}(s, t).
+            &= \what{\delta}(s, t) \in F. \qedhere
     \end{align*}
 \end{proof}
 \begin{proposition}

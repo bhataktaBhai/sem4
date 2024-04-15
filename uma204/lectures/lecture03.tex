@@ -1,5 +1,5 @@
 \lecture{03}{Wed 03 Jan '24}{}
-\begin{definition}[Exponentiation] \label{def:exponentiation}
+\begin{definition*}[Exponentiation] \label{def:exponentiation}
     The recursion principle guarantees the existence of
     $\mathrm{pow} : \Z \times \N \to \N$ such that for all $n, m \in \N$,
     \begin{align*}
@@ -14,7 +14,7 @@
         \end{cases}
     \end{align*}
     We write $z^n$ to denote $\mathrm{pow}(z, n)$.
-\end{definition}
+\end{definition*}
 \begin{remark}
     Note that we have defined $0^0$ to be $1$, but we don't really care.
 \end{remark}
@@ -30,9 +30,9 @@
     Similarly if $-m \in \N$.
 \end{proof}
 
-\begin{theorem} \label{thm:Q:no_rational_square_root_of_2}
-    There exists no $x \in \Q$ such that $x^2 = 2$.
-\end{theorem}
+\begin{theorem*} \label{thm:Q:no_rational_square_root_of_2}
+    There is no rational whose square is $2$.
+\end{theorem*}
 We first make note of the following lemma.
 \begin{lemma} \label{thm:positive_denominator}
     Let $x \in \Q$.
@@ -72,9 +72,9 @@ We will make use of the well-ordered property of $(\N, \le)$ proved below in
     in contradiction to the minimality of $q_0$.
 \end{proof}
 
-\begin{theorem}[Well-ordering principle] \label{thm:well-ordering}
+\begin{theorem*}[Well-ordering principle] \label{thm:well-ordering}
     Every non-empty subset of $\N$ has a least element.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Let $S \subseteq \N$ be non-empty.
     We define $P(n)$ to be ``if $n \in S$, then $S$ has a least element''.
@@ -89,13 +89,13 @@ We will make use of the well-ordered property of $(\N, \le)$ proved below in
     In any case, $P(n+1)$ holds.
 \end{proof}
 
-\begin{theorem} \label{thm:Q:root2_approximation}
+\begin{theorem*} \label{thm:Q:root2_approximation}
     Let \begin{align*}
         A &= \set{x \in \Q \mid x^2 < 2} \\
         B &= \set{x \in \Q \mid x^2 > 2, x > 0}
     \end{align*}
     Then $A$ has no largest element and $B$ has no smallest element.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     Let $a \in A$.
     $a > -2$ since otherwise $a^2 \ge 4$.
@@ -113,9 +113,9 @@ We will make use of the well-ordered property of $(\N, \le)$ proved below in
     Thus $c \in B$.
 \end{proof}
 
-\begin{corollary} \label{thm:Q:no_lub}
+\begin{corollary*} \label{thm:Q:no_lub}
     $(\Q, \le)$ does not have the least upper bound property.
-\end{corollary}
+\end{corollary*}
 \begin{proof}
     Let $b$ be an upper bound of $A$.
     Clearly $b > 0$.
@@ -147,26 +147,10 @@ Similarly, infimum or greatest lower bound.
 $(X, \le)$ is said to have the least upper bound property if every non-empty
 bounded above subset of $X$ admits a supremum.
 
-\begin{proposition}
-    $(\Q, \le)$ does not have the least upper bound property.
-\end{proposition}
-\begin{proof}
-    From \cref{thm:Q:root2_approximation}, we know that $A$ has no largest element
-    and $B$ has no smallest element.
-
-    Let $s$ be a supremum of $A$.
-    Since there is no largest element in $A$, $s \notin A$.
-    From \cref{thm:Q:no_rational_square_root_of_2}, we know that $s^2 \ne 2$.
-    Thus by trichotomy, $s^2 > 2$ and so $s \in B$.
-    But then there is an $s' \in B$ which is less than $s$ but also an upper
-    bound of $A$.
-    This is a contradiction.
-\end{proof}
-
-\begin{theorem}
+\begin{theorem*}
     Every ordered field $F$ ``contains'' $\Q$, \ie, there exists an injective
     map $f : \Q \to F$ that respects $+$, $\cdot$ and $\le$.
-\end{theorem}
+\end{theorem*}
 We will notate this statement as $\Q \subseteq F$.
 \begin{proof}
     Let $f : \Z \to F$ be defined as \[
@@ -214,16 +198,39 @@ We will notate this statement as $\Q \subseteq F$.
     Suppose that $m < n$.
     Then $f(n) - f(m) = f(n) + f(-m) = f(n - m) = (n - m) 1_F$ (where
     $z 1_F$ is notation for $1_F$ added $z$ times).
-    $n - m$ is positive, but $1_F$ added to itself a positive number of times
-    must be positive.
-    This is because $0_F < 1_F$ (UMA101) and so $k 1_F < (k + 1) 1_F$ for all
-    $k \in \N^+$.
-    Induction gives $0_F < k 1_F$ for all $k \in \N^+$.
+    $n - m$ is positive, but $1_F$ added to itself a positive number of
+    times must be positive.
+    This is because $0_F < 1_F$ (UMA101) and so $k 1_F < (k + 1) 1_F$
+    for all $k \in \N^+$.
     Thus $f(m) < f(n)$ and so $f$ respects $<$ (and hence $\le$).
 
     Finally, injectivity of $f$ follows from order preservation.
 
     We extend $f$ to $\Q$ by defining $f(a/b) = f(a) f(b)^{-1}$.
     This continues to be an isomorphism.
-    % TODO
+
+    Why?
+    First note that \[
+        f(ka/kb) = f(ka) f(kb)^{-1} = f(k) f(a) (f(k) f(b))^{-1} = f(a)
+        f(b)^{-1} = f(a/b),
+    \] so that $f$ is well-defined.
+    Now \begin{align*}
+        f(a/b + c/d) &= f\paren*[\Big]{\frac{ad + bc}{bd}} \\
+                     &= f(ad + bc) f(bd)^{-1} \\
+                     &= (f(a) f(d) + f(b) f(c)) (f(b) f(d))^{-1} \\
+                     &= f(a) f(b)^{-1} + f(c) f(d)^{-1} \\
+                     &= f(a/b) + f(c/d)
+        \intertext{and}
+        f(a/b \cdot c/d) &= f(ac/bd) \\
+                     &= f(ac) f(bd)^{-1} \\
+                     &= f(a) f(b)^{-1} f(c) f(d)^{-1} \\
+                     &= f(a/b) f(c/d).
+    \end{align*}
+    Finally \begin{align*}
+        f(a/b) \le f(c/d) &\iff f(a) f(b)^{-1} \le f(c) f(d)^{-1} \\
+                        &\iff f(a) f(b) f(d)^2 \le f(c) f(d) f(b)^2 \\
+                        &\iff (f(ad) - f(bc)) f(b) f(d) \le 0 \\
+                        &\iff (ad - bc) bd \le 0 \\
+                        &\iff a/b \le c/d. \qedhere
+    \end{align*}
 \end{proof}

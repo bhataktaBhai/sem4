@@ -1,13 +1,18 @@
-\let\emph\textsl
 \input{~/IISc/sem4/preamble}
+\usepackage[makeroom]{cancel}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
-\newcommand*{\assignment}[2]{%
+\newcommand*{\assignment}[3]{%
     \stepcounter{assignment}%
-    \subsection{Assignment #1}
-    \marginpar{\raggedright\small{#2}}
-    \vskip 6pt
+    \pagebreak
+    \section*{Assignment #1}
+    \marginpar{\raggedright\small\textsf{#2}}
+    \input{#3}
+    \newpage
+    % indicate that the assignment is over
+    % \hrule
+    % \vspace{6pt}
 }
 \makeatletter
 \newcommand*{\refifdef}[3]{%label,command,fallback
@@ -17,3 +22,5 @@
 
 \newcommand\conj[1]{\overline{#1}}
 \newcommand\1{\bm{1}}
+\newcommand\unifto{\rightarrow}
+\newcommand\pwto{\xrightarrow{p.w.}}

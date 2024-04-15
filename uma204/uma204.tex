@@ -1,8 +1,7 @@
-\documentclass[12pt]{report}
+documentclass[12pt]{report}
+\renewcommand{\thechapter}{\Roman{chapter}}
 \input{preamble}
-\usepackage{geometry}
-\usepackage{showlabels}
-\geometry{a4paper, hmargin={0.5in, 2.5in}}
+\usepackage{docmute}
 
 \title{UMA204: Introduction to Basic Analysis}
 \author{Naman Mishra}
@@ -11,11 +10,14 @@
 \begin{document}
 \maketitle
 \tableofcontents
+% <lectures>
     \input{lectures/lecture01}
     \input{lectures/lecture02}
     \input{lectures/lecture03}
+    \assignment{1}{Quiz 12 Jan 2024}{assignments/assignment01}
     \input{lectures/lecture04}
     \input{lectures/lecture05}
+    \assignment{2}{Quiz 19 Jan 2024}{assignments/assignment02}
     \input{lectures/lecture06}
     \input{lectures/lecture07}
     \input{lectures/lecture08}
@@ -29,4 +31,23 @@
     \input{lectures/lecture16}
     \input{lectures/lecture17}
     \input{lectures/lecture18}
+    \assignment{5}{Quiz 1 Mar 2024}{assignments/assignment05}
+    \input{lectures/lecture19}
+    \input{lectures/lecture20}
+    \input{lectures/lecture21}
+    \input{lectures/lecture22}
+    \input{lectures/lecture23}
+    \input{lectures/lecture24}
+    \input{lectures/lecture25}
+    \input{lectures/lecture26}
+    \input{lectures/lecture27}
+    \input{lectures/lecture28}
+    \input{lectures/lecture29}
+    \input{lectures/lecture30}
+    \input{lectures/lecture31}
+    \input{lectures/lecture32}
+    \input{lectures/lecture33}
+    \input{lectures/lecture34}
+    \input{lectures/lecture35}
+% </lectures>
 \end{document}

@@ -1,0 +1,120 @@
+\section{Reductions} \label{sec:reductions}
+\lecture{23}{Tue 26 Mar '24}{Reductions and Rice's Theorems}
+\begin{definition}[Computable map] \label{def:reductions:computable_map}
+    A map $\sigma\colon A^* \to B^*$ is \emph{computable} if there exists a
+    Turing machine \mcM{} that, for every input $w \in A^*$,
+    halts with output $\sigma(w)$.
+\end{definition}
+\begin{definition*}[Reduction] \label{def:reduction}
+    Let $L \subseteq A^*$ and $M \subseteq B^*$ be languages.
+    We say that $L$ \emph{reduces} to $M$, denoted $L \le M$, if there
+    exists a computable map $\sigma\colon A^* \to B^*$ such that \[
+        w \in L \iff \sigma(w) \in M.
+    \]
+\end{definition*}
+\begin{examples}
+    \item Let $L = 2\N$ and $L' = \set{x\#y\#m \mid x \equiv y \pmod m}$.
+    Then $L \le L'$ via the computable map $n \mapsto n\#2\#0$.
+
+    Is $L' \le L$? Yes!
+    $L'$ is computable, so we can simply take the computable map \[
+        w \mapsto \begin{cases}
+            0 & \text{if } w \in L', \\
+            1 & \text{otherwise}.
+        \end{cases}
+    \]
+    \item Let $L = \set{M \mid M \text{ accepts } \epsilon}$.
+    Then $\HP \le L$ by \cref{thm:decidability:epsilon}, where the map is
+    $\enc(M)\#x \mapsto \enc(P_{M,x})$. \\
+    $L \le \HP$ by the map $\enc(M) \mapsto \enc(M)\#$.
+\end{examples}
+
+\begin{theorem*} \label{thm:reductions:recursion}
+    Let $L \le M$.
+    \begin{enumerate}
+        \item If $M$ is recursively enumerable, then so is $L$.
+        \item If $M$ is recursive, then so is $L$.
+    \end{enumerate}
+\end{theorem*}
+\begin{proof}
+    For each case, let $\mcM$ be a Turing machine that accepts/deicdes $M$.
+
+    Let $\sigma\colon A^* \to B^*$ be the computable map such that $w \in L
+    \iff \sigma(w) \in M$, computed by a Turing machine $\Sigma$.
+
+    Define the Turing machine $\mcL$ that first simulates $\Sigma$
+    on input $w$, and then simulates $\mcM$ on $\sigma(w)$.
+\end{proof}
+
+\begin{exercise}
+    Show that the language \[
+        L = \set{M \mid M \text{ accepts a regular language}}
+    \] is not recursively enumerable.
+\end{exercise}
+\begin{solution}
+    We will show that $\neg\HP \le L$.
+    Use the computable map $M\#x \mapsto Q_{M,x}$, where $Q_{M,x}$ does the
+    following:
+    \begin{itemize}
+        \item First simulate $M$ on $x$.
+        \item If $M$ halts, check if the input is of the form $a^n b^n$.
+    \end{itemize}
+    Then \[
+        L(Q_{M,x}) = \begin{cases}
+            \O & \text{if } M \text{ does not halt on } x, \\
+            \set{a^n b^n} & \text{if } M \text{ halts on } x.
+        \end{cases}
+    \]
+    Then $M\#x \in \neg\HP \iff Q_{M,x} \in L$ so $\neg\HP \le L$.
+    Since $\neg\HP$ is not recursively enumerable, neither is $L$.
+
+    This is heavily inspired by \cref{thm:decidability:regular}.
+\end{solution}
+
+\begin{definition}[Properties] \label{def:reductions:prop}
+    A \emph{property} $P$ of languages over an alphabet $A$ is a subset
+    of languages over $A$.
+
+    A property $P$ is \emph{trivial} if $P = \O$ or $P = \set{A^*}$.
+\end{definition}
+\begin{examples}
+    \item ``is empty'' is non-trivial.
+    \item ``contains $\epsilon$'' is non-trivial.
+    \item ``is accepted by a TM'' is non-trivial.
+\end{examples}
+
+A non-trivial property of r.e. languages is any property $P$ such that
+$P$ contains at least one r.e. language and at least one non-r.e. language.
+
+From now on, ``trivial'' will mean ``trivial with respect to recursively
+enumerable languages''.
+\begin{examples}
+    \item ``is empty'' is non-trivial.
+    \item ``contains $\epsilon$'' is non-trivial.
+    \item ``is accepted by a TM'' is trivial, since each recursively
+    enumerable language is by definition accepted by a TM.
+    So $P = \RE$.
+\end{examples}
+
+\begin{definition}[Monotonicity] \label{def:monotonicity}
+    A property $P$ is \emph{monotone} (with respect to $\RE$) if for all
+    languages $L, L'$, \[
+        L \subseteq L' \implies L \in P \implies L' \in P.
+    \]
+\end{definition}
+\begin{examples}
+    \item ``is infinite'' is monotone.
+    \item ``is finite'' is not monotone.
+\end{examples}
+
+\begin{definition}
+    For a property $P$, we define \[
+        L_P = \set{\enc(M) \mid L(M) \in P}.
+    \]
+\end{definition}
+\begin{theorem*}[Rice 1953] \label{thm:rice}
+    Any non-trivial property of recursively enumerable languages is
+    undecidable.
+    That is, if $P$ is a non-trivial property of r.e. languages, then
+    $L_P$ is undecidable.
+\end{theorem*}

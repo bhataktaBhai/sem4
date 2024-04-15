@@ -1,0 +1,90 @@
+\begin{proof}
+\lecture{20}{Wed 28 Feb '24}{}
+    Let the SOPS of the two series be $(S_n)_{n \ge 1}$ and
+    $(T_n)_{n \ge 1}$ respectively.
+    Note that we only need to show that $(S_n)_n$ is bounded above iff
+    $(T_n)_n$ is.
+
+    Let $k$ and $n$ be such that $n \le 2^k$.
+    Then \begin{align*}
+        S_n &= a_1 + a_2 + a_3 + \dots + a_n \\
+        &\le a_1 + (a_2 + a_3) + \dots + (a_{2^k} + \dots + a_{2^{k+1}-1}) \\
+        &\le a_1 + 2a_2 + \dots + 2^k a_{2^k} \\
+        &= T_{k}
+    \end{align*}
+    Thus if $(T_n)_n$ is bounded then so is $(S_n)_n$.
+
+    Now let $2^k < n$.
+    Then \begin{align*}
+        S_n &= a_1 + a_2 + a_3 + \dots + a_n \\
+           &\ge a_1 + a_2 + a_3 + \dots a_{2^k} \\
+           &= a_1 + a_2 + (a_3 + a_4) + \dots + (a_{2^{k-1}+1} + a_{2^k}) \\
+           &\ge a_1/2 + a_2 + 2 a_4 + \dots + 2^{k-1} a_{2^k} \\
+           &= \frac12 (a_1 + 2 a_2 + 4 a_4 + \dots 2^k a_{2^k}) \\
+           &= T_k
+    \end{align*}
+    Thus if $(S_n)_n$ is bounded then so is $(T_n)_n$.
+\end{proof}
+\begin{corollary}
+    $\sum_{n=1}^{\infty} \frac1{n^p}$ is convergent iff $p > 1$.
+\end{corollary}
+\begin{proof}
+    If $p \le 0$, $\frac1{n^p} \not\to 0$, so the series cannot converge.
+    If $p > 0$, then $\frac1{n^p}$ is decreasing and non-negative, so
+    by the Cauchy condensation test, this converges iff
+    $\sum_{n=1}^{\infty} 2^n \frac1{(2^n)^p}$ converges.
+    But this is a geometric series with ratio $2^{1 - p}$.
+    This converges iff $2^{1-p} < 1 \iff p > 1$.
+\end{proof}
+
+\begin{corollary}
+    $\sum_{n=2}^{\infty} \frac1{n(\log n)^p}$ converges iff $p > 1$.
+\end{corollary}
+\begin{proof}
+    If $p \le 0$, then the series is bounded below by $\frac1n$ for
+    $n \ge 3$.
+    So by the comparison test, the series diverges.
+
+    For $p > 0$, the terms are decreasing and non-negative.
+    $\sum_{n=1}^{\infty} \frac{2^n}{2^n n^p (\log 2)^p}$ converges iff
+    $p > 1$ by the previous corollary.
+\end{proof}
+
+Recall that in UMA101 we defined $e$ as $\sum_{n=0}^{\infty} \frac1{n!}$.
+\begin{theorem}
+    $e = \lim_{n \to \infty} \left(1 + \frac1n\right)^n$.
+\end{theorem}
+\begin{proof}
+    Let $s_n = \sum_{j=0}^{n} \frac1{j!}$ and
+    $t_n = \left(1 + \frac1n\right)^n$.
+    \begin{align*}
+        t_n  &= \sum_{j=0}^{n} \binom{n}{j} \frac1{n^j} \\
+            &= \sum_{j=0}^{n} \frac1{j!} \frac{n(n-1)\dots(n-j+1)}{n^j} \\
+            &= 1 + 1 + \frac1{2!} \left(1 - \frac1n\right)
+                + \frac1{3!} \left(1 - \frac1n\right)\left(1 - \frac{2}{n}\right) + \dots + \\
+            &\qquad \frac1{n!} \left(1 - \frac1n\right) \ldots \left(1 - \frac{n-1}{n}\right)
+    \end{align*}
+    which clearly shows that $t_n \le s_n$ so
+    $\limsup_{n \to \infty} t_n \le e$.
+
+    Fix $m \in \N$.
+    For all $n \ge m \ge 3$, \begin{align*}
+        \liminf_{n \to \infty}
+            &\ge 1 + 1 + \frac1{2!} \left(1 - \frac1n\right) + \dots + \\
+            &\qquad\frac1{m!} \left(1 - \frac1n\right)\left(1 - \frac{2}{n}\right)\dots \left(1-\frac{m-1}{n}\right)\\
+            &\hspace{-2em}\xrightarrow[m \text{ fixed}]{n \to \infty} 1 + 1 + \frac1{2!} + \dots + \frac1{m!} \\
+            &= S_m
+    \end{align*}
+    As $m \to \infty$, \[
+        \liminf_{n \to \infty} t_n \ge \lim_{m \to \infty} S_m = e
+    \]
+\end{proof}
+
+\begin{definition*}[Formal power series] \label{def:fps}
+    Let $(c_n)_{n \in \N} \subseteq \C$.
+    Then the formal sum \[
+        \sum_{n=0}^{\infty} c_n z^n
+    \] is called a \emph{power series}.
+    Here, $z$ is an arbitrary complex number, and the convergence of this
+    series depends on $z$.
+\end{definition*}

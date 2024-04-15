@@ -1,35 +1,35 @@
 \documentclass[12pt]{article}
 \input{../preamble}
 
-\title{Assignment 3}
+\title      {Assignment 3}
 \setcounter{assignment}{3}
+\setcounter   {section}{3}
 \author{Naman Mishra}
 \date{25 January, 2024}
 
 \begin{document}
 \maketitle
-\begin{problem} \end{problem}
+\begin{problem*}
+\end{problem*}
 
-\begin{solution}[A]
+\begin{solution}[Case 1]
     Let $b > 1$ and $n > 0$.
     Let $B = \set{t \in \R : t > 0, t^n < b}$.
+    $B$ is non-empty since $1 \in B$.
+    \\
     Since $b > 1$, $b^n > b$.
-    Moreover, since $x < y \implies x^n < y^n$, where $x$ and $y$ are
-    positive, we have that $b$ is an upper bound for $B$.
-    By definition of $B$, $1 \in B$.
-    Thus $B$ has a supremum.
-
-    Now if $u < v$ are positive real numbers, then $u^n < v^n$.
-    Thus there can be at most one positive $t$ such that $t^n = b$.
+    Moreover, since $0 < x < y \implies x^n < y^n$,
+    we have that $B$ is bounded above by $b$.
+    Thus $b$ has a supremum.
 
     We now show that $(\sup B)^n = b$.
     For this we show that $B$ has no largest element.
-    For any $u \in B$, let $\delta = \min\set{\frac{b-u^n}{2^n}, 1}$.
+    For any $u \in B$, let $\delta = \min\set{\frac{b - u^n}{2^n u^n}, 1}$.
     Then \begin{align*}
     (u(1 + \delta))^n
         &= u^n (1 + n \delta + \dots + \delta^n) \\
-        &= u^n + \delta \sum_{j=1}^{n} \binom{n}{j} \\
-        &< u^n + 2^n \delta \\
+        &\le u^n \paren{1 + \delta \sum_{j=1}^{n} \binom{n}{j}} \\
+        &< u^n + 2^n u^n \delta \\
         &\le u^n + b - u^n \\
         &= b
     \end{align*}
@@ -37,16 +37,85 @@
 
     This implies that $\sup B \notin B$.
     Now let $u = \sup B$ and suppose $u^n > b$.
-    Let \begin{align*}
-        v   &= u + \frac{u^n - b}{nb + u^{n-1}} \\
-            &= \frac{nbu + b}{nb + u^{n-1}}
-        \shortintertext{as before. Then $0 < v < u$ and}
-        v^n - b
-            &= \frac{(nbu + b)^n - b(nb + u^{n-1})^n}{(nb + u^{n-1})^n} \\
-            &> \frac{(nbu + b)^n - (nbu + u^n)^n}{(nb + u^{n-1})^n} \\
-            &> 0
+    Let $\delta = \min\set{\frac{u^n - b}{2^n u^n}, 1}$.
+    Then \begin{align*}
+    (u(1 - \delta))^n
+        &\ge u^n (1 - n \delta) \\
+        &\ge u^n - 2^n u^n \delta \\
+        &= b.
     \end{align*}
-    But since $x \mapsto x^n$ is 
+    Thus $u(1 - \delta)$ is an upper bound of $B$ less than $u$.
+    This contradicts that $u$ is the supremum.
+
+    Thus, $(\sup B)^n = b$.
+    Using $0 < x < y \implies x^n < y^n$, we have that $\sup B$ is the
+    only positive real number whose $n$-th power is $b$,
+    so $t^n = b \implies t = \sup B$.
+\end{solution}
+\begin{solution}[Case 2]
+    Let $mq = np$.
+    For $b$ and $t$ positive,
+    \begin{align*}
+        t^n < b^m
+            &\implies t^{np} < b^{mp} \\
+            &\implies t^{mq} < b^{mp} \\
+            &\implies (t^q)^m < (b^p)^m \\
+            &\implies t^q < b^p.
+    \end{align*}
+    The last implication may seem hairy, but it also follows directly from
+    $0 < x < y \implies x^m < y^m$.
+    Similarly, \[
+        t^q < b^p \implies t^n < b^m.
+    \] Thus \[
+        \sup\set{t \in \R : t > 0, t^n < b^m}
+            = \sup\set{t \in \R : t > 0, t^q < b^p}.
+    \]
+
+    For the rest of the proof, we can give up.
+\end{solution}
+
+\begin{problem*}
+    Given $x = (x_1, \dots, x_n) \in \R^n$ and $p > 0$, define \[
+        \norm{x}_p = \paren*[\bigg]{\sum_{i=1}^{n} \abs{x_i}^p}^{1/p}
+        \mkern-18mu.
+    \]
+    \begin{enumerate}[label=(\alph*)]
+        \item Show that if $p, q > 1$ satisfy $\frac1p + \frac1q = 1$, then
+        \[
+            \sum_{i=1}^{n} \abs{x_i y_i} \le \norm{x}_p \norm{y}_q,
+            \quad \forall x, y \in \R^n.
+        \] You may directly use Young's inequality: if $a, b \ge 0$, then
+        $ab \le \frac{a^p}{p} + \frac{b^q}{q}$.
+        \item Let $d_p(x, y) = \norm{x - y}_p$, $x, y \in \R^n$.
+        Show that $(\R^n, d_p)$ is a metric space if $p \ge 1$.
+        \item Show that $(\R^n, d_p)$ is not a metric space if
+        $p \in (0, 1)$.
+    \end{enumerate}
+\end{problem*}
+\begin{lemma}[Young's inequality] \label{thm:young}
+    Let $p, q > 1$ satisfy $\frac1p + \frac1q = 1$.
+    Then for $a, b \ge 0$, $ab \le \frac{a^p}{p} + \frac{b^q}{q}$.
+\end{lemma}
+\begin{proof}
+    
+\end{proof}
+
+\begin{solution} \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item Apply Young's inequality on $\frac{\abs{x_i}}{\norm{x}_p}$
+        and $\frac{\abs{y_i}}{\norm{y}_q}$.
+        Then \begin{align*}
+            \sum_{i=1}^{n} \frac{\abs{x_i y_i}}{\norm{x}_p \norm{y}_q}
+                &\le \sum_{i=1}^{n} \paren*[\bigg]{
+                    \frac1p \frac{\abs{x_i}^p}{\norm{x}_p^p}
+                    + \frac1q \frac{\abs{y_i}^q}{\norm{y}_q^q}
+                } \\
+                &= \frac1p \sum_{i=1}^{n} \frac{\abs{x_i}^p}{\norm{x}_p^p}
+                + \frac1q \sum_{i=1}^{n} \frac{\abs{y_i}^q}{\norm{y}_q^q} \\
+                &= \frac1p + \frac1q \\
+                &= 1.
+        \end{align*}
+    \end{enumerate}
 \end{solution}
 
 \end{document}

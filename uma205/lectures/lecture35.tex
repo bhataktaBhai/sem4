@@ -1,0 +1,112 @@
+\lecture{35}{Fri 05 Apr '24}{}
+\begin{proposition}
+    Let $N \le G$.
+    Then the set of left cosets partitions $G$.
+    Moreover, $uN = vN$ iff $u^{-1}v \in N$,
+    and $uN = vN$ iff $u$ and $v$ represent the coset.
+\end{proposition}
+\begin{proof}
+    Since $N \le G$, $e \in N$ and so $g = g \cdot 1 \in g N$.
+    Thus $G = \bigcup_{g \in G} gN$.
+
+    Suppose $u, v \in G$ such that $uN \cap vN \ne \O$.
+    Let $x = um = vn$ be an element of the intersection.
+    Then $u = vnm^{-1}$, so $uN \subseteq vN$.
+    Similarly, $vN \subseteq uN$, so that $uN = vN$.
+
+    Thus the set of left cosets $\set{gN \mid g \in G}$ is a partition of
+    $G$.
+
+    Now $uN = vN \iff um = vn \iff u^{-1}v = mn^{-1} \in N$.
+
+    Finally, $v \in uN$ means that $v$ is a representative for $uN$.
+    So $vN = uN$.
+    Thus they both represent the same coset.
+\end{proof}
+
+\begin{definition*}[Normal] \label{def:group:normal}
+    The element $gng^{-1}$ is called the \emph{conjugate} of $n$ by $g$,
+    and $gNg^{-1} = \set{gng^{-1} \mid n \in N}$ is called the conjugate
+    of $N$ by $g$.
+
+    The element $g$ is said to \emph{normalize} $N$ if $gNg^{-1} = N$.
+    A subgroup $N$ is said to be \emph{normal} if every $g \in G$
+    normalizes $N$.
+    We write $N \nsub G$.
+\end{definition*}
+\begin{proposition}
+    Let $G$ be a group and $N \le G$.
+    Then
+    \begin{enumerate}
+        \item The operation $(uN) \cdot (vN) = (uv)N$ is well-defined iff
+            $N$ is normal in $G$.
+        \item If so, the set of left cosets form a group with the above
+            product, with identity $eN$ and inverse $(gN)^{-1} = g^{-1}N$.
+    \end{enumerate}
+\end{proposition}
+\begin{proof} \leavevmode
+    \begin{enumerate}
+        \item Suppose the product is well-defined.
+        That is, for any $u' \in uN$ and $v' \in vN$,
+        we have $u'v' \in uvN$.
+
+        Let $g \in G$ and $n \in N$.
+        Taking the product of $eN$ with $gN$, we have
+        $ng \in gN \implies g^{-1}ng \in N$.
+
+        Now suppose $N$ is normal in $G$.
+        Then $g^{-1}ng \in N$ for all $g \in G$ and $n \in N$.
+
+        Let $u' = um$, $v' = vn$, $m, n \in N$.
+        Then \[
+            u'v' = umvn = uv(v^{-1}mvm) = uv(m'm) \in uvN
+        \] since $v^{-1}mv = m' \in N$.
+        \item Associativity follows from the associativity of $G$.
+        Identity is borrowed from $G$.
+        Inverse is borrowed from $G$. \qedhere
+    \end{enumerate}
+\end{proof}
+\begin{example}
+    If $G$ is abelian, then every subgroup is normal.
+    So $G/N$ is the quotient group for any $N \le G$.
+\end{example}
+
+\begin{theorem}
+    Let $N \le G$.
+    Then the following are equivalent.
+    \begin{enumerate}
+        \item $N \nsub G$.
+        \item $N_G(N) = G$, where $N_G(N)$ is the set of normalizers
+            of $N$ in $G$.
+        \item $gN = Ng$ for all $g \in G$.
+        \item The multiplication of left cosets makes $G/N$ a group.
+        \item $gNg^{-1} \subseteq N$ for all $g \in G$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proposition}
+    $N \le G$ is normal iff it is the kernel of some homomorphism.
+\end{proposition}
+\begin{proof}
+    We have shown that left and right cosets are equal for kernels of
+    homomorphisms.
+    This gives that kernels are normal subgroups.
+
+    Conversely, suppose $N \nsub G$.
+    Let $H = G/N$.
+    Define $\pi\colon G \to H$ by $\pi(g) = gN$.
+    Then $\pi$ is a homomorphism.
+
+    What is the kernel of $\pi$?
+    \begin{align*}
+        \ker \pi &= \set{g \in G \mid \pi(g) = eN} \\
+               &= \set{g \in G \mid gN = N} \\
+               &= \set{g \in G \mid g \in N} = N. \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{definition}
+    Let $N \le G$.
+    The homomorphism $g \mapsto gN$ is the \emph{natural projection}
+    of $G$ onto $G/N$.
+\end{definition}

@@ -1,6 +1,5 @@
-\lecture{07}{Wed 17 Jan '24}{}
-
 \section{The Complex Numbers} \label{sec:C}
+\lecture{07}{Wed 17 Jan '24}{}
 \begin{definition}
     A \emph{complex number} is an ordered pair of real numbers.
     We define operations on the set $\C$ of complex numbers as follows.
@@ -34,11 +33,11 @@ This allows us to identify $x \in \R$ with $(x, 0) \in \C$.
 \end{remark}
 
 \begin{theorem}[Cauchy-Schwarz inequality] \label{thm:C:cs}
-    Let $a_1, a_2, \dots, a_n$ and $b_1, b_2, \dots, b_n$ be real numbers.
+    Let $a_1, \dots, a_n$ and $b_1, \dots, b_n$ be complex numbers.
     Then \[
         \Big\lvert\sum_{j=1}^n a_j \conj{b_j}\Big\rvert^2
             \le \Big(\sum_{j=1}^n \abs{a_j}^2\Big)
-                \Big(\sum_{j=1}^n \abs{b_j}^2\Big).
+              \Big(\sum_{j=1}^n \abs{b_j}^2\Big).
     \]
 \end{theorem}
 \begin{proof}
@@ -68,10 +67,8 @@ This allows us to identify $x \in \R$ with $(x, 0) \in \C$.
 \end{proof}
 
 \chapter{Metric Spaces} \label{chp:metric}
-
 \section{Definitions \& examples} \label{sec:defn}
-
-\begin{definition} \label{def:metric}
+\begin{definition*} \label{def:metric}
     A \emph{metric space} is a pair $(X, d)$ consisting of a set $X$ and a
     ``distance function'' $d\colon X \times X \to [0, \infty)$ such that
     \begin{enumerate}[label=\small(M\arabic*)]
@@ -80,7 +77,7 @@ This allows us to identify $x \in \R$ with $(x, 0) \in \C$.
         \item $d(x, z) \le d(x, y) + d(y, z)$ (triangle inequality).
             \label{def:metric:triangle}
     \end{enumerate}
-\end{definition}
+\end{definition*}
 \begin{examples}
     \item $X = \R$, $d(x, y) = \abs{x - y}$.
     \item (Real Euclidean space) $X = \R^n$.
@@ -98,12 +95,12 @@ This allows us to identify $x \in \R$ with $(x, 0) \in \C$.
     restriction of $d$ to $Y \times Y$ is a distance on $Y$.
 \end{examples}
 
-\begin{proposition}
+\begin{proposition*}
     Given $a, b \in \R^n$, \[
         \big\lvert\norm{a} - \norm{b}\big\rvert
             \le \norm{a + b} \le \norm{a} + \norm{b}.
     \]
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     From Cauchy-Schwarz, \begin{align*}
         \norm{a + b}^2 &= \innerp{a + b}{a + b} \\

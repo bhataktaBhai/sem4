@@ -1,0 +1,81 @@
+\documentclass[12pt]{article}
+\input{../preamble}
+
+\title{Lecture 28 -- Questions}
+\setcounter{assignment}{28}
+\author{Naman Mishra}
+\date{23 March, 2024}
+
+\begin{document}
+\maketitle
+
+\begin{problem*}
+    Construct a function $f\colon (-1, 1) \to \R$ such that $f$ is
+    differentiable on $(-1, 1)$, $f'(0) > 0$, but $f$ is not monotone in
+    any neighbourhood of $0$.
+\end{problem*}
+\begin{solution}
+    \[
+        f(x) = \begin{cases}
+            \frac12 x + x^2\sin\left(\frac{1}{x}\right) & x \neq 0, \\
+            0 & x = 0.
+        \end{cases}
+    \] Then for $x \ne 0$, \[
+        f'(x) = \frac12 + 2x \sin \frac1x - \cos \frac1x,
+    \] and $f'(0) = \frac12$.
+
+    $f$ is differentiable everywhere, so if it is monotone on an interval,
+    $f'$ must have the same sign on that interval.
+
+    But for each $x_n = \frac1{2n\pi} \xrightarrow{n \to \infty} 0$,
+    $f'(x_n) < 0$.
+    So no neighbourhood of $0$ can contain only positive values of $f'$.
+\end{solution}
+
+\begin{problem*}
+    Let $f\colon (a, b) \to \R$ be differentiable and monotonically
+    increasing.
+    Suppose \[
+        Z = \set{x \in (a, b) : f'(x) = 0}
+    \] does not have any limit points in $(a, b)$.
+    Is $f$ necessarily strictly increasing on $(a, b)$?
+\end{problem*}
+\begin{solution}
+    Obviously?
+    Suppose it is only weakly increasing, that is,
+    there exist $x_1 < x_2$ such that $f(x_1) = f(x_2)$.
+    Since it is increasing, $f$ is constant on $[x_1, x_2]$ and
+    $f'$ is $0$ on $(x_1, x_2)$.
+    Then $x_1$ is a limit point of $Z$.
+\end{solution}
+
+\begin{problem*}
+    Is there a differentiable function $f\colon \R \to \R$ such that
+    $f'$ vanishes only on the rationals?
+\end{problem*}
+
+\begin{problem*}
+    Construct three functions $f, g, h\colon \R \to \R$ such that
+    \begin{enumerate}
+        \item they are continuous on $[0, 1]$,
+        \item they are differentiable on $(0, 1)$, and
+        \item there is no $c \in (0, 1)$ for which the vectors \[
+            (f'(c), g'(c), h'(c))
+            \quad \text{and} \quad
+            (f(1) - f(0), g(1) - g(0), h(1) - h(0))
+        \] are linearly dependent in $\R^3$.
+    \end{enumerate}
+\end{problem*}
+\begin{solution}
+    Take the helix \[
+        f(x) = x, \quad
+        g(x) = \cos 2\pi x, \quad
+        h(x) = \sin 2\pi x.
+    \] Then \[
+        (f', g', h')(c) = (1, -2\pi \sin 2\pi c, 2\pi \cos 2\pi c)
+    \] and \[
+        (f, g, h)(1) - (f, g, h)(0) = (1, 0, 0).
+    \] But both $g'(c)$ and $h'(c)$ cannot be $0$ simultaneously.
+\end{solution}
+
+\end{document}

@@ -1,0 +1,66 @@
+\lecture{19}{Thursday 14 Mar '24}{Consistency, Normality, Efficiency and Bias}
+
+\begin{definition}[Consistency] \label{def:mle:consistency}
+    A sequence of estimators $\what{\theta}_n$ for a parameter $\theta$
+    is said to be \emph{consistent} if \[
+        \what{\theta}_n \pto \theta.
+    \] That is, for any $\epsilon > 0$, \[
+        \lim_{n \to \infty}
+            \Pr\Big(\big|{\what{\theta}_n - \theta}\big| < \epsilon \Big)
+        = 1.
+    \]
+\end{definition}
+
+\begin{theorem}[Central limit theorem] \label{thm:mle:clt}
+    Let $X_1, X_2, \ldots$ be i.i.d. random variables with mean $\mu$
+    and variance $\sigma^2$.
+    Then \[
+        \frac{\sum_{i=1}^n (X_i - \mu)}{\sigma \sqrt{n}}
+        \dto N(0, 1).
+    \]
+\end{theorem}
+
+Let $X_i$s be distributed according to the pmf/pdf $f_{\theta_0}(x)$, where
+$f$ can be parameterized by $\theta$ and $\theta_0$ is the true parameter.
+
+Recall the log-likelihood function \[
+    \ell(\theta) = \sum_{i=1}^n \log f_\theta(X_i).
+\] By the law of large numbers, \[
+    \frac1n \ell(\theta)
+        \pto \E[\log f_\theta(X_i)] \quad\text{if it exists.}
+\] This expectation is under the true parameter $\theta_0$.
+
+Thus \begin{align*}
+    \frac1n \ell(\theta) - \frac1n \ell(\theta_0)
+        &\pto \E_{\theta_0}\left[\log \frac{f_\theta(X_i)}{f_{\theta_0}(X_i)}\right] \\
+        &= \kld{f_{\theta_0}}{f_\theta} \\
+        &\ge 0,
+\end{align*} where the equality holds iff $f_{\theta_0}(X) = f_\theta(X)$
+almost everywhere.
+Thus \[
+    \argmax_\theta \ell(\theta)
+        \pto \theta_0.
+\]
+
+\section{How Good is This Convergence?} \label{sec:mle:convergence}
+In this section we redefine
+\begin{definition}[Log-likelihood] \label{def:mle:log-likelihood}
+    The \emph{log-likelihood} function is \[
+        \ell_n(\theta) = \frac1n \sum_{i=1}^n \log f_\theta(X_i).
+    \]
+\end{definition}
+for convenience.
+
+\begin{definition}[Score function] \label{def:mle:convergence:score}
+    Given a probability mass/density function $f_\theta(x)$,
+    where $\theta \in \R^d$ is the parameter, the \emph{score function} is
+    \[
+        z_\theta(x) = \pdv{\theta} \log f_\theta(x)
+               = \frac1{f_\theta(x)} \pdv{f_\theta(x)}{\theta}.
+    \]
+\end{definition}
+Let $Z_x(\theta) = z_\theta(x)$ be thrice differentiable in $\theta$.
+Then \[
+    Z_x(\theta) = Z_x(\theta_0) + Z'_x(\theta_0)(\theta - \theta_0)
+        + \frac12 Z''_x(\theta_0)(\theta - \theta_0)^2
+\]

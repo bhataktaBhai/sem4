@@ -1,0 +1,135 @@
+\lecture{26}{Wed 13 Mar '24}{}
+\begin{theorem} \label{thm:cont:compact_uniform}
+    Let $f\colon X \to Y$ be continuous on a compact set $X$.
+    Then $f$ is uniformly continuous.
+\end{theorem}
+\begin{proof}
+    Let $\varepsilon > 0$ be given.
+    For each $x \in X$, choose $\delta_x > 0$ such that
+    $f(B_X(x; \delta_x)) \subseteq B_Y(f(x); \varepsilon)$.
+    The collection $\set{B_X(x; \frac12 \delta_x)}_{x \in X}$ is an open
+    cover of $X$.
+    Since $X$ is compact, only finitely many of these are needed to cover
+    $X$.
+    Label the centers $x_1, \dots, x_n$ and the corresponding radii
+    $\frac{\delta_1}{2}, \dots, \frac{\delta_n}{2}$.
+    Let $\delta > 0$ be the smallest of these radii.
+
+    Let $p, q \in X$ be such that $d_X(p, q) < \delta$.
+    Then there exists an $i$ such that $d_X(p, x_i) < \frac{\delta_i}{2}$.
+    But $d_X(p, q) < \delta < \frac{\delta_i}{2}$,
+    so $d_X(q, x_i) < \delta_i$ by the triangle inequality.
+
+    Thus $f(p)$ and $f(q)$ are both at most $\varepsilon$ away from
+    $f(x_i)$, so they are at most $2\varepsilon$ away from each other.
+
+    Thus for any $2\varepsilon > 0$, we have produced a $\delta > 0$ such
+    that any points within $\delta$ of each other are mapped to points
+    within $2\varepsilon$ of each other.
+\end{proof}
+
+\begin{theorem} \label{thm:cont:connected}
+    Continuous functions map connected sets to connected sets.
+\end{theorem}
+\begin{proof}
+    Let $X$ be connected and $f\colon X \to Y$ continuous.
+    Suppose $f(X)$ is not connected.
+    That is, there exist nonempty sets $A, B \subseteq f(X)$ such that
+    $A \cup B = f(X)$ and $\wbar{A} \cap B = A \cap \wbar{B} = \O$.
+
+    Let $A_* = f^{-1}(A)$ and $B_* = f^{-1}(B)$.
+    They are nonempty since $A$ and $B$ are nonempty and in the range.
+    Also,
+    $X = f^{-1}(f(X)) = f^{-1}(A \cup B) = f^{-1}(A) \cup f^{-1}(B)$.
+    So $A_*$ and $B_*$ cover $X$.
+
+    Recall that $f$ is continuous implies that the preimage of a closed
+    set is closed.
+    $A_* = f^{-1}(A) \subseteq f^{-1}(\wbar{A})$, so
+    $\wbar{A_*} \subseteq f^{-1}(\wbar{A})$.
+
+    Then \begin{align*}
+        \wbar{A_*} \cap B_* &\subseteq f^{-1}(\wbar{A}) \cap f^{-1}(B) \\
+        &\subseteq f^{-1}(\wbar{A} \cap B) \\
+        &= f^{-1}(\O) = \O.
+    \end{align*}
+    Similarly, $A_* \cap \wbar{B_*} = \O$.
+
+    Thus $A_*$ and $B_*$ are a separation of $X$, contradicting the
+    connectedness of $X$.
+\end{proof}
+
+\section{Discontinuities} \label{sec:cont:dis}
+\begin{examples}
+    \item The \emph{Heaviside function} defined by \[
+        H(x) = \begin{cases}
+            1 & \text{if } x \ge 0, \\
+            0 & \text{if } x < 0.
+        \end{cases}
+    \]
+    \item The \emph{sign function} defined by \[
+        \sgn(x) = \begin{cases}
+            \hphantom{-}1  & \text{if } x > 0, \\
+            \hphantom{-}0  & \text{if } x = 0, \\
+            -1 & \text{if } x < 0.
+        \end{cases}
+    \]
+    \item \[
+        f(x) = \begin{cases}
+            \frac{3x - x^2}{x(x^2 + 2)} & \text{if } x \ne 0, \\
+            0 & \text{if } x = 0.
+        \end{cases}
+    \]
+    \item \[
+        f(x) = \begin{cases}
+            \frac1{x} & \text{if } x \ne 0, \\
+            0 & \text{if } x = 0.
+        \end{cases}
+    \]
+    \item \[
+        f(x) = \begin{cases}
+            \sin\frac1x & \text{if } x \ne 0, \\
+            0 & \text{if } x = 0.
+        \end{cases}
+    \]
+    \item The \emph{Dirichlet function} \[
+        f(x) = \begin{cases}
+            1 & \text{if } x \in \Q, \\
+            0 & \text{otherwise}
+        \end{cases} = \bm{1}_{\Q}.
+    \] This is discontinuous \emph{everywhere}.
+\end{examples}
+
+\begin{definition}
+    Given $f\colon (a, b) \to \R$ and $c \in (a, b)$, we say that
+    \begin{enumerate}
+        \item $f$ has a \emph{simple discontinuity} or a \emph{discontinuity
+            of the first kind} at $c$ if the left-hand and right-hand limits
+            $\lim_{x \to c^-} f(x)$ and $\lim_{x \to c^+} f(x)$ exist but
+            are either unequal, or unequal to $f(c)$.
+        \item $f$ has a \emph{discontinuity of the second kind} at $c$ if
+            either the left-hand or right-hand limit does not exist.
+    \end{enumerate}
+\end{definition}
+
+The first three examples above have simple discontinuities at $0$.
+The last three have discontinuities of the second kind.
+The third example has a \emph{removable} discontinuity at $0$, since
+both one-sided limits exist and are equal.
+
+\begin{theorem}
+    Monotone functions do not have discontinuities of the second kind.
+\end{theorem}
+\begin{corollary}
+    Monotone functions have at most countably many discontinuities.
+\end{corollary}
+
+\begin{example}
+    Discontinuities of monotone functions can be dense.
+
+    Let $D \subseteq (0, 1)$ be a dense countable set.
+    Let $\set{x_1, x_2, \dots}$ be an enumeration.
+    Define \[
+        f(x) = \sum_{n : x_n < x} \frac1{n^2}.
+    \]
+\end{example}

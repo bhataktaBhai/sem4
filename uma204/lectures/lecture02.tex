@@ -1,10 +1,10 @@
 \lecture{02}{Tue 02 Jan '24}{}
 Throughout this section, we will omit the parentheses in $[(a, b)]$ and write
 it as $[a, b]$.
-\begin{proposition} \label{thm:Z:well-defined}
+\begin{proposition*} \label{thm:Z:well-defined}
     The operations $+_\Z$, $\cdot_\Z$ and the relation $\le_\Z$ are
     well-defined.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     Suppose $x = [a, b] = [a', b']$ and $y = [c, d] = [c', d']$.
     Then \begin{align*}
@@ -26,9 +26,9 @@ it as $[a, b]$.
     \end{align*}
 \end{proof}
 
-\begin{proposition}
+\begin{proposition*}
     The relation $\le_\Z$ is a total order on $\Z$.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     Let $x = [a, b], y = [c, d] \in \Z$.
     Since $x +_\Z [0, 0] = [a + 0, b + 0] = x$, $x \le_\Z x$.
@@ -85,7 +85,7 @@ $b = (b' + a) + b = b' + (a + b) = b'$.
     \end{enumerate}
 \end{definition}
 
-\begin{theorem} \leavevmode
+\begin{theorem*} \leavevmode
     \begin{itemize}
         \item $(\Z, +_\Z, \cdot_\Z, \le_\Z)$ is an ordered (commutative) ring.
         \item The map $f = n \mapsto [n, 0]$ from $\N$ to $\Z$ is an
@@ -98,7 +98,7 @@ $b = (b' + a) + b = b' + (a + b) = b'$.
         \end{enumerate}
         In other words, $f$ is an isomorphism onto a subset of $\Z$.
     \end{itemize}
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     For the first part of the theorem, we check all commutative ring axioms.
     We omit the subscripts on $+$ and $\cdot$ for brevity.
@@ -161,7 +161,7 @@ We further define $-[a, b] \coloneq [b, a]$ and $z_1 - z_2 \coloneq z_1 +
 (-z_2)$.
 
 Moreover, we have the following properties.
-\begin{proposition} \label{thm:Z:prop} \leavevmode
+\begin{proposition*} \label{thm:Z:prop} \leavevmode
     \begin{itemize}
         \item There are no zero divisors in $\Z$.
         That is, for all $x, y \in \Z$, $xy = 0$ implies $x = 0$ or $y = 0$.
@@ -171,8 +171,8 @@ Moreover, we have the following properties.
         \item (trichotomy) For all $z \in \Z$, $z = n$ or $z = -n$ for some
         $n \in \N$.
     \end{itemize}
-\end{proposition}
-\begin{proof}
+\end{proposition*}
+\begin{proof} \leavevmode
     \begin{itemize}
         \item From trichotomy proven below, we have $x = n$ or $x = -n$ and
         $y = m$ or $y = -m$ for some $n, m \in \N$.
@@ -189,33 +189,25 @@ Moreover, we have the following properties.
         multiplication is associative and commutative.
         \item Let $z = [a, b]$.
         From trichotomy of $\le$ on $\N$ we know that either $a + n = b$ or
-        $a = b + n$ for some $n \in \N$. (\textcolor{Red}{which \N?})
-        % TODO: clarify ``identifying'' with \N
-        That is, either $z = [0, n] = -n$, or $z = [n, 0] = n$.
+        $a = b + n$ for some $n \in \N$.
+        That is, either $z = [0, n] = -n$, or $z = [n, 0] = n$. \qedhere
     \end{itemize}
 \end{proof}
 
 \section{The Rationals} \label{sec:rationals}
 We cannot solve $3x = 2$ in $\Z$.
 \begin{proof}
-    Suppose $3x = 2$ for some $x = [a, b] \in \Z$.
-    Then \begin{align*}
-        3x &= 2 \\
-        [3, 0] \cdot [a, b] &= [2, 0] \\
-        [3a, 3b] &= [2, 0] \\
-        3a &= 3b + 2
-    \end{align*}
-    % TODO: what now?
-    What now?
+    For $x \le 0$, $3x \le 0 < 2$.
+    For $x \ge 1$, $3x \ge 3 > 2$.
 \end{proof}
 We define $\Z^*$ to be $\Z \setminus \set{0}$ and define the relation $R$ on
 $\Z \times \Z^*$ by $(a, b) R (c, d)$ if $ad = bc$.
 Then $R$ is an equivalence relation on $\Z \times \Z^*$.
 
-\begin{definition}
-    We define $\Q$ to be the set of equivalence classes of $R$, notated
-    $\Z \times \Z^* / R$.
-\end{definition}
+\begin{definition*}
+    We define $\Q$ to be the set of equivalence classes of $R$, denoted
+    $(\Z \times \Z^*) / R$.
+\end{definition*}
 We define operations $+_\Q$ and $\cdot_\Q$ on $\Q$ by
 \begin{align*}
     [(a, b)] +_\Q [(c, d)] &\coloneq [(ad + bc, bd)] \\
@@ -227,9 +219,9 @@ We define an order $\le_\Q$ on $\Q$ by \[
     [(a, b)] \le_\Q [(c, d)] \iff (ad - bc) bd \le 0.
 \]
 We will again omit the parentheses in this section.
-\begin{proposition} \label{thm:Q:well-defined}
+\begin{proposition*} \label{thm:Q:well-defined}
     The operations $+_\Q$, $\cdot_\Q$ and the relation $\le_\Q$ are well-defined.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     Suppose $[a, b] = [a', b']$ and $[c, d] = [c', d']$.
     Then \begin{align*}
@@ -259,9 +251,9 @@ We will again omit the parentheses in this section.
     \end{align*} since $bd \ne 0 \ne b'd'$.
     Thus $+_\Q$, $\cdot_\Q$ and $\le_\Q$ are well-defined.
 \end{proof}
-\begin{proposition}
+\begin{proposition*}
     The relation $\le_\Q$ is a total order on $\Q$.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     \textbf{Transitivity:} Suppose $(ad - bc) bd \le 0$ and $(cf - de) df \le
     0$.
@@ -271,7 +263,7 @@ We will again omit the parentheses in this section.
     \textbf{Antisymmetry:} Suppose $(ad - bc) bd \le 0$ and $(cb - da) db \le 0$.
     Then $(ad - bc) bd = 0$ which gives $ad = bc$ so $x = y$.
 \end{proof}
-\begin{theorem} \leavevmode
+\begin{theorem*} \leavevmode
     \begin{itemize}
         \item $(\Q, +_\Q, \cdot_\Q, \le_\Q)$ is an ordered field.
         \item The map $f = z \mapsto [z, 1]$ from $\Z$ to $\Q$ is an
@@ -284,7 +276,7 @@ We will again omit the parentheses in this section.
         \end{enumerate}
         In other words, $f$ is a commutative ring isomorphism into \Q.
     \end{itemize}
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     For the first part, we check all ordered field axioms.
     We again omit the subscripts on $+$ and $\cdot$ for brevity.

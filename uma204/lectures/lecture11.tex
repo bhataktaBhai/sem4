@@ -1,6 +1,29 @@
 \lecture{11}{Thu 25 Jan '24}{}
 
-\begin{theorem}
+How do we go from the compactness of rectangles to the compactness of
+arbitrary closed and bounded sets in $\R^n$?
+We need the following theorem.
+\begin{theorem} \label{thm:compactness:closed_subset}
+    A closed subset of a compact set is compact.
+\end{theorem}
+\begin{proof}
+    Let $E \subseteq X$ be compact and $F \subseteq E$ be closed.
+    Let $\mcU$ be an open cover of $F$.
+    Then $\mcU \cup \set{F^c}$ is an open cover of $E$.
+    This contains a finite subcover $\mcV$.
+    Then $\mcV \setminus \set{F^c} \subseteq \mcU$ is a finite subcover of $F$.
+\end{proof}
+
+We are now ready to show that closed and bounded sets in $\R^n$ are compact.
+\begin{proof}[Proof that (2) $\implies$ (1) in $\R^n$]
+    Let $E \subseteq \R^n$ be closed and bounded.
+    There is an $R > 0$ such that $E \subseteq B(0; R)$, but
+    $B(0; R) \subseteq [-R, R]^n$.
+    So $E$ is a closed subset of the compact set $[-R, R]^n$.
+    By \cref{thm:compactness:closed_subset}, $E$ is compact.
+\end{proof}
+
+\begin{theorem} \label{thm:compact:intersection}
     Let $\set{K_\alpha}_{\alpha \in \Lambda}$ be a collection of compact
     sets in $(X, d)$ such that any non-empty finite subcollection has
     non-empty intersection.
@@ -8,44 +31,45 @@
 \end{theorem}
 \begin{proof}
     Suppose $\bigcap_{\alpha \in \Lambda} K_\alpha = \O$.
-    No element in $K_1$ is in every other $K_\alpha$.
-    Let $\mcU_\alpha = K_\alpha^c$ for each $\alpha$.
-    Any point in $K_1$ is in at least one $\mcU_\alpha$.
-    Then $\mcU_\alpha$ is an open cover of $K_1$.
-    But since $K_1$ is compact, there is a finite subcover
-    $\mcU_{\alpha_1}, \dots, \mcU_{\alpha_n}$.
-    But then $K_1 \subseteq (K_{\alpha_1} \cap \dots \cap K_{\alpha_n})^c$,
-    so $K_{\alpha_1} \cap \dots \cap K_{\alpha_n} = \O$.
-    Contradiction.
+    Choose a $K \in \set{K_\alpha}_{\alpha \in \Lambda}$.
+    No element in $K$ is in every other $K_\alpha$.
+    Let $U_\alpha = K_\alpha^c$ for each $\alpha$.
+    Any point in $K$ is in at least one $U_\alpha$.
+    Then $\set{U_\alpha}_{\alpha \in \Lambda}$ is an open cover of $K$.
+    Since $K$ is compact, there is a finite subcover
+    $U_{\alpha_1}, \dots, U_{\alpha_n}$.
+    But then \begin{align*}
+        K &\subseteq U_{\alpha_1} \cup \dots \cup U_{\alpha_n} \\
+          &= K_{\alpha_1}^c \cup \dots \cup K_{\alpha_n}^c \\
+          &= (K_{\alpha_1} \cap \dots \cap K_{\alpha_n})^c
+    \end{align*}
+    so $K \cap K_{\alpha_1} \cap \dots \cap K_{\alpha_n} = \O$, a
+    contradiction.
 \end{proof}
+\begin{corollary}
+    Let $K_0 \supseteq K_1 \supseteq K_2 \supseteq \dots$ be non-empty
+    compact sets in $(X, d)$.
+    Then $\bigcap_{n \in \N} K_n \neq \O$.
+\end{corollary}
+\begin{remark}
+    This cannot be used to prove the nested interval property, since
+    the proof of compactness of rectangles in $\R^n$ itself relies on
+    the nested interval property.
+\end{remark}
 
-\begin{theorem}
-    Every closed subset of a compact set is compact.
-\end{theorem}
+\begin{theorem*}
+    Every infinite subset of a compact set has a limit point in the set.
+\end{theorem*}
 \begin{proof}
-    Let $E \subseteq Y \subseteq (X, d)$ where $Y$ is compact and $E$ is
-    closed.
-    Let $\mcU$ be an open cover of $E$ in $X$.
-    Then $\mcU + E^c$ is an open cover of $Y$.
-    Let $\mcV$ be a finite subcover of $\mcU + E^c$.
-    Then $\mcV - E^c$ is a finite subcover of $\mcU$.
-    This is because for any $x \in E$, $x \in \mcV$ (because $x \in Y$) but
-    $x \notin E^c$, so $x \in \mcV - E^c$.
-\end{proof}
-
-\begin{theorem}
-    Every infinite subset of a compact set has a limit point in the compact
-    set.
-\end{theorem}
-\begin{proof}
-    Suppose $E \subseteq (X, d)$ is compact and $F \subseteq E$ is infinite.
+    Let $E \subseteq (X, d)$ be compact and $F \subseteq E$ be infinite.
     Suppose $F$ has no limit point in $E$.
-    Then for every $z \in E$, let $B(z, \varepsilon_z)$ be a neighbourhood
-    of $z$ that contains no point of $F$ (except possibly $z$).
-    Then $\set{B(z, \varepsilon_z)}_{z \in E}$ is an open cover of $E$.
-    However, since $E$ is compact, there is a finite subcover.
-    Since each $B(z, \varepsilon_z)$ contains at most one point of $F$,
-    there are only finitely many points of $F$.
+    Then for every $z \in E$, there exists an $\varepsilon_z > 0$ such that
+    $B(z; \varepsilon_z)$ contains no point of $F$, except possibly $z$.
+    Then $\set{B(z; \varepsilon_z)}_{z \in E}$ is an open cover of $E$.
+
+    Since $E$ is compact, this contains a finite subcover.
+    But each $B(z; \varepsilon_z)$ contains at most one point of $F$,
+    so only finitely many points of $F$ are covered.
     Contradiction.
 \end{proof}
 
@@ -55,7 +79,8 @@
     Let $x_0 \in E$.
     We can produce a sequence $(x_n)_{n \in \N} \subseteq E$ such that \[
         \norm{x_{n+1}} > \norm{x_n} + 1 \text{ for all } n \in \N.
-    \] % TODO: no limit point
+    \] This cannot have a limit point in $E$ (or anywhere) since for any
+    $x \in E$, $B(x, 1)$ contains at most one point of the sequence.
 
     Now suppose (3) holds on $E$ but $E$ is not closed.
     Then there exists a $z \in E^c$ such that $z$ is a limit point of $E$.
@@ -73,7 +98,25 @@
     Hence $y$ can be a limit point of $F$ only if $y = z$.
 \end{proof}
 
-\begin{theorem}
+\begin{theorem} \label{thm:relative:compact}
     Let $E \subseteq Y \subseteq (X, d)$ where $Y$ is compact in $X$.
-    Then $E$ is compact in $Y$ if and only if it is compact in $X$.
+    Then $E$ is compact relative to $Y$ if and only if it is compact in $X$.
 \end{theorem}
+\begin{proof}
+    We use \cref{thm:relative:open}.
+
+    Suppose $E$ is compact in $Y$.
+    Let $\mcU$ be an open cover of $E$ in $X$.
+    Then $\mcV = \set{U \cap Y}_{U \in \mcU}$ is an open cover of $E$
+    in $Y$.
+    This has a finite subcover $\set{U_1 \cap Y, \dots, U_n \cap Y}$.
+    Then $\set{U_1, \dots, U_n}$ is a finite subcover of $E$ in $\mcU$.
+
+    Suppose $E$ is compact in $X$.
+    Let $\mcV$ be an open cover of $E$ in $Y$.
+    Then for each $V \in \mcV$,
+    there exists a set $U_V$ open in $X$ such that $V = U_V \cap Y$,
+    so that $\mcU = \set{U_V}_{V \in \mcV}$ is an open cover of $E$ in $X$.
+    This has a finite subcover $\set{U_{V_1}, \dots, U_{V_n}}$.
+    Then $\set{V_1, \dots, V_n}$ is a finite subcover of $E$ in $\mcV$.
+\end{proof}

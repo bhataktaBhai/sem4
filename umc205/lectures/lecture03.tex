@@ -15,7 +15,7 @@ Suppose we have to construct a DFA for a language $L$ over an alphabet $A$.
 \end{itemize}
 
 \section{DFAs Formally} \label{sec:dfa:formal}
-\begin{definition}[DFA] \label{def:dfa}
+\begin{definition*}[DFA] \label{def:dfa}
     A \emph{deterministic finite-state automaton} $\mathcal{A}$ over an
     alphabet $A$ is a tuple $(Q, s, \delta, F)$ where
     \begin{itemize}
@@ -24,7 +24,7 @@ Suppose we have to construct a DFA for a language $L$ over an alphabet $A$.
         \item $\delta: Q \times A \to Q$ is the \emph{transition function},
         \item $F \subseteq Q$ is the set of \emph{final states}.
     \end{itemize}
-\end{definition}
+\end{definition*}
 For example, the first example in this \namecref{chp:fa} can be written as
 \begin{align*}
     A &= \set{a, b} \\
@@ -37,31 +37,31 @@ For example, the first example in this \namecref{chp:fa} can be written as
         (e, b) &\mapsto e, & (o, b) &\mapsto o.
     \end{aligned}
 \end{align*}
-We further define $\hat{\delta} : Q \times A^* \to Q$ as the extension of
+We further define $\what{\delta} : Q \times A^* \to Q$ as the extension of
 $\delta$ to strings.
 \begin{align*}
-    \hat{\delta}(q, \epsilon) &= q \\
-    \hat{\delta}(q, wa) &= \delta(\hat{\delta}(q, w), a)
+    \what{\delta}(q, \epsilon) &= q \\
+    \what{\delta}(q, wa) &= \delta(\what{\delta}(q, w), a)
 \end{align*}
-\begin{definition}[Language of a DFA] \label{def:dfa:lang}
+\begin{definition*}[Language of a DFA] \label{def:dfa:lang}
     The \emph{language of a DFA} $\mathcal{A}$ is
     \begin{equation*}
-        L(\mathcal{A}) = \set{w \in A^* \mid \hat{\delta}(s, w) \in F}
+        L(\mathcal{A}) = \set{w \in A^* \mid \what{\delta}(s, w) \in F}
     \end{equation*}
-\end{definition}
+\end{definition*}
 
 \section{Regular Languages} \label{sec:dfa:regular}
 \vspace{1em}
-\begin{definition}[Regular Language] \label{def:regular}
+\begin{definition*}[Regular Language] \label{def:regular}
     A language $L$ is \emph{regular} if there exists a DFA $\mathcal{A}$
     over $A$ such that $L(\mathcal{A}) = L$.
-\end{definition}
+\end{definition*}
 For example, the exercises we have done so far.
 Another example is \emph{any} finite language.
 
-\begin{theorem}
+\begin{theorem*}
     The class of regular languages over an alphabet is countable.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     We partition the set of all DFAs over $A$ by their number of states.
     For each $n \in \mathbb{N}$, there are finitely many DFAs with $n$
@@ -78,18 +78,18 @@ This immediately yields the following.
     There are uncountably many languages that are not regular.
 \end{corollary}
 
-\begin{theorem}[Closure under set operations] \label{thm:dfa:regular:closure1}
+\begin{theorem*}[Closure under set operations] \label{thm:dfa:regular:closure1}
     The class of regular languages is closed under union, intersection and
     complementation.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     For complementation, simply invert the set of final states.
     That is, given $\mathcal{A} = (Q, s, \delta, F)$, let
     $\mathcal{A}' = (Q, s, \delta, Q \setminus F)$.
     Then $L(\mathcal{A}') = A^* \setminus L(\mathcal{A})$, since
     \begin{align*}
-        w \in L(\mathcal{A}') &\iff \hat{\delta}(s, w) \in Q \setminus F \\
-        &\iff \hat{\delta}(s, w) \notin F \\
+        w \in L(\mathcal{A}') &\iff \what{\delta}(s, w) \in Q \setminus F \\
+        &\iff \what{\delta}(s, w) \notin F \\
         &\iff w \notin L(\mathcal{A}) \\
         &\iff w \in A^* \setminus L(\mathcal{A})
     \end{align*}
@@ -104,21 +104,21 @@ This immediately yields the following.
         \] where $\Delta((q, q'), a) = (\delta(q, a), \delta'(q', a))$.
     \end{definition}
     Note that in the above definition, the extension of $\Delta$ to strings
-    $\hat{\Delta}$ is given by \[
-        \hat{\Delta}((q, q'), w) = (\hat{\delta}(q, w), \hat{\delta'}(q', w))
+    $\what{\Delta}$ is given by \[
+        \what{\Delta}((q, q'), w) = (\what{\delta}(q, w), \what{\delta'}(q', w))
     \]
     This is easily proved by induction on the length of $w$ (or structural
     induction on $w$).
     \begin{align*}
-        \hat{\Delta}((q, q'), \epsilon) &= (q, q') \\
-        &= (\hat{\delta}(q, \epsilon), \hat{\delta'}(q', \epsilon)) \\
+        \what{\Delta}((q, q'), \epsilon) &= (q, q') \\
+        &= (\what{\delta}(q, \epsilon), \what{\delta'}(q', \epsilon)) \\
         \shortintertext{and if}
-        \hat{\Delta}((q, q'), w) &= (\hat{\delta}(q, w), \hat{\delta'}(q', w)) \\
+        \what{\Delta}((q, q'), w) &= (\what{\delta}(q, w), \what{\delta'}(q', w)) \\
         \shortintertext{then}
-        \hat{\Delta}((q, q'), wa) &= \Delta(\hat{\Delta}((q, q'), w), a) \\
-        &= \Delta((\hat{\delta}(q, w), \hat{\delta'}(q', w)), a) \\
-        &= (\delta(\hat{\delta}(q, w), a), \delta'(\hat{\delta'}(q', w), a)) \\
-        &= (\hat{\delta}(q, wa), \hat{\delta'}(q', wa)).
+        \what{\Delta}((q, q'), wa) &= \Delta(\what{\Delta}((q, q'), w), a) \\
+        &= \Delta((\what{\delta}(q, w), \what{\delta'}(q', w)), a) \\
+        &= (\delta(\what{\delta}(q, w), a), \delta'(\what{\delta'}(q', w), a)) \\
+        &= (\what{\delta}(q, wa), \what{\delta'}(q', wa)).
     \end{align*}
 
     Now let $\mathcal{A}$, $\mathcal{B}$ be DFAs over $A$.
@@ -126,9 +126,9 @@ This immediately yields the following.
     = L(\mathcal{A}) \cap L(\mathcal{B})$, since
     \begin{align*}
         w \in L(\mathcal{A} \times \mathcal{B})
-            &\iff \hat{\Delta}((s, s'), w) \in F \times F' \\
-            &\iff (\hat{\delta}(s, w), \hat{\delta'}(s', w)) \in F \times F' \\
-            &\iff \hat{\delta}(s, w) \in F \land \hat{\delta'}(s', w) \in F' \\
+            &\iff \what{\Delta}((s, s'), w) \in F \times F' \\
+            &\iff (\what{\delta}(s, w), \what{\delta'}(s', w)) \in F \times F' \\
+            &\iff \what{\delta}(s, w) \in F \land \what{\delta'}(s', w) \in F' \\
             &\iff w \in L(\mathcal{A}) \land w \in L(\mathcal{B})
     \end{align*}
     Since $X \cup Y = \comp{\comp{X} \cap \comp{Y}}$, closure under union
@@ -138,4 +138,3 @@ This immediately yields the following.
     $(Q \times Q', (s, s'), \Delta, F \times Q' \cup F' \times Q)$
     accepts the language $L(\mathcal{A}) \cup L(\mathcal{B})$.
 \end{proof}
-

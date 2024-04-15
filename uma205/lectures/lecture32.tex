@@ -1,0 +1,163 @@
+\section{Group Actions} \label{sec:group_actions}
+\lecture{32}{Wed 27 Mar '24}{}
+\begin{definition}[Group action] \label{def:group_action}
+    A (left) \emph{group action} of a group $G$ on a set $A$ is a map
+    $G \times A \to A$ written $(g, a) \mapsto g \cdot a$, satisfying
+    \begin{enumerate}
+        \item $g_1 \cdot (g_2 \cdot a) = (g_1 g_2) \cdot a$ for all
+            $g_1, g_2 \in G$ and $a \in A$.
+        \item $e \cdot a = a$ for all $a \in A$.
+    \end{enumerate}
+    If such a map exists, we say that $G$ \emph{acts on} $A$.
+    Equivalently, $A$ has the \emph{symmetries} of $G$.
+\end{definition}
+\begin{examples}
+    \item The regular $n$-gon is acted on by $D_{2n}$.
+    \item $(g, a) \mapsto a$ is the \emph{trivial action} of $G$ on $A$.
+    \item Let $V$ be a vector space over a field $F$.
+    Then $(F^*, *)$ is a group, and $F^*$ acts on $V$ by scalar
+    multiplication.
+    \item Let $A$ be a set and $S_A$ denote the group of permutations of
+    $A$ (\ie, bijection from $A$ to $A$).
+    Then $S_A$ acts on $A$ by $\sigma \cdot a = \sigma(a)$.
+\end{examples}
+
+Suppose $G$ acts on $A$.
+Then define for all $g \in G$, the map $\sigma_g\colon A \to A$ by \[
+    \sigma_g(a) = g \cdot a.
+\]
+\begin{proposition}
+    \begin{enumerate}
+        \item For all $g \in G$, $\sigma_g$ is a permutation of $A$.
+        That is, $\sigma_g \in S_A$.
+        \item The map $\varphi\colon G \to S_A$ given by
+        $\varphi(g) = \sigma_g$ is a group homomorphism
+        (where the group operation on $S_A$ is composition).
+    \end{enumerate}
+\end{proposition}
+\begin{proof} \leavevmode
+    \begin{enumerate}
+        \item We will show that $\sigma_{g^{-1}}$ is the (two-sided)
+        inverse of $\sigma_g$.
+        \begin{align*}
+            (\sigma_{g^{-1}} \circ \sigma_g)(a)
+                &= \sigma_{g^{-1}}(g \cdot a) \\
+                &= g^{-1} \cdot (g \cdot a) \\
+                &= (g^{-1} g) \cdot a \\
+                &= e \cdot a \\
+                &= a.
+        \end{align*}
+        Interchange the roles of $g$ and $g^{-1}$ to get \[
+            (\sigma_g \circ \sigma_{g^{-1}})(a) = a.
+        \]
+        \item Consider \begin{align*}
+            \varphi(g_1 g_2)(a)
+                &= \sigma_{g_1 g_2}(a) \\
+                &= (g_1 g_2) \cdot a \\
+                &= g_1 \cdot (g_2 \cdot a) \\
+                &= \sigma_{g_1}(\sigma_{g_2}(a)) \\
+                &= \varphi(g_1)(\varphi(g_2)(a)) \\
+                &= (\varphi(g_1) \circ \varphi(g_2))(a).
+        \end{align*}
+        Since this holds for all $a \in A$, \[
+            \varphi(g_1 g_2) = \varphi(g_1) \circ \varphi(g_2).
+        \]
+    \end{enumerate}
+\end{proof}
+
+\begin{definition}[Permutation representation] \label{def:perm_rep}
+    Let $G$ act on $A$ by $g \cdot a$.
+    The map $\varphi\colon G \to S_A$ given by $\varphi(g) = \sigma_g$,
+    where $\sigma_g(a) = g \cdot a$, is called the \emph{permutation
+    representation} of $G$.
+\end{definition}
+
+\begin{definition}[Faith] \label{def:group_actions:faith}
+    A group action is called \emph{faithful} if every $g \in G$ gives a
+    different permutation of $A$, \ie, the permutation representation
+    is injective.
+\end{definition}
+
+\begin{definition}[Kernel] \label{def:group_actions:kernel}
+    The \emph{kernel} of a group action of $G$ on $A$ is the set \[
+        \set{g \in G \mid g \cdot a = a \text{ for all } a \in A}.
+    \]
+\end{definition}
+
+\begin{example}
+    The trivial action is unfaithful (except for the trivial group)
+    and the kernel is the group itself.
+\end{example}
+\begin{proposition}
+    Any action is faithful if and only if its kernel is $\set{e}$.
+\end{proposition}
+\begin{proof}
+    We know that $\varphi(e) = \sigma_e = \id_A$.
+    If the action is faithful, then there is no other $g \in G$ such that
+    $g \cdot a = a \;\forall a \in A$.
+    Thus, the kernel is $\set{e}$.
+
+    Conversely, suppose the kernel is $\set{e}$.
+    Let $g_1, g_2$ be such that $\sigma_{g_1} = \sigma_{g_2}$.
+    Then $\sigma_{g_1 g_2^{-1}} = \id_A$, so $g_1 g_2^{-1} = e$,
+    and $g_1 = g_2$.
+\end{proof}
+
+\begin{example}
+    $G$ acts on itself by left multiplication.
+    This is faithful, because $g_1 e = g_2 e \iff g_1 = g_2$.
+\end{example}
+
+\begin{definition*}[Subgroup] \label{def:group_actions:subgroup}
+    Let $G$ be a group.
+    A non-empty subset $H \subseteq G$ is called a \emph{subgroup},
+    denoted $H \le G$, if $H$ is closed under products and inverses.
+\end{definition*}
+\begin{proposition}
+    Any subgroup of a group is a group.
+\end{proposition}
+\begin{proof}
+    
+\end{proof}
+
+\begin{examples}
+    \item Every group $G$ has two subgroups, $\set{e}$ and $G$.
+    $\set{e}$ is called the \emph{trivial subgroup}.
+    If $H \le G$ and $H \ne G$, then $H$ is called a \emph{proper
+    subgroup}.
+    \item $\set{1, r, \dots, r^{n-1}} < D_{2n}$.
+    \item $(3\Z, +) < (\Z, +)$.
+    \item $(\Q^*, \cdot) \not\le (\R, +)$.
+\end{examples}
+
+\begin{proposition}
+    A non-empty subset $H \subseteq G$ is a subgroup if and only if
+    for every $x, y \in H$, $xy^{-1} \in H$.
+\end{proposition}
+\begin{proof}
+    Suppose $H$ is a subgroup.
+    Then $x, y \in H \implies y^{-1} \in H$ by closure under inverses,
+    and $xy^{-1} \in H$ by closure under products.
+
+    Suppose $H$ satisfies the condition.
+    Let $h \in H$.
+    Then $h h^{-1} = e \in H$.
+    Now taking $x = e$ and $y = h$, we have $h^{-1} = e h^{-1} \in H$.
+    Thus we have closure under inverses.
+
+    Let $h_1, h_2 \in H$.
+    Then $h_2^{-1} \in H$, so $h_1 h_2 = h_1 {(h_2^{-1})}^{-1} \in H$.
+\end{proof}
+
+\begin{exercise}
+    A finite non-empty subset $H$ of a group $G$ is a subgroup iff for
+    all $x, y \in H$, $xy \in H$.
+\end{exercise}
+\begin{proof}
+    If $H$ is a subgroup, this is by definition.
+
+    Suppose $H$ satisfies the condition.
+    Let $h \in H$.
+    $H$ is closed under products, so $\set{h, h^2, \dots} \subseteq H$.
+    By the pigeonhole principle, $e$ and $h^{-1}$ are in this set.
+\end{proof}

@@ -1,0 +1,93 @@
+\lecture{12}{Tue 13 Feb '24}{Structure of GWB Trees}
+\section{The Structure of GWB Trees}
+\begin{definition}[Conjugate distribution] \label{def:conjugate}
+    Let $\ubar{p} = (p_i)_{i \in \N}$ be a pmf on $\N$ with $p_0 > 0$
+    (hence $\eta > 0$).
+    Then $\ubar{\tilde{p}} = (\eta^{i-1} p_i)_{i \in \N}$ is called the
+    \emph{conjugate distribution} of $\ubar{p}$.
+\end{definition}
+
+\begin{exercise}
+    Show that $\ubar{\tilde{p}}$ is a pmf.
+\end{exercise}
+\begin{solution}
+    \begin{align*}
+        \sum_{i=1}^\infty \eta^{i-1} p_i
+            &= \frac1{\eta} \sum_{i=1}^\infty \eta^i p_i \\
+            &= \frac1{\eta} \E_{X \sim \ubar{p}}[\eta^X] \\
+            &= \frac1{\eta} G(\eta) \\
+        \intertext{but $G(\eta) = \eta$}
+            &= 1.
+    \end{align*}
+    For a more intuitive proof, recall that $G(\eta) = \eta$ \emph{because}
+    $\E[\eta^Z_1] = \eta$.
+\end{solution}
+
+\begin{exercise}
+    Show that $\ubar{\tilde{p}}$ is a critical or subcritical offspring
+    distribution.
+\end{exercise}
+\begin{proof}
+    If $\eta = 1$, then $\ubar{\tilde{p}} = \ubar{p}$.
+    But $\eta = 1 \iff \iff \E[Z_1] \le 1$.
+    Thus $\ubar{\tilde{p}}$ is critical.
+
+    Suppose $\eta < 1$, so that $p_0 + p_1 < 1$
+    (otherwise the process would die off, since each node produces either
+    one child, or, with positive probability, no children.
+    Alternatively, $\E[Z_1] < 1$).
+    Then \begin{align*}
+        \E[Z_1] &= \sum k \eta^{k-1} p_k \\
+                &= \dv{}{\eta} \E[\eta^X] \\
+                &= G'(\eta)
+    \end{align*}
+    If $G'(\eta) > 1$, then $G'(s) > 1 \;\forall s \in (\eta, 1)$.
+    Why? Because $p_0 + p_1 < 1$, so $G$ is strictly convex.
+    But $G(\eta) = \eta$, so there exists a $\xi \in (\eta, 1)$ such that
+    $G'(\xi) = 1$, a contradiction.
+    Thus $G'(\eta) \le 1$ so $\E[Z_1] \le 1$.
+\end{proof}
+
+\begin{theorem*}
+    Let $\ubar{\tilde{p}}$ be the conjugate distribution of $\ubar{p}$.
+    Let $\mcT_{\ubar p}$ and $\mcT_{\ubar{\tilde p}}$
+    be the GWB trees with offspring distributions
+    $\ubar{p}$ and $\ubar{\tilde{p}}$ respectively.
+
+    Then \[
+        (\mcT_{\ubar{p}} \given \text{it is finite})
+            \eqd \mcT_{\ubar{\tilde{p}}}.
+    \]
+\end{theorem*}
+
+\begin{exercise}
+    Find the conjugate distribution of $Bin(r, p)$ where
+    $p \in (\frac1r, 1)$.
+\end{exercise}
+
+\begin{definition*}[Breadth-first walk] \label{def:bfs}
+    Let $\ubar t$ be a plane (rooted) tree.
+    Label its vertices $1, 2, \dots, n$ in breadth-first order.
+    Let $C_j(\ubar t)$ be the number of children of vertex $j$ in $\ubar t$.
+    Then the \emph{breadth-first walk} of $\ubar t$ is the sequence
+    \begin{align*}
+        S_j(\ubar t) &= \begin{cases}
+            1 & \text{if } j = 0, \\
+            S_{j-1} + C_j(\ubar t) - 1 & \text{otherwise}.
+        \end{cases} \\
+        &= 1 + \sum_{i=1}^j (C_i(\ubar t) - 1).
+    \end{align*}
+\end{definition*}
+It is obvious that $S_n(\ubar t) = 0$.
+
+\begin{theorem*}
+    There exists a bijection between the set of finite plane trees and the
+    set $\mcS$ of sequences $(s_n)_{n \in \N}$ such that
+    \begin{itemize}
+        \item $s_0 = 1$,
+        \item $s_{n+1} \ge s_n - 1$,
+        \item there is an $n_0$ such that $s_n = 0 \iff n \ge n_0$.
+    \end{itemize}
+    This bijection is such that each tree corresponds to its breadth-first
+    walk.
+\end{theorem*}

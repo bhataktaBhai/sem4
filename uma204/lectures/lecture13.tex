@@ -1,6 +1,5 @@
-\lecture{13}{Wed 31 Jan '24}{}
-
 \begin{definition}[Ternary expansion] \label{def:ternary_expansion}
+\lecture{13}{Wed 31 Jan '24}{}
     Let $x \in [0, 1]$.
     A \emph{ternary expansion} of $x$ is a sequence $(d_1, d_2, \dots)
     \subseteq \set{0, 1, 2}$ such that \[
@@ -70,7 +69,7 @@ We make the following observations:
     the expansion which has no $1$ starting from the point of ambiguity.
 \end{itemize}
 
-\begin{theorem} \label{thm:cantor_set}
+\begin{theorem*} \label{thm:cantor_set}
     There exists a non-empty $E \subseteq [0, 1]$ such that
     \begin{enumerate}
         \item $E$ is compact.
@@ -78,7 +77,7 @@ We make the following observations:
         \item $E^\circ = \wbar{E}^\circ = \O$.
         \item $E$ is uncountable.
     \end{enumerate}
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     \begin{align*}
         E = \{x \in [0, 1] : x \text{ admits at least one ternary} \\
@@ -96,7 +95,10 @@ We make the following observations:
     \end{align*}
     We claim that $E = \bigcap_{m=1}^\infty E_m$ satisfies the conditions of
     the theorem.
-    We have that $E$ is non-empty. % TODO: why?
+    First note that $E_1 \subseteq E_2 \subseteq \dots$,
+    so for any $m_1 < m_2 < \dots < m_k$,
+    $\bigcap_{i = 1}^k E_{m_i} = E_{m_k}$ is non-empty.
+    By \cref{thm:compact:intersection}, $E$ is non-empty
 
     Since $E$ is the intersection of closed sets, $E$ is closed.
     Since $E$ is bounded, $E$ is compact.

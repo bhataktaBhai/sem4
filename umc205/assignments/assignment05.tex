@@ -1,0 +1,422 @@
+\documentclass[12pt]{article}
+\input{~/IISc/sem4/umc205/preamble}
+\usepackage{geometry}
+\DeclareMathOperator{\pref}{pref}
+\tikzset{font=\scriptsize}
+\newcommand{\TOTAL}{\textsc{Total}}
+% \geometry{a4paper, margin=1in}
+\DeclarePairedDelimiterX{\oldmatch}[2]{\langle}{\rangle}%
+{#1\;\delimsize\vert\;\mathopen{}#2}
+\def\match{\oldmatch*}
+\newcommand{\triple}[6]{%
+    \begin{matrix}
+        #1 & #2 & #3 \\
+        #4 & #5 & #6 \\
+    \end{matrix}%
+}
+
+\title      {Assignment 5}
+\setcounter{assignment}{5}
+\setcounter   {section}{5}
+\author{Naman Mishra\\
+(22223)}
+\date{13 April, 2024}
+
+\begin{document}
+\maketitle
+% Problem 1
+\begin{problem*}
+    Show that the function $square\colon \N \to \N$, given by
+    $square(n) = n^2$ is computable by a Turing machine in the sense
+    discussed in class.
+    Give a complete description of the moves of the TM in a modular way.
+\end{problem*}
+\begin{solution}
+    A Turing machine for this computation is shown in \cref{fig:square}.
+    That is, a machine over the input alphabet $\set{0}$ that inputs
+    $0^n$ and outputs $0^{n^2}$.
+
+    Transitions that are not shown are assumed to go to the reject state,
+    as discussed in class.
+    However, these never occur.
+    We have ommitted the reject state as it is never reached.
+
+    $-$ in the transitions represents any character.
+    The transitions $\neg x/{-}, L$ or $\neg x/{-}, R$ denote that upon
+    reading any character $y \ne x$, replace it with $y$ itself and move
+    left or right, respectively (as in the TM given in problem 5).
+
+    The machine works as follows:
+    \begin{itemize}
+        \item Mark the first $0$ as `final' by changing it to $1$.
+        \item For each remaining $0$, append two $1$s to the right.
+        When this is done, change another one of the $0$s to $1$.
+        \item When no more $0$s are left, change all $1$s to $0$s
+        and accept.
+    \end{itemize}
+    This uses the fact that \[
+        n^2 = n + \sum_{i=1}^{n-1} 2i. \qedhere
+    \]
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[node distance=2.6cm]
+            \node[state, initial] (s) {$s$};
+            \node[state, right=of s] (mark) {mark};
+            \node[state, right=of mark] (append) {1};
+            \node[state, below right=2.6cm and 1.3 cm of append] (append2) {11};
+            \node[state, right=of append] (unmark) {unmark};
+            \node[state, below=of mark] (rw) {rewind};
+            \node[state, right=of rw] (MARK) {MARK};
+            \node[state, below=of MARK] (forward) {forward};
+            \node[state, left=of forward] (fixup) {fixup};
+            \node[state, accepting, left=of fixup] (accept) {$t$};
+
+            \path[->]
+            (s) edge[loop above] node {$\leftend / \leftend, R$} (s)
+                edge node {$0 / 1, R$} (mark)
+                edge node[swap] {$\blank / \blank, L$} (accept)
+            (mark) edge node {$0 / \hat{0}, R$} (append)
+                   edge node[swap] {$\neg 0 / {-}, L$} (rw)
+            (append) edge[loop right] node {$\neg\blank / {-}, R$} (append)
+                     edge node[swap] {$\blank / 1, R$} (append2)
+            (append2) edge node[swap] {$\blank / 1, L$} (unmark)
+            (unmark) edge[loop above] node {$\neg \hat0 / {-}, L$} (unmark)
+                     edge[bend right] node[swap] {$\hat{0} / 0, R$} (mark)
+            (rw) edge[loop left] node {$\neg 1 / {-}, L$} (rw)
+                 edge node[swap] {$1 / 1, R$} (MARK)
+            (MARK) edge node[swap] {$0 / 1, R$} (mark)
+                   edge node {$\neg 0 / {-}, L$} (forward)
+            (forward) edge[loop right] node {$\neg\blank / {-}, R$} (forward)
+                      edge node {$\blank / \blank, L$} (fixup)
+            (fixup) edge[loop above] node {$\neg\leftend / 0, L$} (fixup)
+                    edge node {$\leftend / \leftend, R$} (accept);
+        \end{tikzpicture}
+        \caption{A Turing machine that computes the square function.}
+        \label{fig:square}
+    \end{figure}
+\end{solution}
+
+\begin{problem*}
+    Is the following question decidable:
+    Given a Turing machine $M$ and a state $q$ of $M$,
+    does $M$ ever enter state $q$ on some input? Justify your answer.
+\end{problem*}
+\begin{solution}
+    No.
+    The halting problem can be reduced to this.
+
+    Given any Turing machine $M$ and input $x$, we can construct a new
+    Turing machine $P_{M, x}$ that erases its input and runs $M$ on $x$.
+    Thus $P_{M, x}$ halts on all inputs iff $M$ halts on $x$.
+    Let $t$ be the accept state of $P_{M, x}$.
+
+    This map $M\#x \mapsto P_{M, x}\#t$ is computable, which gives a reduction
+    from $\HP$ to $\set{M\#q \mid M \text{ enters state } q}$.
+
+    Thus, if it were decidable whether $P_{M, x}$ enters state $t$ on some
+    input, we could decide the halting problem.
+\end{solution}
+
+\begin{problem*}
+    Let $L, K \subseteq \Sigma^*$.
+    Define \[
+        L / K = \set{x \mid \exists y \in K, xy \in L}.
+    \]
+    \begin{enumerate}[label=(\alph*)]
+        \item Show that if $L$ is regular and $K$ is \emph{any} language,
+            then $L / K$ is regular.
+        \item Show that even if we are given a DFA for $L$ and a Turing
+            machine for $K$, we cannot always construct an automaton for
+            $L / K$.
+    \end{enumerate}
+\end{problem*}
+\begin{solution}
+    Let $L$ be regular.
+    Its canonical relation $\equiv_L$ has finite index.
+
+    Consider the relation $\equiv_{L / K}$ defined by \[
+        x \equiv_{L/K} y \iff (\forall z \in \Sigma^*, xz \in L/K \iff yz \in L/K.)
+    \]
+
+    We will show that \[
+        x \equiv_L y \implies x \equiv_{L/K} y.
+    \] If this is true, then $\equiv_L$ is a refinement of $\equiv_{L/K}$,
+    so $\equiv_{L/K}$ has finite index.
+
+    Let $x \equiv_L y$.
+    Then for all $z \in \Sigma^*$, $xz \in L \iff yz \in L$.
+    Fix a $z \in \Sigma^*$.
+    Suppose $xz \in L/K$.
+    Then there exists $w \in K$ such that $xzw \in L$.
+    But then $yzw \in L$ (by the canonical relation), so $yz \in L/K$.
+    Symmetrically, if $yz \in L/K$, then $xz \in L/K$.
+    Thus for all $z \in \Sigma^*$, $xz \in L/K \iff yz \in L/K$,
+    so that $x \equiv_{L/K} y$.
+    This proves the claim.
+\end{solution}
+
+\begin{problem*}
+    Show that neither the language \[
+        \TOTAL = \set{M \mid M \text{ halts on all inputs}}
+    \] nor its complement is recursively enumerable.
+\end{problem*}
+\begin{solution}
+    Both proofs are by reducing $\nHP$ to the given language.
+    The reduction for $\neg \TOTAL$ is easier,
+    so we present that proof first.
+    \begin{proof}[$\nHP \le \neg \TOTAL$]
+        Given a Turing machine $M$ and input $x$, we can construct a new
+        Turing machine $P_{M, x}$ that erases its input and runs $M$ on $x$.
+        Thus if $M$ halts on $x$, then $P_{M, x}$ halts on all inputs.
+        If M does not halt on $x$, then $P_{M, x}$ does not halt on any input.
+
+        Let $\varphi$ be the map that sends $M\#x$ to $P_{M, x}$.
+        Then $\varphi$ is a computable function, and \[
+            M\#x \in \nHP \iff \varphi(M\#x) \in \neg \TOTAL.
+        \] This proves the claim.
+    \end{proof}
+
+    The reduction for $\TOTAL$ is more involved.
+    \begin{proof}[$\TOTAL$]
+        Given a Turing machine $M$ and input $x$, we can construct a new
+        Turing machine $Q_{M, x}$ that does the following:
+        \begin{enumerate}
+            \item For input $w$, simulate $M$ on $x$ for $|w|$ steps.
+            \item If $M$ halts on $x$ within $|w|$ steps, then enter a
+                looping state.
+            \item If $M$ does not halt on $x$ within $|w|$ steps, then halt.
+        \end{enumerate}
+        This is easy to achieve by storing the input $w$ on one tape, and
+        simulating $M$ on $x$ on another tape, blanking one letter from
+        $w$ after each step of the simulation.
+        This is a computable function.
+
+        If $M$ halts on $x$ in $n$ steps, then $Q_{M, x}$ enters an
+        infinite loop for inputs longer than $n$.
+        But if $M$ does not halt on $x$, then $Q_{M, x}$ halts on every input.
+        Thus \[
+            M\#x \in \nHP \iff Q_{M, x} \in \TOTAL.
+        \] This proves the claim.
+    \end{proof}
+    Since $\nHP$ is not recursively enumerable, neither $\TOTAL$ nor its
+    complement is recursively enumerable.
+\end{solution}
+
+\begin{problem*}
+    Consider the TM $M$ given in the assignment, with input alphabet
+    $\set{a, b}$.
+    \begin{enumerate}[label=(\alph*)]
+        \item Give any string in $Valcomp_{M, baabb}$.
+        \item Recall the notion of matching triples of symbols used in class.
+        Give the entire set of matching triples for $M$.
+        \item Justify the claim that for two valid configurations $c_1$ and
+        $c_2$ of $M$, which are of the same length,
+        we have $c_1 \xRightarrow{1} c_2$ iff for each position in $c_1$,
+        the triple of symbols in $c_1$ and the corresponding triple in $c_2$
+        match.
+        \item Define an analagous notion of matching pairs of symbols.
+        What if we weaken the criterion above to say that at each position
+        the pairs of symbols in $c_1$ and $c_2$ ``match''?
+    \end{enumerate}
+\end{problem*}
+\begin{solution} \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item \small\begin{gather*}
+            \begin{matrix}
+                \leftend & b & a & a & b & b & \blank \\
+                       s & - & - & - & - & - & - \\
+            \end{matrix} \;\,\#\;\,
+            \begin{matrix}
+                \leftend & b & a & a & b & b & \blank \\
+                       - & s & - & - & - & - & - \\
+            \end{matrix} \;\,\#\;\,
+            \begin{matrix}
+                \leftend & b & a & a & b & b & \blank \\
+                       - & - & p & - & - & - & - \\
+            \end{matrix} \;\,\#\\
+            \begin{matrix}
+                \leftend & b & a & a & b & b & \blank \\
+                       - & - & - & p & - & - & - \\
+            \end{matrix} \;\,\#\;\,
+            \begin{matrix}
+                \leftend & b & a & a & b & b & \blank \\
+                       - & - & - & - & p & - & - \\
+            \end{matrix} \;\,\#\;\,
+            \begin{matrix}
+                \leftend & b & a & a & b & b & \blank \\
+                       - & - & - & - & - & p & - \\
+            \end{matrix} \;\,\#\\
+            \begin{matrix}
+                \leftend & b & a & a & b & b & \blank \\
+                       - & - & - & - & - & - & p \\
+            \end{matrix} \;\,\#\;\,
+            \begin{matrix}
+                \leftend & b & a & a & b & b & c \\
+                       - & - & - & - & - & q & - \\
+            \end{matrix} \;\,\#\;\,
+            \begin{matrix}
+                \leftend & b & a & a & b & c & c \\
+                       - & - & - & - & t & - & - \\
+            \end{matrix} \;\,\#
+        \end{gather*} \normalsize
+        \item We assume the unspecified transitions to be ${-} / {-}, R$ into
+        the reject state $r$ (as discussed on MS Teams).
+        We split the matching triples by state.
+        We let $x$, $y$, $z$ denote any tape symbol, and $\beta$ denote any
+        non-blank symbol.
+        Also let $B$ denote any symbol that is not $b$.
+        We denote a matching triple as
+        $\match{\text{triple 1}}{\text{triple 2}}$ for clarity.
+
+        The matching triples for $s$ are \small \begin{align*}
+            \match{\triple \leftend x y s--}{\triple \leftend x y -s-}
+            && \match{\triple x \leftend y -s-}{\triple x \leftend y --s}
+            && \match{\triple x y \leftend --s}{\triple x y \leftend ---} \\
+            \match{\triple a x y s--}{\triple a x y ---}
+            && \match{\triple x a y -s-}{\triple x a y r--}
+            && \match{\triple x y a --s}{\triple x y a -r-} \\
+            \match{\triple b x y s--}{\triple b x y -p-}
+            && \match{\triple x b y -s-}{\triple x b y --p}
+            && \match{\triple x y b --s}{\triple x y b ---} \\
+            \match{\triple c x y s--}{\triple c x y -r-}
+            && \match{\triple x c y -s-}{\triple x c y --r}
+            && \match{\triple x y c --s}{\triple x y c ---} \\
+            \match{\triple \blank x y s--}{\triple \blank x y -r-}
+            && \match{\triple x \blank y -s-}{\triple x \blank y --r}
+            && \match{\triple x y \blank --s}{\triple x y \blank ---}
+        \end{align*} \normalsize
+        For $p$, the matching triples are \small \begin{align*}
+            \match{\triple \blank x y p--}{\triple c x y ---}
+            && \match{\triple x \blank y -p-}{\triple x c y q--}
+            && \match{\triple x y \blank --p}{\triple x y c -q-} \\
+            \match{\triple \beta x y p--}{\triple \beta x y -p-}
+            && \match{\triple x \beta y -p-}{\triple x \beta y --p}
+            && \match{\triple x y \beta --p}{\triple x y \beta ---}
+        \end{align*} \normalsize
+        For $q$, they are \small \begin{align*}
+            \match{\triple b x y q--}{\triple c x y ---}
+            && \match{\triple x b y -q-}{\triple x c y t--}
+            && \match{\triple x y b --q}{\triple x y c -t-} \\
+            \match{\triple B x y q--}{\triple B x y -r-}
+            && \match{\triple x B y -q-}{\triple x B y --r}
+            && \match{\triple x y B --q}{\triple x y B ---}
+        \end{align*} \normalsize
+        For $r$, they are \small \begin{align*}
+            \match{\triple x y z r--}{\triple x y z -r-}
+            && \match{\triple x y z -r-}{\triple x y z --r}
+            && \match{\triple x y z --r}{\triple x y z ---}
+        \end{align*} \normalsize
+        The same triples apply for the accept state $t$, with $r$ replaced by $t$.
+        \small \begin{align*}
+            \match{\triple x y z t--}{\triple x y z -t-}
+            && \match{\triple x y z -t-}{\triple x y z --t}
+            && \match{\triple x y z --t}{\triple x y z ---}
+        \end{align*}
+        In addition to these, we have the matching triples \small \begin{align*}
+            \match{\triple x y z ---}{\triple x y z \theta--}
+            && \match{\triple x y z ---}{\triple x y z --\theta}
+        \end{align*} \normalsize for every state $\theta$, since the read
+        head could be position right outside the triple and move in.
+        Lastly, we have the matching triples \small \begin{align*}
+            \match{\triple x y z ---}{\triple x y z ---}
+        \end{align*} \normalsize where the read head is not in the triple
+        either before or after the transition.
+        \item The construction of the triples makes it clear that if
+        $c_1 \xRightarrow{1} c_2$, then each triple in $c_1$ matches the
+        corresponding triple in $c_2$.
+
+        The converse is also true.
+        Since $c_1$ and $c_2$ are valid configurations, they have exactly
+        one state symbol in the bottom row.
+        The triples matching ensures that the state symbol moves at most
+        one position, either left or right.
+        Thus there are at most $6$ triples which contain any state symbol
+        (before or after the transition).
+        The matching triples ensure that these have arisen from valid
+        transitions.
+
+        For the other triples, the matching ensures that no tape symbol
+        has changed, since the only matching triple with no state symbols
+        is \[
+            \match{\triple x y z ---}{\triple x y z ---}.
+        \]
+
+        Notice that having some length greater that $1$ is essential.
+        Consider the transition \[
+            \begin{pmatrix}
+                u & v & w & x & y & z \\
+                - & - & q & - & - & -
+            \end{pmatrix} \xRightarrow{1} \begin{pmatrix}
+                u & v & w' & x & y & z \\
+                - & - & -  & q & - & -
+            \end{pmatrix}.
+        \] The match \[
+            \match{\triple u v w --q}{\triple u v w' ---}
+        \] ensures that the letter change and move are consistent.
+        But what forces the matching triple \[
+            \match{\triple x y z ---}{\triple x y z q--}?
+        \] The state could `vanish' in the false transition \[
+            \begin{pmatrix}
+                u & v & w & x & y & z \\
+                - & - & q & - & - & -
+            \end{pmatrix} \xRightarrow{1} \begin{pmatrix}
+                u & v & w' & x & y & z \\
+                - & - & -  & - & - & -
+            \end{pmatrix}
+        \] and both the initial and final triples would match.
+        But the triples in between reject this possibility, since
+        \[
+            \match{\triple v w x -q-}{\triple v w' x ---}
+        \] is never a matching triple.
+        The length provides immediate context to each position.
+        This is more clear from the next part.
+        \item The desirable properties still hold.
+        If $c_1$ and $c_2$ are valid configurations of the same length,
+        then $c_1 \xRightarrow{1} c_2$ iff for each position in $c_1$,
+        the pair of symbols in $c_1$ and the corresponding pair in $c_2$
+        match.
+
+        This is because for any transition which changes a portion of the
+        tape as \[
+            \begin{pmatrix}
+                u & v & w & x & y \\
+                - & - & q & - & -
+            \end{pmatrix} \xRightarrow{1} \begin{pmatrix}
+                u & v & w' & x & y \\
+                - & - & -  & q & -
+            \end{pmatrix},
+        \] the pair at $w$ ensures that the head has moved right by
+        following the correct transition.
+        The pair at $v$ ensures that the head has \emph{not} moved left.
+        \qedhere
+    \end{enumerate}
+\end{solution}
+
+\begin{problem*}
+    Show that it is undecidable whether the intersection of two given CFLs
+    is a CFL.
+\end{problem*}
+\begin{solution}
+    We will reduce the halting problem to this problem.
+
+    Let $M$ be a Turing machine and $x$ be an input.
+    Define two PDAs $M_1$ and $M_2$ as in class:
+    Given a string $c_0 \# c_1 \# \dots \# c_n \#$ of (reversed)
+    configurations,
+    \begin{itemize}
+        \item $M_1$ checks that the even-numbered configurations are correctly
+        followed by their successors.
+        \item $M_2$ checks that the odd-numbered configurations are correctly
+        followed by their successors.
+    \end{itemize}
+    Then $L(M_1) \cap L(M_2)$ is the set of valid computations of $M$ on $x$.
+    This is precisely $Valcomp_{M, x}$.
+    If $x$ does not halt on $M$, this is empty, and hence a CFL.
+    If $x$ halts on $M$, this is not a CFL.
+
+    Thus the map $M\#x \mapsto (M_1, M_2)$ is a reduction from the halting
+    problem to the problem of determining whether the intersection of two
+    given CFLs is a CFL.
+\end{solution}
+
+\end{document}

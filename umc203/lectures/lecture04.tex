@@ -1,51 +1,64 @@
-\lecture{04}{Thu 18 Jan '24}{}
-Suppose we also have a loss function $\ell\colon \mathcal{Y} \times
-\mathcal{Y} \to \R_{\ge 0}$.
+\lecture{04}{Thu 18 Jan '24}{Bayes error rate (continued),
+discriminant functions}
+Suppose we also have a loss function
+$\ell\colon \mcY \times \mcY \to \R_{\ge 0}$.
 Then we have the \emph{Bayes error rate} \[
-    E_{Y \given X = x} \ell(\tilde{h}(x), Y)
+    \E_{Y \given X = x} \ell(\tilde{h}(x), Y)
         = \min_{i \in [M]} r_i(x)
-\] where $r_i(x) = E_{Y \given X = x} \ell(i, Y)$.
+\] where $r_i(x) = \E_{Y \given X = x} \ell(i, Y)$.
 
-We define the \emph{Bayes risk} \[
-    R(h) = E_{XY} \ell(h(X), Y)
+We define the \emph{risk} of a classifier as \[
+    R(h) = \E_{XY} \ell(h(X), Y)
 \]
 \begin{theorem}
     Given the loss function $\ell = 1 - \delta$, where $\delta$ is the
-    Kronecker delta, the Bayes classifier minimises the Bayes risk.
-    That is, $h$
+    Kronecker delta, the Bayes classifier minimises the risk.
+    That is, \[
+        \tilde{h} = \argmin_{h\colon \mcX \to \mcY} R(h)
+    \]
 \end{theorem}
 \begin{proof}
-    We have \begin{align*}
+    Fix an $x \in \mcX$.
+    The optimal classifier $h^*$ has \begin{align*}
+        h^*(x) &= \argmin_{h\colon \mcX \to \mcY} \E_{Y \given X = x} \ell(h(x), Y) \\
+            &= \argmin_{h} \sum_{i = 1}^{M} \Pr(Y = i \given X = x) \ell(h(x), i) \\
+            &= \argmin_{h} \sum_{i \ne h(x)} \Pr(Y = k \given X = x) \\
+            &= \argmin_{h} \left(1 - \eta_{h(x)}(x)\right).
+    \end{align*} Similarly we have \begin{align*}
         r_i(x) &= \sum_{j = 1}^{M} \ell(i, j) \eta_j(x) \\
-            &= \sum_{k \ne i} \eta_k(x) \\
-            &= 1 - \eta_i(x)
-    \end{align*}
-    We choose $\tilde{h}(x) = \argmin_i r_i(x)$.
+              &= \sum_{k \ne i} \eta_k(x) \\
+              &= 1 - \eta_i(x)
+    \end{align*} and we choose $\tilde{h}(x) = \argmin_i r_i(x)$.
+
+    Let $i = \tilde{h}(x)$.
     Then for all $j \ne i$, \begin{align*}
-        r_i(x) &< r_j(x) \\
-        1 - \eta_i(x) &< 1 - \eta_j(x) \\
-        \eta_j(x) &< \eta_i(x)
+        r_i(x)     &< r_j(x) \\
+        1 - \eta_i(x) &< 1 - \eta_j(x).
     \end{align*}
-    For all $j \ne i$, $\tilde{h} = h^*$.
+    Thus $1 - \eta_{h(x)}(x)$ is minimised by $h(x) = i$.
+    Thus $h^*(x) = \tilde{h}(x)$.
 \end{proof}
 
-For $M$ category problem, define discriminant functions
-$g_i\colon \mathcal{X} \to \R$ for $i \in [M]$, and define the classifier
+For $M$ category problem, define \emph{discriminant functions}
+$g_i\colon \mcX \to \R$ for $i \in [M]$, and define the classifier
 $h(x) = \argmax_i g_i(x)$.
 
 Let $f\colon [0, 1] \to \R$ be any monotonically increasing function.
-Then $g_i = f \circ \eta_i$ works as a discriminant.
+Then $g_i = f \circ \eta_i$ works as a discriminant to give the Bayes
+classifier.
 
-Suppose $\Pr(X = x \given Y = i) = N(x \given \mu_i, C_i)$.
+Suppose the class conditioned probabilities are given by
+$\Pr(X = x \given Y = i) = N(x \given \mu_i, \Sigma_i)$.
 Then \[
-    \eta_i(x) = \frac{p_i N(x \given \mu_i, C_i)}{P(x)}.
+    \eta_i(x) = \frac{p_i N(x \given \mu_i, \Sigma_i)}{P(x)}.
 \]
 Then \begin{align*}
-    \log \eta_i(x) &= \log p_i + \log N(x \given \mu_i, C_i) - \log P(x) \\
-          &= \log p_i + \log \frac1{\big(\sqrt{2\pi}\big)^d \abs{C}^{1 / 2}}
-          - \frac12 (x - \mu_i)^\top C^{-1} (x - \mu_i)
+    \log \eta_i(x) &= \log p_i + \log N(x \given \mu_i, \Sigma_i) - \log P(x) \\
+          &= \log p_i + \log \frac1{\big(\sqrt{2\pi}\big)^d \abs{\Sigma}^{1 / 2}}
+          - \frac12 \norm{x - \mu_i}^2_{\Sigma^{-1}}
           - \log P(x)
 \end{align*}
-If $C_i = C$ for all $i$, we drop the constants to get \[
-    g_i(x) = \log p_i - \frac12 (x - \mu_i)^\top C^{-1} (x - \mu_i).
+If $\Sigma_i = \Sigma$ for all $i$, we drop the constants to get the
+discriminant \[
+    g_i(x) = \log p_i - \frac12 \norm{x - \mu_i}^2_{\Sigma^{-1}}.
 \]

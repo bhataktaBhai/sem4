@@ -1,0 +1,174 @@
+\section{Vector-valued Functions} \label{sec:riemann:vector}
+\lecture{32}{Wed 27 Mar '24}{Vector integration}
+
+\begin{definition}
+    Let $f\colon [a, b] \to \R^n$, $f = (f_1, \dots, f_n)$.
+    Then $f$ is said to be \emph{Riemann integrable} if each $f_i$
+    is Riemann integrable, and in this case we define \[
+        \int_a^b f(x) \dd x
+            = \left( \int_a^b f_1(x) \dd x, \dots, \int_a^b f_n(x) \dd x \right).
+    \]
+\end{definition}
+
+\begin{theorem} \label{thm:riemann:triangle}
+    Suppose $\vec{f} \in \mcR[a, b]$.
+    Then so is $\lVert{\vec{f}}\;\rVert\colon [a, b] \to [0, \infty)$,
+    and \[
+        \norm{\int_a^b \vec{f}(x) \dd x}
+            \le \int_a^b \norm{\vec{f}(x)} \dd x.
+    \]
+\end{theorem}
+\begin{proof}
+    \[
+        \norm*[\big]{\vec f(x)} = \sqrt{f_1^2(x) + \dots + f_n^2(x)}
+    \] is Riemann integrable since each $f_i$ is, and the square and
+    square root functions are continuous.
+
+    Cauchy-Schwarz.
+    For any $f, g \colon [a, b] \to \R^n$, \begin{align*}
+        \innerp{f(x)}{g(x)}
+            &\le \norm{f(x)} \, \norm{g(x)} \\
+        \implies \int_a^b \innerp{f(x)}{g(x)} \dd x
+            &\le \int_a^b \norm{f(x)} \, \norm{g(x)} \dd x.
+    \end{align*}
+    The LHS is \[
+        \sum_i \int_a^b f_i(x) g_i(x) \dd x.
+    \] Take $g_j(x) = \int_{a}^{b} f_j(t) \dd t$.
+    Then this becomes \[
+        \sum_i \left(\int_{a}^{b} f_i(x) \dd x\right)^2
+            = \norm{\int_{a}^{b} f(x) \dd x}^2\!.
+    \]
+    For the RHS, note that $g$ is constant, and \[
+        \norm{g(x)} = \norm{\int_a^b f(t) \dd t}.
+    \] So the RHS becomes \[
+        \norm{\int_a^b f(x) \dd x} \int_a^b \norm{f(x)} \dd x.
+    \]
+    Thus \[
+        \norm{\int_a^b f(x) \dd x}^2
+            \le \norm{\int_a^b f(x) \dd x} \int_a^b \norm{f(x)} \dd x.
+    \] If $\norm{\int_a^b f(x) \dd x} \ne 0$, cancel it out.
+    Otherwise, the inequality holds anyway.
+\end{proof}
+
+\section{Rectifiable Paths} \label{sec:rectifiable_paths}
+\begin{definition}[Path] \label{def:path}
+    A \emph{path} or \emph{curve} in $\R^n$ is a continuous function
+    $\gamma\colon [a, b] \to \R^n$.
+
+    $\gamma$ is an \emph{arc} if it is injective.
+
+    $\gamma$ is \emph{closed} if $\gamma(a) = \gamma(b)$.
+
+    $\gamma$ is a simple closed curve if $\gamma(a) = \gamma(b)$ and the
+    image of $\gamma$ does not self-intersect.
+\end{definition}
+
+\begin{definition}[Length and rectifiable paths] \label{def:path:length}
+    Let $\gamma\colon [a, b] \to \R^n$ be a path.
+    Let $P = \set{a = x_0 \le x_1 \le \dots \le x_n = b}$ be a partition
+    of $[a, b]$.
+    Define \[
+        \Lambda(P, \gamma)
+            = \sum_{i=1}^n \norm{\gamma(x_i) - \gamma(x_{i-1})}.
+    \] Further define \[
+        \Lambda(\gamma)
+        = \sup\set{\Lambda(P, \gamma) \mid P \text{ partitions } [a, b]}.
+    \] If $\Lambda(\gamma) < \infty$, then $\gamma$ is said to be
+    \emph{rectifiable}, and its \emph{length} is defined to be
+    $\Lambda(\gamma)$.
+\end{definition}
+
+\begin{theorem} \label{thm:riemann:speed}
+    Let $\gamma\colon [a, b] \to \R^n$ be continuously differentiable.
+    Then $\gamma$ is rectifiable, and \[
+        \Lambda(\gamma) = \int_a^b \norm{\gamma'(t)} \dd t.
+    \]
+\end{theorem}
+\begin{proof}
+    First note that $\norm{\gamma'}$ is continuous, and thus
+    Riemann integrable.
+
+    Let $P = \set{x_0 \le \dots \le x_n}$ partition $[a, b]$.
+    By IIFToC, \begin{align*}
+        \gamma(x_j) - \gamma(x_{j-1})
+            &= \int_{x_{j-1}}^{x_j} \gamma'(t) \dd t \\
+        \implies \norm{\gamma(x_j) - \gamma(x_{j-1})}
+            &\le \int_{x_{j-1}}^{x_j} \norm{\gamma'(t)} \dd t.
+        \intertext{by \cref{thm:riemann:triangle}.
+        Summing over all $j$,}
+        \Lambda(P, \gamma)
+            &\le \int_a^b \norm{\gamma'(t)} \dd t.
+            \yesnumber \label{eq:riemann:speed:upper}
+    \end{align*}
+    Thus $\Lambda(\gamma) \le \int_a^b \norm{\gamma'(t)} \dd t$.
+
+    It remains to show that
+    $\Lambda(\gamma) \ge \int_a^b \norm{\gamma'(t)} \dd t$.
+
+    $\gamma'$ is uniformly continuous.
+    Let $\varepsilon > 0$.
+    $\exists \delta > 0$ such that $\forall x, y \in [a, b]$ with
+    $\abs{x - y} < \delta$, \[
+        \norm{\gamma'(x) - \gamma'(y)} < \varepsilon.
+    \]
+
+    Let $P_\varepsilon = \set{x_0 \le \dots \le x_n}$ be a partition
+    with each interval of length less than $\delta$.
+    Then for any $t \in [x_{j-1}, x_j]$, \begin{align*}
+        \norm{\gamma'(t)}
+            &\le \norm{\gamma'(x_{j-1})} + \varepsilon \\
+        \implies \int_{x_{j-1}}^{x_j} \norm{\gamma'(t)} \dd t
+            &\le \int_{x_{j-1}}^{x_j} \norm{\gamma'(x_{j-1})} \dd t
+                + \varepsilon(x_j - x_{j-1}).
+    \end{align*}
+    We focus on the first term.
+    \begin{align*}
+        \int_{x_{j-1}}^{x_j} \norm{\gamma'(x_{j-1})} \dd t
+        &= \norm{\int_{x_{j-1}}^{x_j} \gamma'(x_{j-1}) \dd t} \\
+        &= \norm{\int_{x_{j-1}}^{x_j} \gamma'(x_{j-1}) - \gamma'(t)
+                + \gamma'(t) \dd t} \\
+        &\le \norm{\int_{x_{j-1}}^{x_j} \gamma'(x_{j-1}) - \gamma'(t) \dd t}
+            + \norm{\int_{x_{j-1}}^{x_j} \gamma'(t) \dd t} \\
+        &< \varepsilon(x_j - x_{j-1})
+            + \norm{\gamma(x_j) - \gamma(x_{j-1})}.
+        \intertext{So}
+        \int_{x_{j-1}}^{x_j} \norm{\gamma'(t)} \dd t
+            &< \norm{\gamma(x_j) - \gamma(x_{j-1})}
+                + 2\varepsilon(x_j - x_{j-1}).
+    \end{align*}
+    Summing over all $j$,% in \cref{eq:riemann:velocity},}
+    \begin{align*}
+        \int_a^b \norm{\gamma'(t)} \dd t
+            &\le \Lambda(P_\varepsilon, \gamma) + 2\varepsilon(b - a).
+            \yesnumber \label{eq:riemann:speed:lower}
+        \intertext{Since $\varepsilon$ was arbitrary,}
+        \int_a^b \norm{\gamma'(t)} \dd t
+            &\le \Lambda(\gamma).
+    \end{align*}
+    Or is it ``taking limits as $\varepsilon \to 0$''?
+
+    This should be obvious to me by now, but it's not.
+    So lemme do some $\varepsilon$-stuff.
+
+    $\Lambda(\gamma)$ is the supremum of $\Lambda(P, \gamma)$ over all
+    partitions $P$.
+    So for any $\varepsilon > 0$, there exists a partition $P$
+    such that \begin{align}
+        \Lambda(P, \gamma) > \Lambda(\gamma) - \varepsilon.
+        \label{eq:riemann:speed:lub}
+    \end{align} In fact, it is the unique upper bound that satisfies this.
+
+    We have already shown that the speed integral is an upper bound.
+    From \cref{eq:riemann:speed:lower}, we have shown the
+    property \labelcref{eq:riemann:speed:lub}.
+    Thus $\int_a^b \norm{\gamma'(t)} \dd t$ is the desired supremum.
+
+    More directly, there are partitions that make $\Lambda(\cdot, \gamma)$
+    arbitrarily close to the speed integral.
+    So nothing less than the speed integral can be an upper bound.
+    Thus $\Lambda(\gamma) \le \int_a^b \norm{\gamma'(t)} \dd t$.
+
+    Combining this with \labelcref{eq:riemann:speed:upper}, we have \[
+        \Lambda(\gamma) = \int_a^b \norm{\gamma'(t)} \dd t. \qedhere
+    \]
+\end{proof}

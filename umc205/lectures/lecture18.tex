@@ -1,0 +1,126 @@
+\chapter{Turing Machines} \label{chp:tm}
+\lecture{18}{Thu 07 Mar '24}{}
+
+\section{A Brief History of Logic \& Computability} \label{sec:history}
+
+In 1928, David Hilbert posed the Entscheidungsproblem -- deciding validity
+of first-order logic formulas.
+
+Kurt G\"odel showed
+\begin{itemize}
+    \item in 1929, the completeness of first-order logic;
+    \item in 1931, the incompleteness of first-order arithmetic;
+    \item in 1931, primitive recursive functions. % TODO: what?
+\end{itemize}
+
+In 1936, Alan Turing proved the unsolvability of the Entscheidungsproblem
+using Turing machines.
+In the same year, Alonzo Church proved the same result using $\lambda$-calculus.
+
+\section{Introduction} \label{sec:tm:intro}
+A Turing machine reads a tape that is infinite to the right.
+The tape is divided into cells,
+each of which contains a symbol from a finite alphabet $A$.
+
+In each step:
+\begin{itemize}
+    \item In current state $p$, read current symbol under the tape head,
+    say $a$.
+    \item Change state to $q$.
+    \item Replace $a$ with $b$.
+    \item Move the tape head left or right. \[
+        \delta(p, a) = (q, b, L/R)
+    \]
+\end{itemize}
+
+The machine has special designated \emph{accept} state $t$
+and \emph{reject} state $r$.
+These states are assumed to be ``sink'' states.
+The machine accepts if it enters the accept state,
+and rejects if it enters the reject state.
+The machine never ``falls off'' the left end of the tape.
+That is, on reading `$\leftend$', it always moves right.
+
+\section{Turing Machines Formally} \label{sec:tm:formal}
+\begin{definition*}[Turing machine] \label{def:tm}
+    A \emph{Turing machine} is a tuple \[
+        \mcM = (Q, A, \Gamma, s, \delta, \leftend, \blank, t, r)
+    \] where
+    \begin{itemize}
+        \item $Q$ is a finite set of states;
+        \item $A$ is the finite input alphabet;
+        \item $\Gamma \supseteq A$ is the finite tape alphabet;
+        \item $s \in Q$ is the start state;
+        \item $\delta: Q \times \Gamma \to Q \times \Gamma \times \set{L, R}$
+        is the (deterministic) transition function;
+        \item $\leftend \in \Gamma \setminus A$ is the left end marker;
+        \item $\blank \in \Gamma \setminus A$ is the blank symbol;
+        \item $t \in Q$ is the accept state; and
+        \item $r \in Q \setminus \set{t}$ is the reject state.
+    \end{itemize}
+    $\delta$ must follow the following constraints:
+    \begin{itemize}
+        \item For any state $p$,
+        $\delta(p, \leftend) = (q, \leftend, R)$ for some $q \in Q$;
+        \item For any $a \in \Gamma$, $\delta(t, a) = (t, b, \sigma)$ for 
+        some $b$ and $\sigma$;
+        \item For any $a \in \Gamma$, $\delta(r, a) = (r, b, \sigma)$ for
+        some $b$ and $\sigma$.
+    \end{itemize}
+\end{definition*}
+
+\begin{definition}[Configuration] \label{def:tm:configuration}
+    A \emph{configuration} of a Turing machine \mcM\ as above is a triple \[
+        (p, y\blank^\omega, n) \in Q \times \Gamma^\omega \times \N
+    \] which specifies that the machine is in state $p$,
+    with ``non-blank'' tape contents $y$ (which cannot end with $\blank$),
+    and the read head positioned at the $n$th cell.
+\end{definition}
+\begin{remark}
+    The initial configuration of \mcM\ on input $w \in A^*$ is
+    $(s, \leftend w \blank^\omega, 0)$.
+\end{remark}
+
+\begin{definition}[Acceptance] \label{def:tm:acceptance}
+    We define the $1$-step transition of \mcM\ as follows:
+    If $\delta(p, a) = (q, b, \sigma)$, and $z_n = a$, then \[
+        (p, z, n) \xRightarrow{1} (q, s_b^n(z), n+\sigma).
+    \] where we identify $L$ with $-1$ and $R$ with $+1$.
+
+    We define $\xRightarrow{n}$ and $\xRightarrow{*}$ recursively as
+    before.
+
+    We say that \mcM\ \emph{accepts} $w \in A^*$ if \[
+        (s, \leftend w \blank^\omega, 0) \xRightarrow{*} (t, z, i)
+    \] for some $z \in \Gamma^*$, $i \in \N$.
+
+    We say that \mcM\ \emph{rejects} $w \in A^*$ if \[
+        (s, \leftend w \blank^\omega, 0) \xRightarrow{*} (r, z, i)
+    \] for some $z$ and $i$.
+\end{definition}
+
+\begin{definition}[Halting] \label{def:tm:halting}
+    A Turing machine \mcM\ is said to \emph{halt} on an input $w$ if
+    \mcM\ either accepts or rejects $w$.
+    Otherwise, we say that \mcM\ \emph{loops} on $w$.
+
+    The \emph{language accepted by \mcM} is \[
+        L(\mcM) = \set{w \in A^* \mid \mcM \text{ accepts } w}.
+    \]
+
+    A language $L \subseteq A^*$ is said to be \emph{recursively enumerable}
+    if it is the language accepted by some Turing machine.
+
+    It is said to be \emph{recursive} if it is the language accepted by some
+    Turing machine that halts on all inputs.
+\end{definition}
+Why do we use the terms ``recursively enumerable'' and ``recursive''?
+\begin{proposition}[Recursively enumerable]
+\label{thm:tm:recursively_enumerable}
+    Let \mcM\ be a Turing machine.
+    Then there exists a procedure to list all strings in $L(\mcM)$
+    (possibly with repetitions).
+\end{proposition}
+\begin{proof}
+    
+\end{proof}

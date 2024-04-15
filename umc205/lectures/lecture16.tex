@@ -1,0 +1,181 @@
+\lecture{16}{Thu 29 Feb '24}{}
+\begin{exercise}
+    Consider the CFG $G_1$ again.
+    \begin{align*}
+        S &\to XC \mid AY \\
+        X &\to aXb \mid ab \\
+        Y &\to bYc \mid bc \\
+        A &\to aA \mid a \\
+        C &\to cC \mid c
+    \end{align*}
+    \begin{enumerate}
+        \item What is the language of $G_1$?
+        \item What is the Parikh image of this language?
+        \item Write it as a semi-linear set.
+    \end{enumerate}
+\end{exercise}
+
+\begin{definition}[Pump] \label{def:cfg:pump}
+    Let $G = (N, A, S, P)$ be a context free grammar in CNF.
+    A \emph{pump} of $G$ is a derivation tree $s$ with at least $2$ nodes,
+    such that $\yield(s) = u \cdot \groot(s) \cdot v$ for some
+    $u, v \in A^*$.
+\end{definition}
+\begin{example}
+    For the grammar $S \to \epsilon \mid SS \mid aSb$, example pumps are
+    \vspace{3em}
+    \begin{center}
+        \begin{tikzpicture}
+            \begin{forest}
+                [$S$ [$a$] [$S$] [$b$]]
+            \end{forest}
+        \end{tikzpicture}
+    \end{center}
+\end{example}
+
+\begin{definition}[Basic pumps] \label{def:cfg:pump:order}
+    Let $s$ and $t$ be pumps of a context free grammar $G$.
+    Then we say $s \pumple t$ iff $t$ can be grown from $s$ by replacing
+    a non-terminal $X$ in $s$ by a pump of $X$.
+
+    A pump which is $\pumple$-minimal is called \emph{basic}.
+\end{definition}
+\begin{lemma}
+    The height of a basic pump is at most $2 \abs{N}$.
+\end{lemma}
+\begin{proof}
+    Let $s$ be a basic pump.
+    Let $L$ be the longest path in $s$.
+    If $L$ has more than $2 \abs{N} + 1$ nodes, then $L$ has more than
+    $2 \abs{N}$ nodes excluding the root.
+    So by the pigeonhole principle, there are two nodes $x$ and $y$ in $L$
+    with the same label.
+\end{proof}
+
+\begin{definition}[Order on parse trees] \label{def:cfg:tree:order}
+    Let $s$ and $t$ be derivation trees of terminal strings starting from
+    the start symbol $S$.
+    Then we say $s \le t$ iff $t$ can be grown from $s$ by basic pumps
+    whose non-terminals are comtained in those of $s$.
+\end{definition}
+
+\section{Pushdown Automata} \label{sec:pda}
+CFG's were introduced by Noam Chomsky in 1956.
+Oettinger introduced pushdown automata in 1961.
+Chomsky, Schützenberger, and Evey showed equivalence of CFG's and PDA's in 1962.
+
+A pushdown automaton reads a string from left to right and uses a stack to
+store information about the string it has read so far.
+Each step of the PDA looks like:
+\begin{itemize}
+    \item read and pop the top-of-stack symbol;
+    \item read current symbol and advance the read head;
+    \item push in a string of symbols onto the stack;
+    \item change state.
+\end{itemize}
+Thus each transition of a PDA is of the form \[
+    (p, a, X) \to (q, Y_1 Y_2 \dots Y_k)
+\]
+
+There are two commonly-used mechanisms of acceptance for PDA's:
+\begin{itemize}
+    \item \emph{Empty stack acceptance}: accept if the input is exhausted
+        and the stack is empty.
+    \item \emph{Final state acceptance}: accept if the input is exhausted
+        and the PDA is in a final state.
+\end{itemize}
+
+\begin{example}
+    An acceptance-by-empty-stack PDA for the language
+    $\set{a^n b^n \mid n \ge 0}$ is \begin{align*}
+        (s, \epsilon, \bot) &\to (s, \epsilon) \\
+        (s, a, \bot) &\to (p, A) \\
+        (p, a, A) &\to (p, AA) \\
+        (p, b, A) &\to (q, \epsilon) \\
+        (q, b, A) &\to (q, \epsilon)
+    \end{align*}
+    This is represented by the following diagram:
+    \begin{center}
+        \begin{tikzpicture}[node distance=2cm]
+            \node[state, initial] (s) {$s$};
+            \node[state, right=of s] (p) {$p$};
+            \node[state, right=of p] (q) {$q$};
+            \path[->]
+            (s) edge[loop above] node{$\epsilon, \bot/\epsilon$} (s)
+            (s) edge node{$a, \bot/A$} (p)
+            (p) edge[loop above] node{$a, A/AA$} (p)
+            (p) edge node{$b, A/\epsilon$} (q)
+            (q) edge[loop above] node{$b, A/\epsilon$} (q);
+        \end{tikzpicture}
+    \end{center}
+    The automaton is in state $p$ while reading the run of $a$'s,
+    and moves to state $q$ when it starts reading the run of $b$'s.
+\end{example}
+
+\begin{definition*}[Pushdown automaton] \label{def:pda}
+    A \emph{pushdown automaton} is a tuple
+    $\mcM = (Q, A, \Gamma, s, \delta, \bot, F)$ where
+    \begin{itemize}
+        \item $Q$ is a finite set of states,
+        \item $A$ is the input alphabet,
+        \item $\Gamma$ is the stack alphabet,
+        \item $s \in Q$ is the start state,
+        \item $\delta \subseteq Q
+            \times (A \cup \set{\epsilon})
+            \times \Gamma
+            \times Q
+            \times \Gamma^*$ is a finite set of (non-deterministic)
+            transitions,
+        \item $\bot \in \Gamma$ is the bottom-of-stack symbol,
+        \item $F \subseteq Q$ is the set of final states.
+    \end{itemize}
+    A \emph{configuration} of \mcM\ is of the form
+    $(q, u, \gamma) \in Q \times A^* \times \Gamma^*$,
+    which encodes the current state,
+                  the input read so far,
+              and the stack contents.
+\end{definition*}
+The initial configuration of \mcM\ is $(s, w, \bot)$ for input $w \in A^*$.
+We can define transition relations on configurations:
+\begin{definition*}
+    For a $1$-step transition of \mcM, we define \[
+        (p, au, X\beta) \xRightarrow{1} (q, u, \alpha\beta)
+    \] iff $(p, a, X) \to (q, \alpha)$ is a transition in $\delta$.
+
+    We recursively define $\xRightarrow{*}$ as for NFAs.
+    Then \mcM is said to accept a word $w$
+    \begin{itemize}
+        \item by empty stack iff
+        $(s, w, \bot) \xRightarrow{*} (q, \epsilon, \epsilon)$
+        for some $q \in F$, and
+        \item by final state iff
+        $(s, w, \bot) \xRightarrow{*} (f, \epsilon, \gamma)$
+        for some $f \in F$ and $\gamma \in \Gamma^*$.
+    \end{itemize}
+\end{definition*}
+
+\begin{exercise}
+    Design PDA's for the following languages:
+    \begin{itemize}
+        \item Balanced parentheses.
+        \item $\set{a, b}^* \setminus \set{ww \mid w \in \set{a, b}^*}$.
+    \end{itemize}
+\end{exercise}
+\begin{solution}
+    For balanced parentheses, we can use the following PDA:
+    \begin{align*}
+        (s, \epsilon, \bot) &\to (s, \epsilon) \\
+        (s, \texttt{(}, c) &\to (s, c A) \\
+        (s, \texttt{)}, \texttt{(}) &\to (s, \epsilon)
+    \end{align*}
+    or diagrammatically:
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (s) {$s$};
+            \path[->]
+            (s) edge[loop above] node{$\epsilon, \bot/\epsilon$} (s)
+            (s) edge[loop right] node{$\texttt{(}, c/cA$} (s)
+            (s) edge[loop below] node{$\texttt{)},\texttt{(}/\epsilon$} (s);
+        \end{tikzpicture}
+    \end{center}
+\end{solution}

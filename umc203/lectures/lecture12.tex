@@ -1,0 +1,92 @@
+\section{Nonseparable SVM} \label{sec:svm:nonsep}
+\lecture{12}{Tue 27 Feb '24}{Quadradic programming formulation of
+soft-margin SVM}
+
+We can rewrite this more conveniently (without the ugly $\max$ function)
+by introducing \emph{slack variables} $\xi_i \ge 0$ for each $i \in [n]$.
+\[
+    \boxed{
+        \quad\min_{w, b, \xi} \frac12 \norm{w}^2 + C\sum_{i=1}^n \xi_i
+        \quad\text{subject to}\quad
+        \begin{cases}
+            y_i \paren{\innerp*{w}{x^{(i)}} + b} \ge 1 - \xi_i, \\
+            \xi_i \ge 0.
+        \end{cases}
+    }
+\]
+Now \textbf{SOLVE!}
+
+The Lagrangian is \begin{align*}
+    L(w, b, \xi, \lambda^{(1)}, \lambda^{(2)})
+        &= \frac12 \norm{w}^2 + C\sum_{i=1}^n \xi_i \\
+        &\quad- \sum_{i=1}^n \lambda^{(1)}_i 
+            \paren{y_i (\innerp*{w}{x^{(i)}} + b) - 1 + \xi_i}
+        - \sum_{i=1}^n \lambda^{(2)}_i \xi_i.
+\end{align*} For the KKT point, the stationary conditions are \begin{align}
+    0 = \nabla_w L
+        &= w - \sum_{i=1}^n \lambda^{(1)}_i y_i x^{(i)},
+        \label{eq:nonsep:w} \\
+    0 = \nabla_b L
+        &= -\sum_{i=1}^n \lambda^{(1)}_i y_i,
+        \label{eq:nonsep:b} \\
+    0 = \nabla_{\xi} L
+        &= C - \lambda^{(1)} - \lambda^{(2)}.
+        \label{eq:nonsep:xi}
+\end{align}
+The complementary slackness conditions are \begin{align}
+    \lambda^{(1)}_i \paren{y_i (\innerp*{w}{x^{(i)}} + b) - 1 + \xi_i}
+        &= 0, \label{eq:nonsep:cs1} \\
+    \lambda^{(2)}_i \xi_i
+        &= 0. \label{eq:nonsep:cs2}
+\end{align}
+\subsection{Wolfe Dual} \label{sec:svm:nonsep:wolfe}
+The Wolfe dual is \[
+    \max_{w, b, \xi, \lambda^{(1)}, \lambda^{(2)}}
+        L(w, b, \xi, \lambda^{(1)}, \lambda^{(2)})
+    \quad\text{subject to}\quad
+    \begin{cases}
+        \lambda^{(1)} \ge 0, \\
+        \lambda^{(2)} \ge 0, \\
+        \lambda^{(1)}_i + \lambda^{(2)}_i = C, \\
+        w = \sum_{i=1}^n \lambda^{(1)}_i y_i x^{(i)}, \\
+        \sum_{i=1}^n \lambda^{(1)}_i y_i = 0.
+    \end{cases}
+\]
+Substituting \cref{eq:nonsep:b,eq:nonsep:xi} into $L$, \[
+    L^* = -\frac12 \norm{w}^2 - \sum_{i=1}^n \lambda^{(1)}_i
+        \innerp{w}{y_i x^{(i)}} + \sum_{i=1}^n \lambda^{(1)}_i.
+\] Substituting \cref{eq:nonsep:w}, \[
+    L^* = \sum_i \lambda^{(1)}_i
+            -\frac12 \sum_{i,j} \lambda^{(1)}_i \lambda^{(1)}_j y_i y_j
+                                        \innerp{x^{(i)}}{x^{(j)}}.
+\] We have seen this before!
+In the linearly separable case, the only difference was that
+$\lambda^{(1)}_i$ were positive unrestricted, but here they are bounded
+above by $C$, because of \cref{eq:nonsep:xi}.
+Thus the Wolfe dual boils down to \[
+    \max_{0 \le \lambda^{(1)} \le C}\;
+        \sum_i \lambda^{(1)}_i
+        -\frac12 \sum_{i,j} \lambda^{(1)}_i \lambda^{(1)}_j y_i y_j
+            \innerp{x^{(i)}}{x^{(j)}}.
+\]
+
+\Cref{eq:nonsep:xi} is very interesting.
+For each $i$, $\lambda^{(1)}_i + \lambda^{(2)}_i = C$.
+\begin{itemize}
+    \item If $\lambda^{(1)}_i = 0 \iff \lambda^{(2)}_i = C$,
+    then $\xi_i = 0$ by \cref{eq:nonsep:cs2}.
+    This gives $y_i (\innerp*{w}{x^{(i)}} + b) \ge 1$ for the constraints
+    to hold.
+    \item If $0 < \lambda^{(1)}_i < C \iff 0 < \lambda^{(2)}_i < C$,
+    then $\xi_i = 0$ by \cref{eq:nonsep:cs2}.
+    But from \cref{eq:nonsep:cs1}, $y_i (\innerp*{w}{x^{(i)}} + b) = 1$.
+    \item If $\lambda^{(1)}_i = C \iff \lambda^{(2)}_i = 0$,
+    then $0 \le \xi_i = (1 - y_i (\innerp*{w}{x^{(i)}} + b)) \vee 0$.
+\end{itemize}
+Also note that $\xi_i > 0$ is possible only in the last case,
+$\lambda^{(1)}_i = C$ or $\lambda^{(2)}_i = 0$.
+This is also the only case where $y_i \paren{\innerp*{w}{x^{(i)}} + b} < 1$.
+This makes sense, because for the objective function to be minimized,
+$\xi_i$ needs to be as small as possible.
+There is no need to have a positive $\xi_i$ if the constraints are satisfied
+without it.

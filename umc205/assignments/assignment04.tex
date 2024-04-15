@@ -1,0 +1,591 @@
+\documentclass[12pt]{article}
+\input{~/IISc/sem4/umc205/preamble}
+\usepackage{geometry}
+\DeclareMathOperator{\pref}{pref}
+% \geometry{a4paper, margin=1in}
+
+\title      {Assignment 4}
+\setcounter{assignment}{4}
+\setcounter   {section}{4}
+\author{Naman Mishra}
+\date{14 March, 2024}
+
+\begin{document}
+\maketitle
+% Problem 1
+\begin{problem*}
+    Construct a context-free grammar for the language \[
+        \set{xy \in \set{0, 1}^* \mid \abs{x} = \abs{y} \text{ and } y
+        \text{ contains a } 1}.
+    \]
+\end{problem*}
+\begin{solution}
+    \begin{align*}
+        S &\to 0 S 0 \mid 1 S 0 \\
+        S &\to 0 R 1 \mid 1 R 1 \\
+        R &\to 0 R 0 \mid 0 R 1 \mid 1 R 0 \mid 1 R 1 \mid \epsilon \qedhere
+    \end{align*}
+\end{solution}
+
+% Problem 2
+\begin{problem*}
+    Convert the following context-free grammar to Chomsky Normal Form (CNF):
+    \begin{align*}
+        S &\to AAA \mid B \\
+        A &\to aA \mid B \\
+        B &\to \epsilon
+    \end{align*}
+\end{problem*}
+\begin{solution}
+    We construct the new set of productions using these.
+
+    We add the transition $A \to \epsilon$, since $A \to B$ and
+    $B \to \epsilon$.
+    This allows us to add the transition $S \to AA$ and $A \to a$.
+
+    But $S \to AA$ and $A \to \epsilon$ means we can add $S \to A$.
+    Now that $S \to A$ is a production, we can add $S \to a$.
+
+    We then drop unit- and $\epsilon$-productions to get the rules
+    \begin{align*}
+        S &\to a \mid AA \mid AAA \\
+        A &\to a \mid aA
+    \end{align*}
+    The problematic productions are $S \to AAA$ and $A \to aA$.
+    We can fix these by introducing non-terminals $X$ and $Y$ with rules
+    \begin{align*}
+        X &\to AA \\
+        Y &\to a
+    \end{align*}
+    This gives the CNF
+    \begin{align*}
+        S &\to a \mid AA \mid XA \\
+        X &\to AA \\
+        A &\to a \mid YA \\
+        Y &\to a \qedhere
+    \end{align*}
+\end{solution}
+
+% Problem 3
+\begin{problem*}
+    Consider the language $L = \set*{a^nb^{n^2} \mid n \ge 0}$.
+    Use the Pumping Lemma for CFLs to show that $L$ is not a CFL. 
+\end{problem*}
+\begin{solution}
+    Suppose $L$ is a CFL.
+    Let $k$ be the pumping constant.
+    Consider the string $z = a^kb^{k^2}$.
+    Then $z = uvwxy$ such that
+    \begin{itemize}
+        \item $\abs{vwx} \le k$,
+        \item $vx \ne \epsilon$, and
+        \item $uv^iwx^iy \in L$ for all $i \ge 0$.
+    \end{itemize}
+    Suppose $v = a^\alpha b^\beta$ with $\alpha \beta \ne 0$.
+    Then $uv^2wx^2y = ua^{\alpha} b^{\beta} a^{\alpha} b^{\beta} wx^2y$
+    contains at least two runs of $a$'s and hence cannot be in $L$.
+    Thus $v$ is not of this form.
+    Similarly, neither is $x$.
+
+    Thus $v$ and $x$ can only contain either all $a$'s or all $b$'s.
+    If they were both all $a$'s, then $uv^2wx^2y$ would contain more than
+    $k$ $a$'s but only $k^2$ $b$'s.
+    Similarly, if they were both all $b$'s, then $uv^2wx^2y$ would contain
+    more than $k^2$ $b$'s but only $k$ $a$'s.
+
+    Thus $v = a^\alpha$ and $x = b^\beta$.
+    Then $uv^2wx^2y = a^{k + \alpha} b^{k^2 + \beta} \in L$.
+    This gives $\beta = 2k\alpha + \alpha^2$.
+    Also, $uwy = a^{k - \alpha} b^{k^2 - \beta} \in L$.
+    This gives $\beta = 2k\alpha - \alpha^2$.
+    Thus $\alpha^2 = 0 \implies \alpha = 0$ and $\beta = 0$.
+    But then $vx = \epsilon$, a contradiction.
+
+    Thus $L$ is not a CFL.
+\end{solution}
+
+% Problem 4
+\begin{problem*}
+    Consider the CFG $G$ below:
+    \begin{align*}
+        S &\to XC \mid AY \\
+        X &\to aXb \mid ab \\
+        Y &\to bYc \mid bc \\
+        A &\to aA \mid a \\
+        C &\to cC \mid c
+    \end{align*}
+    \begin{enumerate}[label=(\alph*)]
+        \item Describe the language accepted by $G$.
+        \item Use the construction in Parikh’s theorem to construct a
+        semi-linear expression for $\psi(L(G))$.
+        That is \begin{enumerate}[label=\roman*.]
+            \item Identify the basic pumps for $G$.
+            \item Identify the $\le$-minimal trees.
+            \item Use those to obtain an expression for $\psi(L(G))$.
+        \end{enumerate}
+        \item Use the semi-linear expression obtained above to give a
+        regular expression that is letter-equivalent to $L(G)$.
+    \end{enumerate}
+\end{problem*}
+\begin{solution} \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item \[
+            L(G) = \set{a^l b^m c^n \mid l, m, n \ge 0 \text{ and }
+                m = l \text{ or } m = n}.
+        \]
+        \item \begin{enumerate}[label=\roman*.]
+            \item The basic pumps are $A \to aA$, $B \to bB$, $C \to cC$,
+            $X \to aXb$, and $Y \to bYc$.
+            \begin{center}
+                \begin{forest}
+                    [$A$
+                        [$a$]
+                        [$A$]
+                    ]
+                \end{forest}
+                \qquad \qquad
+                \begin{forest}
+                    [$B$
+                        [$b$]
+                        [$B$]
+                    ]
+                \end{forest}
+                \qquad \qquad
+                \begin{forest}
+                    [$C$
+                        [$c$]
+                        [$C$]
+                    ]
+                \end{forest}
+                \\
+                \begin{forest}
+                    [$X$
+                        [$a$]
+                        [$X$]
+                        [$b$]
+                    ]
+                \end{forest}
+                \qquad \qquad
+                \begin{forest}
+                    [$Y$
+                        [$b$]
+                        [$Y$]
+                        [$c$]
+                    ]
+                \end{forest}
+            \end{center}
+            \item The $\le$-minimal trees are
+            $S \to XC \Rightarrow abc$ and $S \to AY \Rightarrow abc$.
+            \begin{center}
+                \begin{forest}
+                    [$S$
+                        [$X$
+                            [$a$]
+                            [$b$]
+                        ]
+                        [$C$
+                            [$c$]
+                        ]
+                    ]
+                \end{forest}
+                \qquad \qquad
+                \begin{forest}
+                    [$S$
+                        [$A$
+                            [$a$]
+                        ]
+                        [$Y$
+                            [$b$]
+                            [$c$]
+                        ]
+                    ]
+                \end{forest}
+            \end{center}
+            \item The basic pumps, in the order they are listed, are
+            of lengths $1$, $1$, $1$, $2$ and $2$.
+
+            For the first tree, we can apply the pumps $X \to aXb$,
+            $B \to bB$ or $C \to cC$
+            Thus that ``bucket'' gives Parikh map $\set{3 + 2m + n}$.
+
+            For the second tree, we can apply the pumps $A \to aA$,
+            $B \to bB$ or $Y \to bYc$.
+            Thus that bucket gives the same Parikh map.
+
+            Thus the Parikh map of the language is \[
+                \psi(L(G)) = 3 + \Angled{2, 1} = 3 + \Angled{1}
+            \] or simply $\set{3, 4, \dots}$. \qedhere
+        \end{enumerate}
+        \item $aaaa^*$ also has Parikh map $\set{3, 4, \dots}$.
+    \end{enumerate}
+\end{solution}
+
+% Problem 5
+\begin{problem*}
+    Give the transition diagram of a PDA for the language
+    $L = \set{a^l b^m c^n \mid l = m + n}$.
+\end{problem*}
+\begin{solution} \leavevmode
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state, initial] (a) {$a$};
+            \node[state, right=2cm of a] (b) {$b$};
+            \node[state, right=2cm of b] (c) {$c$};
+            \path[->]
+            (a) edge[loop above] node[above] {\begin{tabular}{c}
+                $a, \bot/A$ \\
+                $a, A/AA$
+            \end{tabular}} (a)
+            (a) edge[loop below] node[below] {$\epsilon, \bot/\epsilon$} (a)
+            (a) edge node[above]
+                {$b, A/\epsilon$} (b)
+            (a) edge[bend right] node[below]
+                {$c, A/\epsilon$} (c)
+            (b) edge[loop above] node[above] {$b, A/\epsilon$} (b)
+            (b) edge node[above]
+                {$c, A/\epsilon$} (c)
+            (c) edge[loop above] node[above] {$c, A/\epsilon$} (c);
+        \end{tikzpicture}
+    \end{center}
+    accepts $L$ via empty stack.
+\end{solution}
+
+% Problem 6
+\begin{problem*}
+    Is the class of context-free languages closed under the
+    prefix operation?
+    Justify your answer.
+\end{problem*}
+\begin{solution}
+    Yes.
+
+    Let $\pref(L)$ denote the set of prefixes of strings in $L$. \[
+        \pref(L) = \set{u \mid \exists v \in A^*, uv \in L}.
+    \]
+    We first do away with the case of the empty language.
+    $\pref(\O) = \O$ is a CFL iff $\O$ is a CFL.
+    Whether $\O$ is a CFL or not (it is) is not even relevant.
+
+    Next, notice that $\pref(L)$ contains the empty string for any non-empty
+    $L$.
+    Thus $\pref(L) = \pref(L \setminus \set{\epsilon})$.
+    So we can assume that $L$ does not contain the empty string.
+
+    Now let $G = (N, A, S, P)$ be a CFG for $L$ in CNF.
+    Assume that there are no non-terminals from which \emph{no}
+    terminal string can be derived.%
+    \footnote{If there are, we can remove them, and all productions
+    containing them, from $G$ without affecting the language generated.
+    We handled $L = \O$ separately because the starting symbol cannot
+    be removed.}
+
+    For each non-terminal $X \in N$, introduce a new non-terminal
+    $X_\bot \notin N$.
+    Denote the set of these new non-terminals
+    $N_\bot = \set{X_\bot \mid X \in N}$.
+    We will call these ``vanishing'' non-terminals, or simply
+    ``vanisher''s.
+
+    For each $X_\bot$, we add the following productions to $P$:
+    \begin{itemize}
+        \item $X_\bot \to \epsilon$.
+        \item $X_\bot \to a$, for each production $X \to a$.
+        \item $X_\bot \to Y Z_\bot$ and $X_\bot \to Y_\bot$,
+        for each production $X \to Y Z$.
+    \end{itemize}
+    Call this new set of productions $P'$
+
+    Intuitively, vanishing non-terminals are allowed to go to the empty
+    string directly.
+    They represent truncation, and as such can only be allowed to appear
+    at the end of any sentential form.
+
+    We claim that $G' = (N \cup N_\bot, A, S_\bot, P')$
+    is a CFG for the prefix of $L$,
+    \ie, \[
+        L(G') = \pref(L).
+    \]
+
+    We will use ``non-terminal sentential form'' to mean a sentential form
+    which contains at least one non-terminal.
+    We use $\Rightarrow$ to denote derivation steps in both $G$ and $G'$.
+    The context will make it clear which grammar we are referring to
+    (if any vanisher is present, we are referring to $G'$).
+    % \begin{lemma}
+    %     If a sentential form of $G'$ contains a vanishing non-terminal,
+    %     it occurs as the last symbol.
+    % \end{lemma}
+    % \begin{proof}
+    %     We induct on the length $n$ of the derivation.
+    %     The base case $n = 0$ is direct.
+    %
+    %     Suppose the claim holds for all sentential forms derived in $n$
+    %     steps.
+    %     Let $S \xRightarrow{n} \nu \xRightarrow{1} \omega$.
+    %
+    %     Suppose the last step is $X \to \gamma$.
+    %     This is an original production, from $P'$, so $\gamma$ does not
+    %     contain any vanishing non-terminals.
+    %
+    %     Then $\nu = \alpha X \beta \xRightarrow{1} \alpha \gamma \beta
+    %     = \omega$.
+    %     By the induction hypothesis, only the last symbol of $\beta$ can be
+    %     a vanishing non-terminal.
+    %     Hence $w$ can only contain a vanishing non-terminal at the end.
+    %
+    %     If the last step is $X_\bot \to \gamma$, then $\nu = \alpha X_\bot$
+    %     by the induction hypothesis, so $\omega = \alpha \gamma$,
+    %     where $\alpha$ is free of vanishing non-terminals.
+    %     But looking at the productions, we see that $\gamma$ either contains
+    %     no vanishing non-terminals, or contain them as the last symbol.
+    %     Thus the claim holds for $n + 1$.
+    %
+    %     By induction, the claim holds for all $n$.
+    % \end{proof}
+
+    \begin{lemma} \label{thm:trail}
+        Let $S_\bot \xRightarrow{n} \omega \xRightarrow{1} w$ be a
+        leftmost derivation of $w \in L(G')$.
+        Then $\omega = z X_\bot$ for some $z \in A^*$ and $X \in N$.
+
+        Moreover, each intermediate sentential form is of the form
+        $\gamma X_\bot$ for some $\gamma \in (A \cup N)^*$ and $X \in N$.
+    \end{lemma}
+    \begin{proof}
+        The last symbol in $S_\bot$ is vanishing.
+        From the definition of $P'$ we see that for any production
+        $X_\bot \to \gamma$, $\gamma$ is either a terminal string or
+        ends with a vanisher.
+
+        If a production from the rightmost non-terminal contains no
+        non-terminals, then it must be the last step in the derivation
+        (since it is leftmost).
+
+        Combining these two, we can induct on the length $n$ of the
+        derivation.
+
+        For $n = 0$, the only sentential form is $S_\bot$,
+        and the claim holds.
+        In each step before the last, it is not possible for the last
+        non-terminal to go to a terminal string.
+        But then each step must maintain that the last symbol is a
+        vanisher.
+
+        By induction, each intermediate sentential form (including $\omega$)
+        is of the form $\gamma X_\bot$ for some $\gamma \in (A \cup N)^*$
+        and $X \in N$.
+
+        But $\omega$ contains exactly one non-terminal, since
+        it derives a terminal string in a single step.
+        Thus $\omega = z X_\bot$ for some $z \in A^*$ and $X \in N$.
+    \end{proof}
+
+    \begin{lemma} \label{thm:reverse}
+        Suppose $z X_\bot$ is a sentential form in $G'$.
+        Then there is a sentential form $zX\gamma$ in $G$.
+    \end{lemma}
+    \begin{proof}
+        Consider a leftmost derivation $S_\bot \xRightarrow{*} zX_\bot$.
+        By the previous lemma, each intermediate sentential form is of the
+        form $\gamma Y_\bot$.
+        For any production $Z \to \zeta$, keep it as is.
+        For any production $Z_\bot \to \zeta$, replace it with the
+        corresponding production in $P$.
+        That is,
+        \begin{center}
+            \begin{tabular}{lcl}
+                $Z_\bot \to a$ & $\implies$ & $Z \to a$ \\
+                $Z_\bot \to Z_1 (Z_2)_\bot$ & $\implies$ & $Z \to Z_1 Z_2$
+                    \\
+                $Z_\bot \to (Z_1)_\bot$ & $\implies$ & $Z \to Z_1 Z_2$
+            \end{tabular}
+        \end{center}
+        where in the last case,
+        $Z \to Z_1 Z_2$ must exist in $P$ for some $Z_2$,
+        in order for $Z_\bot \to (Z_1)_\bot$ to be in $P'$.
+
+        Then for any $\gamma Y_\bot \xRightarrow{1} \gamma'$, this process
+        preserves the first $\abs{\gamma'}$ symbols, but with each vanishing
+        non-terminal replaced by its non-vanishing counterpart.
+
+        Thus, this yields a derivation of some sentential form $\gamma''$,
+        whose $\abs{zX_\bot}$-length prefix is $zX$.
+    \end{proof}
+
+    \begin{proposition}
+        $L(G') \subseteq \pref(L(G))$.
+    \end{proposition}
+    \begin{proof}
+        Let $S_\bot \xRightarrow{n} \omega \xRightarrow{1} w$ be a leftmost
+        derivation of $w \in L(G')$.
+
+        By \cref{thm:trail}, $\omega = z X_\bot$ for some $z \in A^*$ and
+        $X \in N$.
+        By \cref{thm:reverse}, there is a sentential form
+        $z X \gamma$ of $G$.
+
+        We assumed that each non-terminal derives some terminal string.
+        By extension, each sentential form of $G$ derives a terminal string.
+        Let $\gamma$ derive a terminal string $y$,
+        and $X$ derive a terminal string $x$.
+
+        The last step in the derivation of $w$ must involve $X_\bot$.
+        If it is $X_\bot \to a$, then $X \to a$ is a production in $P$
+        and so $zay \in L(G)$.
+        Then $w = za \in \pref(L(G))$.
+
+        If it is $X_\bot \to \epsilon$, then $w = x$.
+        But $z x y \in L(G)$, so $w \in \pref(L(G))$.
+
+        Thus $L(G') \subseteq \pref(L(G))$.
+    \end{proof}
+
+    \begin{proposition}
+        $\pref(L(G)) \subseteq L(G')$.
+    \end{proposition}
+    \begin{proof}
+        Let $w \in \pref(L(G))$.
+
+        Look at the parse tree of a derivation of $w$ in $G$.
+        Since $w \in \pref(L(G))$, the leftmost $\abs{w}$ leaves of
+        the parse tree give $w$.
+
+        We will give a scheme to derive $w$ in $G'$.
+
+        If $w = \epsilon$, then apply the production $S_\bot \to \epsilon$.
+        Otherwise, take the subtree rooted at the root which contains
+        only the leaves for $w$.
+        Look at the first level.
+
+        If the root production is $S \to a$, then $w = \epsilon$ or
+        $w = a$, which can both be derived from $S_\bot$ in a single step.
+
+        Otherwise, the root production is $S \to XY$, and the $w$-subtree
+        must contain at least one child of the root.
+        \begin{itemize}
+            \item If the subtree for $w$ only contains left child,
+            then apply the production $S_\bot \to X_\bot$.
+            This reduces the problem to deriving $w$ from $X_\bot$,
+            which can be done by repeating this process on the subtree
+            rooted at $X$.
+            \item If it contains both, then $w = xy$, where $x$ is derived
+            from $X$, and $y$ is the prefix of a terminal string derived
+            from $Y$.
+            Keep the productions from $X$ as is.
+            Apply this same process to the subtree rooted at
+            $Y$ to derive $y$.
+        \end{itemize}
+        For example, consider the grammar $G$ in CNF with productions
+        \begin{align*}
+            S &\to XY \\
+            X &\to AB \\
+            Y &\to CD
+        \end{align*} \[
+            A \to a \qquad
+            B \to b \qquad
+            C \to c \qquad
+            D \to d
+        \] The parse tree for $abcd$ is
+        \begin{center}
+            \begin{forest}
+                [$S$
+                    [$X$
+                        [$A$
+                            [$a$]
+                        ]
+                        [$B$
+                            [$b$]
+                        ]
+                    ]
+                    [$Y$
+                        [$C$
+                            [$c$]
+                        ]
+                        [$D$
+                            [$d$]
+                        ]
+                    ]
+                ]
+            \end{forest}
+        \end{center}
+        For the prefix $abc$, the subtree is
+        \begin{center}
+            \begin{forest}
+                [$S$
+                    [$X$
+                        [$A$
+                            [$a$]
+                        ]
+                        [$B$
+                            [$b$]
+                        ]
+                    ]
+                    [$Y$
+                        [$C$
+                            [$c$]
+                        ]
+                    ]
+                ]
+            \end{forest}
+        \end{center}
+        Then the above algorithm gives the first step as
+        $S_\bot \to X Y_\bot$ and asks to keep the tree rooted at $X$
+        fixed.
+        \begin{center}
+            \begin{forest}
+                [$S_\bot$
+                    [$X$
+                        [$A$
+                            [$a$]
+                        ]
+                        [$B$
+                            [$b$]
+                        ]
+                    ]
+                    [$Y_\bot$]
+                ]
+            \end{forest}
+        \end{center}
+        Then applying this process to derive $c$ from $Y_\bot$ gives
+        \begin{center}
+            $\vcenter{\hbox{\begin{forest}
+                [$S_\bot$
+                    [$X$
+                        [$A$
+                            [$a$]
+                        ]
+                        [$B$
+                            [$b$]
+                        ]
+                    ]
+                    [$Y_\bot$
+                        [$C_\bot$]
+                    ]
+                ]
+            \end{forest}}}$
+            \quad and then \quad
+            $\vcenter{\hbox{\begin{forest}
+                [$S_\bot$
+                    [$X$
+                        [$A$
+                            [$a$]
+                        ]
+                        [$B$
+                            [$b$]
+                        ]
+                    ]
+                    [$Y_\bot$
+                        [$C_\bot$
+                            [$c$]
+                        ]
+                    ]
+                ]
+            \end{forest}}}$
+        \end{center}
+        which is a derivation of $abc$ in $G'$.
+    \end{proof}
+
+    Combining the two propositions, we have $L(G') = \pref(L(G))$.
+\end{solution}
+
+\end{document}

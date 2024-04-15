@@ -1,1 +1,99 @@
+\begin{examples}
 \lecture{09}{Mon 21 Jan '24}{}
+    \item Closed intervals are closed sets.
+    \item $E = [0, 1)$ is neither open nor closed.
+    $\wbar{E} = [0, 1]$, $E^\circ = (0, 1)$ and $\partial E = \set{0, 1}$.
+    \item Finite sets are always closed.
+    \item In the discrete metric, every set is both open and closed.
+\end{examples}
+\begin{proposition} \label{thm:closed:open}
+    A set is closed iff its complement is open.
+\end{proposition}
+\begin{proof}
+    Let $E \subseteq X$ be closed.
+    Let $x \in E^c$.
+    Since $x$ is not a limit point of $E$, there exists an open ball
+    around it that contains no points of $E$.
+    Thus $x$ is an interior point of $E^c$.
+    This gives that $E^c$ is open.
+
+    Now let $E \subseteq X$ be open.
+    Let $x$ be a limit point of $E^c$.
+    Then there is no open ball around $x$ that lies entirely in $E$.
+    Thus $x$ cannot lie in $E$.
+    This gives that $E^c$ is closed.
+\end{proof}
+\begin{corollary} \label{thm:closed_intersection}
+    The intersection of any collection of closed sets is closed,
+    and the union of any finite collection of closed sets is closed.
+\end{corollary}
+\begin{proof}
+    \Cref{thm:open_union,thm:closed:open} and De Morgan's laws.
+\end{proof}
+
+\begin{theorem*} \label{thm:closed:prop} \leavevmode
+    \begin{enumerate}
+        \item The closure of a set is closed.
+        \item If $A \subseteq B$, then $\wbar{A} \subseteq \wbar{B}$.
+        \item $\wbar{E}$ is the smallest closed set containing $E$.
+        That is, \[
+            \wbar{E} = \bigcap_{\substack{F \supseteq E \\ F \text{ closed}}} F.
+        \]
+    \end{enumerate}
+\end{theorem*}
+\begin{proof} \leavevmode
+    \begin{enumerate}
+        \item Let $x$ be a limit point of $\wbar{E}$.
+        We will show that $x$ is a limit point of $E$.
+        Let $\varepsilon > 0$.
+        If $B(x; \varepsilon)$ contains no point from $E$,
+        it must contain a limit point of $E$.
+        But then there are points of $E$ arbitrarily close to it,
+        within the ball.
+        Thus $B(x; \varepsilon)$ contains points of $E$ for any
+        $\varepsilon > 0$ and so $x$ is a limit point of $E$.
+        \item Every point in $A$ is a point in $B$.
+        Every limit point of $A$ is a limit point of $B$.
+        \item Every closed set $F$ containing $E$ must contain
+        \begin{itemize}
+            \item every point of $E$, and
+            \item every limit point of $E$.
+        \end{itemize}
+        Thus $\wbar{E} \subseteq F$ for every such $F$.
+        so $\wbar{E}$ is the smallest closed set containing $E$. \qedhere
+    \end{enumerate}
+\end{proof}
+
+\begin{definition*}[Relative topology] \label{def:relative_topology}
+    Given a metric space $(X, d)$ and subsets $E \subseteq Y$,
+    we say that $E$ is open (resp. closed) \emph{relative to} $Y$
+    if $E$ is an open (resp. closed) set in the metric space $(Y, d\vert_Y)$.
+\end{definition*}
+\begin{proposition} \label{thm:relative:open}
+    Let $(X, d)$ be metric space and $E \subseteq Y \subseteq X$.
+    Then $E$ is open relative to $Y$ iff there exists an open set
+    $F \subseteq X$ such that $E = F \cap Y$.
+\end{proposition}
+\begin{proof}
+    Let $E$ be open relative to $Y$.
+    For each $x \in E$, there exists an $\varepsilon_x > 0$ such that
+    $B_Y(x, \varepsilon_x) \subseteq E$.
+    Let $F = \bigcup_{x \in E} B_X(x, \varepsilon_x)$.
+    Then $F$ is open relative to $X$ and $F \cap Y = E$.
+
+    Let $E = F \cap Y$ where $F$ is open in $X$.
+    For every $x \in F$ there exists an $\varepsilon > 0$ such that
+    $B_X(x, \varepsilon) \subseteq F$.
+    Then for any $y \in E$,
+    $B_Y(y, \varepsilon) = B_X(y, \varepsilon) \cap Y$ is contained in
+    $F \cap Y = E$.
+    So $E$ is open in $Y$.
+\end{proof}
+\begin{corollary} \label{thm:relative:closed}
+    Let $(X, d)$ be metric space and $E \subseteq Y \subseteq X$.
+    Then $E$ is closed relative to $Y$ iff there exists a closed set
+    $F \subseteq X$ such that $E = F \cap Y$.
+\end{corollary}
+\begin{proof}
+    \Cref{thm:closed:open,thm:relative:open}.
+\end{proof}
