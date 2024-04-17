@@ -1,1 +1,60 @@
-\lecture{30}{Fri 22 Mar '24}{}
+\lecture{2024-03-22}{}
+\begin{proof}[Case 2]
+    Suppose that $\lim_{x \downarrow a} g(x) = +\infty$.
+    Let $\varepsilon > 0$ and again choose $\delta$ such that for every
+    $x \in (a, a + \delta)$, \[
+        \abs{\frac{f'(x)}{g'(x)} - A} < \varepsilon.
+    \]
+    Fix a $y \in (a, b)$.
+    Then there exists a $\delta' \in (0, \delta)$ such that
+    for every $z \in (a, a + \delta')$, \[
+        g(z) > \abs{g(y)} + 1 > g(y), 0.
+    \]
+    \textcolor{Red}{I cannot follow Purvi's proof.}
+\end{proof}
+
+\section{Vector-valued Functions} \label{sec:diff:vector}
+The definition is identical to the scalar case, the only point being how to
+interpret the limit in the definition.
+\begin{definition}[Differentiation] \label{def:diff:vector}
+    Let $f\colon (a, b) \to \textcolor{Red}{\R^n}$ and $c \in (a, b)$.
+    We say that $f$ is \emph{differentiable at $c$} with derivative $f'(c)$
+    if \[
+        \textcolor{Red}{\lim_{h \to 0} \norm{\frac{f(c + h) - f(c)}{h} - f'(c)} = 0}.
+    \]
+    We say that $f$ is \emph{differentiable} if it is differentiable at
+    each $c \in (a, b)$, and the map $f'$ is called the \emph{derivative}
+    of $f$.
+\end{definition}
+\begin{remarks}
+    \item If $f(x) = (f_1(x), f_2(x), \dots, f_n(x))$, then
+    $f$ is differentiable at $c$ iff each $f_i$ is differentiable at $c$,
+    and \[
+        f'(c) = (f_1'(c), f_2'(c), \dots, f_n'(c)).
+    \]
+    \item If $f, g\colon (a, b) \to \R^n$ are differentiable at some $c$,
+    then \begin{align*}
+        (f + g)'(c) &= f'(c) + g'(c), \\
+        \innerp fg'(c) &= \innerp{f'(c)}{g(c)} + \innerp{f(c)}{g'(c)}, \\
+    \end{align*}
+\end{remarks}
+
+\begin{theorem}[Mean value inequality] \label{thm:diff:vector:mvt}
+    Suppose $f\colon [a, b] \to \R^n$ is continuous on $[a, b]$ and
+    differentiable on $(a, b)$.
+    Then there exists a $c \in (a, b)$ such that \[
+        \norm{f(b) - f(a)} \leq (b - a) \norm{f'(c)}.
+    \]
+\end{theorem}
+\begin{proof}
+    Let $g(x) = \innerp{f(x)}{f(b) - f(a)}$.
+    Then $g$ is continuous on $[a, b]$ and differentiable on $(a, b)$.
+    By the mean value theorem, there exists a $c \in (a, b)$ such that
+    \begin{align*}
+        g(b) - g(a) &= g'(c) (b - a) \\
+        \norm{f(b) - f(a)}^2 &= \innerp{f'(c)}{f(b) - f(a)} (b - a) \\
+        &\le \norm{f'(c)} \norm{f(b) - f(a)} (b - a),
+    \end{align*} so that \[
+        \norm{f(b) - f(a)} \le \norm{f'(c)} (b - a).
+    \] (if $f(b) = f(a)$, the inequality is trivially true).
+\end{proof}

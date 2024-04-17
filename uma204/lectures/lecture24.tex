@@ -1,5 +1,5 @@
 \begin{examples}[continuous functions]
-\lecture{24}{Thu 07 Mar '24}{}
+\lecture{2024-03-07}{Continuity and topology}
     \item All polynomials $p \in \R[x]$ are continuous.
     \item All rational functions $p/q$,
     where $p, q \in \R[x]$ are continuous.
@@ -9,27 +9,27 @@
     \item $x \in \R \mapsto \log_x(a)$, or simply the reciprocal of
     log, is continuous.
 \end{examples}
-\section{Topology \& Continuity} \label{sec:cont:topology}
-\begin{theorem} \label{thm:cont:topology}
+\section{Continuity \& Topology} \label{sec:cont:open-close}
+\begin{theorem} \label{thm:cont:open-close}
     Let $(X, d_X)$ and $(Y, d_Y)$ be metric spaces.
     Let $f\colon X \to Y$ be a function.
     Then the following are equivalent:
     \begin{enumerate}
         \item $f$ is continuous on $X$.
-        \label{thm:cont:topology:cont}
+        \label{thm:cont:open-close:cont}
         \item $f^{-1}(U)$ is open in $X$ for every open set $U$ in $Y$.
-        \label{thm:cont:topology:open}
+        \label{thm:cont:open-close:open}
         \item $f^{-1}(C)$ is closed in $X$ for every closed set $C$ in $Y$.
-        \label{thm:cont:topology:closed}
+        \label{thm:cont:open-close:closed}
     \end{enumerate}
 \end{theorem}
 \begin{proof}
-    For \labelcref{thm:cont:topology:open}
-    $\iff$ \labelcref{thm:cont:topology:closed},
+    For \labelcref{thm:cont:open-close:open}
+    $\iff$ \labelcref{thm:cont:open-close:closed},
     use that $f^{-1}(Y \setminus C) = X \setminus f^{-1}(C)$.
 
-    We now show \labelcref{thm:cont:topology:cont}
-    $\iff$ \labelcref{thm:cont:topology:open},
+    We now show \labelcref{thm:cont:open-close:cont}
+    $\iff$ \labelcref{thm:cont:open-close:open},
     Suppose $f$ is continuous on $X$.
     Let $U$ be open in $Y$ and $x \in f^{-1}(U)$.
     Then $f(x) \in U$.
@@ -60,13 +60,29 @@
     even though it is a limit point of the image.
 \end{remark}
 
-\begin{theorem}[Compactness] \label{thm:cont:topology:compactness}
+\begin{theorem}[Compactness] \label{thm:cont:open-close:compactness}
     If $f\colon X \to Y$ is continuous and $K \subseteq X$ is compact,
     then $f(K)$ is compact.
 \end{theorem}
+\begin{proof}
+    Let $\set{U_\alpha}$ be an open cover of $f(K)$.
+    Each $f^{-1}(U_\alpha)$ is open in $X$ by \cref{thm:cont:open-close}.
+    Each $x \in K$ must be in one of these, since otherwise its image
+    would not be covered.
+    Then $\set{f^{-1}(U_\alpha)}$ is an open cover of $K$.
+    Let $\set{f^{-1}(U_{\alpha_i})}$ be a finite subcover of $K$.
+    Then $\set{U_{\alpha_i}}$ is a finite subcover of $f(K)$.
+\end{proof}
 \begin{remarks}
     \item The pre-image of a compact set under a continuous function need
     not be compact.
+    \begin{proof}
+        Consider $f\colon x \in \R \mapsto \sin x \in \R$.
+        Then $f^{-1}(\set{0}) = \Z\pi$ is not compact.
+    \end{proof}
     \item Even if the image of every compact set under a function $f$ is
     compact, $f$ need not be continuous.
+    \begin{proof}
+        Dirichlet's function.
+    \end{proof}
 \end{remarks}

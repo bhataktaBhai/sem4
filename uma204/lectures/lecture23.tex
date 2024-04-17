@@ -1,5 +1,5 @@
 \chapter{Functional Limits \& Continuity} \label{chp:fn}
-\lecture{23}{Wed 06 Mar '24}{}
+\lecture{2024-03-06}{Functional limits and continuity}
 \section{Definitions} \label{sec:fn:def}
 \begin{definition}[Limit] \label{def:fn:limit}
     Let $f\colon E \to Y$ be a function from a subset $E$ of a metric space
@@ -75,14 +75,14 @@
     \end{enumerate}
 \end{corollary}
 
-\begin{definition}[Continuity] \label{def:fn:continuity}
+\begin{definition*}[Continuity] \label{def:fn:continuity}
     Let $X$ and $Y$ be metric spaces, $E \subseteq X$ and $f\colon E \to Y$.
     Let $p \in E$.
     Then we say that $f$ is \emph{continuous at $p$} if for every
     $\varepsilon > 0$ there exists a $\delta > 0$ such that for all
     $x \in E$ with $d_X(x, p) < \delta$,
     we have $d_Y(f(x), f(p)) < \varepsilon$.
-\end{definition}
+\end{definition*}
 \begin{remarks}
     \item If $p$ is a limit point of $E$, then $f$ is continuous at $p$ iff
     $\lim_{x \to p} f(x)$ exists and equals $f(p)$.

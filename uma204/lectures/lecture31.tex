@@ -1,18 +1,18 @@
 \chapter{Riemann Integration} \label{chp:riemann}
-\lecture{31}{Mon 25 Mar '24}{}
-\section{\R-valued Functions}
-Let $f\colon [a, b] \to \R$ be a bounded function.
+\section[\R-valued Functions]{Real-valued Functions}
+\lecture{2024-03-25}{}
 \begin{definition}[Partition] \label{def:partition}
+    Let $f\colon [a, b] \to \R$ be a bounded function.
     A \textit{partition} of $[a, b]$ is \[
         P = \set{x_0 \le x_1 \le \cdots \le x_n}
     \] where $x_0 = a$ and $x_n = b$.
 
     We write \begin{align*}
-        \Delta x_j &= x_j - x_{j-1}, \\
-        M_j   &= \sup_{[x_{j-1}, x_j]} f, \\
-        m_j   &= \inf_{[x_{j-1}, x_j]} f, \\
-        \mcU(P, f) &= \sum_{j=1}^n M_j \Delta x_j, \\
-        \mcL(P, f) &= \sum_{j=1}^n m_j \Delta x_j.
+        \Delta x_j \coloneq \Delta_j &\coloneq x_j - x_{j-1}, \\
+        M_j   &\coloneq \sup_{[x_{j-1}, x_j]} f, \\
+        m_j   &\coloneq \inf_{[x_{j-1}, x_j]} f, \\
+        \mcU(P, f) &\coloneq \sum_{j\coloneq1}^n M_j \Delta x_j, \\
+        \mcL(P, f) &\coloneq \sum_{j\coloneq1}^n m_j \Delta x_j.
     \end{align*}
 \end{definition}
 
@@ -24,7 +24,7 @@ Let $f\colon [a, b] \to \R$ be a bounded function.
         &= \sup \set{\mcL(P, f) \mid P \text{ is a partition of } [a, b]}.
     \end{align*}
     If $\wbar{\int_a^b} f(x) \dd x = \ubar{\int_a^b} f(x) \dd x = L$,
-    we say that $f$ is \textit{Riemann integrable} on $[a, b]$ and \[
+    we say that $f$ is \textit{Riemann integrable} on $[a, b]$ and that \[
         \int_a^b f(x) \dd x = L.
     \] We denote the family of Riemann integrable functions on $[a, b]$ by
     $\mcR([a, b])$.
@@ -34,7 +34,7 @@ Let $f\colon [a, b] \to \R$ be a bounded function.
     Let $P^*$ be a \emph{refinement} of $P$, \ie,
     $P^*$ partitions $[a, b]$ and $P \subseteq P^*$. Then \begin{align*}
         \mcL(P, f) &\le \mcL(P^*, f), \\
-        \mcU(P, f) &\le \mcU(P^*, f).
+        \mcU(P^*, f) &\le \mcU(P, f).
     \end{align*}
 \end{lemma}
 \begin{proof}
@@ -86,15 +86,14 @@ Let $f\colon [a, b] \to \R$ be a bounded function.
 
 \begin{corollary}
     $\ubar{\int_a^b} f(x) \dd x$ and $\wbar{\int_a^b} f(x) \dd x$
-    are well-defined, and \[
+    are well-defined in \R, and \[
         \ubar{\int_a^b} f(x) \dd x \le \wbar{\int_a^b} f(x) \dd x.
     \]
 \end{corollary}
 
 \begin{theorem*}
-    $f$ is Riemann integrable on $[a, b]$ if and only if for every
-    $\varepsilon > 0$, there exists a partition $P_\varepsilon$ of
-    $[a, b]$ such that \[
+    $f$ is Riemann integrable on $[a, b]$ iff for every $\varepsilon > 0$,
+    there exists a partition $P_\varepsilon$ of $[a, b]$ such that \[
         \mcU(P_\varepsilon, f) - \mcL(P_\varepsilon, f) < \varepsilon.
     \]
 \end{theorem*}
@@ -144,13 +143,23 @@ Let $f\colon [a, b] \to \R$ be a bounded function.
     \]
 \end{remarks}
 
+\begin{exercise}
+    Every monotone function on $[a, b]$ is Riemann integrable.
+\end{exercise}
+\begin{proof}
+    WLOG suppose that $f\colon [a, b] \to \R$ is increasing.
+    First note that $f$ is bounded, specifically by $f(a)$ below and
+    $f(b)$ above.
+\end{proof}
+
 \begin{theorem*}
     Let $f \in \mcR[a, b]$ with $f[a, b] \subseteq [m, M]$, and
-    let $\varphi\colon [m, M] \to \R$ be a continuous function.
+    let $\phi\colon [m, M] \to \R$ be a continuous function.
     Then \[
-        \varphi \circ f \in \mcR[a, b].
+        \phi \circ f \in \mcR[a, b].
     \]
 \end{theorem*}
 \begin{proof}
+    Let $\phi([m, M]) = [\wbar{m}, \wbar{M}]$.
     Let $\varepsilon > 0$.
 \end{proof}

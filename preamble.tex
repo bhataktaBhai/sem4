@@ -2,6 +2,17 @@
 \usepackage{microtype}
 \usepackage{amsmath}
 \newcommand\yesnumber{\stepcounter{equation}\tag{\theequation}}
+\usepackage[twoside]{fancyhdr}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+% \fancyhead[r]{\thepage}
+\makeatletter
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\textbf{\nouppercase\leftmark}}
+\fancyhead[LO]{\nouppercase\rightmark}
+% \fancyfoot[RE,LO]{\@lecture}
+\makeatother
 
 \input{~/IISc/sem4/preamble/theorems}
 \input{~/IISc/sem4/preamble/symbols}

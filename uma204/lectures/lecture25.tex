@@ -1,6 +1,47 @@
-\lecture{25}{Wed 13 Mar '24}{}
+\lecture{2024-03-11}{}
+\begin{corollary}
+    Any \R-valued continuous function on a compact metric space
+    attains its minimum and maximum.
+\end{corollary}
+\begin{corollary}
+    If $f\colon X \to Y$ is a bijective continuous map and $X$ is compact,
+    then $f^{-1}$ is also continuous.
+\end{corollary}
+\begin{proof}
+    Let $U \subseteq X$ be open.
+    Since $X$ is compact, $X \setminus U$ is compact.
+    Since $f$ is continuous, $f(X \setminus U)$ is compact and hence
+    closed.
+    Since $f$ is bijective, $f(X \setminus U) = Y \setminus f(U)$.
+    Thus $f(U)$ is open.
+
+    Thus $(f^{-1})^{-1}$ maps open sets to open sets,
+    so $f^{-1}$ is continuous.
+\end{proof}
+\begin{definition}[Bounded] \label{def:cont:bounded}
+    A function $f\colon X \to Y$ between metric spaces is said to be
+    \emph{bounded} if $f(X)$ is a bounded set in $Y$.
+\end{definition}
 \begin{definition}[Uniform continuity] \label{def:cont:uniform}
     A function $f\colon X \to Y$ is said to be \emph{uniformly continuous}
     if for every $\varepsilon > 0$, there exists a $\delta > 0$ such that
     for all $x \in X$, $f(B_X(x; \delta)) \subseteq B_Y(f(x); \varepsilon)$.
 \end{definition}
+
+\begin{exercise}
+    Prove that $x \in (0, 1) \mapsto \frac1x$ is \textbf{not}
+    uniformly continuous.
+\end{exercise}
+\begin{proof}
+    Let $\varepsilon = 1$.
+    Suppose there exists a $0 < \delta < 2$ such that for all
+    $x \in (0, 1)$,
+    $\abs{\frac1x - \frac1y} < 1$ whenever $\abs{x - y} < \delta$.
+    But choosing $x = y + \frac{\delta}{2} = \sqrt{\frac{\delta}{2}}$,
+    we have \begin{align*}
+        \abs{\frac1x - \frac1y} &= \frac{\abs{x - y}}{xy} \\
+        &= \frac{\delta}{2} \cdot \frac1{x(x-\frac{\delta}{2})} \\
+        &> \frac{\delta}{2} \cdot \frac1{x^2} \\
+        &= 1. \qedhere
+    \end{align*}
+\end{proof}

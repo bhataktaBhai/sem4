@@ -1,12 +1,18 @@
 \input{~/IISc/sem4/preamble}
+% \usepackage[bitstream-charter]{mathdesign}
+% \usepackage{mlmodern}
+\renewcommand\bfdefault{b}
 \usepackage[makeroom]{cancel}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
+\newlistof{hw}{hw}{Assignments} % counter `assignment' already defined
 \newcommand*{\assignment}[3]{%
+    \refstepcounter{hw}%
     \stepcounter{assignment}%
     \pagebreak
     \section*{Assignment #1}
+    \addcontentsline{hw}{hw}{\protect\numberline{#1}#2}\par
     \marginpar{\raggedright\small\textsf{#2}}
     \input{#3}
     \newpage

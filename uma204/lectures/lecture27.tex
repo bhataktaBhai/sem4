@@ -1,2 +1,52 @@
-\lecture{27}{Thu 14 Mar '24}{Differentiability}
+\lecture{2024-03-14}{Differentiability}
+\begin{proof}
+    WLOG let $f\colon (a, b) \to \R$ be increasing.
+    Let $c \in (a, b)$.
 
+    We will show that \[
+        \lim_{x \uparrow c} f(x) = \sup_{x \in (a, c)} f(x).
+    \] Let $L^- = \sup_{x \in (a, c)} f(x)$.
+    For any $\varepsilon > 0$, there is some $x \in (a, c)$ such that
+    $L^- - \varepsilon < f(x) \leq L^-$.
+    Choose $\delta = c - x$.
+    Then by monotonicity, for $x' \in (c - \delta, c)$, we have \[
+        L^- - \varepsilon < f(x) \le f(x') \le L^-.
+    \] Thus, $\lim_{x \uparrow c} f(x) = L^-$.
+    This is sufficient to prove the theorem.
+
+    Since $f(c)$ is an upper bound for $\set{f(x) \mid x \in (a, c)}$,
+    we also have $L^- \le f(c)$.
+    By symmetry, \[
+        \lim_{x \uparrow c} f(x) \le f(c) \le \lim_{x \downarrow c} f(x).
+    \]
+\end{proof}
+
+\begin{corollary}
+    The set of discontinuities of a monotone function on an interval is
+    at most countable.
+\end{corollary}
+\begin{proof}
+    Let $f\colon (a, b) \to \R$ be increasing and let $D$ be its set of
+    discontinuities.
+    We will construct an injection from $D$ to $\Q$.
+
+    For each $c \in D$, we have \[
+        \lim_{x \uparrow c} f(x) < \lim_{x \downarrow c} f(x),
+    \] since equality would force them to be equal to $f(c)$.
+    By the density of $\Q$ in $\R$, map $c$ to some $q_c \in \Q$ between
+    these two limits.
+
+    Then for any $c < d \in D$, we have $q_c < q_d$, since \[
+        q_c < \lim_{x \downarrow c} f(x) \le \lim_{x \uparrow d} f(x) < q_d.
+    \] Thus the map is injective.
+\end{proof}
+
+However! Discontinuities being countable does not imply that they cannot
+be dense.
+\begin{example}
+    Let $D \subseteq (0, 1)$ be a dense countable set.
+    Let $\set{x_1, x_2, \dots}$ be an enumeration.
+    Define \[
+        f(x) = \sum_{n : x_n < x} \frac1{2^n}.
+    \]
+\end{example}

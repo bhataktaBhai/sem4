@@ -1,4 +1,4 @@
-\lecture{29}{Wed 20 Mar '24}{}
+\lecture{2024-03-20}{Taylor's theorem and L'H\^opital's rule}
 \begin{proof}
     Let \[
         h(x) = (f(b) - f(a))g(x) - (g(b) - g(a))f(x).
@@ -13,6 +13,23 @@
     Thus $h(a) = h(b)$.
     By Rolle's theorem, there exists $c \in (a, b)$ such that $h'(c) = 0$.
     This proves the result.
+\end{proof}
+
+\begin{exercise}
+    Prove that if $f\colon (a, b) \to \R$ is differentiable on $(a, b)$
+    with $f' > 0$ on the entire interval, then $f$ is strictly increasing.
+
+    Similarly if $f' \ge 0$ on the entire interval, then $f$ is
+    weakly increasing.
+\end{exercise}
+\begin{proof}
+    Let $x, y \in (a, b)$ with $x < y$.
+    Suppose $f(x) \ge f(y)$.
+    Then by the mean value theorem, there exists $c \in (x, y)$ such that
+    $f'(c) = \frac{f(y) - f(x)}{y - x} \le 0$.
+
+    If $f(x) > f(y)$, then $f'(c) < 0$.
+    This proves both parts of the exercise.
 \end{proof}
 
 \begin{theorem*}[Taylor's theorem] \label{thm:taylor}
@@ -78,22 +95,23 @@
     This proves the case (\ref{eq:simple_taylor}), and hence the theorem.
 \end{proof}
 
-\begin{theorem}[L'H\^opital's rule] \label{thm:lhopital}
+\begin{theorem*}[L'H\^opital's rule] \label{thm:lhopital}
     Let $a, b \in \wbar{\R}$.
     Suppose $f, g\colon (a, b) \to \R$ are differentiable on $(a, b)$,
     and that $g$ and $g'$ are never zero on $(a, b)$.
     Suppose also that there exists an $A \in \wbar{\R}$ such that \[
-        \lim_{x \to a^+} \frac{f'(x)}{g'(x)} = A.
+        \lim_{x \downarrow a} \frac{f'(x)}{g'(x)} = A.
     \] Then \[
-        \lim_{x \to a^+} \frac{f(x)}{g(x)} = A
+        \lim_{x \downarrow a} \frac{f(x)}{g(x)} = A
     \] whenever any of the following conditions hold.
     \begin{enumerate}
-        \item $\lim_{x \to a^+} f(x) = \lim_{x \to a^+} g(x) = 0$, or
-        \item $\lim_{x \to a^+} g(x) = +\infty$, or
-        \item $\lim_{x \to a^+} g(x) = -\infty$.
+        \item $\lim_{x \downarrow a} f(x) = \lim_{x \downarrow a} g(x) = 0$, or
+        \item $\lim_{x \downarrow a} g(x) = +\infty$, or
+        \item $\lim_{x \downarrow a} g(x) = -\infty$.
     \end{enumerate}
-\end{theorem}
-\begin{proof}
+\end{theorem*}
+\begin{proof}[Case 1]
+    Suppose $\lim_{x \downarrow a} f(x) = \lim_{x \downarrow a} g(x) = 0$.
     We will only consider the case when $a, A \in \R$.
 
     Let $\varepsilon > 0$.
@@ -102,15 +120,12 @@
         A - \varepsilon < \frac{f'(x)}{g'(x)} < A + \varepsilon.
     \] Fix a $y \in (a, a + \delta)$.
     Let $(z_n)_{n \in \N} \subseteq (a, y)$ be a sequence converging to
-    $a$ such that $g(z_n)$ is never $g(y)$.
-
-    Why does such a sequence exist?
-    We can construct this iteratively.
+    $a$ such that $g(z_n)$ is never $g(y)$.%
+    \footnote{Why does such a sequence exist?
     Since $g'$ is never zero on $(a, b)$,
     it cannot be constant on any interval.
     Thus every interval $(a, a+\frac1n) \cap (a, b)$ contains a point $z_n$
-    such that $g(z_n) \ne g(y)$.
-    This gives us the sequence $(z_n)_{n \in \N}$.
+    such that $g(z_n) \ne g(y)$.}
 
     Then by the generalized mean value theorem, for every $n \in \N$,
     there exists a $w_n \in (z_n, y)$ such that \[
@@ -121,5 +136,7 @@
                 < A + \varepsilon.
     \] Taking limits as $n \to \infty$, we find \[
         A - \varepsilon < \frac{f(y)}{g(y)} < A + \varepsilon.
-    \] Since $\varepsilon > 0$ was arbitrary, this proves the result.
+    \] Since $\varepsilon > 0$ was arbitrary, we have that \[
+        \lim_{y \downarrow a} \frac{f(y)}{g(y)} = A.
+    \]
 \end{proof}

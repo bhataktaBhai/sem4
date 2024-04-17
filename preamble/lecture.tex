@@ -1,6 +1,9 @@
+\usepackage{tocloft}
+\usepackage[en-GB,calc]{datetime2}
+\usepackage{calc}
 \usepackage{xifthen}
-\makeatletter
-\def\@lecture{}%
+\newlistof{lecture}{lec}{Lectures} % what is this file extension business?
+% \def\@lecture{}%
 % \newcommand*{\lecture}[3]{
 %     \ifthenelse{\isempty{#3}}{%
 %         \def\@lecture{Lecture #1}%
@@ -11,9 +14,33 @@
 %     \marginpar{\raggedright\small\textsf{#2}}%
 %     \vskip 6pt
 % }
+\makeatletter
 \setlength\marginparwidth{1in}
-\newcommand*{\lecture}[3]{
-    \marginpar{\raggedright\small \textsf{\textbf{Lecture #1.} \footnotesize#2}}%
+\newcommand*{\lecture}[3][]{
+    \ifthenelse{\isempty{#1}}{%
+        \refstepcounter{lecture}%
+    }{%
+        \setcounter{lecture}{#1}%
+    }%
+    \DTMsavedate{lecdate}{#2}%
+    \def\lecdow{\DTMweekdayname{\DTMfetchdow{lecdate}}}
+    \def\lecshortdow{\DTMshortweekdayname{\DTMfetchdow{lecdate}}}
+    \def\lecmonth{\DTMmonthname{\DTMfetchmonth{lecdate}}}
+    \def\lecday{\DTMfetchday{lecdate}}
+    % \marginpar{\raggedright\small \textsf{\textbf{Lecture \thelecture.}%
+    %             \footnotesize\DTMusedate{lecdate}}}%
+    \marginpar{\raggedright\small \textsf{\textbf{Lecture \thelecture.}\\
+        \footnotesize\lecdow\\\lecmonth\ \lecday}}%
+    \ifthenelse{\isempty{#3}}{%
+        \addcontentsline{lec}{lecture}{\protect\numberline{\thelecture}%
+        \lecshortdow, \lecmonth\ \lecday}%
+        \def\@lecture{Lecture \thelecture}%
+    }{%
+        \addcontentsline{lec}{lecture}{\protect\numberline{\thelecture}%
+        \makebox[\widthof{Mon,}][l]{\lecshortdow,}\ \makebox[\widthof{September 00}][l]{\lecmonth\ \lecday} #3}%
+        \def\@lecture{Lecture \thelecture: #3}%
+    }
+    \par
 }
 \g@addto@macro\normalsize{%
   \setlength\abovedisplayskip{7pt}%

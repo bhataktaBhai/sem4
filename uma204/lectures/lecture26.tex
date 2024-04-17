@@ -1,10 +1,11 @@
-\lecture{26}{Wed 13 Mar '24}{}
+\lecture{2024-03-13}{}
 \begin{theorem} \label{thm:cont:compact_uniform}
-    Let $f\colon X \to Y$ be continuous on a compact set $X$.
-    Then $f$ is uniformly continuous.
+    A continuous function on a compact set is uniformly continuous.
 \end{theorem}
 \begin{proof}
-    Let $\varepsilon > 0$ be given.
+    Let $f\colon X \to Y$ be continuous where $X$ is compact.
+
+    Let $\varepsilon > 0$ be arbitrary.
     For each $x \in X$, choose $\delta_x > 0$ such that
     $f(B_X(x; \delta_x)) \subseteq B_Y(f(x); \varepsilon)$.
     The collection $\set{B_X(x; \frac12 \delta_x)}_{x \in X}$ is an open
@@ -59,7 +60,7 @@
     connectedness of $X$.
 \end{proof}
 
-\section{Discontinuities} \label{sec:cont:dis}
+\section{Discontinuities of functions on \R} \label{sec:cont:dis}
 \begin{examples}
     \item The \emph{Heaviside function} defined by \[
         H(x) = \begin{cases}
@@ -75,32 +76,32 @@
         \end{cases}
     \]
     \item \[
-        f(x) = \begin{cases}
+        x \mapsto \begin{cases}
             \frac{3x - x^2}{x(x^2 + 2)} & \text{if } x \ne 0, \\
             0 & \text{if } x = 0.
         \end{cases}
     \]
     \item \[
-        f(x) = \begin{cases}
+        x \mapsto \begin{cases}
             \frac1{x} & \text{if } x \ne 0, \\
             0 & \text{if } x = 0.
         \end{cases}
     \]
     \item \[
-        f(x) = \begin{cases}
+        x \mapsto \begin{cases}
             \sin\frac1x & \text{if } x \ne 0, \\
             0 & \text{if } x = 0.
         \end{cases}
     \]
     \item The \emph{Dirichlet function} \[
-        f(x) = \begin{cases}
+        \bm{1}_{\Q}(x) = \begin{cases}
             1 & \text{if } x \in \Q, \\
-            0 & \text{otherwise}
-        \end{cases} = \bm{1}_{\Q}.
+            0 & \text{otherwise}.
+        \end{cases}
     \] This is discontinuous \emph{everywhere}.
 \end{examples}
 
-\begin{definition}
+\begin{definition*}
     Given $f\colon (a, b) \to \R$ and $c \in (a, b)$, we say that
     \begin{enumerate}
         \item $f$ has a \emph{simple discontinuity} or a \emph{discontinuity
@@ -110,26 +111,13 @@
         \item $f$ has a \emph{discontinuity of the second kind} at $c$ if
             either the left-hand or right-hand limit does not exist.
     \end{enumerate}
-\end{definition}
+\end{definition*}
 
 The first three examples above have simple discontinuities at $0$.
 The last three have discontinuities of the second kind.
 The third example has a \emph{removable} discontinuity at $0$, since
 both one-sided limits exist and are equal.
 
-\begin{theorem}
+\begin{theorem} \label{thm:discont:monotone}
     Monotone functions do not have discontinuities of the second kind.
 \end{theorem}
-\begin{corollary}
-    Monotone functions have at most countably many discontinuities.
-\end{corollary}
-
-\begin{example}
-    Discontinuities of monotone functions can be dense.
-
-    Let $D \subseteq (0, 1)$ be a dense countable set.
-    Let $\set{x_1, x_2, \dots}$ be an enumeration.
-    Define \[
-        f(x) = \sum_{n : x_n < x} \frac1{n^2}.
-    \]
-\end{example}
