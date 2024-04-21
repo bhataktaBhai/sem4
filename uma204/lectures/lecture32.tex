@@ -50,6 +50,28 @@
     Otherwise, the inequality holds anyway.
 \end{proof}
 
+Wow, that came out of nowhere!
+Here is an attempt at making it less biblical.
+\begin{proof}
+    Let $K = \int_a^b f(x) \dd x$.
+    Then \begin{align*}
+        \int_a^b \innerp{f(x)}{K} \dd x
+            &\le \int_a^b \norm{f(x)} \, \norm{K} \dd x \\
+            &= \norm{K} \int_a^b \norm{f(x)} \dd x.
+    \end{align*}
+    But by linearity, \[
+        \int_a^b \innerp{f(x)}{K} \dd x
+            = \int_a^b \sum_i f_i(x) K_i \dd x
+            = \sum_i K_i \int_a^b f_i(x) \dd x
+            = \sum_i K_i^2
+            = \norm{K}^2.
+    \] Thus \[
+        \norm{K}^2 \le \norm{K} \int_a^b \norm{f(x)} \dd x
+    \] so that \[
+        \norm{K} \le \int_a^b \norm{f(x)} \dd x. \qedhere
+    \]
+\end{proof}
+
 \section{Rectifiable Paths} \label{sec:rectifiable_paths}
 \begin{definition}[Path] \label{def:path}
     A \emph{path} or \emph{curve} in $\R^n$ is a continuous function
@@ -60,7 +82,7 @@
     $\gamma$ is \emph{closed} if $\gamma(a) = \gamma(b)$.
 
     $\gamma$ is a simple closed curve if $\gamma(a) = \gamma(b)$ and the
-    image of $\gamma$ does not self-intersect.
+    image of $\gamma$ does not self-intersect except at the endpoints.
 \end{definition}
 
 \begin{definition}[Length and rectifiable paths] \label{def:path:length}
@@ -79,17 +101,18 @@
 \end{definition}
 
 \begin{theorem} \label{thm:riemann:speed}
-    Let $\gamma\colon [a, b] \to \R^n$ be continuously differentiable.
+    Let $\gamma\colon [a, b] \to \R^n$ be continuously differentiable,
+    with the derivative continuously extending to $[a, b]$.
     Then $\gamma$ is rectifiable, and \[
         \Lambda(\gamma) = \int_a^b \norm{\gamma'(t)} \dd t.
     \]
 \end{theorem}
 \begin{proof}
-    First note that $\norm{\gamma'}$ is continuous, and thus
-    Riemann integrable.
+    First note that since $\norm{\gamma'}$ is continuous on $[a, b]$,
+    and thus Riemann integrable (composition of continuous functions).
 
     Let $P = \set{x_0 \le \dots \le x_n}$ partition $[a, b]$.
-    By IIFToC, \begin{align*}
+    By \texttt{II}FToC, \begin{align*}
         \gamma(x_j) - \gamma(x_{j-1})
             &= \int_{x_{j-1}}^{x_j} \gamma'(t) \dd t \\
         \implies \norm{\gamma(x_j) - \gamma(x_{j-1})}
@@ -106,11 +129,7 @@
     $\Lambda(\gamma) \ge \int_a^b \norm{\gamma'(t)} \dd t$.
 
     $\gamma'$ is uniformly continuous.
-    Let $\varepsilon > 0$.
-    $\exists \delta > 0$ such that $\forall x, y \in [a, b]$ with
-    $\abs{x - y} < \delta$, \[
-        \norm{\gamma'(x) - \gamma'(y)} < \varepsilon.
-    \]
+    Let $\varepsilon > 0$ and choose the corresponding $\delta$.
 
     Let $P_\varepsilon = \set{x_0 \le \dots \le x_n}$ be a partition
     with each interval of length less than $\delta$.

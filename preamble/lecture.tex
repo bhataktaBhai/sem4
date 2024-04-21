@@ -1,4 +1,6 @@
 \usepackage{tocloft}
+\addtolength{\cftchapnumwidth}{15pt}
+\addtolength{\cftsecnumwidth}{10pt}
 \usepackage[en-GB,calc]{datetime2}
 \usepackage{calc}
 \usepackage{xifthen}
@@ -29,7 +31,8 @@
     \def\lecday{\DTMfetchday{lecdate}}
     % \marginpar{\raggedright\small \textsf{\textbf{Lecture \thelecture.}%
     %             \footnotesize\DTMusedate{lecdate}}}%
-    \marginpar{\raggedright\small \textsf{\textbf{Lecture \thelecture.}\\
+    \marginpar{\raggedright\small%
+        \textsf{{\textbf{Lecture \thelecture.}} \\
         \footnotesize\lecdow\\\lecmonth\ \lecday}}%
     \ifthenelse{\isempty{#3}}{%
         \addcontentsline{lec}{lecture}{\protect\numberline{\thelecture}%

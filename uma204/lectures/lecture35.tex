@@ -1,7 +1,11 @@
+\section{Differentiation} \label{sec:ssfn:diff}
 \lecture{2024-04-03}{}
 \begin{theorem}
     Let $f_n \in \mcD((a, b))$ and $f_n' \unifto g$.
-    Suppose $f_n(x_0) \unifto f(x_0)$ for some $x_0 \in (a, b)$.
+    Suppose $f_n(x_0) \to f(x_0)$ for some $x_0 \in (a, b)$.
+    Then there is a function $f$ such that $f_n \unifto f$, and \[
+        f'(x) = g(x) \quad \forall x \in (a, b).
+    \]
 \end{theorem}
 \begin{proof}
     WLOG assume that $x > x_0$.
@@ -9,9 +13,11 @@
 
     There exists a $\theta_{m n} \in (x_0, x)$ such that \begin{equation}
         (f_n - f_m)(x) - (f_n - f_m)(x_0)
-            = (f_n' - f_m')(\theta_{m n}) (x - x_0)
+            = (x - x_0) \cdot (f_n' - f_m')(\theta_{m n}).
             \label{eq:unif:mvt}
-    \end{equation} Let $\varepsilon > 0$.
+    \end{equation}
+
+    Let $\varepsilon > 0$.
     Then for $m, n$ beyond some $N$, \begin{align*}
         \abs{f_n(x_0) - f_m(x_0)} &< \frac{\varepsilon}{2} \\
         \abs{f_n'(t) - f_m'(t)} &< \frac{\varepsilon}{2(b-a)}
@@ -20,11 +26,11 @@
     Applying this to \cref{eq:unif:mvt}, \begin{align*}
         \abs{f_n(x) - f_m(x)}
         &\le \abs{f_n(x_0) - f_m(x_0)}
-            + \abs{f_n'(\theta_{m n} - f_m'(\theta_{m n}} \abs{x - x_0} \\
+            + \abs{f_n'(\theta_{m n}) - f_m'(\theta_{m n})} \abs{x - x_0} \\
         &< \frac{\varepsilon}{2} + \frac{\varepsilon(x-x_0)}{2(b-a)} \\
         &< \varepsilon.
     \end{align*}
-    Thus by the Cauchy criterior, $f_n \unifto f$ on $(a, b)$.
+    Thus by the Cauchy criterion, $f_n \unifto f$ on $(a, b)$.
 
     Fix a $p \in (a, b)$.
     Let $\phi_n\colon (a, b) \setminus \set{p} \to \R$ be the difference
@@ -49,7 +55,7 @@
     But uniform convergence implies pointwise convergence, and so
     $\phi_n \pwto h$ which means that $h = \phi$.
 
-    By \cref{TODO}, \begin{align*}
+    By \cref{thm:ssfn:limswap}, \begin{align*}
         \lim_{n \to \infty} \lim_{x \to p} \phi_n(x)
         &= \lim_{x \to p} \phi(x) \\
         \implies \lim_{n \to \infty} f_n'(p) &= f'(p)
@@ -58,7 +64,7 @@
     By IIFTOC, %TODO
 \end{proof}
 
-\subsection{The  Function} \label{sec:the_______function}
+\subsection{The Function} \label{sec:thefn}
 
 Start with $\phi(x) = \abs{x}$ on $[-1, 1]$, and extend it by periodicity
 to the entire number line.
@@ -68,11 +74,12 @@ Define \[
 \] and \[
     f \coloneq \sum_{k=0}^{\infty} f_k
 \]
-By the Weierstrass $M$-test, $f$ is continuous, since \[
+By the \nameref{thm:ssfn:mtest}, $f_n \unifto f$ since \[
     \abs{f_k} \le \left(\frac{3}{4}\right)^k
         \text{ and }
     \sum \left(\frac34\right)^k < \infty.
-\]
+\] Further since $f_n$s are continuous, $f$ is continuous by
+\cref{thm:ssfn:cont}.
 Fix an $x \in \R$.
 Also fix an $m \in \N$.
 There is at most one integer in the $\frac12$-ball around any point, so WLOG

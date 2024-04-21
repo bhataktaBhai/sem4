@@ -26,7 +26,8 @@
     If $\wbar{\int_a^b} f(x) \dd x = \ubar{\int_a^b} f(x) \dd x = L$,
     we say that $f$ is \textit{Riemann integrable} on $[a, b]$ and that \[
         \int_a^b f(x) \dd x = L.
-    \] We denote the family of Riemann integrable functions on $[a, b]$ by
+    \] We also define $\int_b^a f(x) \dd x$ to be $-\int_a^b f(x) \dd x$.
+    We denote the family of Riemann integrable functions on $[a, b]$ by
     $\mcR([a, b])$.
 \end{definition*}
 
@@ -148,8 +149,240 @@
 \end{exercise}
 \begin{proof}
     WLOG suppose that $f\colon [a, b] \to \R$ is increasing.
-    First note that $f$ is bounded, specifically by $f(a)$ below and
-    $f(b)$ above.
+
+    Let $\varepsilon > 0$.
+    Choose $n \in \N$ such that \[
+        \frac{f(b) - f(b)}{n} < \varepsilon.
+    \] Let $P = \set{x_0 \le x_1 \le \dots \le x_n}$, where
+    $x_j = a + j(b - a)/n$.
+    Then \begin{align*}
+        \mcU(P, f) - \mcL(P, f)
+            &= \sum_{j=1}^n (f(x_j) - f(x_{j-1})) \Delta x_j \\
+            &= \frac1n (f(b) - f(a)) \\
+            &< \varepsilon. \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{exercise}
+    Every continuous function on $[a, b]$ is Riemann integrable.
+\end{exercise}
+\begin{proof}
+    Let $f\colon [a, b] \to \R$ be continuous.
+    By \cref{thm:cont:compact_uniform}, $f$ is uniformly continuous.
+
+    Let $\varepsilon > 0$.
+    Choose $\delta > 0$ such that for all $x, y \in [a, b]$,
+    $\abs{f(x) - f(y)} < \varepsilon$ whenever $\abs{x - y} \le \delta$.
+
+    Choose $n \in \N$ such that $(b - a)/n < \delta$.
+    Let $P = \set{a \le a + \frac1n \le \dots \le b}$.
+    Then \begin{align*}
+        \mcU(P, f) - \mcL(P, f)
+            &= \sum_{j=1}^n (M_j - m_j) \Delta x_j \\
+            &\le \frac1n \sum_{j=1}^n \varepsilon \\
+            &= \varepsilon. \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{exercise}
+    Any bounded function on $[a, b]$ that has at most finitely many
+    discontinuities is Riemann integrable.
+\end{exercise}
+\begin{proof}
+    Let $f\colon [a, b] \to \R$ be bounded by $M$, and
+    let \[
+        D = \set{a = x_0 \le x_1 \le \dots \le x_{m-1} \le x_m = b}
+    \] be its set of discontinuities, together with the endpoints.
+    Let $\delta_0$ be half of the minimum distance between any two of these
+    points.
+
+    Let $\varepsilon > 0$.
+    Choose $\delta_1 > 0$ such that
+    $(m+1) \cdot 2M \cdot 2\delta_1 < \varepsilon/2$.
+    Finally let $\delta = \delta_0 \wedge \delta_1$.
+
+    Let $I_j = [x_{j-1} + \delta, x_j - \delta]$ for $j \in [m]$.
+    Let $J_j = [x_j - \delta, x_j + \delta]$ for $j \in [m-1]$,
+    with $J_0 = [a, a + \delta]$ and $J_m = [b - \delta, b]$.
+
+    Consider the intervals $I_j = [x_{j-1} + \delta, x_j - \delta]$ for
+    $j \in [m]$.
+    Let $L$ be the maximum length of $I_j$s.
+    $f$ is continuous on these intervals, so it is Riemann integrable on
+    each of them.
+    Associate with each $I_j$ a partition $P_j$ such that
+    $\mcU(P_j, f) - \mcL(P_j, f) < \varepsilon/2mL$.
+
+    Let $P = \set{a, b} \cup \bigcup_{j=1}^m P_j$.
+    Then \begin{align*}
+        \mcU(P, f) - \mcL(P, f)
+            &= \sum_{j=1}^m (\mcU(P_j, f) - \mcL(P_j, f)) \abs{I_j}
+                + \sum_{j=0}^m (\sup_{J_j} f - \inf_{J_j} f) \abs{J_j} \\
+            &< m \cdot \frac{\varepsilon}{2mL} \cdot L
+                + (m+1) \cdot 2M \cdot 2\delta \\
+            &< \frac{\varepsilon}{2} + \frac{\varepsilon}{2} \\
+            &= \varepsilon. \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{exercise}[Properties of the integral] \label{thm:riemann:prop}
+    Let $f, g\colon [a, b] \to \R$ be Riemann integrable.
+    \begin{enumerate}[label=(\alph*)]
+        \item $f + g$ is Riemann integrable, and \[
+            \int_a^b (f + g)(x) \dd x = \int_a^b f(x) \dd x
+                + \int_a^b g(x) \dd x.
+        \] \label{thm:riemann:prop:sum}
+        \item $\lambda f$ is Riemann integrable for any $\lambda \in \R$,
+        and \[
+            \int_a^b \lambda f(x) \dd x = \lambda \int_a^b f(x) \dd x.
+        \] \label{thm:riemann:prop:scale}
+        \item For any $c \in [a, b]$, \[
+            \int_a^b f(x) \dd x = \int_a^c f(x) \dd x
+                + \int_c^b f(x) \dd x,
+        \] with the integrals on the right side guaranteed to exist.
+        \label{thm:riemann:prop:split}
+        \item If $f(x) \le g(x)$ for all $x \in [a, b]$, then \[
+            \int_a^b f(x) \dd x \le \int_a^b g(x) \dd x.
+        \] \label{thm:riemann:prop:squeeze}
+    \end{enumerate}
+\end{exercise}
+\begin{proof}
+    The first part follows from $\sup A + B \le \sup A + \sup B$ and the
+    corresponding inequality for $\inf$, since for any partition $P$,
+    \begin{align*}
+        \mcU(P, f + g) &\le \mcU(P, f) + \mcU(P, g), \\
+        \mcL(P, f + g) &\ge \mcL(P, f) + \mcL(P, g).
+    \end{align*}
+
+    The second part follows from $\sup \lambda A = \lambda \sup A$.
+
+    For the third part, let $\varepsilon > 0$.
+    Construct a partition $P$ of $[a, b]$ such that \[
+        \mcU(P, f) - \mcL(P, f) < \varepsilon.
+    \] Take union with $c$ and split into two partitions
+    $P_1 = \set{a \le \dots \le c}$ and $P_2 = \set{c \le \dots \le b}$.
+    Then \begin{align*}
+        \mcU(P_1, f) - \mcL(P_1, f) &\le \mcU(P, f) - \mcL(P, f), \\
+        \mcU(P_2, f) - \mcL(P_2, f) &\le \mcU(P, f) - \mcL(P, f). \qedhere
+    \end{align*}
+
+    The last part follows from $\sup_I f \le \sup_I g$ for any interval $I$.
+\end{proof}
+
+\begin{exercise*}[The first fundamental theorem of calculus]
+    Let $f \in \mcR[a, b]$.
+    Let $F\colon [a, b] \to \R$ be given by \[
+        F(x) = \int_a^x f(t) \dd t.
+    \] Then $F$ is a (Lipschitz) continuous function on $[a, b]$.
+    Moreover, if $f$ is continuous at $p \in (a, b)$, then $F$ is
+    differentiable at $p$ and $F'(p) = f(p)$.
+\end{exercise*}
+\begin{proof}
+    $F(x)$ is well-defined because of part \labelcref{thm:riemann:prop:split}
+    of \cref{thm:riemann:prop}.
+
+    To see that $F$ is continuous, let $M$ be a bound for $f$.
+    Let $x < y \in [a, b]$.
+    Then \[
+        \abs{F(x) - F(p)}
+            = \abs{\int_x^y f(t) \dd t}
+            \le M \abs{x - y}.
+    \] Thus $F$ satisfies the Lipschitz condition, and is hence continuous.
+
+    Now suppose $f$ is continuous at $p$.
+    Then for $x \in (p, p + \delta) \cap [a, b]$, \begin{align*}
+        \frac{F(x) - F(p)}{x - p}
+            &= \frac1{x - p} \int_p^x f(t) \dd t \\
+    \end{align*}
+    For $\varepsilon > 0$ we can choose a $\delta > 0$ such that
+    $\abs{f(t) - f(p)} < \varepsilon$ whenever $\abs{t - p} < \delta$.
+    Then for $x \in (p, p + \delta) \cap [a, b]$, \begin{align*}
+        \frac{F(x) - F(p)}{x - p}
+            &= \frac1{x - p} \int_p^x f(t) \dd t \\
+            &= \frac1{x - p} \int_p^x (f(t) - f(p)) \dd t + f(p)
+    \end{align*}
+    The integral is bounded above by $\varepsilon (x - p)$ and below by
+    $-\varepsilon (x - p)$.
+    Thus \[
+        \abs{\frac{F(x) - F(p)}{x - p} - f(p)} \le \varepsilon. \qedhere
+    \]
+\end{proof}
+
+\begin{exercise*}[The second fundamental theorem of calculus]
+    Let $I \supseteq [a, b]$ be an open interval, and
+    $f\colon I \to \R$ be a function that admits an anti-derivative $F$
+    on $I$.
+    Suppose $f\vert_{[a, b]}$ is Riemann integrable.
+    Then \[
+        \int_a^b f(x) \dd x = F(b) - F(a).
+    \]
+\end{exercise*}
+\begin{proof}
+    We will show that for any partition, the upper integral is at least
+    $F(b) - F(a)$ and the lower integral is at most $F(b) - F(a)$.
+
+    Let $P = \set{x_0 \le x_1 \le \dots \le x_n}$ partition $[a, b]$.
+    By the MVT, there exists a $t_j \in [x_{j-1}, x_j]$ such that \[
+        F(x_j) - F(x_{j-1}) = f(t_j) \Delta x_j.
+    \] Then \begin{align*}
+        F(b) - F(a)
+            &= \sum_{j=1}^n (F(x_j) - F(x_{j-1})) \\
+            &= \sum_{j=1}^n f(t_j) \Delta x_j
+    \end{align*}
+    Thus \[
+        \mcL(P, f) \le F(b) - F(a) \le \mcU(P, f).
+    \] Taking the infimum and supremum over all partitions, we have \[
+        \int_a^b f(x) \dd x = F(b) - F(a). \qedhere
+    \]
+\end{proof}
+
+\begin{exercise}[Integration by substitution]
+    Let $I \supseteq [a, b]$ be an open interval, and $g$ be a continuously
+    differentiable function on $I$.
+    Let $J \supseteq g(I)$ be an open interval, and $f$ be a continuous
+    function on $J$.
+    Then \[
+        \int_a^b f(g(x)) g'(x) \dd x = \int_{g(a)}^{g(b)} f(x) \dd x.
+    \]
+\end{exercise}
+\begin{proof}
+    Since $f$, $g$ and $g'$ are continuous, $(f \circ g) \cdot g'$ is
+    continuous, so that the integral on the left side is well-defined.
+
+    Since $f$ is continuous, the map $F\colon J \to \R$ given by \[
+        F(x) = \int_{g(a)}^x f(t) \dd t
+    \] is well-defined (in particular the right side is well-defined).
+
+    By the first fundamental theorem of calculus, $F'(x) = f(x)$ for all
+    $x \in J$.
+    Thus \begin{align*}
+        \int_a^b f(g(x)) g'(x) \dd x
+            &= \int_a^b F'(g(x)) g'(x) \dd x \\
+            &= \int_a^b (F \circ g)'(x) \dd x. \\
+            &= F(g(b)) - F(g(a))
+    \end{align*} by the second fundamental theorem of calculus.
+    But also \begin{align*}
+        \int_{g(a)}^{g(b)} f(x) \dd x
+            &= \int_{g(a)}^{g(b)} F'(x) \dd x \\
+            &= F(g(b)) - F(g(a)). \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{exercise}
+    Let $f$ and $g$ be continuously differentiable functions on an
+    open interval $I \supseteq [a, b]$.
+    Then \[
+        \int_a^b f(x) g'(x) \dd x = f(b) g(b) - f(a) g(a)
+            - \int_a^b f'(x) g(x) \dd x,
+    \] where both integrals exist.
+\end{exercise}
+\begin{proof}
+    Existence follows from the continuity of $f$, $g$ and their derivatives.
+    Now by the second fundamental theorem of calculus, \begin{align*}
+        \int_a^b f(x) g'(x) + f'(x) g(x) \dd x
+            &= \int_a^b (f(x) g(x))' \dd x \\
+            &= f(b) g(b) - f(a) g(a). \qedhere
+    \end{align*}
 \end{proof}
 
 \begin{theorem*}
@@ -160,6 +393,48 @@
     \]
 \end{theorem*}
 \begin{proof}
-    Let $\phi([m, M]) = [\wbar{m}, \wbar{M}]$.
-    Let $\varepsilon > 0$.
+    By \cref{thm:cont:compact_uniform}, $\phi$ is uniformly continuous.
+    Let $\varepsilon > 0$, and choose $\delta \in (0, \varepsilon)$
+    such that whenever $\abs{x - y} < \delta$,
+    $\abs{\phi(x) - \phi(y)} < \varepsilon$.
+
+    Let $P = \set{x_0 \le x_1 \le \dots \le x_n}$ be a partition of $[a, b]$
+    such that \[
+        \mcU(P, f) - \mcL(P, f) < \tilde{\varepsilon},
+    \] which we will leave unspecified for now.
+
+    Let $I_j = [x_{j-1}, x_j]$ and define \begin{align*}
+        m_j &= \inf\nolimits_{I_j} f,
+            &\quad m^*_j &= \inf\nolimits_{I_j} \phi \circ f, \\
+        M_j &= \sup\nolimits_{I_j} f,
+            &\quad M^*_j &= \sup\nolimits_{I_j} \phi \circ f.
+    \end{align*}
+    Let $A \subseteq [n]$ be the set of indices $j$ such that
+    $M_j - m_j < \delta$.
+    These are labels of the `good' intervals, and for $j \in A$, \[
+        M^*_j - m^*_j < \varepsilon.
+    \] Let $B = [n] \setminus A$ be the set of `bad' indices.
+
+    Then for each $j \in B$, \begin{align*}
+        M_j - m_j &\ge \delta \\
+        \implies \sum_{j \in B} (M_j - m_j) \abs{I_j}
+            &\ge \delta \sum_{j \in B} \abs{I_j}
+    \end{align*}
+    But the sum on the left is bounded above by $\tilde{\varepsilon}$.
+    Thus \[
+        \sum_{j \in B} \abs{I_j} < \frac{\tilde{\varepsilon}}{\delta}.
+    \] Choosing $\tilde{\varepsilon} = \delta \varepsilon$ gives \[
+        \sum_{j \in B} \abs{I_j} < \varepsilon.
+    \]
+
+    Thus \begin{align*}
+        \mcU(P, \phi \circ f) - \mcL(P, \phi \circ f)
+            &= \sum_{j \in A} (M^*_j - m^*_j) \abs{I_j}
+                + \sum_{j \in B} (M^*_j - m^*_j) \abs{I_j} \\
+            &< \varepsilon \sum_{j \in A} \abs{I_j}
+                + 2 \varepsilon (b - a) \sup_{[m, M]} \abs{\phi} \\
+            &\le K \varepsilon
+    \end{align*} for some constant $K$.
+
+    Since $\varepsilon > 0$ was arbitrary, $\phi \circ f \in \mcR[a, b]$.
 \end{proof}

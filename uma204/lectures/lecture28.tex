@@ -25,7 +25,7 @@
     \end{enumerate}
 \end{exercise}
 \newpage
-\begin{exercise}
+\begin{exercise}[Chain rule]
     Suppose $f\colon (a, b) \to \R$ is differentiable at $c \in (a, b)$.
     Suppose $f((a, b)) \subseteq (p, q)$ and $g\colon (p, q) \to \R$ is
     differentiable at $f(c)$.
@@ -144,6 +144,15 @@ Recall that derivatives are not very well-behaved!
     Suppose $f'(a) < \lambda < f'(b)$.
     Then there exists a $c \in (a, b)$ such that $f'(c) = \lambda$.
 \end{theorem}
+\begin{proof}
+    Let $g(x) = f(x) - \lambda x$ for $x \in (p, q) \supseteq [a, b]$.
+    Then $g'(x) = f'(x) - \lambda$ so that $g'(a) < 0 < g'(b)$.
+    This means that $g$ is strictly decreasing from $a$
+    and strictly increasing to $b$.
+
+    Thus $g$ attains a minimum at some $c \in (a, b)$.
+    Then $g'(c) = 0$ so that $f'(c) = \lambda$.
+\end{proof}
 
 \begin{exercise}
     If $g\colon (a, b) \to \R$ has a simple discontinuity at $c \in (a, b)$,
@@ -166,24 +175,10 @@ Recall that derivatives are not very well-behaved!
     \end{description}
 \end{proof}
 
-\begin{exercise}
-    Show that if a function has a discontinuity of the first kind, then
-    it cannot satisfy the intermediate value property.
-\end{exercise}
 \begin{corollary}
     Let $f\colon (p, q) \to \R$ be differentiable.
     Then $f'$ only has discontinuities of the second kind.
 \end{corollary}
-
-\begin{proof}[Proof of \cref{thm:diff:ivt}]
-    Let $g(x) = f(x) - \lambda x$ for $x \in (p, q) \supseteq [a, b]$.
-    Then $g'(x) = f'(x) - \lambda$ so that $g'(a) < 0 < g'(b)$.
-    This means that $g$ is strictly decreasing from $a$
-    and strictly increasing to $b$.
-
-    Thus $g$ attains a minimum at some $c \in (a, b)$.
-    Then $g'(c) = 0$ so that $f'(c) = \lambda$.
-\end{proof}
 
 \begin{theorem*}[Generalised mean value theorem] \label{thm:mvt:general}
     Let $f, g\colon [a, b] \to \R$ be continuous functions that are

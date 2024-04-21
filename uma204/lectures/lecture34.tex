@@ -1,1 +1,97 @@
-\lecture{2024-04-03}{}
+\lecture{2024-04-01}{}
+\begin{theorem} \label{thm:ssfn:sup}
+    Let $(f_n)_{n \in \N}$ converge pointwise to $f$.
+    Put \[
+        M_n = \sup_{x \in X} d_Y(f_n(x), f(x)).
+    \] Then $f_n \unifto f$ iff $M_n \to 0$.
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        f_n \unifto f
+        &\iff \forall\varepsilon \,\exists N \,\forall n \ge N \,\forall x\,
+            (d(f_n(x), f(x)) < \varepsilon) \\
+        &\iff \forall\varepsilon \,\exists N \,\forall n \ge N\,
+            (\varepsilon \text{ is an upper bound for } d(f_n(x), f(x))) \\
+        &\iff \forall\varepsilon \,\exists N \,\forall n \ge N\,
+            (M_n \le \varepsilon) \\
+        &\iff M_n \to 0. \qedhere
+    \end{align*}
+\end{proof}
+
+\section{Continuity} \label{sec:ssfn:cont}
+\begin{theorem} \label{thm:ssfn:limswap}
+    Let $(f_n\colon E \subseteq X \to \C)_{n \in \N}$ converge uniformly
+    to $f\colon E \to \C$.
+    Let $x$ be a limit point of $E$, and suppose that \[
+        \lim_{z \to x} f_n(z) = A_n.
+    \] Then $(A_n)_{n \in \N}$ converges, and \[
+        \lim_{n \to \infty} A_n = \lim_{z \to x} f(z).
+    \] In other words, \[
+        \lim_{n \to \infty} \lim_{z \to x} f_n(z)
+            = \lim_{z \to x} \lim_{n \to \infty} f_n(z).
+    \]
+\end{theorem}
+\begin{proof}
+    Let $\varepsilon > 0$.
+    Since $f_n \unifto f$, there exists an $N$ such that \[
+        d(f_m(z), f_n(z)) < \varepsilon
+    \] for all $z \in E$ and $m, n \ge N$.
+
+    Thus for close enough $z$ and large enough $m, n$, \[
+        d(A_m, A_n) \le d(A_m, f_m(z)) + d(f_m(z), f_n(z)) + d(f_n(z), A_n)
+            < 3\varepsilon.
+    \] Thus $(A_n)_{n \in \N}$ is Cauchy and hence converges to some $A$.
+
+    Next, for large enough $n$ and close enough $z$, \[
+        d(A, f(z)) \le d(A, A_n) + d(A_n, f(z)) < 2\varepsilon,
+    \] which proves that \[
+        \lim_{z \to x} f(z) = A. \qedhere
+    \]
+\end{proof}
+
+\begin{theorem*} \label{thm:ssfn:cont}
+    Let $f_n\colon E \subseteq X \to \C$ be continuous for all $n$.
+    If $f_n \unifto f$, then $f$ is continuous.
+\end{theorem*}
+\begin{proof}
+    From the previous theorem, \begin{align*}
+        \lim_{z \to x} f(z) &= \lim_{n \to \infty} \lim_{z \to x} f_n(z) \\
+        &= \lim_{n \to \infty} f_n(x) \\
+        &= f(x). \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{definition}[Supremum norm] \label{def:ssfn:supnorm}
+    Let $\mcC(X)$ denote the set of all complex-valued, continuous and
+    bounded functions on $X$.
+
+    The \emph{supremum norm} on $\mcC(X)$ is defined by \[
+        \norm{f}_\infty = \sup_{x \in X} \abs{f(x)}.
+    \]
+\end{definition}
+It is easy to check that this is a metric.
+\begin{remark}
+    \Cref{thm:ssfn:sup} can be restated as \[
+        f_n \unifto f \iff f_n \to f \text{ in } (\mcC(X), \norm{\cdot}_\infty).
+    \]
+\end{remark}
+
+\begin{theorem}[Completeness] \label{thm:ssfn:cont:completeness}
+    $(\mcC(X), \norm{\cdot}_\infty)$ is complete.
+\end{theorem}
+\begin{proof}
+    Let $(f_n)_{n \in \N}$ be a Cauchy sequence in $\mcC(X)$.
+    That is, for all $\varepsilon > 0$, there exists an $N$ such that \[
+        \norm{f_m - f_n}_\infty < \varepsilon
+    \] for all $m, n \ge N$.
+
+    But $\sup A - \sup B \le \sup (A - B)$, so \[
+        \abs{\sup_{x \in X} f_m(x) - \sup_{x \in X} f_n(x)}
+            \le \sup_{x \in X} \abs{f_m(x) - f_n(x)} < \varepsilon.
+    \] By \cref{thm:ssfn:cauchy}, $(f_n)_{n \in \N}$ converges uniformly
+    to some $f\colon X \to \C$.
+
+    By \cref{thm:ssfn:cont}, $f$ is continuous.
+    Since $f_n$ is bounded, $f$ is bounded.
+    Thus $f \in \mcC(X)$, and $f_n \to f$ in $(\mcC(X), \norm{\cdot}_\infty)$.
+\end{proof}

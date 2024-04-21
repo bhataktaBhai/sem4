@@ -1,1 +1,105 @@
-\lecture{2024-04-03}{}
+\chapter{Sequences and Series of Functions} \label{chp:ssfn}
+\lecture{2024-03-28}{Sequences and series of functions}
+In this chapter, all functions, unless stated otherwise, are assumed
+to be complex-valued.
+\begin{definition}[Pointwise convergence] \label{def:ssfn:pointwise}
+    A sequence of functions $(f_n)_{n \in \N}$ between metric spaces
+    $X$ and $Y$ is said to \emph{converge pointwise} to a function $f$
+    if for all $x \in X$, the sequence $(f_n(x))_{n \in \N}$ converges to
+    $f(x)$.
+\end{definition}
+\begin{definition}[Pointwise sum] \label{def:ssfn:pointwise_sum}
+    Let $(f_n)_{n \in \N}$ be a sequence of functions from some metric
+    space $X$ to a normed vector space $Y$.
+    Then the sum $\sum_{n=1}^{\infty} f_n$ converges pointwise to a function
+    $s$ if \[
+        s(x) = \sum_{n \in \N} f_n(x)
+    \] for all $x \in X$.
+\end{definition}
+
+\begin{definition*}[Uniform convergence] \label{def:ssfn:unif}
+    A sequence of functions $(f_n)_{n \in \N}$ between metric spaces
+    $X$ and $Y$ is said to \emph{converge uniformly} to a function $f$
+    if for every $\varepsilon > 0$, there exists an $N \in \N$ such that
+    for all $x \in X$ and $n \ge N$, $d_Y(f_n(x), f(x)) < \varepsilon$.
+
+    We denote this by $f_n \unifto f$.
+
+    If $Y$ is a normed space, we say that the sum $\sum_{n=1}^{\infty} f_n$
+    converges uniformly to a function $s$ if its sequence of partial sums
+    converges uniformly to $s$.
+\end{definition*}
+
+\begin{exercise}[Cauchy criterion] \label{thm:ssfn:cauchy}
+    State and prove the Cauchy criterion for uniform convergence
+    for functions onto a complete metric space.
+\end{exercise}
+\begin{solution}
+    $(f_n)_{n \in \N}$ converges uniformly iff for every $\varepsilon > 0$
+    there exists an $N \in \N$ such that $\forall x \forall m \forall n$
+    with $m, n \ge N$, \[
+        d(f_m(x), f_n(x)) < \varepsilon.
+    \]
+    $\sum_{n \in \N} f_n$ converges uniformly iff for every
+    $\varepsilon > 0$ there exists an $N \in \N$ such that
+    $\forall x \forall m \forall n$ with $m, n \ge N$, \[
+        \abs{\sum_{i = m+1}^n f_i(x)} < \varepsilon.
+    \]
+    \begin{proof}
+        The statement for the series follows from that for the sequence.
+        Let $Y$ be complete.
+
+        Let $(f_n\colon X \to Y)_{n \in \N} \unifto f$.
+        Let $\varepsilon > 0$.
+        Choose $N$ such that $\forall x \forall n \ge N$, \[
+            d(f_n(x), f(x)) < \varepsilon/2.
+        \] Then by the triangle inequality, we have that
+        $\forall x \forall m, n \ge N$, \[
+            d(f_m(x), f_n(x)) < \varepsilon/2.
+        \]
+
+        Now suppose that $(f_n)_n$ satisfies the Cauchy criterion.
+        For every $\varepsilon$ there exists an $N$ such that
+        $\forall x \forall m, n \ge N$, \[
+            d(f_m(x), f_n(x)) < \varepsilon.
+        \] Thus for any $x$, the sequence $f_n(x)$ is Cauchy and hence
+        convergent.
+        Let $f$ be the pointwise limit of $(f_n)_n$.
+        We claim that $f_n \unifto f$.
+
+        Let $\varepsilon > 0$.
+        Choose $N$ such that $\forall x \forall m, n \ge N$, \[
+            d(f_m(x), f_n(x)) < \varepsilon/2.
+        \] Fix an $x \in X$.
+        Let $N_x$ be such that $\forall n \ge N_x$, \[
+            d(f_n(x), f(x)) < \varepsilon/2.
+        \] Let $N' = \max(N, N_x)$.
+        Then for all $n \ge N$, \[
+            d(f_n(x), f(x)) \le d(f_n(x), f_{N'}(x)) + d(f_{N'}(x), f(x))
+            < \varepsilon.
+        \] Since $x$ was arbitrary, we have that $f_n \unifto f$.
+        \renewcommand{\qedsymbol}{\ensuremath{\square\blacksquare}}
+    \end{proof}%
+    \renewcommand{\qedsymbol}{}%
+\end{solution}
+
+\begin{exercise*}[Weierstrass M-test] \label{thm:ssfn:mtest}
+    Let $(f_n)_{n \in \N}$ be a sequence of functions from a metric space
+    $X$ to the complex numbers.
+    Suppose there is a sequence $(M_n)_{n \in \N} \subseteq \R$
+    such that $\forall x \forall n$, \[
+        \abs{f_n(x)} \le M_n.
+    \] If $\sum_{n \in \N} M_n$ converges, then $\sum_{n \in \N} f_n$
+    converges absolutely and uniformly on $X$.
+\end{exercise*}
+\begin{proof}
+    Let $\varepsilon > 0$.
+    Choose $N$ such that $\sum_{n = N}^{\infty} M_n < \varepsilon$.
+    Then for all $x \in X$ and $m, n \ge N$, \[
+        \abs{\sum_{i = m+1}^n f_i(x)}
+            \le \sum_{i = m+1}^n \abs{f_i(x)}
+            \le \sum_{i = m+1}^n M_i
+            < \varepsilon.
+    \] Thus by \cref{thm:ssfn:cauchy}, $\sum_{n \in \N} f_n$ converges
+    absolutely and uniformly.
+\end{proof}

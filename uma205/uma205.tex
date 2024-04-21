@@ -1,15 +1,18 @@
 \documentclass[12pt]{report}
+\providecommand{\theoremnumberwithin}{chapter}
 \renewcommand{\thechapter}{\Roman{chapter}}
-\input{preamble}
 \usepackage{geometry}
+\input{preamble}
 
-\title{UMA205: Introduction to Algebraic Structures}
+\title{UM 205: Introduction to Algebraic Structures}
 \author{Naman Mishra}
 \date{January 2024}
 
 \begin{document}
 \maketitle
 \tableofcontents
+% \newpage
+\listoflecture
 % <lectures>
     \input{lectures/lecture01}
     \input{lectures/lecture02}
