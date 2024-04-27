@@ -3,10 +3,9 @@
     An MN relation for a language $L$ over an alphabet $A$ is an equivalence
     relation $\sim$ on $A^*$ satisfying
     \begin{itemize}
-        \item $\sim$ is right invariant, \ie, if $x \sim y$, then for all
+        \item $\sim$ is right invariant: if $x \sim y$, then for all
         $a \in A$, $xa \sim ya$.
-        \item $\sim$ refines $L$, \ie, if $x \sim y$, then $x \in L$ iff
-        $y \in L$.
+        \item $\sim$ refines $L$: if $x \sim y$, then $x \in L \iff y \in L$.
     \end{itemize}
 \end{definition*}
 Note that the first condition is equivalent to saying that for all
@@ -119,15 +118,18 @@ accepting states.
     if $xSy$ then $xRy$.
 \end{definition}
 
-\begin{lemma} \label{thm:mn:refinement}
+\begin{lemma*} \label{thm:mn:refinement}
     Let $L$ be a language over an alphabet $A$.
     Let $\sim$ be an MN-relation for $L$.
-    Then $R$ refines $\equiv_L$.
-\end{lemma}
+    Then $\sim$ refines $\equiv_L$.
+\end{lemma*}
 \begin{proof}
     $\sim$ is right invariant.
     This means that for all $x, y \in A^*$, if $x \sim y$ then
-    $\forall z \in A^* (xz \sim yz)$, so $x \equiv_L y$.
+    $\forall z \in A^* (xz \sim yz)$.
+    But $\sim$ refines $L$, so $xz \sim yz \implies
+    (xz \in L \longleftrightarrow yz \in L)$.
+    Thus $x \equiv_L y$.
 \end{proof}
 
 \begin{theorem*}[Myhill-Nerode] \label{thm:mn:mn}

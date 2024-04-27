@@ -1,23 +1,54 @@
 \lecture{2024-01-09}{}
 \begin{definition}[Sigma algebra] \label{def:sigma_algebra}
-    A \emph{$\sigma$-algebra} over a set $\Omega$ is a collection $\mcF$ of
+    A \emph{$\sigma$-algebra} over a set $\Omega$ is a collection $\F$ of
     subsets of $\Omega$ such that
     \begin{enumerate}
-        \item $\O \in \mcF$,
-        \item if $A \in \mcF$, then $A^c \in \mcF$,
-        \item if $\mcA \subseteq \mcF$ is countable, then
-            $\bigcup \mcA \in \mcF$.
+        \item $\O \in \F$,
+        \item if $A \in \F$, then $A^c \in \F$,
+        \item if $\mcA \subseteq \F$ is countable, then
+            $\bigcup \mcA \in \F$.
     \end{enumerate}
 \end{definition}
-\begin{definition}[Probability Space] \label{def:probability_space}
-    A \emph{probability space} is a triple $(\Omega, \mcF, \Pr)$, where
-    $\Omega$ is a set, \mcF\ is a $\sigma$-algebra over $\Omega$, and
-    $\Pr$ is a probability measure over $(\Omega, \mcF)$.
-\end{definition}
+\begin{proposition}
+    Let \F{} be a $\sigma$-algebra over $\Omega$.
+    Then if $\mcA \subseteq \F$ is countable, then
+    $\bigcap \mcA \in \F$.
+\end{proposition}
+\begin{proof}
+    Let $B = \bigcap \mcA$.
+    Then $B^c = \bigcup \set{A^c : A \in \mcA}$.
+    By closure under complements, each $A^c \in \F$.
+    By closure under countable unions, $B^c \in \F$.
+    Thus $B = (B^c)^c \in \F$.
+\end{proof}
+\begin{definition*}[Probability space] \label{def:probability_space}
+    A \emph{probability space} is a triple $(\Omega, \F, \Pr)$, where
+    $\Omega$ is a set, \F\ is a $\sigma$-algebra over $\Omega$, and
+    $\Pr$ is a probability measure over $(\Omega, \F)$.
+\end{definition*}
 
-\begin{definition}
-    Let $X_1$, $X_2$, \ldots and $X$ be random variables over a probability
-    space $(\Omega, \mcF, \Pr)$.
+\begin{definition}[Random variable] \label{def:random_variable}
+    Given a probability space $(\Omega, \F, \Pr)$ and a
+    measurable space $(E, \mcE)$, a \emph{random variable} is a measurable
+    function $X : \Omega \to E$, which means that for all $B \in \mcE$,
+    $X^{-1}(B) \in \F$.
+\end{definition}
+For our purposes, $E = \mcS$ and $\mcE = 2^\mcS$.
+Notice that if $(X_i)_{i=1}^n$ are random variables, then for any
+$B \in \mcE^n$, \begin{multline*}
+    (X_1, \dots, X_n)^{-1}(B) = \set{
+        \omega \in \Omega : X_1(\omega) \in B_1, \dots, X_n(\omega) \in B_n
+    } \\
+    = X_1^{-1}(B_1) \cap \cdots \cap X_n^{-1}(B_n) \in \F,
+\end{multline*} by closure under intersections.
+Thus $(X_1, \dots, X_n)$ is a random variable onto the product space
+$(E^n, \mcE^n)$.
+
+In fact this holds for any countable collection of random variables.
+
+\begin{definition*}
+    Let $X_1$, $X_2$, \ldots{} and $X$ be random variables over a probability
+    space $(\Omega, \F, \Pr)$.
     We define
     \begin{description}
         \item[Almost sure convergence.] $X_n \asto X$ if \[
@@ -34,32 +65,127 @@
         \] where $F$'s are cumulative distribution functions and $F_X$ is
         continuous.
     \end{description}
-\end{definition}
+\end{definition*}
 
-\begin{exercise}
+\begin{exercise*}[Chapman-Kolmogorov equation] \label{thm:chapman_kolmogorov}
+    Recall that $p_{ij}^{(n)} \coloneq \Pr_i(X_n = j)$.
     Derive the Chapman-Kolmogorov equation \[
-        p_{xy}^{(m+n)} = \sum_{z \in S} p_{xz}^{(m)} p_{zy}^{(n)}
-    \] for all $x, y \in S$ and $m, n \in \N$.
-\end{exercise}
+        p_{xy}^{(m+n)} = \sum_{z \in \mcS} p_{xz}^{(m)} p_{zy}^{(n)}
+    \] for all $x, y \in \mcS$ and $m, n \in \N$.
+\end{exercise*}
 \begin{solution}
     We have \begin{align*}
         p_{xy}^{(m+n)} &= P^{m+n}_{xy} \\
             &= (P^m P^n)_{xy} \\
-            &= \sum_{z \in S} P^m_{xz} P^n_{zy} \\
-            &= \sum_{z \in S} p_{xz}^{(m)} p_{zy}^{(n)}.
+            &= \sum_{z \in \mcS} P^m_{xz} P^n_{zy} \\
+            &= \sum_{z \in \mcS} p_{xz}^{(m)} p_{zy}^{(n)}. \qedhere
     \end{align*}
 \end{solution}
 
-\begin{definition}[Period] \label{def:period}
-    Let $(X_n)_{n \in \N}$ be $MC(S, \mu_0, P)$.
-    For each $x \in S$, let $F_x = \set{n \in \N^* : p_{xx}^{(n)} > 0}$.
+\begin{exercise}
+    Let $(X_n)_{n \in \N}$ be $MC(\mcS, \mu_0, P)$.
+    Show that for any $k \ge 1$, $(X_{kn})_{n \in \N}$ is
+    $MC(\mcS, \mu_0, P^k)$.
+\end{exercise}
+\begin{solution}
+    Let $Y_n = X_{kn}$.
+    Let $N \in \N$.
+    Then \begin{align*}
+        \Pr_{\mu_0}(Y_0 = y_0, \dots, Y_N = y_N)
+            &= \Pr_{\mu_0}(X_0 = y_0, \dots, X_{kN} = y_N) \\
+            &= \mu_0(y_0) p_{y_0 y_1}^{(k)} \cdots p_{y_{kN} y_N}^{(k)} \\
+            &= \mu_0(y_0) (P^k)_{y_0 y_1} \cdots (P^k)_{y_{kN} y_N}.
+    \end{align*}
+    Thus by \cref{thm:crit}, $(Y_n)_{n \in \N}$ is $MC(\mcS, \mu_0, P^k)$.
+\end{solution}
+
+\begin{definition}[Communication] \label{def:communication}
+    Let $(X_n)_{n \in \N}$ be $MC(\mcS, \mu_0, P)$.
+    For $x, y \in \mcS$, we say that $x$ \emph{leads to} $y$ if
+    $\Pr_x(X_n = y \text{ for some } n \ge 0) > 0$.
+    % TODO: > or \ge?
+
+    We say that $x$ \emph{communicates with} $y$ if $x \to y$ and $y \to x$,
+    and write $x \otto y$.
+\end{definition}
+
+\begin{theorem} \label{thm:comm_equiv}
+    Suppose $x, y \in \mcS$ and $x \ne y$.
+    Then the following are equivalent:
+    \begin{enumerate}
+        \item \label{thm:comm_equiv:def}
+        $x \to y$,
+        \item \label{thm:comm_equiv:sum}
+        there exists an $n \ge 1$ such that $(P^n)_{xy} = p_{xy}^{(n)} > 0$,
+        \item \label{thm:comm_equiv:path}
+        there exists an $n \ge 1$ and $x_1, \dots, x_{n-1} \in \mcS$ such that
+        \[
+            p_{x x_1} p_{x_1 x_2} \cdots p_{x_{n-1} y} > 0.
+        \]
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \[
+        \Pr_x(X_n = y \text{ for some } n \ge 0)
+            \le \sum_{n=0}^\infty \Pr_x(X_n = y)
+            = \sum_{n=0}^\infty p_{xy}^{(n)}.
+    \]
+    The sum is zero iff all terms are zero.
+    Thus \labelcref{thm:comm_equiv:def} and \labelcref{thm:comm_equiv:sum}
+    are equivalent.
+
+    Now since $p_{xy}^{(n)} = (P^n)_{xy}$, we have \begin{align*}
+        p_{xy}^{(n)}
+            &= \sum_{x_1, \dots, x_{n-1} \in \mcS} p_{xx_1} p_{x_1 x_2}
+                \cdots p_{x_{n-1} y}.
+    \end{align*}
+    Thus $p_{xy}^{(n)}$ is zero iff all paths from $x$ to $y$ of length $n$
+    have zero probability.
+    This proves that \labelcref{thm:comm_equiv:sum} $\iff$
+    \labelcref{thm:comm_equiv:path}.
+\end{proof}
+\begin{corollary}
+    If $x \to y$ and $y \to z$, then $x \to z$.
+\end{corollary}
+\begin{proof}
+    By \cref{thm:comm_equiv}, there exist $n, m \ge 1$ such that
+    $p_{xy}^{(n)} > 0$ and $p_{yz}^{(m)} > 0$.
+    Then by \cref{thm:chapman_kolmogorov}, $p_{xz}^{(n+m)} > 0$
+    so $x \to z$.
+\end{proof}
+
+\begin{corollary}
+    Communication is an equivalence relation.
+\end{corollary}
+\begin{proof}
+    Reflexivity and symmetry are immediate.
+    Transitivity follows from the previous corollary.
+\end{proof}
+
+\begin{definition*}[Communicating class] \label{def:comm_class}
+    The equivalence classes of $\otto$ are called
+    \emph{communicating classes}.
+
+    A communicating class \mcC{} is \emph{closed} if for all $x \in \mcC$
+    and $y \in \mcS$, $x \to y$ implies $y \in \mcC$.
+
+    A state $x$ is \emph{absorbing} if $\set{x}$ is a closed
+    communicating class.
+
+    A markov chain is \emph{irreducible} if its state space is itself
+    a communicating class.
+\end{definition*}
+
+\begin{definition*}[Period] \label{def:period}
+    Let $(X_n)_{n \in \N}$ be $MC(\mcS, \mu_0, P)$.
+    For each $x \in \mcS$, let $F_x = \set{n \in \N^* : p_{xx}^{(n)} > 0}$.
     The \emph{period} of $x$ is defined as $d_x = \gcd F_x$, where
     $\gcd \O$ is considered to be $0$.
 
     A state $x$ is \emph{aperiodic} if $d_x = 1$.
     A Markov chain is \emph{aperiodic} if all its states are aperiodic.
     % TODO: every state or any state?
-\end{definition}
+\end{definition*}
 \begin{examples}
     \item The simple random walk on $\Z$ is periodic with period $2$.
     \item Consider the walk on $\Z$ given by
@@ -87,10 +213,6 @@
 \begin{theorem}
     If $x \leftrightarrow y$, then $d_x = d_y$.
 \end{theorem}
-Here, $x \leftrightarrow y$ denotes the existence of a path from $x$ to $y$
-and from $y$ to $x$.
-That is, $x \leftrightarrow y$ if there exist $n, m \in \N$ such that
-$p_{xy}^{(n)} > 0$ and $p_{yx}^{(m)} > 0$.
 \begin{proof}
     Trivial when $x = y$.
     Suppose $x \ne y$ and let $n, m \in \N$ be lengths of paths from
@@ -108,12 +230,13 @@ $p_{xy}^{(n)} > 0$ and $p_{yx}^{(m)} > 0$.
     By symmetry, $d_y \mid d_x$, so $d_x = d_y$.
 \end{proof}
 
-\begin{theorem} \label{thm:schur_recurrence}
-    If $d_x \ge 1$, then there exists an $n_x \in \N^*$ such that for all
-    $n \ge n_x$, $p_{xx}^{(nd_x)} > 0$. \\
-    As a special case, if $d_x = 1$, then $p_{xx}^{(n)} > 0$ for all
+\begin{theorem*} \label{thm:schur_recurrence}
+    If $d_x \ge 1$, then there exists an $N \in \N^*$ such that for all
+    $n \ge N$, $p_{xx}^{(nd_x)} > 0$.
+
+    As a special case, if $p$ is aperiodic, then $p_{xx}^{(n)} > 0$ for all
     large enough $n$.
-\end{theorem}
+\end{theorem*}
 We first prove a general number-theoretic result.
 
 \begin{theorem}[Schur's Lemma] \label{thm:schur}
@@ -174,3 +297,5 @@ We are now ready to prove Schur's Lemma.
         Thus $\tilde{g}_S \mid g_S$.
     \end{itemize}
     Thus we can write $g_S = \sum_{s \in S} a_s s$ where $a_s \in \Z$.
+    \renewcommand{\qedsymbol}{$\dots$}
+\end{proof}

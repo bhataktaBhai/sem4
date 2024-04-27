@@ -1,5 +1,5 @@
-\lecture{2024-01-30}{}
 \section{Myhill-Nerode Theorem} \label{sec:mn}
+\lecture{2024-01-30}{}
 We will see several %TODO: how to finish this sentence?
 \begin{itemize}
     \item A language $L$ is regular iff a certain equivalence relation
@@ -28,7 +28,8 @@ We will see several %TODO: how to finish this sentence?
 \begin{definition*}
     For any language $L \subseteq A^*$, we define the canonical equivalence
     relation $\equiv_L$ on $A^*$ as \[
-        x \equiv_L y \iff \forall z \in A^*(xz \in L \iff yz \in L).
+        x \equiv_L y \iff
+            \forall z \in A^*(xz \in L \longleftrightarrow yz \in L).
     \]
 \end{definition*}
 
@@ -49,7 +50,7 @@ We will see several %TODO: how to finish this sentence?
         \item $\epsilon + a + (.^*)aa$,
         \item $b + (.^*)ab$,
         \item $(.^*)ba$,
-        \item $(.^*)bb$.
+        \item $(.^*)bb$. \qedhere
     \end{itemize}
 \end{solution}
 

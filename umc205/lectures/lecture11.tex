@@ -5,7 +5,7 @@
     \emph{stable partitioning} of \mcA\ if for all $p, q \in Q$,
     if $p \sim q$, then
     \begin{itemize}
-        \item $p \in F$ iff $q \in F$, and
+        \item $p \in F \iff q \in F$, and
         \item $\delta(p, a) \sim \delta(q, a)$ for all $a \in A$.
     \end{itemize}
 \end{definition*}
@@ -20,7 +20,7 @@ How is this merging done?
 Let $p \sim q$.
 Then for all $a \in A$, we have that $[\delta(p, a)] = [\delta(q, a)]$.
 Thus we define $\delta'([p], a) = [\delta(p, a)]$.
-\begin{definition}
+\begin{definition*}
     Let $\mcA = (Q, s, \delta, F)$ be a DFA and let $\sim$ be a stable
     partitioning of \mcA.
     We define $\mcA/{\sim}$ as follows. \[
@@ -31,7 +31,7 @@ Thus we define $\delta'([p], a) = [\delta(p, a)]$.
             \set{[p] \mid p \in F}
         \big).
     \]
-\end{definition}
+\end{definition*}
 
 \begin{proposition}
     Let $\sim$ be a stable partitioning of a DFA \mcA.

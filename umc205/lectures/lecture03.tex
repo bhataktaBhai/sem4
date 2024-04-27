@@ -1,5 +1,5 @@
-\lecture{2024-01-09}{}
 \section{A good way to construct DFAs} \label{sec:dfa:ideas}
+\lecture{2024-01-09}{}
 Suppose we have to construct a DFA for a language $L$ over an alphabet $A$.
 \begin{itemize}
     \item Think of a finite number of properties of strings that you might
@@ -25,17 +25,17 @@ Suppose we have to construct a DFA for a language $L$ over an alphabet $A$.
         \item $F \subseteq Q$ is the set of \emph{final states}.
     \end{itemize}
 \end{definition*}
-For example, the first example in this \namecref{chp:fa} can be written as
+For example, the DFA in \cref{fig:dfa:odd_a} can be written as
 \begin{align*}
     A &= \set{a, b} \\
     Q &= \set{e, o} \\
     s &= e \\
     F &= \set{o}
 \end{align*} and \begin{align*}
-    \delta &= \begin{aligned}
+    \delta &= \left\{\begin{aligned}
         (e, a) &\mapsto o, & (o, a) &\mapsto e, \\
         (e, b) &\mapsto e, & (o, b) &\mapsto o.
-    \end{aligned}
+    \end{aligned}\right.
 \end{align*}
 We further define $\what{\delta} : Q \times A^* \to Q$ as the extension of
 $\delta$ to strings.
@@ -51,7 +51,6 @@ $\delta$ to strings.
 \end{definition*}
 
 \section{Regular Languages} \label{sec:dfa:regular}
-\vspace{1em}
 \begin{definition*}[Regular Language] \label{def:regular}
     A language $L$ is \emph{regular} if there exists a DFA $\mathcal{A}$
     over $A$ such that $L(\mathcal{A}) = L$.

@@ -16,38 +16,38 @@
 
 \chapter{Discrete time Markov Chains} \label{sec:dtmc}
 \begin{definition}[Stochastic matrix] \label{def:stochastic_matrix}
-    Let $S$ be a state set (at most countable).
-    A matrix $P = (p_{xy})_{x,y \in S}$ is called a \emph{stochastic matrix}
-    if $p_{xy} \ge 0$ for all $x, y \in S$ and $\sum_{y \in S} p_{xy} = 1$
-    for all $x \in S$.
+    Let $\mcS$ be a state set (at most countable).
+    A matrix $P = (p_{xy})_{x,y \in \mcS}$ is called a \emph{stochastic matrix}
+    if $p_{xy} \ge 0$ for all $x, y \in \mcS$ and $\sum_{y \in \mcS} p_{xy} = 1$
+    for all $x \in \mcS$.
 \end{definition}
 
-\begin{definition}[Markov chain] \label{def:markov}
-    Let $S$ be a state set, $P = (p_{xy})$ a stochastic matrix, and $\mu_0$
-    a probability distribution on $S$, \ie, $\mu_0(x) \ge 0$ for all
-    $x \in S$ and $\sum_{x \in S} \mu_0(x) = 1$.
+\begin{definition*}[Markov chain] \label{def:markov}
+    Let $\mcS$ be a state set, $P = (p_{xy})$ a stochastic matrix, and $\mu_0$
+    a probability distribution on $\mcS$, \ie, $\mu_0(x) \ge 0$ for all
+    $x \in \mcS$ and $\sum_{x \in \mcS} \mu_0(x) = 1$.
 
     Suppose $X_0, X_1, \dots$ are random variables defined on the same
-    probability space taking values in $S$.
+    probability space taking values in $\mcS$.
     Then $(X_n)_{n \in \N}$ is called a \emph{Markov chain} with initial
     distribution $\mu_0$ and transition matrix $P$, denoted $MC(\mu_0, P)$,
     if $X_0$ has distribution $\mu_0$ and for all $n \ge 0$, \[
         \Pr(X_{n+1} = x_{n+1} \mid X_n = x_n, \dots, X_0 = x_0)
             = p_{x_n x_{n+1}}
     \] whenever $\Pr(X_n = x_n, \dots, X_0 = x_0) > 0$.
-\end{definition}
+\end{definition*}
 \begin{notation}
     Whenever writing $\Pr(X_n \in A \mid (X_0, \dots, X_{n-1}) \in B)$, it
     will be understood that only $\Pr((X_0, \dots, X_{n-1}) \in B) > 0$ is
     considered.
 \end{notation}
 
-\begin{theorem}
+\begin{theorem*} \label{thm:crit}
     $(X_n)_{n=0}^N$ is $MC(\mu_0, P)$ iff \[
         \Pr(X_0 = x_0, \dots, X_N = x_N)
             = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-1} x_N}
-    \] for all $x_0, \dots, x_N \in S$.
-\end{theorem}
+    \] for all $x_0, \dots, x_N \in \mcS$.
+\end{theorem*}
 \begin{proof}
     Both directions are proven by induction.
 
@@ -76,12 +76,12 @@
     \] Now for the converse, suppose \[
         \Pr(X_0 = x_0, \dots, X_N = x_N)
         = \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-1} x_N}
-    \] for all $x_0, \dots, x_N \in S$.
-    Then for any $x_0, \dots, x_{N-1} \in S$,
+    \] for all $x_0, \dots, x_N \in \mcS$.
+    Then for any $x_0, \dots, x_{N-1} \in \mcS$,
     \begin{align*}
         \Pr(X_0 = x_0, \dots, X_{N-1} = x_{N-1})
-            &= \sum_{x_N \in S} \Pr(X_0 = x_0, \dots, X_N = x_N) \\
-            &= \sum_{x_N \in S} \mu_0(x_0) p_{x_0 x_1} \dots 
+            &= \sum_{x_N \in \mcS} \Pr(X_0 = x_0, \dots, X_N = x_N) \\
+            &= \sum_{x_N \in \mcS} \mu_0(x_0) p_{x_0 x_1} \dots 
                 p_{x_{N-2} x_{N-1}} p_{x_{N-1} x_N} \\
             &= \mu_0(x_0) p_{x_0 x_1} \dots p_{x_{N-2} x_{N-1}}.
     \end{align*}
@@ -194,9 +194,9 @@
     \begin{definition}
         % TODO: why is "Definition" in the style of "Example"?
         Suppose $Z_1, \dots, Z_k$ are random variables taking values in a
-        state set $S$ defined on a probability space $(\Omega, \mcF, \Pr)$.
+        state set $\mcS$ defined on a probability space $(\Omega, \mcF, \Pr)$.
         and $\tilde{Z}_1, \dots, \tilde{Z}_k$ are rvs taking values in a
-        state set $S$ defined on a probability space
+        state set $\mcS$ defined on a probability space
         $(\tilde{\Omega}, \tilde{\mcF}, \tilde{P})$.
         Then $(Z_1, \dots, Z_k)$ and $(\tilde{Z}_1, \dots, \tilde{Z}_k)$ are
         said to be identically distributed if \[
@@ -231,35 +231,35 @@
     with direcred graph $K_4$ with some edge weights.
 \end{examples}
 
-\begin{theorem}
+\begin{theorem*}
     If $(X_n)_{n \in \N}$ is a DTMC with transition matrix $P$, then \[
         \Pr_{\mu_0}(X_n = y) = (\mu_0 P^n)_y.
     \] In particular, $\Pr_x(X_n = y) = (P^n)_{x,y} \eqcolon p_{xy}^{(n)}$.
     % DONE: wtf is $p_{xy}^{(n)}$?
     % it is notation for $\Pr_x(X_n = y)$
-\end{theorem}
+\end{theorem*}
 Here, $\mu_0$ is viewed as a row vector, and $\Pr_{\mu_0}$ is the distribution
 under the assumption that $X_0 \sim \mu_0$.
 Also, $\Pr_x$ is under the assumption that $\mu_0 = \delta_x$.
 \begin{proof}
     \begin{align*}
         \Pr_{\mu_0}(X_n = y)
-            &= \smashoperator{\sum_{x_0, \dots, x_{n-1} \in S}}
+            &= \smashoperator{\sum_{x_0, \dots, x_{n-1} \in \mcS}}
                 \Pr(X_0 = x_0, \dots, X_{n-1} = x_{n-1}, X_n = y) \\
-            &= \smashoperator{\sum_{x_0, \dots, x_{n-1} \in S}}
+            &= \smashoperator{\sum_{x_0, \dots, x_{n-1} \in \mcS}}
                 (\mu_0)_{x_0} p_{x_0 x_1} \dots p_{x_{n-1} y} \\
             &= (\mu_0 P^n)_y \qedhere
     \end{align*}
 \end{proof}
 
-\begin{theorem}[Markov property] \label{thm:mp}
+\begin{theorem*}[Markov property] \label{thm:mp}
     Let $(X_n)_{n \in \N}$ be $MC(\mu_0, P)$.
-    Then for any $n \ge 0$, $l \ge 1$, $x_n, \dots, x_{n+l} \in S$ and
-    $A \subseteq S^n$, \begin{multline*}
-        \Pr_{\mu_0}(X_i = x_i, n < i \le n + l \mid X_n = x_n, (X_0, \dots, X_{n-1}) \in A) \\
-        = \Pr_{x_n}(X_1 = x_{n+1}, \dots, X_l = x_{n+l})
-    \end{multline*}
-\end{theorem}
+    Then for any $n \ge 0$, $l \ge 1$, $x_n, \dots, x_{n+l} \in \mcS$ and
+    $A \subseteq \mcS^n$, \begin{align*}
+        \Pr_{\mu_0}(X_i = x_i, n < i \le n + l \mid X_n = x_n, (X_0, \dots, X_{n-1}) \in A&) \\
+        = \Pr_{x_n}(X_1 = x_{n+1}, \dots, X_l &= x_{n+l})
+    \end{align*}
+\end{theorem*}
 In other words, conditioning on $X_n = x_n$ and $(X_0, \dots, X_{n-1}) \in A$,
 the process $(X_n, X_{n+1}, \dots)$ is $MC(\delta_{x_n}, P)$.
 \begin{proof}

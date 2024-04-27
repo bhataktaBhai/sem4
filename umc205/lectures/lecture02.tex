@@ -1,4 +1,5 @@
-\chapter{Languages} \label{chp:languages}
+\chapter{Finite-State Automata} \label{chp:fa}
+\section{Languages} \label{sec:languages}
 \lecture{2024-01-04}{Deterministic Finite-State Automata}
 
 \begin{definition*}
@@ -45,7 +46,7 @@
     $\set{}$ are all languages over $A$.
 \end{example}
 
-\begin{definition*}[Concatenation] \label{def:languages:concatenation}
+\begin{definition}[Concatenation] \label{def:languages:concatenation}
     Let $u$, $v$ be strings over an alphabet $A$.
     Then $u \cdot v$ or simply $uv$ is the string obtained by appending $v$
     to the end of $u$.
@@ -53,7 +54,7 @@
     For two languages $L_1$, $L_2$ over $A$, define their concatenation \[
         L_1 \cdot L_2 \coloneq \set{uv \mid u \in L_1, v \in L_2}.
     \]
-\end{definition*}
+\end{definition}
 We will also write $ua$ where $u$ is a string and $a$ is a letter to mean
 $u$ concatenated with the string of length 1 consisting of the letter $a$.
 
@@ -66,10 +67,10 @@ $u$ concatenated with the string of length 1 consisting of the letter $a$.
     This is called the \emph{lexicographic order} on $A^*$.
 \end{definition*}
 
-\begin{proposition}
+\begin{proposition*}
     Let $A$ be an alphabet.
     Then the set of all languages over $A$ is uncountable.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     Diagonilization.
     Let $\Phi\colon A^* \to 2^{A^*}$ be a map.
@@ -77,8 +78,9 @@ $u$ concatenated with the string of length 1 consisting of the letter $a$.
     Then $L_\Phi$ is a language over $A$ that is not in the image of $\Phi$.
 \end{proof}
 
-\chapter{Finite-State Automata} \label{chp:fa}
-\begin{center}
+\section{Deterministic Finite-State Automata} \label{sec:dfa}
+\begin{figure}[b]
+    \centering
     \begin{tikzpicture}
         \node[state, initial] (q0) {$e$};
         \node[state, accepting, right=of q0] (q1) {$o$};
@@ -88,12 +90,14 @@ $u$ concatenated with the string of length 1 consisting of the letter $a$.
             (q1) edge [loop above] node {$b$} (q1)
             (q1) edge [bend left] node {$a$} (q0);
     \end{tikzpicture}
-\end{center}
-This is a deterministic finite state automaton.
+    \caption{A DFA that accepts strings with an odd number of $a$'s.}
+    \label{fig:dfa:odd_a}
+\end{figure}
+\Cref{fig:dfa:odd_a} shows a deterministic finite state automaton.
 The machine starts at state $e$,
 and as it reads a (finite) string consiting of $a$'s and $b$'s,
 it moves to the state specified by the arrows from the current state.
-The state $o$ is an ``accepting state''.
+State $o$ is an `accepting state'.
 Each string whose evaluation ends at state $o$ is said to be accepted by the
 automaton.
 

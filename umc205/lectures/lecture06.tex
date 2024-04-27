@@ -1,5 +1,5 @@
-\lecture{2024-01-18}{}
 \section{Non-deterministic Finite Automata} \label{sec:nfa}
+\lecture{2024-01-18}{}
 \begin{examples}
     \item An NFA for ``contains $abb$ as a subword''
     \begin{center}
@@ -151,9 +151,10 @@
         \what{\delta}(X, aw) &= \what{\delta}(\delta(X, a), w) \\
             &= \bigcup_{p \in \delta(X, a)} \set{q \in Q \mid p \follows{w} q}
         \intertext{by the inductive hypothesis}
-            &= \bigcup_{p \in \set{q \in Q \mid \exists q_0 \in X (q_0 \follows{a} p)}}
+            &= \bigcup_{p \in \set*{q \in Q \mid \exists q_0 \in X (q_0 \follows{a} p)}}
                 \set{q \in Q \mid p \follows{w} q} \\
             &= \set{q \in Q \mid \exists q_0 \in X (q_0 \follows{aw} q)}.
+            \qedhere
     \end{align*}
 \end{proof}
 

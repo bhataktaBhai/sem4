@@ -1,0 +1,34 @@
+\section{Stationary distributions} \label{sec:inv}
+Let $\mcS$ be a countable state space and $P$ a transition matrix on $\mcS$.
+Then any function $\lambda\colon \mcS \to [0, \infty]$ corresponds to a
+measure on $\mcS$, by setting \[
+    \lambda(A) = \sum_{x \in A} \lambda(x).
+\] Conversely, any measure on $\mcS$ is of this form.
+(\textcolor{Red}{Why?}) %TODO
+
+A measure $\lambda$ can be thought of as a row vector
+$(\lambda(x))_{x \in \mcS}$.
+Then \[
+    (\lambda P)_y = \sum_{x \in \mcS} \lambda(x) P(x, y)
+\] also gives a measure on $\mcS$.
+
+A \emph{probability distribution} $\pi$ on $\mcS$ is a measure such that
+$\pi(\mcS) = 1$.
+
+\begin{definition*} \label{def:inv:measure}
+    A measure $\lambda$ on $\mcS$ is \emph{invariant} for a DTMC with
+    transition matrix $P$ is $\lambda P = \lambda$.
+    That is, \[
+        \sum_{x \in \mcS} \lambda(x) P(x, y) = \lambda(y)
+            \quad \forall y \in \mcS.
+    \]
+    If $\lambda$ is a probability distribution, it is called a
+    \emph{stationary distribution}.
+\end{definition*}
+
+\begin{proposition}
+    If $(X_n)_{n \in \N}$ is $MC(\pi, P)$ where $\pi$ is a stationary
+    distribution, then \[
+        X_0 \eqd X_1 \eqd \dots \sim \pi.
+    \]
+\end{proposition}

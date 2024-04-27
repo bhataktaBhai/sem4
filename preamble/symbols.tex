@@ -165,3 +165,8 @@
 \let\ubar\underline
 
 \DeclareMathOperator\sgn{sgn}
+
+\let\oldleft\left
+\let\oldright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\oldleft}
+\renewcommand{\right}{\aftergroup\egroup\oldright}

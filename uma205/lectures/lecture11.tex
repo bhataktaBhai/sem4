@@ -54,7 +54,7 @@ We enumerate some more values in \cref{tab:stirling}.
 
     For functions of image size $j$, there are $\binom{x}{j}$ ways to choose
     the image, and $j! \stirling nj$ ways to choose the preimage.
-    But $\binom{x}{j} j!$ is precisely $n^{\underline{j}}$.
+    But $\binom{x}{j} j!$ is precisely $x^{\underline{j}}$.
 
     Thus both sides agree at infinitely many points, and so they are equal.
 \end{proof}
@@ -69,7 +69,7 @@ We enumerate some more values in \cref{tab:stirling}.
 \end{exercise*}
 \begin{solution}
     Let $b_k$ be the number of partitions of $[n+1]$ with $n+1$ in a block
-    of size $k+1$.
+    with $k$ other elements.
     Then $b_k = \binom{n}{k} B_{n-k}$.
     This gives the desired result by the re-indexing $k \mapsto n-k$.
 \end{solution}

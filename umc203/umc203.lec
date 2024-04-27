@@ -1,0 +1,20 @@
+\contentsline {lecture}{\numberline {1}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {01}\ 09} Classification and Bayes classifier}{4}{lecture.1}%
+\contentsline {lecture}{\numberline {2}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {3},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {01}\ 11} Bayes classifier, multivariate gaussians and optimality}{7}{lecture.2}%
+\contentsline {lecture}{\numberline {3}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {01}\ 16} Bayes error rate}{10}{lecture.3}%
+\contentsline {lecture}{\numberline {4}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {3},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {01}\ 18} Bayes error rate (continued), discriminant functions}{11}{lecture.4}%
+\contentsline {lecture}{\numberline {5}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {01}\ 23} Fisher discriminant}{12}{lecture.5}%
+\contentsline {lecture}{\numberline {6}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {3},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {01}\ 25} The perceptron algorithm}{17}{lecture.6}%
+\contentsline {lecture}{\numberline {7}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {3},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {02}\ 01} Generalization error of the perceptron algorithm}{19}{lecture.7}%
+\contentsline {lecture}{\numberline {8}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {02}\ 06} Primer on convex optimisation}{23}{lecture.8}%
+\contentsline {lecture}{\numberline {9}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {3},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {02}\ 08} Large margin classification}{27}{lecture.9}%
+\contentsline {lecture}{\numberline {11}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {02}\ 27} Linear SVM classifiers for linearly non-separable data: VC Dimension}{29}{section.5.1}%
+\contentsline {lecture}{\numberline {13}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {02}\ 27} Quadradic programming formulation of soft-margin SVM}{33}{section.5.3}%
+\contentsline {lecture}{\numberline {11}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {02}\ 27} Kernel definition and various operations}{36}{chapter.6}%
+\contentsline {lecture}{\numberline {14}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {0},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {03}\ 04} Least squares and Ridge regression for linear models}{37}{chapter.7}%
+\contentsline {lecture}{\numberline {15}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {03}\ 05} Bias-variance decomposition with application to least squares}{40}{lecture.15}%
+\contentsline {lecture}{\numberline {16}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {2},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {03}\ 06} Bias-variance decomposition with application to ridge regression}{43}{lecture.16}%
+\contentsline {lecture}{\numberline {18}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {1},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {03}\ 26} Maximum Likelihood Estimation}{45}{chapter.8}%
+\contentsline {lecture}{\numberline {19}\makebox [\widthof {Mon,}][l]{\DTMshortweekdayname {3},}\ \makebox [\widthof {September 00}][l]{\DTMmonthname {03}\ 14} Consistency, Normality, Efficiency and Bias}{48}{lecture.19}%
+\contentsline {lecture}{\numberline {21}\DTMshortweekdayname {1}, \DTMmonthname {03}\ 26}{49}{section.8.2}%
+\contentsline {lecture}{\numberline {24}\DTMshortweekdayname {3}, \DTMmonthname {04}\ 04}{51}{subsection.8.2.1}%
+\contentsline {lecture}{\numberline {25}\DTMshortweekdayname {0}, \DTMmonthname {04}\ 08}{55}{lecture.25}%

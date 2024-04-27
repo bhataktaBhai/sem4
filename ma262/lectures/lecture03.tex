@@ -1,4 +1,5 @@
 \lecture{2024-01-11}{}
+\begin{proof}[$\dots$]
     First consider the case $\abs{S} = 2$.
     Let $S = \set{s_1, s_2}$.
     We know that $g_S = a s_1 + b s_2$ for some $a, b \in \Z$.
@@ -31,17 +32,18 @@
 \end{proof}
 We can now prove \cref{thm:schur_recurrence}.
 \begin{proof}
-    Applying Schur's lemma to $F_x$, we have the existence of an $n_x$ such
+    Applying Schur's lemma to $F_x$, we have the existence of an $N$ such
     that $nd_x$ can be written as a non-negative integer combination of
-    elements of $F_x$, for all $n \ge n_x$.
+    elements of $F_x$, for all $n \ge N$.
     Let $nd_x = \sum_{i=1}^{k} a_i f_i$.
-    Then by the Chapman-Kolmogorov equation, \begin{align*}
+    Then since $p_{ij}^{(m)} = (P^m)_{ij}$, \begin{align*}
         p_{xx}^{(nd_x)} &\ge \underbrace{p_{xx}^{(f_1)} \dots p_{xx}^{(f_1)}}_{a_1 \text{ times}} \dots \underbrace{p_{xx}^{(f_k)} \dots p_{xx}^{(f_k)}}_{a_k \text{ times}} \\
             &\ge \prod_{i=1}^{k} (p_{xx}^{(f_i)})^{a_i} \\
             &> 0 \qedhere
     \end{align*}
 \end{proof}
 
+\section{Stopping Times} \label{sec:stopping_times}
 \begin{definition}[The Extended Reals] \label{def:extended_reals}
     The \emph{extended real line} is the set of real numbers along with $2$
     formal sumbols $+\infty$ and $-\infty$, denoted by \[
@@ -73,44 +75,52 @@ We can now prove \cref{thm:schur_recurrence}.
     for all $n \in \N$.
 \end{definition}
 % Consider $X : (\Omega, \F, P) \to \overline{\R}$.
-\begin{definition}[Natural filtration] \label{def:natural_filtration}
-    Let $(X_n)_{n \in \N}$ be a sequence of $S$-valued random variables
+\begin{definition*}[Natural filtration] \label{def:natural_filtration}
+    Let $(X_n)_{n \in \N}$ be a sequence of $\mcS$-valued random variables
     defined on $(\Omega, \F, \Pr)$.
     For $n \in \N$, define \begin{align*}
         \F_n &= \set{(X_0, X_1, \dots, X_n)^{-1}(A) \mid A \subseteq
-                S^{n+1}} \cap \F \\ %TODO: verify
+                \mcS^{n+1}}
             &= \sigma(X_0, X_1, \dots, X_n)
     \end{align*}
     Here, $(X_0, \dots, X_n)^{-1}(A) = \set{\omega \in \Omega \mid
     (X_0(\omega), \dots, X_n(\omega)) \in A}$. \\
     This sequence of $\sigma$-algebras is called the \emph{natural
     filtration} of $(X_n)_{n \in \N}$.
-\end{definition}
+\end{definition*}
 \begin{remark}
-    Note that each $\F_n$ is a subset of $2^\Omega$, not $\Omega$.
+    Note that elements of $\F_n$ are subsets of $\Omega$, not elements of
+    $\Omega$.
+
+    (GUESS) $\F_n$ is the set of all subsets of $\Omega$ subject to one
+    condition: if $(X_0, \dots, X_n)(\omega_1)
+    = (X_0, \dots, X_n)(\omega_2)$, then any set in $\F_n$ containing
+    $\omega_1$ must also contain $\omega_2$.
+    \begin{multline*}
+        \F_n = \{A \subseteq \Omega \mid \forall \omega_1, \omega_2
+            \in \Omega: \\
+            (\omega_1 \in A) \lxor (\omega_2 \in A) \rightarrow
+            (X_0, \dots, X_n)(\omega_1) \ne (X_0, \dots, X_n)(\omega_2)\}
+    \end{multline*}
     % In fact, if one defines the equivalence relation $\sim_n$ on $\Omega$ by
     % $\omega \sim_n \omega'$ iff $X_i(\omega) = X_i(\omega')$ for each
     % $i \le n$, then $\F_n$ is simply $\Omega /{\sim_n}$.
 
     Why is $\F_n$ a $\sigma$-algebra?
-    The empty set is in $\F_n$ because $\O \in S^{n+1}$, and the set of
+    The empty set is in $\F_n$ because $\O \in \mcS^{n+1}$, and the set of
     pre-images of the null set is the null set.
     The complement of any set in $\F_n$ is in $\F_n$ because
     $(X_0, \dots, X_n)^{-1}(A)^c = (X_0, \dots, X_n)^{-1}(A^c)$.
 
     Why is $\F_n \subseteq \F_{n+1}$?
-    For any $A \subseteq S^{n+1}$, we have \[
+    For any $A \subseteq \mcS^{n+1}$, we have \[
         (X_0, \dots, X_n)^{-1}(A)
-            = (X_0, \dots, X_n, X_{n+1})^{-1}(A \times S).
+            = (X_0, \dots, X_n, X_{n+1})^{-1}(A \times \mcS).
     \]
-    The set $\wbar{\F} = 2^\Omega$ works as a $\sigma$-algebra containing each
-    $\F_n$.
-    \textcolor{Red}{But is this the desired closure?
-    Or did we intend $\F_n$ to be intersected with $\F$?}
 \end{remark}
 
-\begin{definition}[Stopping time] \label{def:stopping_time}
-    Suppose $(X_n)_{n \in \N}$ is a sequence of $S$-valued random variables
+\begin{definition*}[Stopping time] \label{def:stopping_time}
+    Suppose $(X_n)_{n \in \N}$ is a sequence of $\mcS$-valued random variables
     on $(\Omega, \F, (\F_n)_{n \in \N}, \Pr)$ where $(\F_n)_{n \in \N}$ is
     the natural filtration of $(X_n)_{n \in \N}$.
 
@@ -119,10 +129,15 @@ We can now prove \cref{thm:schur_recurrence}.
     $n \in \N$, \[
         \set{\omega \in \Omega \mid \tau(\omega) \le n} \in \F_n.
     \]
-\end{definition}
+\end{definition*}
 This is equivalent to saying that for all $n \in \N$, \[
     \1{\set{\tau \le n}} = \1{\set{(X_0, \dots, X_n) \in A}}
-    \quad \text{for some } A \in S^{n+1}.
+    \quad \text{for some } A \in \mcS^{n+1}.
+\]
+(GUESS) In keeping with the previous guess, it is equivalent to the
+following: if $\omega, \omega' \in \Omega$ with
+$\tau(\omega) = n < \tau(\omega')$, then \[
+    (X_0, \dots, X_n)(\omega) \ne (X_0, \dots, X_n)(\omega').
 \]
 Intuitively, a stopping time is a time at which we can decide whether or not
 to stop the process based on the information available up to that time (in
@@ -133,8 +148,8 @@ Then the event that the hitting time of $10$ is at most $n$ is \[
     \set{T_{10} \le n} = \bigcup_{i=1}^{n} \set{X_i = 10}.
 \]
 \begin{examples}
-    \item Let $(X_n)_{n \in \N}$ be an $S$-valued stochastic process and let
-    $A \subseteq S$.
+    \item Let $(X_n)_{n \in \N}$ be an $\mcS$-valued stochastic process and let
+    $A \subseteq \mcS$.
     Let $T_A \coloneq \inf\set{n \ge 1 \mid X_n \in A}$ (where we take
     $\inf \O$ to be $+\infty$).
     Then $T_A$ is a stopping time with respect to the natural filtration
@@ -150,11 +165,11 @@ Then the event that the hitting time of $10$ is at most $n$ is \[
     Intuitively, $L$ is the \emph{last} time we are below $7$, which cannot
     be determined based on the information available from the past.
 \end{examples}
-\begin{proposition}
+\begin{proposition*} \label{thm:stopping_time}
     $\tau$ is a stopping time iff for all $n \in \N$, \[
         \set{\tau = n} \in \F_n.
     \]
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     Suppose $\tau$ is a stopping time.
     Then $\set{\tau = n} \in \F_n$ for all $n \in \N$.
@@ -203,13 +218,13 @@ We can interpret the above operations as follows.
 \end{exercise}
 \begin{solution}
     Consider the SRW($p$) started at the origin, with \begin{align*}
-        \tau_1 &= \inf\set{n \ge 1 \mid X_n = 1} \\
-        \tau_2 &= \inf\set{n \ge 1 \mid X_n = 2}
+        \tau_1 &= \inf\set{n \ge 1 \mid X_n = 1}, \\
+        \tau_2 &= \inf\set{n \ge 1 \mid X_n = 2}. \qedhere
     \end{align*}
 \end{solution}
 
-\begin{theorem}[Strong Markov property] \label{thm:smp}
-    Let $(X_n)_{n \in \N}$ be in $MC(\mu_0, p)$,
+\begin{theorem*}[Strong Markov property] \label{thm:smp}
+    \,\\Let $(X_n)_{n \in \N}$ be $MC(\mu_0, P)$,
     and let $\tau$ be a stopping time.
     Let $A \subseteq \N$.
     Then \begin{multline*}
@@ -217,13 +232,13 @@ We can interpret the above operations as follows.
             \given \tau \in A, X_\tau = x) \\
         = \Pr_x(X_1 = x_1, \dots, X_n = x_n)
     \end{multline*}
-\end{theorem}
+\end{theorem*}
 \begin{remark}
     The SMP is equivalent to \begin{equation*}
-        \E_{\mu_0}\left[f\big((X_{\tau+j})_{j \in \N}\big) \mid \tau \in A,
-        X_\tau = x\right]
-            = \E_x\left[f\big((X_j)_{j \in \N}\big)\right]
-    \end{equation*} for any bounded function $f \colon S^\infty \to \R$.
+        \boxed{\E_{\mu_0}\left[f\big((X_{\tau+j})_{j \in \N}\big)
+                        \mid \tau \in A, X_\tau = x\right]
+            = \E_x\left[f\big((X_j)_{j \in \N}\big)\right]}
+    \end{equation*} for any bounded function $f \colon \mcS^\infty \to \R$.
 \end{remark}
 \begin{proof}
     \begin{align*}
@@ -245,7 +260,7 @@ We can interpret the above operations as follows.
     and dividing by $\Pr_{\mu_0}(\tau \in A, X_\tau = x)$ yields the result.
 \end{proof}
 
-\begin{definition}
+\begin{definition*} \label{def:pgf}
     Suppose $X$ takes values in $\N \cup \set{\infty}$, and let
     $p_k \coloneq \Pr(X = k)$, $k \in \N \cup \set{\infty}$.
     Then the \emph{probability generating function} of $X$ is defined as
@@ -253,7 +268,7 @@ We can interpret the above operations as follows.
         G_X(s) &= p_0 + p_1 s + p_2 s^2 + \dots, \quad s \in (-1, 1) \\
             &= \E[s^X]
     \end{align*} where we take $s^\infty = 0$ for $\abs{s} < 1$.
-\end{definition}
+\end{definition*}
 \begin{remark}
     The left limit $G_X(1^-) = \lim_{s \uparrow 1} G_X(s) = 1 - p_\infty$.
 \end{remark}
@@ -264,10 +279,11 @@ Otherwise, \[
           = G_X'(1^-)
 \]
 
-\begin{theorem} \label{thm:pgf}
-    Let $X$, $Y$ be two random variables taking values in $\N \cup \infty$ and
-    $G_X(s) = G_Y(s) \;\forall s \in (-1, 1)$, then $X \eqd Y$.
-\end{theorem}
+\begin{theorem*} \label{thm:pgf}
+    Let $X$, $Y$ be two random variables taking values in
+    $\N \cup \set{\infty}$ and $G_X(s) = G_Y(s) \;\forall s \in (-1, 1)$.
+    Then $X \eqd Y$.
+\end{theorem*}
 \begin{proof}
     Since $G_X, G_Y \in C^\infty(-1, 1)$, we have \[
         G_X^{(n)} = G_Y^{(n)} \text{ for all } n \in \N.
@@ -276,17 +292,19 @@ Otherwise, \[
     % TODO: where is rigour?
 \end{proof}
 
-\begin{exercise}
+\begin{exercise*}
     Suppose $(X_n)_{n \in \N}$ is an SRW($p$) on \Z\ started at the origin.
-    Find $G \coloneq G_{T_{-1}}$,
+    Find $G_{T_{-1}}$,
     where $T_{-1}$ is the first hitting time of $-1$.
-\end{exercise}
+\end{exercise*}
 \begin{solution}
+    Denote $G_{T_{-1}}$ by $G$ for simplicity.
     \begin{align*}
         G(s) &= \E_0[s^{T_{-1}}] \\
             &= p \E_0[s^{T_{-1}} \given X_1 = 1]
                 + q \E_0[s^{T_{-1}} \given X_1 = -1] \\
             &= p \E_1[s^{1 + T_{-1}}] + q s \\
+            &= p s \E_1[s^{T_{-1}}] + q s \\
             &= p s \E_0[s^{T_{-2}}] + q s
     \end{align*}
     Since $s^\infty = 0$ by our convention, we have \begin{align*}
@@ -303,99 +321,6 @@ Otherwise, \[
     \end{align*}
     \textbf{Claim:} $G(s) = \frac{1 - \sqrt{1 - 4pqs^2}}{2ps}$ for all
     $s \in (-1, 1) \setminus \set{0}$.
+    % This is becuas the $+$ solution does not converge at $0$.
     % TODO: WTF how
-\end{solution}
-We get several results from this exercise.
-The probability of ever hitting $-1$ is \begin{align*}
-    1 - \Pr_0(T_{-1} = \infty) &= \lim_{s \uparrow 1} G(s) \\
-        &= \frac{1 - \sqrt{1 - 4pq}}{2p} \\
-        &= \frac{1 - \abs{2p - 1}}{2p} \\
-        &= \begin{cases}
-            1 & \text{if the walk is left-biased,} \\
-            \frac{q}{p} & \text{otherwise.}
-        \end{cases} \\
-        &= \frac{q}{p} \wedge 1
-\end{align*}
-Another way to see the left-biased case is to note that $X_n$'s are sums of
-iid $\mathrm{Ber}_{\pm}(p)$ random variables, and so by the strong law of
-large numbers, \[
-    \frac{X_n}{n} \asto p - q.
-\] Thus if $p < q$, then $X_n \asto -\infty$.
-
-\begin{exercise}
-    Consider the SRW($p$) on $\Z$ started at the origin.
-    Show that $T_{-2} \eqd \tau_1 + \tau_2$, where $\tau_1$ and $\tau_2$ are
-    iid copies of $T_{-1}$.
-\end{exercise}
-\begin{solution}
-    \begin{align*}
-        \E_0[s^{T_{-2}}] &= \E_0[s^{T_{-2}} \1{T_{-1} < \infty}] \\
-            &= \sum_m \E_0[s^{T_{-2}} \1{T_{-1} = m}] \\
-            &= \sum_m \Pr_0(T_{-1} = m) \E_{-1}[s^{m + T_{-2}}] \\
-            &= \sum_m \Pr_0(T_{-1} = m) s^m \E_{-1}[s^{T_{-2}}] \\
-            &= \E_0[s^{T_{-1}}] \sum_m \Pr_0(T_{-1} = m) s^m \\
-            &= G(s)^2
-    \end{align*}
-    On the other hand, $\E_0[s^{\tau_1 + \tau_2}] = \E_0[s^{\tau_1}]^2
-    = G(s)^2$ by independence.
-
-    Thus, $T_{-2} \eqd \tau_1 + \tau_2$ by \cref{thm:pgf}.
-\end{solution}
-
-\begin{exercise}
-    Consider the SRW($p$) on \Z\ started at the origin.
-    Find $\Pr_0(T_{-1} = n)$, $n \in \N$.
-\end{exercise}
-\begin{solution}
-    We have $G(s) = \frac{1-\sqrt{1-4pqs^2}}{2ps}$.
-    We first need a nice expression for $\binom{1/2}{k}$ in order to
-    use the binomial theorem.
-    \begin{align*}
-        \binom{1/2}{k}
-        &= \frac{\frac12(\frac12 - 1) \dots (\frac12 - k + 1)}{k!} \\
-        &= \frac1{2^k} \frac{1(1 - 2) \dots (1 - 2k + 2)}{k!} \\
-        &= \frac{(-1)^{k-1}}{2^k} \frac{(2k - 3)!!}{k!}
-        \intertext{We can rewrite $(2k-3)!!$ as}
-        (2k-3)!! &= \frac{(2k-3)!}{(2k-4)!!}
-            = \frac{(2k-3)!!}{2^{k-2} (k-2)!}
-        \intertext{so that}
-        \binom{1/2}{k}
-        &= \frac{(-1)^{k-1}}{2^{2k-2}} \frac{(2k - 3)!}{k! (k-2)!} \\
-        &= \frac{(-1)^{k-1}}{2^{2k-2} k} \binom{2k-3}{k-2}
-        \intertext{but multiplying by $\frac{2k-2}{2(k-1)}$ yields an even
-        nicer}
-        &= \frac{(-1)^{k-1}}{2^{2k-1}} \frac{1}{k} \binom{2k-2}{k-1}
-    \end{align*}
-    The expression doesn't make sense for $k = 0$, for which the coefficient
-    is $1$, and the derivation doesn't make sense for $k = 1$, but for which
-    the expression happens to match the coefficient.
-
-    But if we look closely, we see that this is just \[
-        \frac{(-1)^{k-1}}{2^{2k-1}} C_{k-1}
-    \] where $C_{k-1}$ is the $(k-1)$th
-    \href{https://en.wikipedia.org/wiki/Catalan_number}{Catalan number}!
-
-    From the binomial theorem, \begin{align*}
-        (1 - x)^{\frac12} &= \sum_{k=0}^{\infty} \binom{1/2}{k} (-x)^k \\
-            &= 1 - \sum_{k=1}^{\infty} \frac1{2^{2k-1}} C_{k-1} x^k
-        \shortintertext{but more interestingly,}
-        (1 - 4x)^{\frac12} &= 1 - 2 \sum_{k=1}^{\infty} C_{k-1} x^k
-    \end{align*}
-    In fact, this gives that \[
-        \frac{1 - \sqrt{1 - 4x}}{2x} \text{ is the generating function for }
-        (C_k)_{k \in \N}.
-    \] Getting back to the problem at hand, we have \begin{align*}
-        G(s) &= \frac{1 - \sqrt{1 - 4pqs^2}}{2ps} \\
-            &= qs \sum_{k=0}^{n} C_k (pqs^2)^k
-    \end{align*}
-    So we have \[
-        \Pr_0(T_{-1} = n) = \begin{cases}
-            0 & \text{if $n$ is even} \\
-            p^k q^{k+1} C_k & \text{if $n = 2k+1$}
-        \end{cases}
-    \] In the case of $p = q = \frac12$, this in fact proves that the
-    number of SRW paths of length $2n$ from the origin to the origin, that
-    never go below the origin, is the $n$th Catalan number.
-    Why? Because each such path can be extended bijectively to a path of
-    length $2n+1$ that hits $-1$ for the first time at time $2n+1$.
 \end{solution}

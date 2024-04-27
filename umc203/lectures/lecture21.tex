@@ -1,0 +1,83 @@
+\section{Restricted Boltzmann Machines} \label{sec:rbm}
+\lecture[21]{2024-03-26}{}
+\[
+    \Pr(S = s) = \frac{e^{-E(s)/T}}{Z}
+\] where $T$ is the temperature.
+We will fix $T = 1$. \[
+    \Pr(S = s) = \frac{e^{-E(s)}}{Z}
+\]
+Suppose $w_{ii} = 0$ and $(w_{ij})$ is symmetric.
+\begin{align*}
+    E(s) &= -\frac12 \sum_{i, j} w_{ij} s_i s_j - \sum_i b_i s_i \\
+    &= \sum_i s_i \paren*[\Big]{\sum_{j \ge i} w_{ij} s_j + b_i} \\
+    &= \sum_i s_i \paren*[\Big]{\sum_{j > i} w_{ij} s_j + b_i}
+\end{align*} since $w_{i i} = 0$.
+Suppose further that $w_{12} = 0$.
+Then \[
+    E(s) = s_1 \paren*[\Big]{\sum_{j > 2} w_{1j} s_j + b_1}
+            + s_2 \paren*[\Big]{\sum_{j > 2} w_{2j} s_j + b_2}
+            + K
+\] where $K$ depends only on $s_3, \dots, s_n$.
+Thus conditioned on $S_{3:n}$,
+$S_1$ and $S_2$ are conditionally independent.
+
+\subsection{A real life example} \label{sec:rbm:eg}
+You feel sick.
+You go to the doctor.
+The doctor asks you a series of questions, perhaps about the weather,
+your kids, your job, your symptoms.
+The doctor then diagnoses you.
+The doctor is a restricted Boltzmann machine?
+
+The doctor has a knowledge base \[
+    \Pr(S = s \given D_1 = d_1, \dots, D_m = d_m).
+\] They figure out the inverse of this, \[
+    \Pr(D = d \given S = s)
+\] using some Bayesion wizardry.
+
+Now that we have touched some grass, let's go back to the math.
+
+Split $S = (V, H)$ where $V$ are the ``visible'' symptoms and $H$ are the
+``hidden'' symptoms. \[
+    V = \begin{pmatrix}
+        S_1 \\
+        \vdots \\
+        S_m
+    \end{pmatrix}, \quad
+    H = \begin{pmatrix}
+        S_{m+1} \\
+        \vdots \\
+        S_d
+    \end{pmatrix}
+\]
+
+Let \[
+    \mcD = \set{v^{(1)}, \dots, v^{(N)}}
+\]
+We apply the latent variable model.
+\[
+    \log \Pr(V = v) = \log \sum_h \Pr(V = v, H = h)
+\]
+\begin{align*}
+    \mcL(\theta) &= \sum_{i=1}^N \log \Pr(V = v^{(i)})
+\end{align*} and we employ the algorithm \[
+    \theta \gets \theta + \eta \pdv{\mcL}{\theta}
+\] where $\eta$ is the learning rate.
+This is called \emph{gradient ascent}.
+
+Consider the baby case $N = 1$.
+\begin{align*}
+    \mcL &= \log \sum_h \Pr(V = v, H = h) \\
+      &= \log \sum_h e^{-E(s)} - \log Z \\
+    \implies \pdv{\mcL}{w_{ij}}
+    &= \frac1{\sum_h e^{-E(s)}}
+            \sum_h e^{-E(s)} \pdv{E(s)}{w_{ij}}
+        - \frac1Z \pdv{Z}{w_{ij}} \\
+    &= \frac1{\sum_h e^{-E(s)}} \sum_h e^{-E(s)} \pdv{E(s)}{w_{ij}}
+        + \frac1Z \sum_s e^{-E(s)} \pdv{E(s)}{w_{ij}} \\
+    &= \sum_h \frac{e^{-E(s)}}{\sum_h e^{-E(s)}} s_i s_j
+        - \sum_s \frac{e^{-E(s)}}{Z} s_i s_j \\
+    &= \sum_h \Pr(H = h \given V = v) s_i s_j
+        - \sum_s \Pr(S = s) s_i s_j \\
+    &= \E_{H \given V}[s_i s_j] - \E_S[s_i s_j]
+\end{align*}

@@ -1,19 +1,73 @@
-\chapter{Principal Component Analysis} \label{chp:pca}
-\lecture{2024-04-08}{}
-Let the data \[
-    \mcD = \set{x^{(1)}, \dots, x^{(n)}} \subseteq \R^d
-\] be drawn i.i.d. from a distribution $P$.
-
-By Cauchy-Shwartz, \[
-    \innerp{u}{v} \le \norm{u} \norm{v},
-\] with equality achieved when $v = \lambda u$.
-
-\textbf{THEREFORE,} the maximum value of $u^\top C u$ is achieved...
-when $C u = \lambda u$.
-
-This reminds me of
-\begin{align*}
-    E &= mc^2 \\
-    E &= \frac{hc}{\lambda} \\
-    \lambda &= \frac{h}{mv}
+\subsection{Ridge Rigression} \label{sec:generalization:rr}
+\lecture{2024-03-06}{Bias-variance decomposition with application to ridge regression}
+This time we have \begin{align*}
+    Y &= \innerp w X + \varepsilon \\
+    f(x; \mcD) &= \innerp{w_{RR}} x
+    \intertext{where}
+    w_{RR} &= (D^\top D + \lambda I)^{-1} D^\top t.
 \end{align*}
+We again compute the three terms:
+\begin{itemize}
+    \item \textbf{Bias:} $\E_{\mcD \given X} f(X; \mcD) - \innerp w X$ to
+    compute $\E_X \left(\E_{\mcD \given X} f(X; \mcD) - \innerp w X\right)^2$.
+    \item \textbf{Variance:} $\Var_{\mcD \given X} f(X; \mcD)$.
+    \item \textbf{Noise:} again simply $\sigma^2$.
+\end{itemize}
+
+Since $t = D w + \varepsilon$, $\E[t] = D w$.
+First we write \begin{align*}
+    w_{RR} &= (D^\top D + \lambda I)^{-1} (D^\top D w + D^\top \varepsilon) \\
+    &= (D^\top D + \lambda I)^{-1} (D^\top D + \lambda I - \lambda I) w
+        + (D^\top D + \lambda I)^{-1} D^\top \varepsilon \\
+    &= w - \lambda (D^\top D + \lambda I)^{-1} w + (D^\top D + \lambda I)^{-1} D^\top \varepsilon.
+    \intertext{Taking expectations,}
+    \E_\mcD w_{RR} &= w - \lambda \E_\mcD (D^\top D + \lambda I)^{-1} w \\
+    &= w - \lambda (D^\top D + \lambda I)^{-1} w. \tag{fixed design}
+\end{align*}
+Thus the bias is \begin{align*}
+    \E_{\mcD} f(x; \mcD) - \innerp w x
+        &= \innerp x {\E_\mcD w_{RR}} - \innerp w X \\
+        &= - \lambda \innerp x {(D^\top D + \lambda I)^{-1} w}.
+\end{align*}
+Then the expected bias$^2$ is \begin{align*}
+    \E_X \left(\E_{\mcD \given X} f(X; \mcD) - \innerp w X\right)^2
+        &= \lambda^2 \E_X \left[w^\top (D^\top D + \lambda I)^{-1} x x^\top
+            (D^\top D + \lambda I)^{-1} w\right] \\
+        &= \frac{\lambda^2}{n} w^\top (D^\top D + \lambda I)^{-1}
+            \left(\sum_{i=1}^n x_i x_i^\top\right)
+            (D^\top D + \lambda I)^{-1} w \tag{fixed design} \\
+        &= \frac{\lambda^2}{n} w^\top (D^\top D + \lambda I)^{-1}
+            D^\top D (D^\top D + \lambda I)^{-1} w.
+\end{align*}
+We can decompose $D^\top D = U \Sigma U^\top$ for some orthogonal $U$ and
+diagonal $\Sigma$.
+Then \begin{align*}
+    D^\top D + \lambda I &= U (\Sigma + \lambda I) U^\top \\
+    (D^\top D + \lambda I)^{-1} &= U (\Sigma + \lambda I)^{-1} U^\top \\
+    \implies (D^\top D + \lambda I)^{-1} D^\top D (D^\top D + \lambda I)^{-1}
+    &= U (\Sigma + \lambda I)^{-1} \Sigma (\Sigma + \lambda I)^{-1} U^\top.
+\end{align*}
+Note that \[
+    (\Sigma + \lambda I)^{-1} = \diag\set{\frac1{\sigma_i + \lambda}}.
+\] Thus the bias$^2$ term is \[
+    \frac1n w^\top U S U^\top w,
+\] where \[
+    S = \diag\set{\frac{\lambda^2 \sigma_i}{(\sigma_i + \lambda)^2}}
+    = \diag\set{\frac{\sigma_i}{\left(1+\frac{\sigma_i}{\lambda}\right)^2}}
+\]
+and $U$ contains the eigenvectors of $D^\top D$.
+
+An alternate way to write this is \[
+    \frac{\lambda}{n} \cdot w^\top U
+    \left(\frac{\sqrt\Sigma}{\sqrt\lambda} + \frac{\sqrt\lambda}{\sqrt\Sigma}\right)^{-2}
+    U^\top w
+\] which looks absolutely terrible.
+
+The variance turns out to be \[
+    \frac{\sigma^2 d_{\text{eff}}}{n} \quad \text{where} \quad
+    d_{\text{eff}} = \sum_{i=1}^d \frac{\sigma_i^2}{(\sigma_i + \lambda)^2}.
+\]
+Thus we have \[
+    \boxed{R(f_{RR}) = \sigma^2 \paren{1 + \frac{d_{\text{eff}}}{n}}
+        + \frac1n w^\top U S U^\top w.}
+\]

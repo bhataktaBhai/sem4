@@ -1,6 +1,5 @@
+\section{Two Necessary Conditions for Regular Languages} \label{sec:pumping_periodic}
 \lecture{2024-01-11}{}
-
-\subsection{Two Necessary Conditions for Regular Languages} \label{sec:pumping_periodic}
 In a given DFA $\mcA$ with $n$ states,
 any path of length greater than $n-1$ must contain a cycle.
 Let $u$ be the string of symbols on the path from the start state
@@ -46,9 +45,9 @@ $k \geq 0$.
             &= \what{\delta}(s, t) \in F. \qedhere
     \end{align*}
 \end{proof}
-\begin{proposition}
+\begin{proposition*}
     The language $\set{a^n b^n \mid n \ge 0}$ is not regular.
-\end{proposition}
+\end{proposition*}
 \begin{proof}
     Let $k \in \N$.
     Choose $t = a^k b^k = xyz$ where $x = \epsilon$, $y = a^k$, and $z = b^k$.
@@ -57,6 +56,7 @@ $k \geq 0$.
     Then $x u v^2 w z = a^{k + j} b^k$, which is not in the language.
     Therefore, the language is not regular.
 \end{proof}
+We will later see that it is a context-free language.
 
 \begin{exercise}
     Show that $\set{a^{2^n} \mid n \ge 0}$ is not a regular language.

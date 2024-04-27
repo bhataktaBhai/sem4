@@ -38,8 +38,8 @@
 
 \section{Regular Expressions} \label{sec:regex}
 Consider the alphabet $\set{a, b}$.
-A regular expression over this language is built from $a$, $b$, $\epsilon$,
-using operators $+$, $\cdot$, $*$, and parentheses.
+A regular expression over this language is built from $a$, $b$, $\epsilon$
+and $\O$ using operators $+$, $\cdot$, $*$, and parentheses.
 \begin{examples}
     \item $(a^*)\cdot b$ is ``any number of $a$'s followed by one $b$''.
     \item $(a + b)^*abb(a + b)^*$ is ``contains $abb$ as a subword''.
@@ -64,8 +64,11 @@ using operators $+$, $\cdot$, $*$, and parentheses.
         \item $L(r_1 \cdot r_2) = L(r_1) \cdot L(r_2)$.
         \item $L(r^*) = L(r)^* = \bigcup_{i = 0}^\infty L(r)^i$.
     \end{enumerate}
-    We give precedence to $*$, $\cdot$, $+$, in that order.
+    We give precedence to $^*$, $\cdot$ and $+$ in that order.
 \end{definition*}
+Parentheses can be used to override precedence.
+Note that we do not give $\epsilon$ as an atom, but it can be represented
+using $\O^*$.
 
 \begin{theorem*}[Kleene's theorem] \label{thm:regex:kleene}
     The class of languages defined by regular expressions is exactly the

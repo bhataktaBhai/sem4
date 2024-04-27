@@ -20,13 +20,12 @@
     auto,
     shorten >=1pt,
 }
-% \makeatletter
-% \renewcommand\xRightarrow[2][]{%
-%     \ext@arrow 0055{\Rightarrowfill@}{#1\ }{#2\ }}
-% \makeatother
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
+\newcommand\popen{\texttt{(}}
+\newcommand\pclose{\texttt{)}}
+
 \DeclareMathOperator\yield{yield}
 \DeclareMathOperator\groot{root}
 \newcommand\pumple{\vartriangleleft}
@@ -41,3 +40,16 @@
 \newcommand\REC{\mathsf{REC}}
 \newcommand\FO{\mathsf{FO}}
 \newcommand\Th{\mathsf{Th}}
+
+% https://www.reddit.com/r/LaTeX/comments/1aqr0ez/comment/kqes0bp/
+\makeatletter
+% \renewcommand\xRightarrow[2][]%
+% {\ext@arrow 0055{\Rightarrowfill@}{#1}{#2\ }}
+\renewcommand\xRightarrow[2][]{%
+    \ifx\relax#1\relax%
+        \ext@arrow 0055{\Rightarrowfill@}{}{#2\ }
+    \else%
+        \ext@arrow 0055{\Rightarrowfill@}{#1\ }{#2\ }
+    \fi
+}
+\makeatother

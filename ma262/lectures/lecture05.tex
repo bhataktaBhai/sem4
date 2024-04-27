@@ -1,6 +1,125 @@
 \lecture{2024-02-04}{}
-\begin{definition}
-    A recurrent state $x$ is said to be \emph{null recurrent}
-    (resp. \emph{positive recurrent}) if $\E_x[T_x] = \infty$
-    (resp. $\E_x[T_x] < \infty$).
-\end{definition}
+\begin{definition*}
+    A recurrent state $x$ is said to be \emph{null recurrent} if
+    $\E_x[T_x] = \infty$.
+
+    It is said to be \emph{positive recurrent} if $\E_x[T_x] < \infty$.
+\end{definition*}
+
+\begin{theorem*}
+    Suppose $x, y \in \mcS$.
+    Then let \begin{align*}
+        N_y^{(n)} &= \sum_{j=1}^{n} \1{X_j = y}, \\
+        G^{(n)}(x, y) &= \E_x[N_y^{(n)}] = \sum_{j=1}^{n} p_{xy}^{(j)}.
+    \end{align*}
+    Then under $\Pr_x$, \[
+        \frac{N_y^{(n)}}{n} \asto \dfrac{\1{T_y < \infty}}{\E_y[T_y]}.
+    \] Further, \[
+        \frac{G^{(n)}(x, y)}{n} \to \dfrac{f_{xy}}{\E_y[T_y]}.
+    \]
+    We are using the convention that $\frac{1}{\infty} = 0$, which makes
+    both the limits zero for transient and null recurrent states.
+\end{theorem*}
+\begin{proof}
+    Suppose $y$ is transient.
+    Then \[
+        G(x, y) = \E_x[N_y] = \frac{f_{xy}}{1 - f_{yy}} < \infty
+    \] so \[
+        \frac{N_y^{(n)}}{n} \le \frac{N_y}{n} \asto 0.
+    \] Similarly \[
+        \frac{G^{(n)}(x, y)}{n} \le \frac{G(x, y)}{n} \to 0.
+    \]
+
+    Now suppose $y$ is recurrent.
+    Define $T_y^{(1)} = T_y$, and for $m \ge 2$, define \[
+        T_y^{(m)} = \inf\set*{n > T_y^{(m-1)} \mid X_n = y}.
+    \] Then \[
+        N_y^{(n)} = m \iff T_y^{(m)} \le n < T_y^{(m+1)}
+    \]
+    If $T_y = \infty$, then obviously $N_y^{(n)} = 0$ for all $n$, so \[
+        \frac{N_y^{(n)}}{n} \asto 0.
+    \] Suppose $T_y < \infty$.
+    \begin{align*}
+        \frac{T_y^{(m)}}{m} &\le \frac{n}{m} < \frac{T_y^{(m+1)}}{m}
+                                        < \frac{T_y^{(m+1)}}{m+1}
+    \end{align*}
+    Then as $n \to \infty$, $m \to \infty$, and \[
+        \frac{T_y^{(m)}}{m} \asto \E_y[T_y].
+    \] So \[
+        \frac{n}{m} \asto \E_y[T_y].
+    \]
+    Thus \[
+        \frac{N_y^{(n)}}{n} \asto \frac{1}{\E_y[T_y]}.
+    \] Similarly \begin{align*}
+        \E_x[N_y^{(n)}] &= \E_x[\1{T_y < \infty} N_y^{(n)}] \\
+        &= \E_x[\1{T_y < \infty}] \E_x[N_y^{(n)} \mid T_y < \infty] \\
+        \frac{G^{(n)}(x, y)}{n} &\to \frac{f_{xy}}{\E_y[T_y]}. \qedhere
+    \end{align*}
+\end{proof}
+
+\begin{fact*}[Dominated convergence theorem] \label{thm:dct}
+    Suppose $Z$, $X$ and $(X_n)_{n \in \N}$ are \R-valued random variables
+    defined on the probability space $(\Omega, \mcF, \Pr)$.
+    Further assume that \begin{gather*}
+        X_n \asto X \\
+        \forall n \big(\abs{X_n} \le Z \text{ almost surely}\big) \\
+        \E[Z] < \infty.
+    \end{gather*}
+    Then \[
+        \E[X_n] \to \E[X] \in \R.
+    \]
+\end{fact*}
+
+\begin{theorem*}
+    Suppose $x \to y$ and $x$ is positive recurrent.
+    Then $y$ is positive recurrent.
+\end{theorem*}
+\begin{proof}
+    We will use the previous theorem.
+    We know from \cref{thm:tnr:neighbour} that $y$ is recurrent and
+    $y \to x$.
+    Let $p_{xy}^{(n_1)} > 0$ and $p_{yx}^{(n_2)} > 0$.
+
+    Then $p_{yy}^{(n_1 + m + n_2)} \ge p_{xy}^{(n_1)} p_{xx}^{(m)} p_{yx}^{(n_2)}$.
+    \begin{align*}
+        \frac{G^{(n)}(y, y)}{n} &\ge \frac1n \sum_{m=0}^{n-n_1-n_2} p_{xy}^{(n_1)} p_{xx}^{(m)} p_{yx}^{(n_2)} \\
+        &= \frac1n p_{xy}^{(n_1)} p_{yx}^{(n_2)} G^{(n-n_1-n_2)}(x, x) \\
+        \intertext{Taking limits,}
+        \frac1{\E_y[T_y]} &\ge \frac{p_{xy}^{(n_1)} p_{yx}^{(n_2)}}{\E_x[T_x]} > 0.
+    \end{align*}
+    Thus $\E_y[T_y] < \infty$.
+\end{proof}
+
+\begin{corollary}
+    Let \mcC{} be a communicating class.
+    Then either all states in \mcC{} are transient,
+    or all are null recurrent,
+    or all are positive recurrent.
+\end{corollary}
+
+\begin{theorem*}
+    Let \mcC{} be a finite communicating class.
+    Then all states in \mcC{} are positive recurrent.
+\end{theorem*}
+\begin{proof}
+    Let $x \in \mcC$.
+    \begin{align*}
+        \sum_{y \in \mcC} \frac{G^{(n)}(x, y)}{n}
+            &= \frac1n \sum_{y \in \mcC} \sum_{j=1}^{n} p_{xy}^{(j)} \\
+            &= \frac1n \sum_{j=1}^{n} \sum_{y \in \mcC} p_{xy}^{(j)} \\
+            &= 1.
+    \end{align*}
+    Taking limits, \[
+        \sum_{y \in \mcC} \frac{f_{xy}}{\E_y[T_y]} = 1.
+    \] The interchange of the sum and limit is justified by the fact that
+    the sum is finite.
+    If all $\E_y[T_y]$ were infinite, then the sum would be zero.
+    Thus there exists at least one positive recurrent state in \mcC,
+    which forces all states to be positive recurrent.
+\end{proof}
+
+\subsection{Transience and Recurrence of the SSRW on $\Z^d$} \label{sec:z^d}
+\begin{theorem*}
+    The SSRW on $\Z^d$ is \emph{null} recurrent if $d = 1, 2$
+    and transient if $d \ge 3$.
+\end{theorem*}

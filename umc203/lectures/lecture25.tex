@@ -1,0 +1,19 @@
+\chapter{Principal Component Analysis} \label{chp:pca}
+\lecture{2024-04-08}{}
+Let the data \[
+    \mcD = \set{x^{(1)}, \dots, x^{(n)}} \subseteq \R^d
+\] be drawn i.i.d. from a distribution $P$.
+
+By Cauchy-Shwartz, \[
+    \innerp{u}{v} \le \norm{u} \norm{v},
+\] with equality achieved when $v = \lambda u$.
+
+\textbf{THEREFORE,} the maximum value of $u^\top C u$ is achieved...
+when $C u = \lambda u$.
+
+This reminds me of
+\begin{align*}
+    E &= mc^2 \\
+    E &= \frac{hc}{\lambda} \\
+    \lambda &= \frac{h}{mv}
+\end{align*}

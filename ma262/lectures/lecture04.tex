@@ -36,10 +36,10 @@ large numbers, \[
     Thus, $T_{-2} \eqd \tau_1 + \tau_2$ by \cref{thm:pgf}.
 \end{solution}
 
-\begin{exercise}
-    Consider the SRW($p$) on \Z\ started at the origin.
+\begin{exercise*}
+    Consider the SRW($p$) on \Z{} started at the origin.
     Find $\Pr_0(T_{-1} = n)$, $n \in \N$.
-\end{exercise}
+\end{exercise*}
 \begin{solution}
     We have $G(s) = \frac{1-\sqrt{1-4pqs^2}}{2ps}$.
     We first need a nice expression for $\binom{1/2}{k}$ in order to
@@ -93,32 +93,52 @@ large numbers, \[
     Why? Because each such path can be extended bijectively to a path of
     length $2n+1$ that hits $-1$ for the first time at time $2n+1$.
 \end{solution}
+% \begin{solution}[Alternate]
+%     If one is allowed to use previous knowledge of the Catalan numbers,
+%     then the following solution is much simpler.
+%     \begin{align*}
+%         \Pr(T_{-1} = 0) &= 0 \\
+%         \Pr(T_{-1} = 1) &= q \\
+%         \intertext{and for $n \ge 2$,}
+%         \Pr(T_{-1} = n) &= p \Pr(T_{-2} = n-1) \\
+%         &= p \sum_{k=1}^{n-2} \Pr(T_{-1} = k) \Pr(T_{-1} = n-1-k) \\
+%     \end{align*}
+%     Now let \[
+%         a_n = \frac{\Pr(T_{-1} = n)}{p^{n-1} q^n}
+%     \] so that \begin{align*}
+%         a_0 &= 0 \\
+%         a_1 &= 1 \\
+%         a_n &= \sum_{k=1}^{n-2} 
+%     \end{align*}
+% \end{solution}
 \section{Transience \& Recurrence} \label{sec:tnr}
-\begin{definition}
-    Let $(X_n)_{n \in \N}$ be $MC_S(\mu_0, P)$.
+\begin{definition*}
+    Let $(X_n)_{n \in \N}$ be $MC_\mcS(\mu_0, P)$.
     Define $T_y = \text{\textcolor{Red}{???}} = \inf \set{n \in \N^* \mid X_n = y}$,
     where we take $\inf \O$ to be $+\infty$.
 
-    For $x, y \in S$, define $f_{xy} = \Pr_x(T_y < \infty)$.
-    A state $x \in S$ is said to be \emph{recurrent} if $f_{xx} = 1$, and
+    For $x, y \in \mcS$, define $f_{xy} = \Pr_x(T_y < \infty)$.
+    A state $x \in \mcS$ is said to be \emph{recurrent} if $f_{xx} = 1$, and
     \emph{transient} otherwise.
 
     A state $x$ is said to be \emph{absorbing} if $f_{xy} > 0$ only when
     $x = y$.
+    (This is equivalent to $\set{x}$ being a communicating class.)
 
     We further define \begin{align*}
-        N_y     &= \#\set{n \in \N^* \mid X_n = y} \\
-        G(x, y) &= \E_x[N_y]
+        N_y     &= \#\set{n \in \N^* \mid X_n = y}, \\
+        G(x, y) &= \E_x[N_y].
     \end{align*}
-\end{definition}
+    $G\colon \mcS^2 \to \R$ is called the \emph{Green's function}.
+\end{definition*}
 
 \begin{lemma} \label{thm:tnr:G}
-    For all $x, y \in S$, $G(x, y) = \sum_{n \in \N} p_{xy}^{(n)}$.
+    For all $x, y \in \mcS$, $G(x, y) = \sum_{n \in \N} p_{xy}^{(n)}$.
 \end{lemma}
 \begin{proof}
     We write $N_y$ as $\sum_{n=1}^{\infty} \1{X_n = y}$.
     Then, \begin{align*}
-        G(x, y) &= \E_x\!\!\left[\sum_{n=1}^{\infty} \1{X_n = y}\right] \\
+        G(x, y) &= \E_x\left[\sum_{n=1}^{\infty} \1{X_n = y}\right] \\
                 &= \sum_{n=1}^{\infty} \E_x[\1{X_n = y}] \tag{MCT} \\
                 &= \sum_{n=1}^{\infty} \Pr_x(X_n = y) \\
                 &= \sum_{n=1}^{\infty} p_{xy}^{(n)}
@@ -127,27 +147,50 @@ large numbers, \[
     monotone convergence theorem stated below.
     % TODO: why is montone convergence theorem needed?
 \end{proof}
-\begin{theorem}[Monotone convergence theorem] \label{thm:tnr:mct}
+\begin{fact*}[Monotone convergence theorem] \label{thm:tnr:mct}
     Let $(\Omega, \F, \Pr)$ be a probability space.
     Let $X_n\colon \Omega \to [0, \infty]$ be a sequence of random variables
     and $X\colon \Omega \to [0, \infty]$ be another random variable.
     Suppose that $X_n(\omega)\le X_{n+1}(\omega)$ for each $n$ and $\omega$,
     and that $X_n(\omega) \to X(\omega)$ for each $\omega$.
     Then, $\E[X_n] \to \E[X]$.
-\end{theorem}
+\end{fact*}
 \begin{remark}
     The statement holds even if $X_n \asto X$.
 \end{remark}
+\begin{proof}
+    We consider the case where $X_n\colon \Omega \to [0, \infty)$
+    and $X\colon \Omega \to [0, \infty)$.
 
-\begin{theorem}
-    For all $x, y \in S$, \[
+    Since $X_n \le X_{n+1} \le X$, we have \[
+        \E[X_n] \le \E[X_{n+1}] \le \E[X].
+    \] Thus the sequence $(\E[X_n])_{n \in \N}$ is increasing and bounded
+    and so converges to some limit $L \le \E[X]$.
+    \renewcommand{\qedsymbol}{\ensuremath{\dots}}
+\end{proof}
+What does this have to do with the Green's function?
+\begin{align*}
+    \E_x\left[\sum_{n=1}^{\infty} \1{X_n = y}\right]
+        &= \E_x\left[\lim_{n \to \infty} S_n\right]
+\end{align*}
+where $S_n$'s are the partial sums.
+Note that $S_n \le S_{n+1}$ and $S_n \to \sum_{n=1}^{\infty} p_{xy}^{(n)}$.
+Thus applying the monotone convergence theorem, we get \begin{align*}
+    \E_x\left[\sum_{n=1}^{\infty} \1{X_n = y}\right]
+        &= \lim_{n \to \infty} \E_x[S_n] \\
+        &= \lim_{n \to \infty} \sum_{m=1}^{n} \E_x[\1{X_m = y}] \\
+        &= \sum_{n=1}^{\infty} \E_x[\1{X_n = y}].
+\end{align*}
+
+\begin{theorem*}
+    For all $x, y \in \mcS$, \[
         \Pr_x(N_y = m) = \begin{cases}
             1 - f_{xy} & \text{if } m = 0 \\
             f_{xy} f_{yy}^{m-1} (1 - f_{yy}) & \text{if } m \in \N^* \\
             f_{xy} [f_{yy} = 1] & \text{if } m = +\infty
         \end{cases}
     \]
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     $N_y = 0$ if and only if $T_y = +\infty$.
     This occurs with probability $1 - f_{xy}$.
@@ -184,14 +227,14 @@ Now \begin{align*}
     \end{align*}
 \end{proof}
 
-\begin{theorem} \leavevmode
+\begin{theorem*} \leavevmode
     \begin{enumerate}[label=(\arabic*)]
         \item Suppose $y$ is transient.
-        Then for all $x \in S$, $\Pr_x(N_y < \infty) = 1$ and
+        Then for all $x \in \mcS$, $\Pr_x(N_y < \infty) = 1$ and
         $G(x, y) = \frac{f_{xy}}{1 - f_{yy}} < \infty$.
         \item Suppose $y$ is recurrent.
         Then $\Pr_y(N_y = \infty) = 1$ and $G(y, y) = +\infty$.
-        Further, for all $x \in S \setminus \set{y}$,
+        Further, for all $x \in \mcS \setminus \set{y}$,
         $\Pr_x(N_y = \infty) = f_{xy}$ and \[
             G(x, y) = \begin{cases}
                 0 & \text{if } f_{xy} = 0, \\
@@ -199,7 +242,7 @@ Now \begin{align*}
             \end{cases}
         \]
     \end{enumerate}
-\end{theorem}
+\end{theorem*}
 \begin{proof} \leavevmode
     \begin{enumerate}[label=(\arabic*)]
         \item Since $y$ is transient, $f_{yy} < 1$.
@@ -217,7 +260,7 @@ Now \begin{align*}
                     &= \frac{f_{xy}}{1 - f_{yy}}.
         \end{align*}
         \item Since $y$ is recurrent, $f_{yy} = 1$.
-        By the previous theorem, for any $x \in S$, \[
+        By the previous theorem, for any $x \in \mcS$, \[
             \Pr_x(N_y = m) = \begin{cases}
                 1 - f_{xy} & \text{if } m = 0, \\
                 0 & \text{if } m \in \N^*, \\
@@ -227,51 +270,48 @@ Now \begin{align*}
         \qedhere
     \end{enumerate}
 \end{proof}
-\begin{corollary}
+\begin{corollary*}
     A state $x$ is recurrent iff
     $G(x, x) = \sum_{m=1}^{\infty} p_{xx}^{(m)} = +\infty$.
-\end{corollary}
+\end{corollary*}
 
-\begin{definition}
+\begin{definition*}
     A DTMC is said to be \emph{recurrent} (resp. \emph{transient}) if all
     its states are recurrent (resp. transient).
-\end{definition}
+\end{definition*}
 
-\begin{theorem}
-    If $\abs{S} < \infty$, then there exists a recurrent state.
-\end{theorem}
+\begin{theorem*}
+    If $\abs{\mcS} < \infty$, then there exists a recurrent state.
+\end{theorem*}
 \begin{proof}
     Suppose not.
-    Then for all $x, y \in S$, $G(x, y) = \sum_{m=0}^{\infty} p_{xy}^{(m)}
+    Then for all $x, y \in \mcS$, $G(x, y) = \sum_{m=0}^{\infty} p_{xy}^{(m)}
     < \infty$.
     Then the individual terms of the series must tend to $0$.
     Thus \begin{align*} % TODO: sum over x or y?
-        \sum_{y \in S} \lim_{m \to \infty} p_{xy}^{(m)}
+        \sum_{y \in \mcS} \lim_{m \to \infty} p_{xy}^{(m)}
             &= 0 \\
-        \implies \lim_{m \to \infty} \sum_{y \in S} p_{xy}^{(m)}
+        \implies \lim_{m \to \infty} \sum_{y \in \mcS} p_{xy}^{(m)}
             &= 0.
     \end{align*}
     The interchange of the limit and the sum is justified since the sum
     is finite.
-    But $\sum_{y \in S} p_{xy}^{(m)} = 1$ for all $m$. % TODO: why?
+    But $\sum_{y \in \mcS} p_{xy}^{(m)} = 1$ for all $m$. % TODO: why?
     Thus we have a contradiction.
 \end{proof}
 
-\begin{theorem}
-    Suppose $x \ne y \in S$, $x$ is recurrent and $x \leadsto y$.
-    Then $y$ is recurrent, $y \leadsto x$ and $f_{xy} = f_{yx} = 1$.
-\end{theorem}
-By $x \leadsto y$, we mean that there exists $n \in \N^*$ such that
-$p_{xy}^{(n)} > 0$.
-In other words, $f_{xy} > 0$.
+\begin{theorem*} \label{thm:tnr:neighbour}
+    Suppose $x \ne y \in \mcS$, $x$ is recurrent and $x \to y$.
+    Then $y$ is recurrent, $y \to x$ and $f_{xy} = f_{yx} = 1$.
+\end{theorem*}
 \begin{proof}
-    Since $x \leadsto y$, there exists $n \in \N^*$ and $x_1,\dots,x_{n-1}$
+    Since $x \to y$, there exists $n \in \N^*$ and $x_1,\dots,x_{n-1}$
     distinct from $x$ such that $p_{xx_1}p_{x_1x_2}\dots p_{x_{n-1}y} > 0$.
     Since $x$ is recurrent, \[
         0 = \Pr_x(T_x = +\infty)
             \ge p_{xx_1}p_{x_1x_2}\dots p_{x_{n-1}y} \Pr_y(T_x = +\infty)
     \] so $\Pr_y(T_x = +\infty)$ must be $0$.
-    Thus $y \leadsto x$ with $f_{yx} = 1$.
+    Thus $y \to x$ with $f_{yx} = 1$.
     If $y$ is recurrent, then $f_{xy}$ would be $1$ by the same argument.
     Thus we need only show that $y$ is recurrent.
     We can show this by showing that $G(y, y) = +\infty$.

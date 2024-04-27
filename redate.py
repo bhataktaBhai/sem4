@@ -10,9 +10,10 @@ def redate(lines):
     except StopIteration:
         print(f'Error: no lecture found in file {sys.argv[1]}')
         sys.exit(1)
-    match = re.search(r'\\lecture{(\d+)}{(.*?)}{(.*?)}', line)
+    match = re.search(r'\\lecture{(\d+)}{(.*?)}{(.*?)}?', line)
+    # lecture command may span multiple lines
     if match is None:
-        match = re.search(r'\\lecture(\[\d+\])?{(.*?)}{(.*?)}', line)
+        match = re.search(r'\\lecture(\[\d+\])?{(.*?)}{(.*?)}?', line)
         if match is None:
             print('Error: invalid lecture format')
             sys.exit(1)
