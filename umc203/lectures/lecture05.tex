@@ -20,12 +20,12 @@ We can rewrite this as \[
     \frac{\braket{w}{A}{w}}{\braket{w}{B}{w}},
 \] where $A = \outerp{\mu_0 - \mu_1}{\mu_0 - \mu_1}
 = (\mu_0 - \mu_1)(\mu_0 - \mu_1)^\top$ and $B = \Sigma_0 + \Sigma_1$.
-\begin{definition}[Rayleigh quotient] \label{def:rayleigh_quotient}
+\begin{definition*}[Rayleigh quotient] \label{def:rayleigh_quotient}
     The \emph{Rayleigh quotient} of a Hermitian matrix $M$
     and a non-zero vector $x$ is defined as \[
         R(M; x) = \frac{\norm{x}^2_{M}}{\norm{x}^2}.
     \]
-\end{definition}
+\end{definition*}
 \begin{theorem} \label{thm:rayleigh}
     The Rayleigh quotient is maximized at the largest eigenvalue of $M$,
     by the corresponding eigenvector.
@@ -49,36 +49,36 @@ We can rewrite this as \[
     $\lambda^*$ when $x$ is a multiple of the corresponding eigenvector.
 \end{proof}
 
-\begin{definition}[Generalized Rayleigh quotient] \label{def:gen_rayleigh}
+\begin{definition*}[Generalized Rayleigh quotient] \label{def:gen_rayleigh}
     The \emph{generalized Rayleigh quotient} of matrices $A$ and $B$ with
     a non-zero vector $x$ is defined as \[
         R(A, B; x) = \frac{\braket{x}{A}{x}}{\braket{x}{B}{x}},
     \] where $A$ and $B$ are Hermitian and $B$ is invertible.
-\end{definition}
-\begin{lemma}[Square roots] \label{thm:square_roots}
+\end{definition*}
+\begin{lemma*}[Square roots] \label{thm:square_roots}
     Let $B$ be a positive definite matrix.
     Then there exists a positive definite matrix $L$ such that $L^2 = B$.
-\end{lemma}
+\end{lemma*}
 \begin{proof}
     Let $B = QDQ^\top$ be the eigenvalue decomposition of $B$.
     Then we can take $L = Q\sqrt{D}Q^\top$.
 \end{proof}
 \begin{lemma} \label{thm:gen_rayleigh_to_rayleigh}
     The generalized Rayleigh quotient $R(A, B; x)$ is equal to the
-    Rayleigh quotient $R(L^{-1}AL^{-1}; \cdot L x)$,
+    Rayleigh quotient $R(L^{-1}AL^{-1}; L x)$,
     where $L$ is a square root of $B$.
 \end{lemma}
 \begin{proof}
-    We have \begin{align*}
+    \begin{align*}
         R(A, B; x) &= \frac{\braket{x}{A}{x}}{\braket{x}{B}{x}} \\
         &= \frac{\braket{Lx}{L^{-1}AL^{-1}}{Lx}}{\innerp{Lx}{Lx}} \\
         &= R(L^{-1}AL^{-1}; Lx). \qedhere
     \end{align*}
 \end{proof}
-\begin{theorem} \label{thm:gen_rayleigh}
+\begin{theorem*} \label{thm:gen_rayleigh}
     The generalized Rayleigh quotient $R(A, B; x)$ is maximized at the
     largest eigenvalue of $B^{-1}A$, by the corresponding eigenvector.
-\end{theorem}
+\end{theorem*}
 \begin{proof}
     By \cref{thm:square_roots}, we can find a square root $L$ of $B$.
     Then by \cref{thm:gen_rayleigh_to_rayleigh}, we have \[
@@ -98,14 +98,15 @@ Suppose that $B$ is invertible and let $L$ be a square root of $B$.
 Thus the above theorem gives us that the maximum of the Fisher criterion
 is achieved at the largest eigenvalue of $B^{-1}A$.
 Let this be $\lambda^*$ and let $w^*$ be the corresponding eigenvector.
-Then we have \begin{align*}
-    B^{-1} A w^* &= \lambda^* w^* \\
-    \implies (\Sigma_0 + \Sigma_1)^{-1} \outerp{\mu_0 - \mu_1}{\mu_0 - \mu_1} (w^*) &= \lambda^* w^*.
-    \intertext{But $\outerp{v}{w}(x) = \innerp{w}{x}v$ for any vector $x$.
-    So}
+Then we have \begin{gather*}
+    B^{-1} A w^* = \lambda^* w^* \\
+    \implies (\Sigma_0 + \Sigma_1)^{-1} \outerp{\mu_0 - \mu_1}{\mu_0 - \mu_1} (w^*) = \lambda^* w^*.
+\end{gather*}
+But $\outerp{v}{w}(x) = \innerp{w}{x}v$ for any vector $x$.
+So \[
     \innerp{\mu_0 - \mu_1}{w^*} (\Sigma_0 + \Sigma_1)^{-1} (\mu_0 - \mu_1)
-        &= \lambda^* w^*
-\end{align*}
+        = \lambda^* w^*
+\]
 This gives that $w^*$ is a multiple of $(\Sigma_0 + \Sigma_1)^{-1} (\mu_0 - \mu_1)$.
 Taking $w^* = (\Sigma_0 + \Sigma_1)^{-1} (\mu_0 - \mu_1)$ gives the
 eigenvalue $\lambda^* = \braket{\mu_0 - \mu_1}{(\Sigma_0 + \Sigma_1)^{-1}}{\mu_0 - \mu_1}$.

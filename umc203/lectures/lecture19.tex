@@ -1,15 +1,14 @@
 \lecture{2024-03-14}{Consistency, Normality, Efficiency and Bias}
 
-\begin{definition}[Consistency] \label{def:mle:consistency}
+\begin{definition*}[Consistency] \label{def:mle:consistency}
     A sequence of estimators $\what{\theta}_n$ for a parameter $\theta$
     is said to be \emph{consistent} if \[
         \what{\theta}_n \pto \theta.
     \] That is, for any $\epsilon > 0$, \[
         \lim_{n \to \infty}
-            \Pr\Big(\big|{\what{\theta}_n - \theta}\big| < \epsilon \Big)
-        = 1.
+            \Pr(\abs*{\what{\theta}_n - \theta} < \epsilon) = 1.
     \]
-\end{definition}
+\end{definition*}
 
 \begin{theorem}[Central limit theorem] \label{thm:mle:clt}
     Let $X_1, X_2, \ldots$ be i.i.d. random variables with mean $\mu$
@@ -20,47 +19,210 @@
     \]
 \end{theorem}
 
-Let $X_i$s be distributed according to the pmf/pdf $f_{\theta_0}(x)$, where
-$f$ can be parameterized by $\theta$ and $\theta_0$ is the true parameter.
+\begin{theorem}
+    Let $\set{f_\theta(x) \mid \theta \in \Theta}$ be a nice family of
+    distributions.
+    Let $X_i$s be distributed according to the $f_{\theta_0}(x)$.
+    Then the MLE $\what{\theta}_n$ is consistent.
+\end{theorem}
+\begin{proof}
+    By the law of large numbers, \[
+        \frac1n \ell_n(\theta)
+            \pto \E[\log f_\theta(X_i)] \quad\text{if it exists.}
+    \] This expectation is under the true parameter $\theta_0$.
 
-Recall the log-likelihood function \[
-    \ell(\theta) = \sum_{i=1}^n \log f_\theta(X_i).
-\] By the law of large numbers, \[
-    \frac1n \ell(\theta)
-        \pto \E[\log f_\theta(X_i)] \quad\text{if it exists.}
-\] This expectation is under the true parameter $\theta_0$.
+    Thus \begin{align*}
+        \frac1n \ell_n(\theta) - \frac1n \ell_n(\theta_0)
+            &\pto \E_{\theta_0}\left[\log \frac{f_\theta(X_i)}{f_{\theta_0}(X_i)}\right] \\
+            &= \kld{f_{\theta_0}}{f_\theta} \\
+            &\ge 0,
+    \end{align*} where the equality holds iff $f_{\theta_0}(X) = f_\theta(X)$
+    almost everywhere.
+    Thus \[
+        \argmax_\theta \ell_n(\theta) \to \theta_0. \qedhere
+    \]
+\end{proof}
 
-Thus \begin{align*}
-    \frac1n \ell(\theta) - \frac1n \ell(\theta_0)
-        &\pto \E_{\theta_0}\left[\log \frac{f_\theta(X_i)}{f_{\theta_0}(X_i)}\right] \\
-        &= \kld{f_{\theta_0}}{f_\theta} \\
-        &\ge 0,
-\end{align*} where the equality holds iff $f_{\theta_0}(X) = f_\theta(X)$
-almost everywhere.
-Thus \[
-    \argmax_\theta \ell(\theta)
-        \pto \theta_0.
-\]
-
-\section{How Good is This Convergence?} \label{sec:mle:convergence}
-In this section we redefine
+\section{How Good is This Convergence?} \label{sec:mle:normality}
+In this section we define
 \begin{definition}[Log-likelihood] \label{def:mle:log-likelihood}
-    The \emph{log-likelihood} function is \[
-        \ell_n(\theta) = \frac1n \sum_{i=1}^n \log f_\theta(X_i).
+    The \emph{normalized log-likelihood} function is \[
+        L_n(\theta) = \frac1n \sum_{i=1}^n \log f_\theta(X_i).
     \]
 \end{definition}
 for convenience.
 
-\begin{definition}[Score function] \label{def:mle:convergence:score}
-    Given a probability mass/density function $f_\theta(x)$,
-    where $\theta \in \R^d$ is the parameter, the \emph{score function} is
+\begin{definition*}[Score function] \label{def:mle:convergence:score}
+    Given a probability mass/density family $f_\theta(x)$,
+    where $\theta \in \R^d$ is the parameter, the \emph{score function}
+    $Z_x\colon \Theta \subseteq \R^d \to \R^d$ is defined by
     \[
-        z_\theta(x) = \pdv{\theta} \log f_\theta(x)
-               = \frac1{f_\theta(x)} \pdv{f_\theta(x)}{\theta}.
+        Z_x(\theta) = \pdv{\theta} \log f_\theta(x)
+              = \frac1{f_\theta(x)} \pdv{}{\theta} f_\theta(x).
+    \]
+\end{definition*}
+We will also abuse the heck out of notation and write \[
+    Z_x'(\theta) \text{ to mean } \pdv{\theta} Z_x(\theta),
+\] which is reasonable, but \[
+    f_\theta'(x) \text{ to mean } \pdv{\theta} f_\theta(x),
+\] which is not.
+To make it seem less unreasonable, we may write \[
+    f_\theta(x) \text{ as } f(x \given \theta).
+\]
+
+\begin{lemma*}
+    For $\theta \in \Theta$, \[
+        \E[Z_X(\theta)] = 0, \quad \Var[Z_X(\theta)] = -\E[Z'_X(\theta)].
+    \]
+\end{lemma*}
+The expectations and variances are over $X \sim f(\theta)$.
+First of all, ``For $\theta \in \Theta$'' specifies that $\theta$ is fixed.
+Secondly, we will never in this section prescribe a distribution
+over $\Theta$.
+That would be a weird thing to do.
+\begin{proof}
+    \begin{align*}
+        \E[Z_X(\theta)]
+            &= \int \frac{\pdv{}{\theta}f_\theta(x)}{\cancel{f_\theta(x)}}
+                                \cancel{f_\theta(x)} \dd x \\
+            &= \pdv{}{\theta} \int f_\theta(x) \dd x \\
+            &= 0.
+    \end{align*}
+    Alternatively, \begin{align*}
+        \E[Z_X(\theta)]
+            &= \lim_{n \to \infty} \frac1n \sum_{i=1}^n Z_{X_i}(\theta) \\
+            &= \lim_{n \to \infty} \frac1n \sum_{i=1}^n \pdv{}{\theta} \log f_\theta(X_i) \\
+            &= \pdv{}{\theta} \lim_{n \to \infty} L_n(\theta) \\
+            &= 0.
+    \end{align*} (Something of that sort.)
+
+    Next note that \begin{align*}
+        Z'_X(\theta) &= \pdv{}{\theta} Z_X(\theta) \\
+            &= \pdv{}{\theta} \frac{\pdv{}{\theta} f_\theta(x)}{f_\theta(x)} \\
+            &= \frac{\pdv[2]{}{\theta} f_\theta(x)}{f_\theta(x)}
+                - \frac{\left(\pdv{}{\theta} f_\theta(x)\right)^2}{f_\theta(x)^2} \\
+            &= \frac{\pdv[2]{}{\theta} f_\theta(x)}{f_\theta(x)}
+                - Z_X(\theta)^2.
+    \end{align*} The expectation of the first term is again $0$ by the
+    same reasoning.
+    Thus \[
+        \Var[Z_X(\theta)] = \E[Z_X(\theta)^2]
+            = -\E[Z'_X(\theta)]. \qedhere
+    \]
+\end{proof}
+
+\begin{theorem*} \label{thm:mle:normality}
+    Let $\set{f_\theta(x) \mid \theta \in \Theta}$ be a family of
+    distributions and assume all niceties.
+    Let $(X_n)_{n \ge 1}$ be a sequence of i.i.d. random variables
+    distributed according to $f_{\theta_0}$.
+    Let $\what{\theta}_n$ be the MLE of $\theta$ based on $X_1, \ldots, X_n$.
+    Then $\what{\theta}_n$ is consistent and asymptotically normal, with \[
+        \sqrt{n}(\what{\theta}_n - \theta_0) \dto
+            N\left(0, \frac{1}{\mcI(\theta_0)}\right),
+    \] where \[
+        \mcI(\theta) = \Var_{X \sim f(\theta)}[Z_X(\theta)]
+             = -\E_{X \sim f(\theta)}[Z'_X(\theta)]
+    \] is the \emph{Fisher information matrix}.
+\end{theorem*}
+$\frac1{\mcI(\theta_0)}$ obviously refers to the inverse of the matrix.
+\begin{proof}[``Proof'']
+    Assume that $Z_x$ is thrice differentiable for each $x$.
+    Then \[
+        Z_x(\theta) = Z_x(\theta_0) + Z'_x(\theta_0)(\theta - \theta_0)
+            + \frac12 Z''_x(\theta_0)(\theta - \theta_0)^2
+            + O(\norm{\theta - \theta_0}^3).
+    \] Summing over all $x$'s, \begin{align*}
+        \sum_{i=1}^n Z_{X_i}(\theta)
+            &\approx \sum_{i=1}^n Z_{X_i}(\theta_0)
+                + \sum_{i=1}^n Z'_{X_i}(\theta_0)(\theta - \theta_0)
+    \end{align*}
+    This is relevant because \[
+        L_n'(\theta) = \frac1n \sum_{i=1}^n Z_{X_i}(\theta).
+    \]
+
+    Now note that \begin{align*}
+        L_n'(\theta) &= L_n'(\theta_0) + L_n''(\theta_0)(\theta - \theta_0)
+                    + O(\norm{\theta - \theta_0}^2) \\
+        \implies 0 &= L_n'(\theta_0) + L_n''(\theta_0)(\what{\theta}_n - \theta_0)
+                    + O(\norm{\what{\theta}_n - \theta_0}^2),
+    \end{align*} since $\what{\theta}_n$ maximizes $L_n$.
+    Since $\what{\theta}_n$ is consistent, the second order term can
+    be ignored.
+    Thus \[
+        \sqrt n (\what{\theta}_n - \theta_0) \approx
+            - \sqrt n L_n'(\theta_0) L_n''(\theta_0)^{-1}.
+    \] Now \[
+        \sqrt n L_n'(\theta_0)
+        = \frac1{\sqrt n} \sum_{i=1}^n Z_{X_i}(\theta_0)
+        \dto N(0, \mcI(\theta_0)),
+    \] since the $Z_{X_i}$ are i.i.d. with mean $0$ and variance
+    $\mcI(\theta_0)$.
+
+    Moreover \begin{align*}
+        L_n''(\theta_0)
+            &= \frac1n \sum_{i=1}^n Z'_X(\theta_0) \\
+            &\pto -\E[Z'_X(\theta_0)] = \mcI(\theta_0).
+    \end{align*}
+    Wow! Look at the interplay between the variance of the score, and the
+    expectation of its derivative.
+
+    This gives (appealing to intuition) \[
+        \sqrt n (\what{\theta}_n - \theta_0)
+            \dto \frac1{\mcI(\theta_0)} N(0, \mcI(\theta_0))
+            = N(0, \mcI(\theta_0)^{-1}). \qedhere
+    \]
+\end{proof}
+
+\begin{definition}[Mean squared error] \label{def:mle:mse}
+    The \emph{mean squared error} of an estimator
+    $T_n\colon \mcX^n \to \Theta$ for the parameter $\theta_0$ is \[
+        \MSE(T_n) = \E[(T_n - \theta_0)^2].
     \]
 \end{definition}
-Let $Z_x(\theta) = z_\theta(x)$ be thrice differentiable in $\theta$.
-Then \[
-    Z_x(\theta) = Z_x(\theta_0) + Z'_x(\theta_0)(\theta - \theta_0)
-        + \frac12 Z''_x(\theta_0)(\theta - \theta_0)^2
-\]
+Among two unbiased estimators, the one with the lower variance is deemed
+to be better.
+
+\section{Efficiency \& Bias} \label{sec:mle:eff}
+We now attempt to justify why MLE is a good choice,
+apart from proof by obviousness.
+In fact, it is not obvious, because there are estimators which have a
+lower MSE than the MLE.
+Which is better in such a case?
+\begin{theorem*}[Cram\'er-Rao bound] \label{thm:mle:cramer-rao}
+    Let $T_n\colon \mcX^n \to \Theta$ be an unbiased estimator for $\theta$
+    using i.i.d. samples $X_1, \ldots, X_n$.
+    Then \[
+        \Var(T_n) \ge \frac1{n \mcI(\theta_0)}.
+    \]
+\end{theorem*}
+\begin{proof}
+    Let $Z(\theta) = \ell_n'(\theta) = \sum_{i=1}^n Z_{X_i}(\theta)$.
+    Obviously $\Var[Z(\theta)] = \sum \Var(Z_{X_i}(\theta))
+    = n \mcI(\theta)$.
+
+    Also note that $\E[Z(\theta)] = 0$.
+
+    Now since $T_n$ is unbiased, \[
+        \theta = \E[T_n \given \theta]
+    \] for all $\theta \in \Theta$.
+    Differentiating both sides, \begin{align*}
+        1 &= \pdv{}{\theta} \E[T_n \given \theta] \\
+          &= \pdv{}{\theta} \int T_n(\bm{x}) f_{\theta}(\bm{x}) \dd \bm{x} \\
+          &= \int T_n(\bm{x}) \pdv{}{\theta} f_{\theta}(\bm{x}) \dd \bm{x} \\
+          &= \int T_n(\bm{x}) Z(\theta)(\bm{x}) f_{\theta}(\bm{x}) \dd \bm{x} \\
+          &= \E[T_n Z(\theta)] \\
+          &= \Cov(T_n, Z(\theta)).
+    \end{align*}
+    What?! Two random variables that are perfectly correlated!
+
+    Now \begin{align*}
+        \Cov(T_n, Z(\theta)) &\le \sqrt{\Var(T_n) \Var(Z(\theta))} \\
+        \implies \Var(T_n) &\ge \frac{\Cov(T_n, Z(\theta))^2}{\Var(Z(\theta))} \\
+        &= \frac1{n \mcI(\theta)}. \qedhere
+    \end{align*}
+\end{proof}
+
+But from \cref{thm:mle:normality}, we already know that the MLE achieves
+this bound.
+Thus the MLE is \emph{asymptotically efficient}.

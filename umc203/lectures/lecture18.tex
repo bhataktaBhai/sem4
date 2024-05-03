@@ -3,7 +3,8 @@
 
 \begin{definition} \label{def:mle}
     Let $X_1, X_2, \dots$ be i.i.d. random variables drawn from a
-    distribution $\Pr_{\theta}$, where $\theta \in \Theta$.
+    distribution $\Pr_{\theta}$, where $\theta$ belongs to a parameter space
+    $\Theta$.
     The \emph{likelihood function} is defined as \[
         L_n(\theta) = \prod_{i=1}^{n} \Pr_{\theta}(X_i),
     \]
@@ -18,7 +19,7 @@
 \begin{definition*}[KL divergence] \label{def:kl_div}
     The \emph{Kullback-Leibler divergence} of the distribution $P$ from the
     distribution $Q$ is defined as \[
-        \kld{P}{Q} = \E_P \left[\log \frac{P(X)}{Q(X)} \right].
+        \kld{P}{Q} = \E_{X \sim P} \left[\log \frac{P(X)}{Q(X)} \right].
     \]
     For discrete distributions, this is \[
         \kld{P}{Q} = \sum_{x} P(x) \log \frac{P(x)}{Q(x)}.
@@ -31,22 +32,23 @@
     \]
 \end{lemma}
 \begin{proof}
-    $\log$ is convex down, so the tangent at $x = 1$ always lies above the
-    curve.
+    $\log$ is concave (convex down),
+    so the tangent at $x = 1$ always lies above the curve.
 \end{proof}
-\begin{proposition}
+\begin{proposition*}
     For all distributions $P$ and $Q$, \[
         \kld{P}{Q} \ge 0.
     \]
-\end{proposition}
+\end{proposition*}
 \begin{proof}
+    We write $\E_P$ to mean $\E_{X \sim P}$.
     \begin{align*}
         -\kld{P}{Q} &= \E_P \left[\log \frac{Q(X)}{P(X)} \right] \\
         &\le \E_P \left[\frac{Q(X)}{P(X)} - 1 \right] \\
         &= \int \frac{Q(x)}{P(x)} P(x) \dd x - 1 \\
         &= 0.
     \end{align*}
-    For equality to hold, $P(X) = Q(X)$ with probability 1.
+    For equality to hold, $P = Q$ almost surely.
 \end{proof}
 
 \begin{exercise}
@@ -75,7 +77,7 @@
 
 \begin{definition*}[Entropy] \label{def:entropy}
     The \emph{entropy} of a distribution $P$ is defined as \[
-        H(P) = -\E_P \log P(X).
+        H(P) = -\E_{X \sim P} \log P(X).
     \]
 \end{definition*}
 
@@ -128,7 +130,7 @@
 
     Thus the MLE is \[
         \what\mu_n = \wbar{X}_n, \quad
-        \what\Sigma_n = \frac1n
-                \sum_{i=1}^{n} \outerp{X_i - \wbar{X}_n}{X_i - \wbar{X}_n}.
+        \what\Sigma_n = \frac1n \sum_{i=1}^{n}
+                \outerp{X_i - \wbar{X}_n}{X_i - \wbar{X}_n}. \qedhere
     \]
 \end{solution}

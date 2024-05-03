@@ -9,7 +9,7 @@ We come back to apples and oranges.
 \end{align*}
 We also know \emph{priors} \begin{align*}
     \Pr(Y = 1) &= p_1 & \Pr(Y = -1) &= 1 - p_1 \eqcolon p_2
-    \intertext{and \emph{class condition distributions}}
+    \intertext{and \emph{class conditioned distributions}}
     \Pr(X = x \mid Y = 1) &= f_1(x) & \Pr(X = x \mid Y = -1) &= f_2(x)
 \end{align*}
 \begin{remark}
@@ -83,10 +83,10 @@ Thus $h^*(x) = \sgn(\innerp{w}{x} - b)$.
 We wish to compute the error $\Pr(h(X) \ne Y)$ for some rule $h$.
 \begin{align*}
     \Pr(h(X) \ne Y)
-        &= E_{XY} \ind{h^*(X) \ne Y} \\
-        &= E_X E_{Y \mid X} \ind{h^*(X) \ne Y} \\
+        &= \E_{XY} \ind{h^*(X) \ne Y} \\
+        &= \E_X \E_{Y \mid X} \ind{h^*(X) \ne Y} \\
     \intertext{but}
-    E_{Y \mid X = x} \ind{h^*(X) \ne Y}
+    \E_{Y \mid X = x} \ind{h^*(X) \ne Y}
         &= \begin{cases}
             1 - \eta(x) & \text{if } h(x) = 1 \\
             \eta(x) & \text{if } h(x) = -1
@@ -99,8 +99,8 @@ setting $h(x) = -1$ minimizes the error.
 
 More rigorously, upon comparing with $h^*$,
 \begin{align*}
-    E_{Y \mid X} (\ind{h(X) \ne Y} - \ind{h^*(X) \ne Y})
-        &= E_{Y \given X} (\ind{h^*(X) = Y} - \ind{h^*(X) \ne Y}) \\
+    \E_{Y \mid X} (\ind{h(X) \ne Y} - \ind{h^*(X) \ne Y})
+        &= \E_{Y \given X} (\ind{h^*(X) = Y} - \ind{h^*(X) \ne Y}) \\
         &= \eta(x) (\ind{h^*(X) = 1} - \ind{h^*(X) = -1}) \\
         &\qquad + (1 - \eta(x)) (\ind{h^*(X) = -1} - \ind{h^*(X) = 1}) \\
         &= (2 \eta(x) - 1)(\ind{h^*(X) = 1} - \ind{h^*(X) = -1}) \\
@@ -110,9 +110,9 @@ The second term is $1$ when the first term is positive, and $-1$ when it is
 negative.
 
 Thus \begin{align*}
-    E_{XY} (\ind{h(X) \ne Y} - \ind{h^*(X) \ne Y})
-        &= E_X E_{Y \mid X} (\ind{h(X) \ne Y} - \ind{h^*(X) \ne Y}) \\
-        &= E_X \abs{2 \eta(x) - 1} \ge 0.
+    \E_{XY} (\ind{h(X) \ne Y} - \ind{h^*(X) \ne Y})
+        &= \E_X \E_{Y \mid X} (\ind{h(X) \ne Y} - \ind{h^*(X) \ne Y}) \\
+        &= \E_X \abs{2 \eta(x) - 1} \ge 0.
 \end{align*}
 This proves that the Bayes classifier is the classifier with the lowest
 probability of error. \\

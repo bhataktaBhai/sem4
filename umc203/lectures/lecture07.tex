@@ -6,7 +6,7 @@ We denote this as $\mcD \sim P^N$.
 That is, \begin{align*}
     \mcD &= \set{(x^{(i)}, y_i) \mid x^{(i)} \in \mcX, y_i \in \mcY,
                                 i \in [N]} \\
-    \mcD &\sim P^{(N)} \\
+    \mcD &\sim P^{N} \\
     \mcX &\subseteq \R^d \\
     \mcY &= \pms.
 \end{align*}
@@ -14,7 +14,7 @@ That is, \begin{align*}
 Suppose there exists a $w^* \in \R^d$ such that for each $i \in [N]$,
 $\sgn \innerp{w^*}{x^{(i)}} = y_i$. \\
 Then the algorithm described in the previous lecture will find a $w$ that
-separates the samples in at most $\frac{R^2}{\gamma^{*2}}$ iterations,
+separates the samples in at most $R^2/\gamma^{*2}$ iterations,
 where $R$ is the maximum norm of $x^{(i)}$s (\emph{radius}) and \[
     \gamma^* = \gamma(w^*)
         = \min_{i \in [N]} \frac{\abs*{w^{*\top} x^{(i)}}}{\norm{w^*}}
@@ -43,7 +43,7 @@ $h_\mcD^{A}$.
     classifier $h_\mcD^{A}$.
     The \emph{leave-one-out error} of $A$ on $\mcD$ is defined to be \[
         \wbar{R}^{LOO}_\mcD(A) \coloneq \frac1m \sum_{i=1}^{m}
-            \left[h_{\mcD_{(i)}}^A\!\!\left(x^{(i)}\right) \ne y_i\right],
+            \left[h_{\mcD_{(i)}}^A\!\left(x^{(i)}\right) \ne y_i\right],
     \] where $\mcD_{(i)} = \mcD \setminus \set{(x^{(i)}, y_i)}$.
 \end{definition*}
 
@@ -52,15 +52,14 @@ all samples \mcD\ of size $m$ drawn iid from $P$.
 \begin{align*}
     \E_{\mcD \sim P^m}[\wbar R^{\text{LOO}}_\mcD(A)]
     &= \frac1m \E_{\mcD \sim P^m} \sum_{i=1}^{m}
-        \left[h_{\mcD_{(i)}}^A\!\!\left(x^{(i)}\right) \ne y_i\right]
+        \left[h_{\mcD_{(i)}}^A\!\left(x^{(i)}\right) \ne y_i\right]
     \intertext{Since the samples are iid, we have}
     \E_{\mcD \sim P^m}
         &= \E_{\mcD \sim P^{m-1}} \E_{(x^{(i)}, y_i) \sim P}
     \intertext{We first compute the inner expectation.}
-    \E_{(x^{(i)}, y_i) \sim P} \left[h_{\mcD_{(i)}}^A\!\!
-    \left(x^{(i)}\right) \ne y_i \right]
-        &= \Pr \left(h^A_{\mcD_{(i)}}\!\!\left(x^{(i)}\right)
-                \ne y_i\right) \\
+    \E_{(x^{(i)}, y_i) \sim P} \left[h_{\mcD_{(i)}}^A\!\left(x^{(i)}\right)
+                                    \ne y_i \right]
+        &= \Pr\left(h^A_{\mcD_{(i)}}\!\left(x^{(i)}\right) \ne y_i\right) \\
         &= R(h^A_{\mcD_{(i)}})
     \intertext{So we have}
     \E_{\mcD \sim P^m}[\wbar R^{\text{LOO}}_\mcD(A)]
@@ -81,12 +80,12 @@ Thus we have proven the following theorem.
     acting on a sample of size $m-1$ drawn iid from $P$.
     \[
         \E_{\mcD \sim P^m}[\wbar R^{\text{LOO}}_\mcD(A)]
-        = \smashoperator{\E_{\mcD \sim P^{m-1}}} [R(h^A_{\mcD})].
+        = \E_{\mcD \sim P^{m-1}} [R(h^A_{\mcD})].
     \]
 \end{theorem*}
 
 \subsection{Perceptron's Leave-One-Out Error} \label{sec:perceptron:loo}
-Fix a sample $\mcD \sim P^{N+1}$.
+Fix a sample set $\mcD \sim P^{N+1}$.
 Let $i_k$ be the index of the sample misclassified in the $k$th iteration.
 Then the $w$ returned by the Perceptron algorithm is \[
     w^{(k)} = \sum_{j=1}^{M} y_{i_j} x^{(i_j)}

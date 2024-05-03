@@ -1,0 +1,73 @@
+\chapter{EM Algorithm} \label{chp:em}
+\section{Latent Variable Models} \label{sec:latent}
+\lecture{2024-03-18}{EM algorithm with application to mixture models}
+
+Let $\set{P_\theta \mid \theta \in \Theta}$ be a family of distributions,
+where $P_\theta\colon \mcX \times \mcZ \to [0, \infty)$.
+Let $X \in \mcX$ and $Z \in \mcZ$ be random variables with joint
+distribution $P_\theta$.
+That is, \[
+    \Pr(X = x, Z = z \mid \theta) = P_\theta(x, z).
+\] So \[
+    \Pr(X = x \mid \theta) = \sum_z P_\theta(x, z)
+\]
+$X$ is the \emph{observed} variable and $Z$ is the \emph{latent} variable.
+
+Let \[
+    \mcD = \set{x^{(1)}, \ldots, x^{(N)}} \subseteq \R^n.
+\]
+For a fixed $x \in \mcX$, define the posterior \[
+    \Pos(\theta) = z \mapsto \Pr(Z = z \mid X = x, \theta).
+\]
+
+\begin{definition*}
+    Given $\bm{x} = (x^{(i)})_{i=1}^N$,
+    define the \emph{complete data likelihood} as \[
+        f(\bm{x}, \bm{Z} \mid \theta)
+            = \prod_{i=1}^N P_\theta(x^{(i)}, Z^{(i)}),
+    \] where $\bm{Z} = (Z^{(i)})_{i=1}^N$ is a random vector over $\mcZ^N$,
+    and $\theta \in \Theta$.
+    % Also define the \emph{complete data log-likelihood} as \[
+    %     \ell(\theta) = \log L(\theta)
+    %          = \log f(\bm{x}, \bm{Z} \mid \theta)
+    %          = \sum_{i=1}^N \log P_\theta(x^{(i)}, Z^{(i)}).
+    % \]
+
+    Use this to define \[
+        Q(\theta, \theta^{(0)}) = \E[\log f(\bm{x}, \bm{Z} \mid \theta)]
+    \] This is the \emph{expected complete data log-likelihood}.
+\end{definition*}
+\begin{proposition}
+    If $\mcZ = [k]$, then \[
+        Q(\theta, \theta^{(0)}) = \sum_{j=1}^N Q^{(j)}(\theta, \theta^{(0)})
+    \] where \[
+        Q^{(j)}(\theta, \theta^{(0)})
+            = \sum_{i=1}^k P_i^{(j)} \log P_\theta(x^{(j)}, i)
+    \] and \[
+        P_i^{(j)} = \Pr(Z^{(j)} = i \mid X^{(j)} = x^{(j)}, \theta^{(0)}).
+    \]
+\end{proposition}
+\begin{proof}
+    Expand the expectation.
+    \begin{align*}
+        Q(\theta, \theta^{(0)})
+            &= \E\left[\sum_{j=1}^N \log P_\theta(x^{(i)}, Z_i)
+                \biggm| X^{(j)} = x^{(j)}, \theta^{(0)}\right] \\
+            &= \sum_{j=1}^N \E[\log P_\theta(x^{(i)}, Z_i)
+                \mid X^{(j)} = x^{(j)}, \theta^{(0)}] \\
+            &= \sum_{j=1}^N \sum_{i=1}^k \Pr(Z^{(j)} = i \mid X^{(j)} = x^{(j)}, \theta^{(0)}) \log P_\theta(x^{(j)}, i) \\
+            &= \sum_{j=1}^N \sum_{i=1}^k P_i^{(j)} \log P_\theta(x^{(j)}, i) \\
+            &= \sum_{j=1}^N Q^{(j)}(\theta, \theta^{(0)}). \qedhere
+    \end{align*}
+\end{proof}
+
+But we don't even see the $Z^{(i)}$'s!
+What we wish to maximize is the likelihood of the observed data \begin{align*}
+    \ell(\theta) &= \sum_{i=1}^N \log \Pr(X = x^{(i)} \mid \theta) \\
+         &= \sum_{i=1}^N \log \sum_{z \in \mcZ} P_\theta(x^{(i)}, z) \\
+         &= \sum_{i=1}^N \log \E_{Z \sim \Pos(\theta)}[P_\theta(x^{(i)}, Z)].
+\end{align*} The KL divergence of $P_\theta$ from $P_{\theta'}$ is \begin{align*}
+    \kld{P_\theta}{P_\theta'}
+        &= \E_{X, Z \sim P_\theta}[\log P_\theta(X, Z) - \log P_{\theta'}(X, Z)] \\
+        &= \E_{X \sim P_\theta^X} \E_{Z \sim \Pos(\theta)}[\log P_\theta(X, Z) - \log P_{\theta'}(X, Z)].
+\end{align*}

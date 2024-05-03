@@ -12,12 +12,12 @@
     \]
 \end{definition}
 
-\begin{theorem*}
+\begin{fact*}
     Let $f \in C^1(C)$, where $C \subseteq \R^d$ is convex.
     Then $f$ is convex iff \[
         f(y) - f(x) \ge \innerp{\nabla f(x)}{y-x}
     \] for all $x, y \in C$.
-\end{theorem*}
+\end{fact*}
 
 \begin{notation}
     Let $A$ and $B$ be symmetric matrices.
@@ -46,13 +46,13 @@
     \end{itemize}
 \end{proof}
 
-\begin{theorem*}
+\begin{fact*}
     Let $f \in C^2(C)$, where $C \subseteq \R^d$ is convex.
     Let $H(x) = (\hess f)(x)$.
     Then $f$ is convex iff \[
         H(x) \succeq 0 \quad \forall x \in C.
     \]
-\end{theorem*}
+\end{fact*}
 
 \begin{definition*}[Convex optimisation problem] \label{def:convexopt}
     Let $f\colon \R^d \to \R$ and $f_i\colon \R^d \to \R$ be convex
@@ -65,7 +65,9 @@
         \end{cases}
     \]
 \end{definition*}
-\begin{definition*}[Lagrangian] \label{def:convex:lagrangian}
+
+\section{KKT Conditions} \label{sec:kkt}
+\begin{definition*} \label{def:kkt}
     Let $\lambda \in \R^m$ and $\mu \in \R^n$.
     The \emph{Lagrangian} of the convex optimisation problem is \[
         L(x, \lambda, \mu) = f(x) + \sum_{i=1}^{m} \lambda_i f_i(x)
@@ -83,10 +85,10 @@ The first condition is the \emph{stationarity} condition.
 The second and third conditions are the \emph{primal feasibility}
 conditions.
 The final condition is the \emph{complementary slackness} condition.
-\begin{theorem*}
+\begin{fact*}
     If $x^*$ is a KKT point for the convex optimisation problem, then
     $x^*$ is a global minimiser.
-\end{theorem*}
+\end{fact*}
 \begin{example}
     Consider the convex optimisation problem \[
         \min_{x \in \R^d} \frac12 \norm{x - z}^2 \quad \text{such that}
@@ -113,7 +115,7 @@ The final condition is the \emph{complementary slackness} condition.
         \max_{x, \lambda, \mu} L(x, \lambda, \mu) \quad \text{such that}
         \quad \begin{cases}
             \lambda \ge 0, \\
-            \grad_x L(x, \lambda, \mu) = 0.
+            \nabla_x L(x, \lambda, \mu) = 0.
         \end{cases}
     \]
 \end{definition*}

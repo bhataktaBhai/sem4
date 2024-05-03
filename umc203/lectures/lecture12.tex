@@ -1,14 +1,14 @@
 \section{Generalization Error} \label{sec:svm:generalization}
-\lecture[11]{2024-02-27}{Linear SVM classifiers for linearly non-separable data:
+\lecture[12]{2024-02-27}{Linear SVM classifiers for linearly non-separable data:
 VC Dimension}
 
 \begin{theorem}[FOML 5.4] \label{thm:svm:error}
     Let $h_\mcD^{SVM}$ be the classifier returned by the SVM for a sample
-    \mcD{}, and let $N_SV(\mcD)$ be the number of support vectors that
+    \mcD{}, and let $N_{SV}(\mcD)$ be the number of support vectors that
     define $h_\mcD^{SVM}$.
     Then, \[
         \E_{\mcD \sim P^m}(R(h_\mcD^{SVM}))
-            \le \E_{\mcD \sim P^{m+1}}\left[\frac{N_SV(\mcD)}{m+1}\right]
+            \le \E_{\mcD \sim P^{m+1}}\left[\frac{N_{SV}(\mcD)}{m+1}\right]
     \]
 \end{theorem}
 \begin{proof}
@@ -239,6 +239,7 @@ This motivates the following formulation of the SVM problem for
 linearly non-separable data, since smaller $w$ gives smaller bounds on
 the error.
 \[
-    \min_{w, b} C\sum_{i=1}^{n} \paren{1 - y_i (\innerp*{w}{x^{(i)}} + b)}_+
-    + \frac12 \norm{w}^2
-\] where $(x)_+ = \max(0, x)$.
+    \min_{w, b} \frac12 \norm{w}^2
+        + C \sum_{i=1}^{n} \paren{1 - y_i (\innerp{w}{x^{(i)}} + b)}_+
+\] where $(x)_+ = x [x \ge 0] = 0 \vee x = \max(0, x)$,
+and $C$ is a penalty for wrong answers.

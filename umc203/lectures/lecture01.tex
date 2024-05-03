@@ -80,24 +80,24 @@ We wish to measure the probability $\Pr(h(X) \ne Y)$.
 Suppose a coin is given with unknown probability of heads $p$.
 How do we estimate $p$?
 We flip the coin $n$ times and count the number of heads $n_H$.
-Then we estimate $p$ as $\hat{p} = \frac{n_H}{n}$.
+Then we estimate $p$ as $\hat{p} = n_H/n$.
 
 The rationale behind this is the weak/strong law of large numbers.
-\begin{theorem}[Weak Law of Large Numbers] \label{thm:probability_review:wlln}
+\begin{fact}[Weak Law of Large Numbers] \label{thm:probability_review:wlln}
     Let $X_1, X_2, \ldots$ be i.i.d.~random variables with mean $\mu$.
     Then for any $\varepsilon > 0$, \[
         \Pr\left(\abs{\frac{1}{n} \sum_{i=1}^n X_i - \mu} > \varepsilon\right)
         \to 0
     \] as $n \to \infty$.
-\end{theorem}
+\end{fact}
 
-\begin{theorem}[Strong Law of Large Numbers] \label{thm:probability_review:slln}
+\begin{fact}[Strong Law of Large Numbers] \label{thm:probability_review:slln}
     Let $X_1, X_2, \ldots$ be i.i.d.~random variables with mean $\mu$.
     Then \[
         \Pr\left(\lim_{n \to \infty} \frac{1}{n} \sum_{i=1}^n X_i = \mu\right)
         = 1
     \]
-\end{theorem}
+\end{fact}
 We have made several assumptions here.
 We know the structure of the problem at hand.
 For instance, we know that there is exactly one coin tossed each time.
